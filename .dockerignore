@@ -28,9 +28,6 @@ dist/
 build/
 coverage/
 
-# MkDocs build output
-site/
-
 # Docker
 Dockerfile
 .dockerignore
