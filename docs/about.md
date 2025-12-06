@@ -1,6 +1,6 @@
 # About
 
-Sherpa is a IT lab tool inspired by the Vagrant, Containerlab and Netlabs of the world.
+Sherpa is a tool that aims to make creating IT infrastructure labs intuitive and painless.
 
 ## Why?
 
@@ -26,3 +26,33 @@ I come from a networking background and in that space, VM's are mostly still kin
 - Initially only KVM/QEMU will be supported via [libvirt](https://libvirt.org/)
 - Potential future [Cloud Hypervisor](https://github.com/cloud-hypervisor/cloud-hypervisor) support.
 - Docker
+
+## Device Support Matrix
+
+- ✅ - Working
+- 🚧 - Planned
+- ⚠️ - Partially Working
+
+| Vendor    | Model          | Minimum Tested Version | Status | ZTP Method     |
+| --------- | -------------- | ---------------------- | ------ | -------------- |
+| Arista    | vEOS           | 4.32.2f                | ✅     | TFTP           |
+| Aruba     | AOS-CX         | 10.07                  | ✅     | TFTP           |
+| Cisco     | ASAv           | 9.20.2                 | ✅     | CDROM          |
+| Cisco     | CSR 1000v      | 17.03.08a              | ✅     | CDROM          |
+| Cisco     | Catalyst 8000v | 17.13.01a              | ✅     | CDROM          |
+| Cisco     | Catalyst 9000v | 17.12.01               | ✅     | CDROM          |
+| Cisco     | XRv 9000       | 7.11.1                 | ✅     | CDROM          |
+| Cisco     | Nexus 9300v    | 10.4.2.f               | ✅     | CDROM          |
+| Cisco     | IOSv           | 159-3.m8               | ✅     | Disk           |
+| Cisco     | IOSv L2        | 20200920               | ✅     | Disk           |
+| Juniper   | vRouter        | 23.4R2-S2.1            | ✅     | CDROM          |
+| Juniper   | vSwitch        | 23.4R2-S2.1            | ✅     | CDROM          |
+| Juniper   | vSRXv3         | 23.2R2.21              | ✅     | CDROM          |
+| Juniper   | vEvolved       | 23.4R2-S2.1            | ✅     | TFTP           |
+| Nvidia    | Cumulus Linux  | 5.9.2                  | ✅     | USB            |
+| Nokia     | SR Linux       | 24.10.1                | ✅     | TBA            |
+| Microsoft | FlatCar Linux  | 3975.2.2               | ✅     | Ignition       |
+| Microsoft | Windows Server | 2024                   | ✅     | CloudBase-Init |
+| Canonical | Ubuntu Linux   | 24.04                  | ✅     | Cloud-Init     |
+| RedHat    | Fedora Linux   | 40-1.14                | ✅     | Cloud-Init     |
+| SONiC     | Sonic Linux    | 25051122               | ✅     | TFTP           |

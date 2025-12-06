@@ -5,15 +5,16 @@ docs_dir: docs
 
 nav:
   - About: about.md
+  - Manifest: manifest.md
   - Install:
-    - install/index.md
+    - install/automated.md
+    - install/manual.md
   - Boxes:
     - boxes/virtual-machines.md
     - boxes/containers.md
-    - boxes/unikernels.md
-
-  - Configuration:
-    - configuration/index.md
+    # - boxes/unikernels.md
+  - Configuration: configuration.md
+  - Troubleshooting: troubleshooting.md
 
 theme:
   name: material
