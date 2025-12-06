@@ -9,15 +9,26 @@ nav:
     - install/supported-platforms.md
     - install/automated.md
     - install/manual.md
+  - Update:
+    - update/sherpa.md
+    - update/system.md
   - Manifest: manifest.md
   - Usage: usage.md
   - Boxes:
     - boxes/supported-devices.md
     - boxes/virtual-machines/cisco-iosxe.md
+    - boxes/virtual-machines/flatcar-linux.md
     - boxes/containers/nokia-srlinux.md
     # - boxes/unikernels.md
+  - Networking:
+    - networking/nat.md
+    - networking/bridge.md
+    - networking/isolated.md
   - Configuration: configuration.md
-  - Troubleshooting: troubleshooting.md
+  - Help:
+    - help/libvirt.md
+    - help/docker.md
+    - help/troubleshooting.md
 
 theme:
   name: material

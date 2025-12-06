@@ -1,3 +1,5 @@
+# About
+
 Sherpa is a tool that aims to make creating IT infrastructure labs intuitive and painless.
 
 ## Why?

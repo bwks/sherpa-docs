@@ -1,3 +1,5 @@
+# Automated
+
 Sherpa can be installed via an installation script.
 
 ```

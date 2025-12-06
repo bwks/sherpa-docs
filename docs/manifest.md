@@ -1,5 +1,7 @@
+# Manifest
+
 A `Manifest` describes the lab configuration parameters.
-Manifests are defined in the `toml` format in a file named `manifest.toml`
+Manifests are defined in the [toml](https://toml.io/en/) format in a file named `manifest.toml`
 in the current directory.
 
 ```toml
