@@ -5,14 +5,16 @@ docs_dir: docs
 
 nav:
   - About: about.md
-  - Manifest: manifest.md
-  - Usage: usage.md
   - Install:
+    - install/supported-platforms.md
     - install/automated.md
     - install/manual.md
+  - Manifest: manifest.md
+  - Usage: usage.md
   - Boxes:
-    - boxes/virtual-machines.md
-    - boxes/containers.md
+    - boxes/supported-devices.md
+    - boxes/virtual-machines/cisco-iosxe.md
+    - boxes/containers/nokia-srlinux.md
     # - boxes/unikernels.md
   - Configuration: configuration.md
   - Troubleshooting: troubleshooting.md
