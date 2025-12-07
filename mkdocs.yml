@@ -18,13 +18,23 @@ nav:
     - boxes/supported-devices.md
     - boxes/virtual-machines/cisco-iosxe.md
     - boxes/virtual-machines/flatcar-linux.md
+    - boxes/virtual-machines/free-bsd.md
+    - boxes/virtual-machines/open-bsd.md
+    - boxes/virtual-machines/net-bsd.md
+    - boxes/virtual-machines/dragonfly-bsd.md
     - boxes/containers/nokia-srlinux.md
     # - boxes/unikernels.md
   - Networking:
     - networking/nat.md
     - networking/bridge.md
     - networking/isolated.md
-  - Configuration: configuration.md
+    - networking/management.md
+    - networking/black-hole.md
+  - Configuration:
+    - configuration/sherpa.md
+  - Examples:
+    - examples/kubernetes.md
+    - examples/clos.md
   - Help:
     - help/libvirt.md
     - help/docker.md

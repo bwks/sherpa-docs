@@ -28,6 +28,8 @@
 | Nvidia    | Cumulus Linux  | cumulus_linux    | VM        | 5.9.2                  | ✅     | USB            |
 | Microsoft | FlatCar Linux  | flatcar_linux    | VM        | 3975.2.2               | ✅     | Ignition       |
 | Microsoft | Windows Server | windows_server   | VM        | 2024                   | ✅     | CloudBase-Init |
+| Alpine    | Alpine Linux   | alpine_linuxv    | VM        | 3.22.2                 | ✅     | Cloud-Init     |
+| Alpine    | Alpine Linux   | alpine_linuxc    | Container | 3.22.2                 | 🚧     | TBA            |
 | Canonical | Ubuntu Linux   | ubuntu_linux     | VM        | 24.04                  | ✅     | Cloud-Init     |
 | Debian    | Debian Linux   | debian_linux     | VM        | 10.0                   | 🚧     | Cloud-Init     |
 | RedHat    | Fedora Linux   | fedora_linux     | VM        | 40-1.14                | ✅     | Cloud-Init     |
@@ -37,3 +39,7 @@
 | Alma      | Alma Linux     | alma_linux       | VM        | 9.0.0                  | 🚧     | Cloud-Init     |
 | Suse      | OpenSuse Linux | opensuse_linux   | VM        | 9.0.0                  | 🚧     | Cloud-Init     |
 | Suse      | Suse Linux     | suse_linux       | VM        | 9.0.0                  | 🚧     | Cloud-Init     |
+| BSD       | Free BSD       | free_bsd         | VM        | 14.2                   | 🚧     | Cloud-Init     |
+| BSD       | Open BSD       | open_bsd         | VM        | 10.8                   | 🚧     | Cloud-Init     |
+| BSD       | Net BSD        | net_bsd          | VM        | 10.1                   | 🚧     | Cloud-Init     |
+| BSD       | DragonFly BSD  | dragonfly_bsd    | VM        | 6.4.0                  | 🚧     | Cloud-Init     |

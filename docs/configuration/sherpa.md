@@ -1,4 +1,4 @@
-# Configuration
+# Sherpa
 
 The Sherpa application is installed in the `/opt/sherpa/` directory.
 
