@@ -14,16 +14,18 @@ nav:
     - update/system.md
   - Manifest: manifest.md
   - Usage: usage.md
-  - Boxes:
-    - boxes/supported-devices.md
-    - boxes/virtual-machines/cisco-iosxe.md
-    - boxes/virtual-machines/flatcar-linux.md
-    - boxes/virtual-machines/free-bsd.md
-    - boxes/virtual-machines/open-bsd.md
-    - boxes/virtual-machines/net-bsd.md
-    - boxes/virtual-machines/dragonfly-bsd.md
-    - boxes/containers/nokia-srlinux.md
-    # - boxes/unikernels.md
+  - Devices:
+    - devices/supported-devices.md
+    - Arista:
+      - devices/arista/arista-veos.md
+    - devices/cisco-iosxe.md
+    - devices/flatcar-linux.md
+    - devices/free-bsd.md
+    - devices/open-bsd.md
+    - devices/net-bsd.md
+    - devices/dragonfly-bsd.md
+    - devices/nokia-srlinux.md
+    # - nodes/unikernels.md
   - Networking:
     - networking/nat.md
     - networking/bridge.md
@@ -73,6 +75,7 @@ theme:
 
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/table.css
 
 markdown_extensions:
   - admonition

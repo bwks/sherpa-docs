@@ -1,0 +1,15 @@
+/* Make default tables denser with borders and striped rows */
+.md-typeset table:not([class]) {
+  /* font-size: 0.8rem; */
+  border-collapse: collapse;
+}
+
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td {
+  border: 1px solid var(--md-typeset-table-color);
+  padding: 4px 8px;
+}
+
+.md-typeset table:not([class]) tbody tr:nth-child(odd) {
+  background-color: var(--md-default-bg-color--lightest);
+}

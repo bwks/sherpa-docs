@@ -10,7 +10,7 @@
 | --------- | -------------- | ---------------- | --------- | ---------------------- | ------ | -------------- |
 | Arista    | vEOS           | arista_veos      | VM        | 4.32.2f                | ✅     | TFTP           |
 | Arista    | cEOS           | arista_ceos      | Container | 4.32.2f                | 🚧     | TBA            |
-| Aruba     | AOS-CX         | arista_ceos      | VM        | 10.07                  | ✅     | TFTP           |
+| Aruba     | AOS-CX         | aruba_aoscx      | VM        | 10.07                  | ✅     | TFTP           |
 | Cisco     | ASAv           | cisco_asav       | VM        | 9.20.2                 | ✅     | CDROM          |
 | Cisco     | CSR 1000v      | cisco_csr1000v   | VM        | 17.03.08a              | ✅     | CDROM          |
 | Cisco     | Catalyst 8000v | cisco_cat8000v   | VM        | 17.13.01a              | ✅     | CDROM          |
@@ -24,7 +24,7 @@
 | Juniper   | vSRXv3         | juniper_vsrxv3   | VM        | 23.2R2.21              | ✅     | CDROM          |
 | Juniper   | vEvolved       | juniper_vevolved | VM        | 23.4R2-S2.1            | ✅     | TFTP           |
 | Nokia     | SR Linux       | nokia_srlinux    | Container | 24.10.1                | 🚧     | TBA            |
-| SONiC     | Sonic Linux    | sonix_linux      | VM        | 25051122               | ✅     | TFTP           |
+| SONiC     | Sonic Linux    | sonic_linux      | VM        | 25051122               | ✅     | TFTP           |
 | Nvidia    | Cumulus Linux  | cumulus_linux    | VM        | 5.9.2                  | ✅     | USB            |
 | Microsoft | FlatCar Linux  | flatcar_linux    | VM        | 3975.2.2               | ✅     | Ignition       |
 | Microsoft | Windows Server | windows_server   | VM        | 2024                   | ✅     | CloudBase-Init |
