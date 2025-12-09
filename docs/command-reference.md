@@ -18,9 +18,9 @@ sherpa up
 
 This will bring up the virtual devices and stitch the interfaces together.
 
-## Kill Environment
+## Destroy Environment
 
-When done, tear down the environment.
+Stop and delete all lab resources.
 
 ```
 sherpa destroy

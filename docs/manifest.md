@@ -4,6 +4,8 @@ A `Manifest` describes the lab configuration parameters.
 Manifests are defined in the [toml](https://toml.io/en/) format in a file named `manifest.toml`
 in the current directory.
 
+## Example Manifest
+
 ```toml
 # manifest.toml
 name = "sexy-salamander"

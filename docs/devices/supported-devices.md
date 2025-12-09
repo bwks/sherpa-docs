@@ -2,9 +2,7 @@
 
 ## Device Support Matrix
 
-- ✅ - Working
-- 🚧 - Planned
-- ⚠️ - Partially Working
+✅ - Working | 🚧 - Planned | ⚠️ - Partially Working
 
 | Vendor    | Model          | Device Type      | Kind      | Minimum Tested Version | Status | ZTP Method     |
 | --------- | -------------- | ---------------- | --------- | ---------------------- | ------ | -------------- |
@@ -28,8 +26,8 @@
 | Nvidia    | Cumulus Linux  | cumulus_linux    | VM        | 5.9.2                  | ✅     | USB            |
 | Microsoft | FlatCar Linux  | flatcar_linux    | VM        | 3975.2.2               | ✅     | Ignition       |
 | Microsoft | Windows Server | windows_server   | VM        | 2024                   | ✅     | CloudBase-Init |
-| Alpine    | Alpine Linux   | alpine_linuxv    | VM        | 3.22.2                 | ✅     | Cloud-Init     |
-| Alpine    | Alpine Linux   | alpine_linuxc    | Container | 3.22.2                 | 🚧     | TBA            |
+| Alpine    | Alpine Linux   | alpine_vlinux    | VM        | 3.22.2                 | ✅     | Cloud-Init     |
+| Alpine    | Alpine Linux   | alpine_clinux    | Container | 3.22.2                 | 🚧     | TBA            |
 | Canonical | Ubuntu Linux   | ubuntu_linux     | VM        | 24.04                  | ✅     | Cloud-Init     |
 | Debian    | Debian Linux   | debian_linux     | VM        | 10.0                   | 🚧     | Cloud-Init     |
 | RedHat    | Fedora Linux   | fedora_linux     | VM        | 40-1.14                | ✅     | Cloud-Init     |
