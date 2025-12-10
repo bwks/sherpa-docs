@@ -5,15 +5,46 @@ docs_dir: docs
 
 nav:
   - About: about.md
-  - Install:
-    - install/index.md
-  - Boxes:
-    - boxes/virtual-machines.md
-    - boxes/containers.md
-    - boxes/unikernels.md
-
+  - Quickstart: quickstart.md
+  - Architecture: architecture.md
+  - Install / Update:
+    - Install:
+      - install-update/install/supported-platforms.md
+      - install-update/install/automated.md
+      - install-update/install/manual.md
+    - Update:
+      - install-update/update/sherpa.md
+      - install-update/update/system.md
+  - Manifest: manifest.md
+  - Devices:
+    - devices/supported-devices.md
+    - Arista:
+      - devices/arista/arista-veos.md
+    - devices/cisco-iosxe.md
+    - devices/flatcar-linux.md
+    - devices/free-bsd.md
+    - devices/open-bsd.md
+    - devices/net-bsd.md
+    - devices/dragonfly-bsd.md
+    - devices/nokia-srlinux.md
+    # - nodes/unikernels.md
+  - Networking:
+    - networking/management.md
+    - networking/bridge.md
+    - networking/isolated.md
+    - networking/black-hole.md
   - Configuration:
-    - configuration/index.md
+    - configuration/sherpa.md
+  - Command Reference: command-reference.md
+  - Examples:
+    - examples/basic.md
+    - examples/clos.md
+    - examples/test-servers.md
+    - examples/kubernetes.md
+  - Help:
+    - help/libvirt.md
+    - help/docker.md
+    - help/troubleshooting.md
 
 theme:
   name: material
@@ -48,6 +79,7 @@ theme:
 
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/table.css
 
 markdown_extensions:
   - admonition
