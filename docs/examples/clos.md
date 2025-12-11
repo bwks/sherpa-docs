@@ -3,7 +3,7 @@
 ```toml
 name = "sherpa-clos"
 
-devices = [
+nodes = [
   { name = "spine01", model = "sonic_linux" },
   { name = "spine02", model = "sonic_linux" },
   { name = "leaf01", model = "sonic_linux" },

@@ -10,7 +10,7 @@ in the current directory.
 # manifest.toml
 name = "sexy-salamander"
 
-devices = [
+nodes = [
   { name = "dev01", model = "cisco_cat8000v" },
   { name = "dev02", model = "cisco_cat8000v" },
 ]
@@ -27,16 +27,16 @@ links = [
 To avoid naming collisions, the `lab name` is hashed with the users, `username`
 to create a `lab-id`. Resources are suffixed with the `lab-id` to create unique resource names.
 
-## Devices
+## Nodes
 
-[Required] - The devices that will be managed as part of this lab.
+[Required] - The nodes that will be managed as part of this lab.
 
 - **name**: The name of the device.
 - **model**: The model of the device.
 
 ## Links
 
-[Optional] - Links define the connectivity relationship between devices in the topology.
+[Optional] - Links define the connectivity relationship between nodes in the topology.
 
 Each device is defined with it's `name` and `interface` separated by a double colon `(::)`
 

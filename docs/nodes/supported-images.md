@@ -1,6 +1,6 @@
-# Supported Devices
+# Supported Images
 
-## Device Support Matrix
+## Image Support Matrix
 
 ✅ - Working | 🚧 - Planned | ⚠️ - Partially Working
 
@@ -25,7 +25,7 @@
 | SONiC     | Sonic Linux    | sonic_linux      | VM        | 25051122               | ✅     | TFTP           |
 | Nvidia    | Cumulus Linux  | cumulus_linux    | VM        | 5.9.2                  | ✅     | USB            |
 | Microsoft | FlatCar Linux  | flatcar_linux    | VM        | 3975.2.2               | ✅     | Ignition       |
-| Microsoft | Windows Server | windows_server   | VM        | 2024                   | ✅     | CloudBase-Init |
+| Microsoft | Windows Server | windows_server   | VM        | 2012                   | ✅     | CloudBase-Init |
 | Alpine    | Alpine Linux   | alpine_vlinux    | VM        | 3.22.2                 | ✅     | Cloud-Init     |
 | Alpine    | Alpine Linux   | alpine_clinux    | Container | 3.22.2                 | 🚧     | TBA            |
 | Canonical | Ubuntu Linux   | ubuntu_linux     | VM        | 24.04                  | ✅     | Cloud-Init     |

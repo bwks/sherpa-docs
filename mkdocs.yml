@@ -6,7 +6,9 @@ docs_dir: docs
 nav:
   - About: about.md
   - Quickstart: quickstart.md
-  - Architecture: architecture.md
+  - Architecture:
+    - architecture/architecture.md
+    - architecture/credentials.md
   - Install / Update:
     - Install:
       - install-update/install/supported-platforms.md
@@ -16,17 +18,30 @@ nav:
       - install-update/update/sherpa.md
       - install-update/update/system.md
   - Manifest: manifest.md
-  - Devices:
-    - devices/supported-devices.md
+  - Nodes:
+    - nodes/supported-images.md
     - Arista:
-      - devices/arista/arista-veos.md
-    - devices/cisco-iosxe.md
-    - devices/flatcar-linux.md
-    - devices/free-bsd.md
-    - devices/open-bsd.md
-    - devices/net-bsd.md
-    - devices/dragonfly-bsd.md
-    - devices/nokia-srlinux.md
+      - nodes/arista/arista-veos.md
+    - Aruba:
+      - nodes/aruba/aruba-aoscx.md
+    - Cisco:
+      - nodes/cisco/cisco-asav.md
+      - nodes/cisco/cisco-csr1000v.md
+      - nodes/cisco/cisco-cat8000v.md
+      - nodes/cisco/cisco-cat9000v.md
+    - Nokia:
+      - nodes/nokia-srlinux.md
+    - Linux:
+      - nodes/linux/flatcar-linux.md
+      - nodes/linux/ubuntu-linux.md
+    - BSD:
+      - nodes/bsd/free-bsd.md
+      - nodes/bsd/open-bsd.md
+      - nodes/bsd/net-bsd.md
+      - nodes/bsd/dragonfly-bsd.md
+    - Windows:
+      - nodes/windows/windows-server.md
+
     # - nodes/unikernels.md
   - Networking:
     - networking/management.md
@@ -76,6 +91,9 @@ theme:
       toggle:
         icon: material/weather-cloudy
         name: Switch to Latte
+  icon:
+    admonition:
+      note: fontawesome/solid/lightbulb
 
 extra_css:
   - stylesheets/extra.css
