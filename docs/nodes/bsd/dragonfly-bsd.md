@@ -18,17 +18,18 @@ sherpa image import \
 
 ## Node Parameters
 
-| Property             | Value        |
-| -------------------- | ------------ |
-| Tested Version       | 6.4.0        |
-| CPU                  | 1            |
-| RAM                  | 1GB          |
-| CDROM Driver         | SATA         |
-| DISK                 | virtio.qcow2 |
-| DISK Driver          | virtio       |
-| ZTP Method           | cloud-init   |
-| Management Interface | eth1         |
-| Interface Driver     | virtio       |
+| Property             | Value           |
+| -------------------- | --------------- |
+| Kind                 | Virtual Machine |
+| Tested Version       | 6.4.0           |
+| CPU                  | 1               |
+| RAM                  | 1GB             |
+| CDROM Driver         | SATA            |
+| DISK                 | virtio.qcow2    |
+| DISK Driver          | virtio          |
+| ZTP Method           | cloud-init      |
+| Management Interface | eth1            |
+| Interface Driver     | virtio          |
 
 ## Example Manifest
 

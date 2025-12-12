@@ -67,6 +67,28 @@ Set the default libvirt URI.
 echo 'export LIBVIRT_DEFAULT_URI=qemu:///system' > ~/.zshrc
 ```
 
+## Networking
+
+### Bridge Interface
+
+```yaml
+network:
+  version: 2
+  ethernets:
+    eth1-iface:
+      match:
+        macaddress: 6c:0b:84:aa:68:4e
+      set-name: eth1
+      dhcp4: false
+      dhcp6: false
+  bridges:
+    br-sherpa0:
+      interfaces: [eth1-iface]
+      parameters:
+        stp: false
+        forward-delay: 0
+```
+
 ## Sherpa
 
 ### Sherpa Server
@@ -92,6 +114,14 @@ Create `sherpa` directory
 ```
 sudo mkdir -p /opt/sherpa && \
     sudo chown sherpa:sherpa /opt/sherpa
+```
+
+```
+# 1. Make the directory owned by the group
+sudo chgrp sherpa /opt/sherpa
+
+# 2. Allow group members to create/enter
+sudo chmod 2775 /opt/sherpa
 ```
 
 ### Sherpa Client

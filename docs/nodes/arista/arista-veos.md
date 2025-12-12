@@ -33,19 +33,20 @@ sherpa image import \
 
 ## Node Parameters
 
-| Property             | Value        |
-| -------------------- | ------------ |
-| Tested Version       | 4.32.2f      |
-| CPU                  | 2            |
-| RAM                  | 2GB          |
-| CDROM                | aboot.iso    |
-| CDROM Driver         | IDE          |
-| DISK                 | virtio.qcow2 |
-| DISK Driver          | SATA         |
-| ZTP Method           | TFTP         |
-| Management Interface | mgmt1        |
-| Data Interfaces      | eth1-48      |
-| Interface Driver     | virtio       |
+| Property             | Value           |
+| -------------------- | --------------- |
+| Kind                 | Virtual Machine |
+| Tested Version       | 4.32.2f         |
+| CPU                  | 2               |
+| RAM                  | 2GB             |
+| CDROM                | aboot.iso       |
+| CDROM Driver         | IDE             |
+| DISK                 | virtio.qcow2    |
+| DISK Driver          | SATA            |
+| ZTP Method           | TFTP            |
+| Management Interface | mgmt1           |
+| Data Interfaces      | eth1-48         |
+| Interface Driver     | virtio          |
 
 ## Example Manifest
 
