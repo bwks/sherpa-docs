@@ -41,7 +41,7 @@ sherpa image import \
 | RAM                  | 2GB             |
 | CDROM                | aboot.iso       |
 | CDROM Driver         | IDE             |
-| DISK                 | virtio.qcow2    |
+| DISK                 | virtioa.qcow2   |
 | DISK Driver          | SATA            |
 | ZTP Method           | TFTP            |
 | Management Interface | mgmt1           |
@@ -51,7 +51,7 @@ sherpa image import \
 ## Example Manifest
 
 ```toml
-name = "silly-sausage"
+name = "arista-veos"
 
 nodes = [
   { name = "dev01", model = "arista_veos" },

@@ -27,7 +27,6 @@ nav:
     - Cisco:
       - nodes/cisco/general.md
       - nodes/cisco/cisco-asav.md
-      - nodes/cisco/cisco-csr1000v.md
       - nodes/cisco/cisco-cat8000v.md
       - nodes/cisco/cisco-cat9000v.md
       - nodes/cisco/cisco-cat9800cl.md

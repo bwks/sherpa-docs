@@ -1,6 +1,6 @@
 # General
 
-The following Cisco images can be accessed if you have a Cisco Modeling Labs subscription.
+The following Cisco images can be accessed if you have a Cisco Modeling Labs (CML) subscription.
 
 - ASAv
 - Catalyst 8000v

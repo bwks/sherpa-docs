@@ -21,7 +21,7 @@ sherpa image import \
 | CPU                  | 1               |
 | RAM                  | 1GB             |
 | CDROM Driver         | SATA            |
-| DISK                 | virtio.qcow2    |
+| DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | cloud-init      |
 | Management Interface | eth1            |
