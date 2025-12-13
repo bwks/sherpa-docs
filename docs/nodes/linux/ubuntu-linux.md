@@ -1,3 +1,5 @@
+# Ubuntu Linux
+
 ## Base Image
 
 Base images can be downloaded from [Ubuntu Cloud Images](https://cloud-images.ubuntu.com/).
@@ -30,7 +32,7 @@ sherpa image import \
 ## Example Manifest
 
 ```toml
-name = "silly-sausage"
+name = "ubuntu-linux"
 
 nodes = [
   { name = "dev01", model = "ubuntu_linux" },

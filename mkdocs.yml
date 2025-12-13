@@ -29,22 +29,22 @@ nav:
       - nodes/cisco/cisco-asav.md
       - nodes/cisco/cisco-cat8000v.md
       - nodes/cisco/cisco-cat9000v.md
-      - nodes/cisco/cisco-cat9800cl.md
-      - nodes/cisco/cisco-cedge.md
+      # - nodes/cisco/cisco-cat9800cl.md
+      # - nodes/cisco/cisco-cedge.md
       - nodes/cisco/cisco-csr1000v.md
-      - nodes/cisco/cisco-fmcv.md
-      - nodes/cisco/cisco-ftdv.md
-      - nodes/cisco/cisco-ioll2.md
-      - nodes/cisco/cisco-iol.md
-      - nodes/cisco/cisco-iolserial.md
-      - nodes/cisco/cisco-iosvl2.md
+      # - nodes/cisco/cisco-fmcv.md
+      # - nodes/cisco/cisco-ftdv.md
+      # - nodes/cisco/cisco-ioll2.md
+      # - nodes/cisco/cisco-iol.md
+      # - nodes/cisco/cisco-iolserial.md
       - nodes/cisco/cisco-iosv.md
+      - nodes/cisco/cisco-iosvl2.md
       - nodes/cisco/cisco-iosxrv9000.md
       - nodes/cisco/cisco-nexus9300v.md
-      - nodes/cisco/cisco-sdwanc.md
-      - nodes/cisco/cisco-sdwanm.md
-      - nodes/cisco/cisco-sdwanv.md
-      - nodes/cisco/cisco-vedge.md
+      # - nodes/cisco/cisco-sdwanc.md
+      # - nodes/cisco/cisco-sdwanm.md
+      # - nodes/cisco/cisco-sdwanv.md
+      # - nodes/cisco/cisco-vedge.md
     - Mikrotik:
       - nodes/mikrotik/mikrotik-chr.md
     - Nokia:
@@ -52,12 +52,13 @@ nav:
     - Linux:
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
+      - nodes/linux/opensuse-linux.md
       - nodes/linux/ubuntu-linux.md
     - BSD:
-      - nodes/bsd/free-bsd.md
+      # - nodes/bsd/free-bsd.md
       - nodes/bsd/open-bsd.md
-      - nodes/bsd/net-bsd.md
-      - nodes/bsd/dragonfly-bsd.md
+      # - nodes/bsd/net-bsd.md
+      # - nodes/bsd/dragonfly-bsd.md
     - Windows:
       - nodes/windows/windows-server.md
 

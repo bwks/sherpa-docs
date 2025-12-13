@@ -1,16 +1,16 @@
-# Fedora Linux
+# OpenSUSE Linux
 
 ## Base Image
 
-Base images can be downloaded from [Fedora Cloud Images](https://fedoraproject.org/cloud/download).
+Base images can be downloaded from [OpenSUSE Cloud Images](https://download.opensuse.org/repositories/Cloud:/Images:/).
 
 ## Import Image
 
 ```
 sherpa image import \
-  --src Fedora-Cloud-Base-Generic-43-1.6.x86_64.qcow2 \
-  --model fedora_linux \
-  --version 43-1.6 \
+  --src openSUSE-Leap-15.6.x86_64-NoCloud.qcow2 \
+  --model opensuse_linux \
+  --version 15.6 \
   --latest
 ```
 
@@ -18,7 +18,7 @@ sherpa image import \
 
 | Property             | Value           |
 | -------------------- | --------------- |
-| Tested Version       | 43-1.6          |
+| Tested Version       | 15.6            |
 | Kind                 | Virtual Machine |
 | CPU                  | 1               |
 | RAM                  | 1GB             |
@@ -32,10 +32,10 @@ sherpa image import \
 ## Example Manifest
 
 ```toml
-name = "fedora-linux"
+name = "opensuse-linux"
 
 nodes = [
-  { name = "dev01", model = "fedora_linux" },
+  { name = "dev01", model = "opensuse_linux" },
 ]
 ```
 
