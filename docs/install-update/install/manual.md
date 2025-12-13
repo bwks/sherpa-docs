@@ -113,15 +113,9 @@ Create `sherpa` directory
 
 ```
 sudo mkdir -p /opt/sherpa && \
-    sudo chown sherpa:sherpa /opt/sherpa
-```
-
-```
-# 1. Make the directory owned by the group
-sudo chgrp sherpa /opt/sherpa
-
-# 2. Allow group members to create/enter
-sudo chmod 2775 /opt/sherpa
+    sudo chown sherpa:sherpa /opt/sherpa && \
+    sudo chgrp sherpa /opt/sherpa && \
+    sudo chmod 2775 /opt/sherpa
 ```
 
 ### Sherpa Client

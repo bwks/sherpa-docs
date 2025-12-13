@@ -25,10 +25,29 @@ nav:
     - Aruba:
       - nodes/aruba/aruba-aoscx.md
     - Cisco:
+      - nodes/cisco/general.md
       - nodes/cisco/cisco-asav.md
       - nodes/cisco/cisco-csr1000v.md
       - nodes/cisco/cisco-cat8000v.md
       - nodes/cisco/cisco-cat9000v.md
+      - nodes/cisco/cisco-cat9800cl.md
+      - nodes/cisco/cisco-cedge.md
+      - nodes/cisco/cisco-csr1000v.md
+      - nodes/cisco/cisco-fmcv.md
+      - nodes/cisco/cisco-ftdv.md
+      - nodes/cisco/cisco-ioll2.md
+      - nodes/cisco/cisco-iol.md
+      - nodes/cisco/cisco-iolserial.md
+      - nodes/cisco/cisco-iosvl2.md
+      - nodes/cisco/cisco-iosv.md
+      - nodes/cisco/cisco-iosxrv9000.md
+      - nodes/cisco/cisco-nexus9300v.md
+      - nodes/cisco/cisco-sdwanc.md
+      - nodes/cisco/cisco-sdwanm.md
+      - nodes/cisco/cisco-sdwanv.md
+      - nodes/cisco/cisco-vedge.md
+    - Mikrotik:
+      - nodes/mikrotik/mikrotik-chr.md
     - Nokia:
       - nodes/nokia-srlinux.md
     - Linux:
@@ -79,19 +98,19 @@ theme:
         icon: material/weather-night
         name: Switch to Macchiato
 
-    - scheme: macchiato
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-partly-cloudy
-        name: Switch to Mocha
+    # - scheme: macchiato
+    #   primary: custom
+    #   accent: custom
+    #   toggle:
+    #     icon: material/weather-partly-cloudy
+    #     name: Switch to Mocha
 
-    - scheme: mocha
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-cloudy
-        name: Switch to Latte
+    # - scheme: mocha
+    #   primary: custom
+    #   accent: custom
+    #   toggle:
+    #     icon: material/weather-cloudy
+    #     name: Switch to Latte
   icon:
     admonition:
       note: fontawesome/solid/lightbulb

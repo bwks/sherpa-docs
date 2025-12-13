@@ -2,11 +2,11 @@
 
 ## Base Image
 
-The base image can be downloaded from the [HPE Support Portal](https://networkingsupport.hpe.com/globalsearch#q=aos-cx%20switch%20simulator&tab=all) and search for `aos-cx switch simulator`.
+The base image can be downloaded from the [HPE Support Portal](https://networkingsupport.hpe.com/globalsearch#q=aos-cx%20switch%20simulator&tab=all). Search for `aos-cx switch simulator`.
 
 !!! Note
 
-    An account is required to download the image.f
+    An account is required to download the image.
 
 ## Import Image
 
@@ -20,7 +20,7 @@ unzip AOS-CX_Switch_Simulator_10_16_1010_ova.zip
 
 ### Convert
 
-The image is in `ova` format and needs to be converted.
+The extracted file is in `ova` format and needs to be converted to `qcow2`.
 
 ```
 mkdir aos-ova && \
