@@ -52,6 +52,7 @@ nav:
     - Linux:
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
+      - nodes/linux/suse-linux.md
       - nodes/linux/opensuse-linux.md
       - nodes/linux/ubuntu-linux.md
     - BSD:

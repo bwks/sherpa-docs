@@ -13,7 +13,9 @@ sudo apt install \
   telnet \
   ssh \
   mtools \
-  e2tools
+  e2tools \
+  gzip \
+  unzip
 ```
 
 ### Check Virtualization Capabilities
@@ -116,6 +118,15 @@ sudo mkdir -p /opt/sherpa && \
     sudo chown sherpa:sherpa /opt/sherpa && \
     sudo chgrp sherpa /opt/sherpa && \
     sudo chmod 2775 /opt/sherpa
+```
+
+### Create Blank Disks
+
+#### TODO Update
+
+```
+bash scripts/create_blank_disks.sh
+bash scripts/create_iosv_disk.sh
 ```
 
 ### Sherpa Client
