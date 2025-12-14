@@ -24,6 +24,11 @@ nav:
       - nodes/arista/arista-veos.md
     - Aruba:
       - nodes/aruba/aruba-aoscx.md
+    - BSD:
+      # - nodes/bsd/free-bsd.md
+      - nodes/bsd/open-bsd.md
+      # - nodes/bsd/net-bsd.md
+      # - nodes/bsd/dragonfly-bsd.md
     - Cisco:
       - nodes/cisco/general.md
       - nodes/cisco/cisco-asav.md
@@ -45,23 +50,18 @@ nav:
       # - nodes/cisco/cisco-sdwanm.md
       # - nodes/cisco/cisco-sdwanv.md
       # - nodes/cisco/cisco-vedge.md
-    - Mikrotik:
-      - nodes/mikrotik/mikrotik-chr.md
-    - Nokia:
-      - nodes/nokia-srlinux.md
     - Linux:
       - nodes/linux/cumulus-linux.md
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
+      - nodes/linux/opensuse-linux.md
       - nodes/linux/sonic-linux.md
       - nodes/linux/suse-linux.md
-      - nodes/linux/opensuse-linux.md
       - nodes/linux/ubuntu-linux.md
-    - BSD:
-      # - nodes/bsd/free-bsd.md
-      - nodes/bsd/open-bsd.md
-      # - nodes/bsd/net-bsd.md
-      # - nodes/bsd/dragonfly-bsd.md
+    - Mikrotik:
+      - nodes/mikrotik/mikrotik-chr.md
+    - Nokia:
+      - nodes/nokia-srlinux.md
     - Windows:
       - nodes/windows/windows-server.md
 

@@ -4,7 +4,8 @@
 
 !!! Note
 
-    Nvidia discontinued Cumulus-VX since version `5.13`. There is no current way to download Cumulus-VX images.
+    Nvidia discontinued Cumulus-VX since version `5.13`. There is no current official way to
+    download Cumulus-VX images.
 
 ## Import Image
 
