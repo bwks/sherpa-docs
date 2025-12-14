@@ -47,5 +47,5 @@ nodes = [
 
 ## Notes
 
-- Approximate boot time and for ZTP to complete: `1 minute`
+- Approximate time for the system to boot, and for ZTP to finish: `1 minute`
 - Tested with the `UFS` image.
