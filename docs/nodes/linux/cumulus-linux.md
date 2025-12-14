@@ -11,9 +11,9 @@
 
 ```
 sherpa image import \
-  --src cumulus-vx-5.9.2.qcow2 \
+  --src cumulus-vx-5.9.1.qcow2 \
   --model cumulus_linux \
-  --version 5.9.2 \
+  --version 5.9.1 \
   --latest
 ```
 
@@ -21,7 +21,7 @@ sherpa image import \
 
 | Property             | Value           |
 | -------------------- | --------------- |
-| Tested Version       | 5.9.2           |
+| Tested Version       | 5.9.1           |
 | Kind                 | Virtual Machine |
 | CPU                  | 2               |
 | RAM                  | 2GB             |
