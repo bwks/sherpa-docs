@@ -60,5 +60,5 @@ nodes = [
 
 ## Notes
 
-- Approximate boot time to interactive: `3 minutes`
+- Approximate boot time and for ZTP to complete: `3 minutes`
 - vEOS is tested with `Aboot-veos-serial-8.0.2.iso`

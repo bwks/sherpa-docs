@@ -49,4 +49,4 @@ nodes = [
 
 ## Notes
 
-- Approximate boot time to interactive: `2 minutes`
+- Approximate boot time and for ZTP to complete: `2 minutes`

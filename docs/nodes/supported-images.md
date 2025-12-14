@@ -35,9 +35,9 @@
 | Centos    | Centos Linux   | centos_linux     | VM        | 9.0.0                  | 🚧     | Cloud-Init     |
 | Rocky     | Rocky Linux    | rocky_linux      | VM        | 9.0.0                  | 🚧     | Cloud-Init     |
 | Alma      | Alma Linux     | alma_linux       | VM        | 9.0.0                  | 🚧     | Cloud-Init     |
-| Suse      | OpenSuse Linux | opensuse_linux   | VM        | 9.0.0                  | 🚧     | Cloud-Init     |
-| Suse      | Suse Linux     | suse_linux       | VM        | 9.0.0                  | 🚧     | Cloud-Init     |
+| Suse      | OpenSuse Linux | opensuse_linux   | VM        | 9.0.0                  | ✅     | Cloud-Init     |
+| Suse      | Suse Linux     | suse_linux       | VM        | 9.0.0                  | ✅     | Cloud-Init     |
 | BSD       | Free BSD       | free_bsd         | VM        | 14.2                   | 🚧     | Cloud-Init     |
-| BSD       | Open BSD       | open_bsd         | VM        | 10.8                   | 🚧     | Cloud-Init     |
+| BSD       | Open BSD       | open_bsd         | VM        | 10.8                   | ✅     | Cloud-Init     |
 | BSD       | Net BSD        | net_bsd          | VM        | 10.1                   | 🚧     | Cloud-Init     |
 | BSD       | DragonFly BSD  | dragonfly_bsd    | VM        | 6.4.0                  | 🚧     | Cloud-Init     |
