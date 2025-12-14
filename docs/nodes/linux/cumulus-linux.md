@@ -1,0 +1,47 @@
+# Cumulus Linux
+
+## Base Image
+
+!!! Note
+
+    Nvidia discontinued Cumulus-VX since version `5.13`. There is no current way to download Cumulus-VX images.
+
+## Import Image
+
+```
+sherpa image import \
+  --src cumulus-vx-5.9.2.qcow2 \
+  --model cumulus_linux \
+  --version 5.9.2 \
+  --latest
+```
+
+## Node Parameters
+
+| Property             | Value           |
+| -------------------- | --------------- |
+| Tested Version       | 5.9.2           |
+| Kind                 | Virtual Machine |
+| CPU                  | 2               |
+| RAM                  | 2GB             |
+| CDROM Driver         | SATA            |
+| DISK                 | virtioa.qcow2   |
+| DISK Driver          | virtio          |
+| ZTP Method           | USB             |
+| Management Interface | eth0            |
+| Data Interfaces      | swp1-52         |
+| Interface Driver     | virtio          |
+
+## Example Manifest
+
+```toml
+name = "cumulus-linux"
+
+nodes = [
+  { name = "dev01", model = "cumulus_linux" },
+]
+```
+
+## Notes
+
+- Approximate boot time and for ZTP to complete: `2 minutes`

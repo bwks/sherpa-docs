@@ -50,6 +50,7 @@ nav:
     - Nokia:
       - nodes/nokia-srlinux.md
     - Linux:
+      - nodes/linux/cumulus-linux.md
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
       - nodes/linux/sonic-linux.md
