@@ -1,8 +1,8 @@
-# OpenSUSE Linux
+# Alma Linux
 
 ## Base Image
 
-Base images can be downloaded from [OpenSUSE Cloud Images](https://download.opensuse.org/repositories/Cloud:/Images:/).
+Base images can be downloaded from [Alma Cloud Images](https://wiki.almalinux.org/cloud/).
 
 Look for the Generic No Cloud image.
 
@@ -10,9 +10,9 @@ Look for the Generic No Cloud image.
 
 ```
 sherpa image import \
-  --src openSUSE-Leap-15.6.x86_64-NoCloud.qcow2 \
-  --model opensuse_linux \
-  --version 15.6 \
+  --src AlmaLinux-10-GenericCloud-10.1-20251125.0.x86_64_v2.qcow2 \
+  --model alma_linux \
+  --version 10-20241125 \
   --latest
 ```
 
@@ -20,7 +20,7 @@ sherpa image import \
 
 | Property             | Value           |
 | -------------------- | --------------- |
-| Tested Version       | 15.6            |
+| Tested Version       | 10-20241125     |
 | Kind                 | Virtual Machine |
 | CPU                  | 1               |
 | RAM                  | 1GB             |
@@ -34,10 +34,10 @@ sherpa image import \
 ## Example Manifest
 
 ```toml
-name = "opensuse-linux"
+name = "alma-linux"
 
 nodes = [
-  { name = "dev01", model = "opensuse_linux" },
+  { name = "dev01", model = "alma_linux" },
 ]
 ```
 

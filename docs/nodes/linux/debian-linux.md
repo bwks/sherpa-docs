@@ -1,18 +1,16 @@
-# OpenSUSE Linux
+# Debian Linux
 
 ## Base Image
 
-Base images can be downloaded from [OpenSUSE Cloud Images](https://download.opensuse.org/repositories/Cloud:/Images:/).
-
-Look for the Generic No Cloud image.
+Base images can be downloaded from [Debian Cloud Images](https://cloud.debian.org/images/cloud/).
 
 ## Import Image
 
 ```
 sherpa image import \
-  --src openSUSE-Leap-15.6.x86_64-NoCloud.qcow2 \
-  --model opensuse_linux \
-  --version 15.6 \
+  --src debian-13-nocloud-amd64-20251117-2299.qcow2 \
+  --model debian_linux \
+  --version 13-20251117 \
   --latest
 ```
 
@@ -20,7 +18,7 @@ sherpa image import \
 
 | Property             | Value           |
 | -------------------- | --------------- |
-| Tested Version       | 15.6            |
+| Tested Version       | 13-20251117     |
 | Kind                 | Virtual Machine |
 | CPU                  | 1               |
 | RAM                  | 1GB             |
@@ -34,10 +32,10 @@ sherpa image import \
 ## Example Manifest
 
 ```toml
-name = "opensuse-linux"
+name = "debian-linux"
 
 nodes = [
-  { name = "dev01", model = "opensuse_linux" },
+  { name = "dev01", model = "debian_linux" },
 ]
 ```
 

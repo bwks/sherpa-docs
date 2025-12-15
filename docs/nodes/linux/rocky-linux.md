@@ -1,8 +1,8 @@
-# OpenSUSE Linux
+# Rocky Linux
 
 ## Base Image
 
-Base images can be downloaded from [OpenSUSE Cloud Images](https://download.opensuse.org/repositories/Cloud:/Images:/).
+Base images can be downloaded from the [Rocky Downloads](https://rockylinux.org/download) page.
 
 Look for the Generic No Cloud image.
 
@@ -10,9 +10,9 @@ Look for the Generic No Cloud image.
 
 ```
 sherpa image import \
-  --src openSUSE-Leap-15.6.x86_64-NoCloud.qcow2 \
-  --model opensuse_linux \
-  --version 15.6 \
+  --src Rocky-10-GenericCloud-Base.latest.x86_64.qcow2 \
+  --model rocky_linux \
+  --version 10-20251215 \
   --latest
 ```
 
@@ -20,7 +20,7 @@ sherpa image import \
 
 | Property             | Value           |
 | -------------------- | --------------- |
-| Tested Version       | 15.6            |
+| Tested Version       | 10-20251215     |
 | Kind                 | Virtual Machine |
 | CPU                  | 1               |
 | RAM                  | 1GB             |
@@ -34,10 +34,10 @@ sherpa image import \
 ## Example Manifest
 
 ```toml
-name = "opensuse-linux"
+name = "rocky-linux"
 
 nodes = [
-  { name = "dev01", model = "opensuse_linux" },
+  { name = "dev01", model = "rocky_linux" },
 ]
 ```
 

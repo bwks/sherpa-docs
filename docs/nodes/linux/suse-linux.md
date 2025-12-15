@@ -3,6 +3,7 @@
 ## Base Image
 
 Base images can be downloaded from the [SUSE Linux Enterprise Downloads](https://www.suse.com/download/sles/) page.
+
 Look for the `qcow2` image with `cloud` in the name.
 
 !!! Note

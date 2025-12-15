@@ -4,6 +4,8 @@
 
 Base images can be downloaded from [Fedora Cloud Images](https://fedoraproject.org/cloud/download).
 
+Look for the Generic No Cloud image.
+
 ## Import Image
 
 ```
@@ -26,7 +28,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | cloud-init      |
-| Management Interface | eth1            |
+| Management Interface | eth0            |
 | Interface Driver     | virtio          |
 
 ## Example Manifest
