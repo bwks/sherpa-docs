@@ -26,7 +26,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | cloud-init      |
-| Management Interface | eth1            |
+| Management Interface | eth0            |
 | Interface Driver     | virtio          |
 
 ## Example Manifest

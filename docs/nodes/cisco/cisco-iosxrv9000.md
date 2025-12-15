@@ -1,5 +1,11 @@
 # Cisco IOS-XRv 9000
 
+!!! Warning
+
+    Not working. ZTP config is applied, but there is no IP connectivity.
+    Device does not get IP address via DHCP, nor does applying IP address
+    manually help.
+
 ## Base Image
 
 See the [general notes](general.md) for information on obtaining a base image.
@@ -8,8 +14,8 @@ See the [general notes](general.md) for information on obtaining a base image.
 
 ```
 sherpa image import \
-  --src /tmp/xrv9k-fullk9-7.11.1/virtioa.qcow2 \
-  --version 7.11.1 \
+  --src xrv9k-fullk9-x-25.1.1.qcow2 \
+  --version 25.1.1 \
   --model cisco_iosxrv9000 \
   --latest
 ```
@@ -19,7 +25,7 @@ sherpa image import \
 | Property             | Value                |
 | -------------------- | -------------------- |
 | Kind                 | Virtual Machine      |
-| Tested Version       | 7.11.1               |
+| Tested Version       | 25.1.1               |
 | CPU                  | 4                    |
 | RAM                  | 20GB                 |
 | CDROM Driver         | SATA                 |
@@ -42,4 +48,4 @@ nodes = [
 
 ## Notes
 
-- Approximate time for the system to boot, and for ZTP to finish: `10 minutes`
+- Approximate time for the system to boot, and for ZTP to finish: `20 minutes`

@@ -1,16 +1,22 @@
-# OpenSUSE Linux
+# Red Hat Linux
 
 ## Base Image
 
-Base images can be downloaded from [OpenSUSE Cloud Images](https://download.opensuse.org/repositories/Cloud:/Images:/).
+Base images can be downloaded from the [Red Hat Enterprise Linux Downloads](https://access.redhat.com/downloads/content/rhel) page.
+
+Look for the `KVM Guest` image with in the name.
+
+!!! Note
+
+    An account is required. Creating a free developer account allows you to access Red Hat Enterprise Linux images.
 
 ## Import Image
 
 ```
 sherpa image import \
-  --src openSUSE-Leap-15.6.x86_64-NoCloud.qcow2 \
-  --model opensuse_linux \
-  --version 15.6 \
+  --src rhel-10.1-x86_64-kvm.qcow2 \
+  --model redhat_linux \
+  --version 10.1 \
   --latest
 ```
 
@@ -18,7 +24,7 @@ sherpa image import \
 
 | Property             | Value           |
 | -------------------- | --------------- |
-| Tested Version       | 15.6            |
+| Tested Version       | 10.1            |
 | Kind                 | Virtual Machine |
 | CPU                  | 1               |
 | RAM                  | 1GB             |
@@ -32,10 +38,10 @@ sherpa image import \
 ## Example Manifest
 
 ```toml
-name = "opensuse-linux"
+name = "redhat-linux"
 
 nodes = [
-  { name = "dev01", model = "opensuse_linux" },
+  { name = "dev01", model = "redhat_linux" },
 ]
 ```
 

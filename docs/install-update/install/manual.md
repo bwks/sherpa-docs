@@ -95,6 +95,8 @@ network:
 
 ### Sherpa Server
 
+#### Users/Groups
+
 Add `sherpa` user and group
 
 ```
@@ -118,6 +120,17 @@ sudo mkdir -p /opt/sherpa && \
     sudo chown sherpa:sherpa /opt/sherpa && \
     sudo chgrp sherpa /opt/sherpa && \
     sudo chmod 2775 /opt/sherpa
+```
+
+### AppArmor
+
+Update AppArmor policy to allow `qemu` to access config files.
+
+```
+sudo mkdir -p /var/lib/libvirt/sherpa/
+sudo sh -c 'echo "  # For ignition files" >> /etc/apparmor.d/abstractions/libvirt-qemu'
+sudo sh -c 'echo "  /var/lib/libvirt/sherpa/** r," >> /etc/apparmor.d/abstractions/libvirt-qemu'
+sudo systemctl restart libvirtd.service
 ```
 
 ### Create Blank Disks

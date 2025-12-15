@@ -4,7 +4,10 @@
 
 Base images can be downloaded from the [SUSE Linux Enterprise Downloads](https://www.suse.com/download/sles/) page.
 Look for the `qcow2` image with `cloud` in the name.
-An account is required, which can be created without any support contract.
+
+!!! Note
+
+    An account is required, which can be created without any support contract.
 
 ## Import Image
 
@@ -28,7 +31,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | cloud-init      |
-| Management Interface | eth1            |
+| Management Interface | eth0            |
 | Interface Driver     | virtio          |
 
 ## Example Manifest

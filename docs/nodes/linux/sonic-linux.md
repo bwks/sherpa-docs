@@ -4,10 +4,10 @@
 
 Base images can be downloaded from [TBC]().
 
-## ZTP
+!!! Warning
 
-Virtual Machine images from [sonic.software](https://sonic.software/) to not have ZTP enabled.
-If you obtain your image from there, ZTP will not work.
+    Virtual Machine images from [sonic.software](https://sonic.software/) do not have ZTP enabled
+    during compilation. If you obtain your image from there, ZTP will not work.
 
 ## Import Image
 

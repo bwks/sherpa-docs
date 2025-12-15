@@ -50,11 +50,17 @@ nav:
       # - nodes/cisco/cisco-sdwanm.md
       # - nodes/cisco/cisco-sdwanv.md
       # - nodes/cisco/cisco-vedge.md
+    - Juniper:
+      - nodes/juniper/juniper-vrouter.md
+      - nodes/juniper/juniper-vswitch.md
+      - nodes/juniper/juniper-vevolved.md
+      - nodes/juniper/juniper-vsrxv3.md
     - Linux:
       - nodes/linux/cumulus-linux.md
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
       - nodes/linux/opensuse-linux.md
+      - nodes/linux/redhat-linux.md
       - nodes/linux/sonic-linux.md
       - nodes/linux/suse-linux.md
       - nodes/linux/ubuntu-linux.md

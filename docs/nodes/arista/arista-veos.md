@@ -3,7 +3,10 @@
 ## Base Image
 
 Base images can be downloaded from the [Arista support portal](https://www.arista.com/en/support/software-download).
-An account is required, which can be created without any support contract.
+
+!!! Note
+
+    An account is required, which can be created without any support contract.
 
 Both a Virtual Machine `QCOW2` image and a Boot Loader `ISO` are required.
 
