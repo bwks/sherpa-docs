@@ -2,9 +2,8 @@
 
 !!! Warning
 
-    Not working. ZTP config is applied, but there is no IP connectivity.
-    Device does not get IP address via DHCP, nor does applying IP address
-    manually help.
+    Not working. ZTP config is applied, but cannot ssh to node.
+    Outbound connectivity is ok.
 
 ## Base Image
 
@@ -49,3 +48,4 @@ nodes = [
 ## Notes
 
 - Approximate time for the system to boot, and for ZTP to finish: `20 minutes`
+- Version `25.1.1` changed the bios to `uefi`. Previous versions used `sea_bios`

@@ -9,6 +9,7 @@ nav:
   - Architecture:
     - architecture/architecture.md
     - architecture/credentials.md
+    - architecture/zero-touch-provisioning.md
   - Install / Update:
     - Install:
       - install-update/install/supported-platforms.md
