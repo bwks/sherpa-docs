@@ -26,10 +26,8 @@ nav:
     - Aruba:
       - nodes/aruba/aruba-aoscx.md
     - BSD:
-      # - nodes/bsd/free-bsd.md
+      - nodes/bsd/free-bsd.md
       - nodes/bsd/open-bsd.md
-      # - nodes/bsd/net-bsd.md
-      # - nodes/bsd/dragonfly-bsd.md
     - Cisco:
       - nodes/cisco/general.md
       - nodes/cisco/cisco-asav.md

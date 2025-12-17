@@ -1,19 +1,15 @@
 # Free BSD
 
-!!! warning
-
-    The image fails to enable SSH on boot. Port 22 is already in use and SSH cannot bind.
-
 ## Base Image
 
-Base images can be downloaded from [BSD CLoud Images](https://bsd-cloud-image.org/).
+Base images can be downloaded from [BSD Cloud Images](https://bsd-cloud-image.org/).
 
 ## Import Image
 
 ```
 
 sherpa image import \
- --src freebsd-14.2-zfs-2024-12-08.qcow2 \
+ --src freebsd-14.2-ufs-2024-12-08.qcow2 \
  --model free_bsd \
  --version 14.2 \
  --latest
@@ -32,7 +28,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | cloud-init      |
-| Management Interface | eth1            |
+| Management Interface | eth0            |
 | Interface Driver     | virtio          |
 
 ## Example Manifest
