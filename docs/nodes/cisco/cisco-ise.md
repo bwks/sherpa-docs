@@ -1,0 +1,74 @@
+# Cisco ISE
+
+!!! note
+
+    SSH key based authentication is not working.
+
+## Base Image
+
+See the [general notes](general.md) for information on obtaining a base image.
+
+If you have a CML subscription, the `qcow2` image can also be found in the ref-platform ISO.
+
+## Import Image
+
+### Download
+
+Base images can also be downloaded from the [Cisco Software](software.cisco.com/download/home) page.
+
+Search for `Identity Services Engine Software` and download the `eval` image.
+
+### Convert
+
+!!! note
+
+    This step is not required for the CML ref-platform image.
+
+The image downloaded from [Cisco Software](software.cisco.com/download/home) is in `ova` format
+and needs to be converted to `qcow2`.
+
+```
+mkdir ise-ova && \
+  tar -xvf Cisco-vISE-300-3.4.0.608.ova -C ise-ova && \
+  cd ise-ova && \
+  qemu-img convert -p -f vmdk -O qcow2 Cisco-vISE-300-3.4.0.608-disk1.vmdk Cisco-vISE-300-3.4.0.608.qcow2
+```
+
+### Import
+
+```
+sherpa image import \
+  --src Cisco-vISE-300-3.4.0.608.qcow2 \
+  --version 3.4.0 \
+  --model cisco_ise \
+  --latest
+```
+
+## Node Parameters
+
+| Property             | Value           |
+| -------------------- | --------------- |
+| Kind                 | Virtual Machine |
+| Tested Version       | 3.4.0           |
+| CPU                  | 4               |
+| RAM                  | 16GB            |
+| CDROM Driver         | IDE             |
+| DISK                 | virtioa.qcow2   |
+| DISK Driver          | IDE             |
+| ZTP Method           | Disk            |
+| Management Interface | eth0            |
+| Interface Driver     | virtio          |
+
+## Example Manifest
+
+```toml
+name = "cisco-ise"
+
+nodes = [
+  { name = "dev01", model = "cisco_ise" },
+]
+```
+
+## Notes
+
+- Approximate time for the system to boot, and for ZTP to finish: `8 minutes`

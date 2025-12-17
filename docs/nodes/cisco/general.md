@@ -17,6 +17,7 @@ The following Cisco images can be accessed if you have a Cisco Modeling Labs (CM
 - NX OS 9000
 - Catalyst SD-WAN (including Manager, Controller, Validator, vEdge, and Cisco Edge)
 - Catalyst 9800-CL
+- ISE
 
 The images are available via your account on the [Cisco Learning Store](https://learningnetworkstore.cisco.com/myaccount).
 However, they come with the below warning which I have coped from [here](https://developer.cisco.com/docs/modeling-labs/vm-images-for-cml-labs/#vm-images-for-cml-labs). Use them outside of CML at your own risk.

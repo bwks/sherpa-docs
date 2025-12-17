@@ -44,6 +44,7 @@ nav:
       - nodes/cisco/cisco-iosv.md
       - nodes/cisco/cisco-iosvl2.md
       - nodes/cisco/cisco-iosxrv9000.md
+      - nodes/cisco/cisco-ise.md
       - nodes/cisco/cisco-nexus9300v.md
       # - nodes/cisco/cisco-sdwanc.md
       # - nodes/cisco/cisco-sdwanm.md
@@ -56,6 +57,7 @@ nav:
       - nodes/juniper/juniper-vswitch.md
     - Linux:
       - nodes/linux/alma-linux.md
+      - nodes/linux/alpine-linux.md
       - nodes/linux/cumulus-linux.md
       - nodes/linux/debian-linux.md
       - nodes/linux/fedora-linux.md
