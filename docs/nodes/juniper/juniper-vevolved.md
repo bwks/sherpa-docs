@@ -60,4 +60,4 @@ as a `USB` removable disk. The disk must be formatted as vFAT and have the label
 
 ## Notes
 
-- Approximate time for the system to boot, and for ZTP to finish: `9 minutes`
+- Approximate time for the system to be ready: `9 minutes`

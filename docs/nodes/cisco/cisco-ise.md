@@ -14,7 +14,7 @@ If you have a CML subscription, the `qcow2` image can also be found in the ref-p
 
 ### Download
 
-Base images can also be downloaded from the [Cisco Software](software.cisco.com/download/home) page.
+Base images can also be downloaded from the [Cisco Software](https://software.cisco.com/download/home) page.
 
 Search for `Identity Services Engine Software` and download the `eval` image.
 
@@ -24,22 +24,22 @@ Search for `Identity Services Engine Software` and download the `eval` image.
 
     This step is not required for the CML ref-platform image.
 
-The image downloaded from [Cisco Software](software.cisco.com/download/home) is in `ova` format
+The image downloaded from [Cisco Software](https://software.cisco.com/download/home) is in `ova` format
 and needs to be converted to `qcow2`.
 
 ```
 mkdir ise-ova && \
-  tar -xvf Cisco-vISE-300-3.4.0.608.ova -C ise-ova && \
+  tar -xvf Cisco-vISE-300-3.5.0.527.ova -C ise-ova && \
   cd ise-ova && \
-  qemu-img convert -p -f vmdk -O qcow2 Cisco-vISE-300-3.4.0.608-disk1.vmdk Cisco-vISE-300-3.4.0.608.qcow2
+  qemu-img convert -p -f vmdk -O qcow2 Cisco-vISE-300-3.5.0.527-disk1.vmdk Cisco-vISE-300-3.5.0.527.qcow2
 ```
 
 ### Import
 
 ```
 sherpa image import \
-  --src Cisco-vISE-300-3.4.0.608.qcow2 \
-  --version 3.4.0 \
+  --src /tmp/Cisco-vISE-300-3.5.0.527.qcow2 \
+  --version 3.5.0 \
   --model cisco_ise \
   --latest
 ```
@@ -50,11 +50,11 @@ sherpa image import \
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
 | Tested Version       | 3.4.0           |
-| CPU                  | 4               |
-| RAM                  | 16GB            |
+| CPU                  | 16              |
+| RAM                  | 32GB            |
 | CDROM Driver         | IDE             |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | IDE             |
+| DISK Driver          | virtio          |
 | ZTP Method           | Disk            |
 | Management Interface | eth0            |
 | Interface Driver     | virtio          |
@@ -71,4 +71,4 @@ nodes = [
 
 ## Notes
 
-- Approximate time for the system to boot, and for ZTP to finish: `8 minutes`
+- Approximate time for the system to be ready: `80 minutes`

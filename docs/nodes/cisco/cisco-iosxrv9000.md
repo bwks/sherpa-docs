@@ -47,5 +47,5 @@ nodes = [
 
 ## Notes
 
-- Approximate time for the system to boot, and for ZTP to finish: `20 minutes`
+- Approximate time for the system to be ready: `20 minutes`
 - Version `25.1.1` changed the bios to `uefi`. Previous versions used `sea_bios`

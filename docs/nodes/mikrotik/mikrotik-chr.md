@@ -50,4 +50,4 @@ nodes = [
 
 ## Notes
 
-- Approximate time for the system to boot, and for ZTP to finish: `1 minute`
+- Approximate time for the system to be ready: `1 minute`

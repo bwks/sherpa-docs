@@ -75,5 +75,5 @@ nodes = [
 
 ## Notes
 
-- Approximate time for the system to boot, and for ZTP to finish: `3 minutes`
+- Approximate time for the system to be ready: `3 minutes`
 - vEOS is tested with `Aboot-veos-serial-8.0.2.iso`

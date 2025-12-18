@@ -50,4 +50,4 @@ ZTP config must be provided in a file named `juniper.conf` in the root directory
 
 ## Notes
 
-- Approximate time for the system to boot, and for ZTP to finish: `4 minutes`
+- Approximate time for the system to be ready: `4 minutes`
