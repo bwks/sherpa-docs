@@ -57,6 +57,7 @@ sherpa image import \
 | DISK Driver          | virtio          |
 | ZTP Method           | Disk            |
 | Management Interface | eth0            |
+| Data Interfaces      | eth1-4          |
 | Interface Driver     | virtio          |
 
 ## Example Manifest

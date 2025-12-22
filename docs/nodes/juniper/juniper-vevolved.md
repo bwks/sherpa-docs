@@ -50,6 +50,10 @@ Therefore, the TFTP method is selected for this device type as default.
 
 ### USB
 
+!!! Warning
+
+    This method is not working.
+
 Juniper vEvolved requires a disk formatted in a particular way. If not completed during the system install,
 run the `scripts/create_blank_disks.sh` script to create the base disk. This base disk will be created
 in the `/opt/sherpa/images/blank_disk` directory. This only needs to occur once as the base disk

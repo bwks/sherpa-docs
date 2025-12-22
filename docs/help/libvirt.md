@@ -27,3 +27,15 @@ virsh net-dumpxml <network_name>
 ```
 
 ## Storage
+
+```
+virsh pool-list --all --detailed
+```
+
+```
+virsh pool-info <pool_name>
+```
+
+```
+virsh pool-dumpxml <pool_name>
+```

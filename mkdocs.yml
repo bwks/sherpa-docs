@@ -7,9 +7,18 @@ nav:
   - About: about.md
   - Quickstart: quickstart.md
   - Architecture:
-    - architecture/architecture.md
-    - architecture/credentials.md
+    - architecture/overview.md
+    - architecture/virtual-machine.md
+    - architecture/container.md
+    - architecture/unikernel.md
+    - Networking:
+      - architecture/networking/management.md
+      - architecture/networking/bridge.md
+      - architecture/networking/isolated.md
+      - architecture/networking/black-hole.md
+    - architecture/storage.md
     - architecture/zero-touch-provisioning.md
+    - architecture/credentials.md
   - Install / Update:
     - Install:
       - install-update/install/supported-platforms.md
@@ -72,15 +81,14 @@ nav:
       - nodes/mikrotik/mikrotik-chr.md
     - Nokia:
       - nodes/nokia-srlinux.md
+    - SQL:
+      - nodes/sql/mysql.md
+      - nodes/sql/postgresql.md
+      - nodes/sql/surrealdb.md
     - Windows:
       - nodes/windows/windows-server.md
 
     # - nodes/unikernels.md
-  - Networking:
-    - networking/management.md
-    - networking/bridge.md
-    - networking/isolated.md
-    - networking/black-hole.md
   - Configuration:
     - configuration/sherpa.md
   - Command Reference: command-reference.md
