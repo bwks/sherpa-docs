@@ -17,6 +17,7 @@ nav:
       - architecture/networking/isolated.md
       - architecture/networking/black-hole.md
     - architecture/storage.md
+    - architecture/database.md
     - architecture/zero-touch-provisioning.md
     - architecture/credentials.md
   - Install / Update:
@@ -117,7 +118,7 @@ theme:
       accent: custom
       toggle:
         icon: material/weather-night
-        name: Switch to Macchiato
+        name: Switch to Latte
 
     # - scheme: macchiato
     #   primary: custom

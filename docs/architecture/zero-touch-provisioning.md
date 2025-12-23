@@ -11,6 +11,7 @@ The following configuration parameters are applied to nodes via ZTP:
 - Default route
 - DNS domain
 - DNS name servers
+- DNS search domains
 - Sherpa user with password and SSH key authentication.
 
 ## Custom Node Configuration
