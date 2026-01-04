@@ -235,8 +235,8 @@
   --md-code-hl-special-color: var(--ctp-frappe-pink);
   --md-code-hl-function-color: var(--ctp-frappe-blue);
   --md-code-hl-constant-color: var(--ctp-frappe-peach);
-  --md-code-hl-keyword-color: var(--ctp-frappe-mauve);
-  --md-code-hl-string-color: var(--ctp-frappe-mauve);
+  --md-code-hl-keyword-color: var(--ctp-frappe-yellow);
+  --md-code-hl-string-color: var(--ctp-frappe-yellow);
   /* --md-code-hl-string-color: var(--ctp-frappe-green); */
   --md-code-hl-name-color: var(--ctp-frappe-text);
   --md-code-hl-operator-color: var(--ctp-frappe-sky);

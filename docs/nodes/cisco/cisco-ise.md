@@ -1,9 +1,5 @@
 # Cisco ISE
 
-!!! note
-
-    SSH key based authentication is not working.
-
 ## Base Image
 
 See the [general notes](general.md) for information on obtaining a base image.
@@ -38,18 +34,18 @@ mkdir ise-ova && \
 
 ```
 sherpa image import \
-  --src /tmp/Cisco-vISE-300-3.5.0.527.qcow2 \
+  --src Cisco-vISE-300-3.5.0.527.qcow2 \
   --version 3.5.0 \
   --model cisco_ise \
   --latest
 ```
 
-## Node Parameters
+## Default Node Parameters
 
 | Property             | Value           |
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
-| Tested Version       | 3.4.0           |
+| Tested Version       | 3.5.0           |
 | CPU                  | 16              |
 | RAM                  | 32GB            |
 | CDROM Driver         | IDE             |
@@ -70,6 +66,17 @@ nodes = [
 ]
 ```
 
+## Logging
+
+### Install
+
+ISE Install progress logs can be viewed with the command:
+
+```
+show logging system ade/ADE.log tail
+```
+
 ## Notes
 
 - Approximate time for the system to be ready: `80 minutes`
+- SSH key authentication is disabled by default, use [password](/architecture/credentials) auth instead.

@@ -127,9 +127,9 @@ sudo mkdir -p /opt/sherpa && \
 Update AppArmor policy to allow `qemu` to access config files.
 
 ```
-sudo mkdir -p /var/lib/libvirt/sherpa/
+sudo mkdir -p /opt/sherpa/libvirt/images/
 sudo sh -c 'echo "  # For ignition files" >> /etc/apparmor.d/abstractions/libvirt-qemu'
-sudo sh -c 'echo "  /var/lib/libvirt/sherpa/** r," >> /etc/apparmor.d/abstractions/libvirt-qemu'
+sudo sh -c 'echo "  /opt/sherpa/libvirt/images/** r," >> /etc/apparmor.d/abstractions/libvirt-qemu'
 sudo systemctl restart libvirtd.service
 ```
 

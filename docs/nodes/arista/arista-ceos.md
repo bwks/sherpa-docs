@@ -1,28 +1,30 @@
-# Nokia SR Linux
+# Arista cEOS
 
-!!! warning
-
-    Page under construction
-
-Nokia SR Linux is a container based image.
+Arista cEOS is a container based image.
 
 ## Base Image
 
-Base images can be downloaded from the [Nokia SR Linux](https://github.com/nokia/srlinux-container-image) github container registry.
+Base images can be downloaded from the [Arista support portal](https://www.arista.com/en/support/software-download).
+
+!!! note
+
+    An account is required, which can be created without any support contract.
+
+Look for the 64 bit `cEOS Lab` image.
 
 ### Import image
 
 ```
-docker pull ghcr.io/nokia/srlinux:25.10.1
+docker image import cEOS64-lab-4.35.1F.tar.xz arista-ceos:4.35.1F
 ```
 
 TODO: Update to use shepra CLI for import.
 
 ```
 sherpa image import \
-  --src ghcr.io/nokia/srlinux \
-  --version 25.10.1 \
-  --model nokia_srlinux \
+  --src cEOS64-lab-4.35.1F.tar.xz \
+  --version 4.35.1F \
+  --model arista_ceos \
   --latest
 ```
 
@@ -31,7 +33,7 @@ sherpa image import \
 | Property             | Value         |
 | -------------------- | ------------- |
 | Kind                 | Container     |
-| Tested Version       | 25.10.1       |
+| Tested Version       | 4.35.1F       |
 | CPU                  | 2             |
 | RAM                  | 2GB           |
 | CDROM                | aboot.iso     |
@@ -46,10 +48,10 @@ sherpa image import \
 ## Example Manifest
 
 ```toml
-name = "nokia-srlinux"
+name = "arista-ceos"
 
 nodes = [
-  { name = "dev01", model = "nokia_srlinux" },
+  { name = "dev01", model = "arista_ceos" },
 ]
 ```
 

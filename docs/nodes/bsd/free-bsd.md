@@ -16,7 +16,7 @@ sherpa image import \
 
 ```
 
-## Node Parameters
+## Default Node Parameters
 
 | Property             | Value           |
 | -------------------- | --------------- |

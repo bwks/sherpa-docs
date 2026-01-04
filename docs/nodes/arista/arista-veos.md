@@ -1,5 +1,7 @@
 # Arista vEOS
 
+Arista vEOS is a virtual machine based image.
+
 ## Base Image
 
 Base images can be downloaded from the [Arista support portal](https://www.arista.com/en/support/software-download).
@@ -8,7 +10,8 @@ Base images can be downloaded from the [Arista support portal](https://www.arist
 
     An account is required, which can be created without any support contract.
 
-Both a Virtual Machine `QCOW2` image and a Boot Loader `ISO` are required.
+Look for the 64 bit `vEOS Lab` image. Both a Virtual Machine `QCOW2` image and a Boot Loader
+`ISO` are required.
 
 ### VM Image
 
@@ -46,7 +49,7 @@ sherpa image import \
   --latest
 ```
 
-## Node Parameters
+## Default Node Parameters
 
 | Property             | Value           |
 | -------------------- | --------------- |

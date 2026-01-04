@@ -21,7 +21,7 @@ run the `scripts/create_iosv_disk.sh` script to create the base disk. This base 
 in the `/opt/sherpa/images/blank_disk` directory. This only needs to occur once as the base disk
 is cloned during instance creation.
 
-## Node Parameters
+## Default Node Parameters
 
 | Property             | Value           |
 | -------------------- | --------------- |

@@ -19,7 +19,7 @@ sherpa image import \
   --latest
 ```
 
-## Node Parameters
+## Default Node Parameters
 
 | Property             | Value           |
 | -------------------- | --------------- |

@@ -20,6 +20,7 @@ nav:
     - architecture/database.md
     - architecture/zero-touch-provisioning.md
     - architecture/credentials.md
+    - architecture/ssh-tunneling.md
   - Install / Update:
     - Install:
       - install-update/install/supported-platforms.md
@@ -33,6 +34,7 @@ nav:
     - nodes/supported-images.md
     - Arista:
       - nodes/arista/arista-veos.md
+      - nodes/arista/arista-ceos.md
     - Aruba:
       - nodes/aruba/aruba-aoscx.md
     - BSD:
@@ -60,6 +62,10 @@ nav:
       # - nodes/cisco/cisco-sdwanm.md
       # - nodes/cisco/cisco-sdwanv.md
       # - nodes/cisco/cisco-vedge.md
+    - Generic:
+      - nodes/generic/container.md
+      - nodes/generic/nanovm.md
+      - nodes/generic/virtual-machine.md
     - Juniper:
       - nodes/juniper/juniper-vevolved.md
       - nodes/juniper/juniper-vrouter.md
