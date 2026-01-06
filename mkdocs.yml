@@ -49,7 +49,7 @@ nav:
       # - nodes/cisco/cisco-cedge.md
       - nodes/cisco/cisco-csr1000v.md
       # - nodes/cisco/cisco-fmcv.md
-      # - nodes/cisco/cisco-ftdv.md
+      - nodes/cisco/cisco-ftdv.md
       # - nodes/cisco/cisco-ioll2.md
       # - nodes/cisco/cisco-iol.md
       # - nodes/cisco/cisco-iolserial.md
