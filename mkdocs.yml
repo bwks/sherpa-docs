@@ -31,7 +31,6 @@ nav:
       - install-update/update/system.md
   - Manifest: manifest.md
   - Nodes:
-    - nodes/supported-images.md
     - Arista:
       - nodes/arista/arista-veos.md
       - nodes/arista/arista-ceos.md

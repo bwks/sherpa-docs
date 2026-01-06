@@ -4,7 +4,7 @@
 
 ### Storage pools
 
-- /var/lib/libvirt/images/
+- /opt/sherpa/libvirt/images/
 
 ## Containers
 

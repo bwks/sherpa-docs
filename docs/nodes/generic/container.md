@@ -28,9 +28,12 @@ sherpa image import \
 ```toml
 name = "generic-container"
 
-nodes = [
-  { name = "dev01", model = "generic_container", image = "container-registry/image", version = "vX.Y.Z" },
-]
+[[nodes]]
+name = "dev01"
+model = "generic_container"
+image = "container-registry/image"
+version = "vX.Y.Z"
+commands = ["some", "start", "commands"]
 ```
 
 ## Notes
