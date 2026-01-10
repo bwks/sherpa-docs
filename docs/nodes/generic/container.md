@@ -5,11 +5,20 @@ Sherpa.
 
 ### Import
 
+#### Sherpa
+
+Pull the image down via sherpa
+
 ```
-sherpa image import \
-  --src container-registry/image \
-  --version vX.Y.Z  \
-  --model generic_container
+sherpa container image pull nginx:1.29.4-perl
+```
+
+#### Docker
+
+Sherpa uses the system's docker images, so you can also pull the image down via the `docker` cli.
+
+```
+docker image pull nginx:1.29.4-perl
 ```
 
 ## Default Node Parameters
@@ -19,7 +28,7 @@ sherpa image import \
 | Kind                 | Container |
 | CPU                  | 1         |
 | RAM                  | 1GB       |
-| ZTP Method           | Bind      |
+| ZTP Method           | Volume    |
 | Management Interface | eth0      |
 | Interface Driver     | virtio    |
 
@@ -28,12 +37,9 @@ sherpa image import \
 ```toml
 name = "generic-container"
 
-[[nodes]]
-name = "dev01"
-model = "generic_container"
-image = "container-registry/image"
-version = "vX.Y.Z"
-commands = ["some", "start", "commands"]
+nodes = [
+  { name = "dev01", model = "generic_container", image = "nginx", version = "1.29.4-perl" },
+]
 ```
 
 ## Notes

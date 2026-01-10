@@ -8,40 +8,34 @@ Nokia SR Linux is a container based image.
 
 ## Base Image
 
-Base images can be downloaded from the [Nokia SR Linux](https://github.com/nokia/srlinux-container-image) github container registry.
+Base images can be obtained from the [Nokia SR Linux](https://github.com/nokia/srlinux-container-image) github container registry.
 
 ### Import image
 
-```
-docker pull ghcr.io/nokia/srlinux:25.10.1
-```
-
-TODO: Update to use shepra CLI for import.
+#### Sherpa
 
 ```
-sherpa image import \
-  --src ghcr.io/nokia/srlinux \
-  --version 25.10.1 \
-  --model nokia_srlinux \
-  --latest
+sherpa container image pull ghcr.io/nokia/srlinux:25.10.1
+```
+
+#### Docker
+
+Sherpa uses the system's docker images, so you can also pull the image down via the `docker` cli.
+
+```
+docker image pull ghcr.io/nokia/srlinux:25.10.1
 ```
 
 ## Default Node Parameters
 
-| Property             | Value         |
-| -------------------- | ------------- |
-| Kind                 | Container     |
-| Tested Version       | 25.10.1       |
-| CPU                  | 2             |
-| RAM                  | 2GB           |
-| CDROM                | aboot.iso     |
-| CDROM Driver         | IDE           |
-| DISK                 | virtioa.qcow2 |
-| DISK Driver          | SATA          |
-| ZTP Method           | TFTP          |
-| Management Interface | mgmt1         |
-| Data Interfaces      | eth1-52       |
-| Interface Driver     | virtio        |
+| Property             | Value     |
+| -------------------- | --------- |
+| Kind                 | Container |
+| CPU                  | 2         |
+| RAM                  | 4GB       |
+| ZTP Method           | Volume    |
+| Management Interface | Mgmt0.0   |
+| Interface Driver     | virtio    |
 
 ## Example Manifest
 
@@ -55,4 +49,4 @@ nodes = [
 
 ## Notes
 
-- Approximate time for the system to be ready: `3 minutes`
+- Approximate time for the system to be ready: `1 minute`

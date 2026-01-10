@@ -17,7 +17,7 @@ services.
 
 ### DHCP
 
-A DHCP server with a range of addresses starting from the `network address + 10`
+A DHCP server with a range of addresses starting from the `first usable address + 10`
 and ending at the `last address -1`.
 
 ### DNS

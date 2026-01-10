@@ -79,4 +79,4 @@ show logging system ade/ADE.log tail
 ## Notes
 
 - Approximate time for the system to be ready: `80 minutes`
-- SSH key authentication is disabled by default, use [password](/architecture/credentials) auth instead.
+- SSH key authentication is disabled by default, use [password](../../architecture/credentials.md) auth instead.
