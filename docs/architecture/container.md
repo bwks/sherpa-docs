@@ -1,3 +1,3 @@
 # Container
 
-Sherpa supports OCI containers via the [Docker](https://docs.docker.com/) engine API.
+Containers are supported via the [Docker](https://docs.docker.com/) engine runtime and API.

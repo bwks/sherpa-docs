@@ -1,6 +1,6 @@
-# NanoVM
+# Unikernel
 
-A generic nanovm allows for the use of nanovm models that are not natively defined within
+A generic unikernel allows for the use of unikernel models that are not natively defined within
 Sherpa.
 
 ### Import
@@ -26,10 +26,10 @@ sherpa image import \
 ## Example Manifest
 
 ```toml
-name = "generic-nanovm"
+name = "generic-unikernel"
 
 nodes = [
-  { name = "dev01", model = "generic_nanovm", repo = "nanovm-registry/image", version = "vX.Y.Z" },
+  { name = "dev01", model = "generic_unikernel", repo = "unikernel-registry/image", version = "vX.Y.Z" },
 ]
 ```
 

@@ -25,7 +25,7 @@ sherpa image import \
 | CDROM Driver         | virtio          |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
-| ZTP Method           | CloudInit       |
+| ZTP Method           | Cloud-Init      |
 | Management Interface | eth0            |
 | Interface Driver     | virtio          |
 

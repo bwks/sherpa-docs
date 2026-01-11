@@ -20,7 +20,7 @@ nav:
     - architecture/database.md
     - architecture/zero-touch-provisioning.md
     - architecture/credentials.md
-    - architecture/ssh-tunneling.md
+    - architecture/ssh.md
   - Install / Update:
     - Install:
       - install-update/install/supported-platforms.md
@@ -63,7 +63,7 @@ nav:
       # - nodes/cisco/cisco-vedge.md
     - Generic:
       - nodes/generic/container.md
-      - nodes/generic/nanovm.md
+      - nodes/generic/unikernel.md
       - nodes/generic/virtual-machine.md
     - Juniper:
       - nodes/juniper/juniper-vevolved.md

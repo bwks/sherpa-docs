@@ -1,13 +1,12 @@
 # Container
 
-A generic container allows for the use of container models that are not natively defined within
-Sherpa.
+A generic container allows for the use of container models that are not natively defined within Sherpa.
 
 ### Import
 
 #### Sherpa
 
-Pull the image down via sherpa
+Pull the image down via sherpa.
 
 ```
 sherpa container image pull nginx:1.29.4-perl
