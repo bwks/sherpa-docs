@@ -43,7 +43,7 @@ docker image pull ghcr.io/nokia/srlinux:25.10.1
 name = "nokia-srlinux"
 
 nodes = [
-  { name = "dev01", model = "nokia_srlinux" },
+  { name = "dev01", model = "nokia_srlinux", version = "25.10.1" },
 ]
 ```
 

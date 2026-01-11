@@ -61,6 +61,8 @@ nav:
       # - nodes/cisco/cisco-sdwanm.md
       # - nodes/cisco/cisco-sdwanv.md
       # - nodes/cisco/cisco-vedge.md
+    - Fortinet:
+      - nodes/fortinet/fortinet-fortigate.md
     - Generic:
       - nodes/generic/container.md
       - nodes/generic/unikernel.md
@@ -86,7 +88,9 @@ nav:
     - Mikrotik:
       - nodes/mikrotik/mikrotik-chr.md
     - Nokia:
-      - nodes/nokia-srlinux.md
+      - nodes/nokia/nokia-srlinux.md
+    - Paloalto:
+      - nodes/paloalto/paloalto-panos.md
     - SQL:
       - nodes/sql/mysql.md
       - nodes/sql/postgresql.md
@@ -147,11 +151,12 @@ extra_css:
   - stylesheets/table.css
 
 markdown_extensions:
-  - admonition
   - toc:
       permalink: true
+  - admonition
   - pymdownx.highlight
   - pymdownx.superfences
-
+  - pymdownx.tabbed:
+      alternate_style: true
 plugins:
   - search

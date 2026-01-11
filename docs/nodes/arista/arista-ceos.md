@@ -46,6 +46,26 @@ nodes = [
 ]
 ```
 
+## Node Access
+
+=== "SSH"
+
+    ```
+    sherpa ssh dev01
+    ```
+
+=== "Console"
+
+    ```
+    sherpa console dev01
+    ```
+
+=== "Docker"
+
+    ```
+    docker exec -it dev01-<lab-id> sudo Cli
+    ```
+
 ## Notes
 
 - Approximate time for the system to be ready: `1 minutes`
