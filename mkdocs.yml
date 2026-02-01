@@ -16,6 +16,7 @@ nav:
       - architecture/networking/bridge.md
       - architecture/networking/isolated.md
       - architecture/networking/black-hole.md
+      - architecture/networking/point-to-point.md
     - architecture/storage.md
     - architecture/database.md
     - architecture/zero-touch-provisioning.md
