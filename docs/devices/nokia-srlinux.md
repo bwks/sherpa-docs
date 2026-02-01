@@ -1,1 +1,0 @@
-# Nokia SR Linux

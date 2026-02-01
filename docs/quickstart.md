@@ -6,9 +6,9 @@
 curl https://blah.bleh | sudo sh
 ```
 
-## Devices
+## Nodes
 
-In Sherpa, a device is a virtual machine or container
+In Sherpa, a node is a virtual machine or container
 that is managed as part of a lab environment.
 
 ## Manifest
@@ -17,7 +17,7 @@ that is managed as part of a lab environment.
 # manifest.toml
 name = "labrador-infiniato"
 
-devices = [
+nodes = [
   { name = "dev01", model = "sonic_vlinux" },
   { name = "dev02", model = "sonic_vlinux" },
 ]

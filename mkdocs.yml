@@ -6,7 +6,22 @@ docs_dir: docs
 nav:
   - About: about.md
   - Quickstart: quickstart.md
-  - Architecture: architecture.md
+  - Architecture:
+    - architecture/overview.md
+    - architecture/virtual-machine.md
+    - architecture/container.md
+    - architecture/unikernel.md
+    - Networking:
+      - architecture/networking/management.md
+      - architecture/networking/bridge.md
+      - architecture/networking/isolated.md
+      - architecture/networking/black-hole.md
+      - architecture/networking/point-to-point.md
+    - architecture/storage.md
+    - architecture/database.md
+    - architecture/zero-touch-provisioning.md
+    - architecture/credentials.md
+    - architecture/ssh.md
   - Install / Update:
     - Install:
       - install-update/install/supported-platforms.md
@@ -16,23 +31,75 @@ nav:
       - install-update/update/sherpa.md
       - install-update/update/system.md
   - Manifest: manifest.md
-  - Devices:
-    - devices/supported-devices.md
+  - Nodes:
     - Arista:
-      - devices/arista/arista-veos.md
-    - devices/cisco-iosxe.md
-    - devices/flatcar-linux.md
-    - devices/free-bsd.md
-    - devices/open-bsd.md
-    - devices/net-bsd.md
-    - devices/dragonfly-bsd.md
-    - devices/nokia-srlinux.md
+      - nodes/arista/arista-veos.md
+      - nodes/arista/arista-ceos.md
+    - Aruba:
+      - nodes/aruba/aruba-aoscx.md
+    - BSD:
+      - nodes/bsd/free-bsd.md
+      - nodes/bsd/open-bsd.md
+    - Cisco:
+      - nodes/cisco/general.md
+      - nodes/cisco/cisco-asav.md
+      - nodes/cisco/cisco-cat8000v.md
+      - nodes/cisco/cisco-cat9000v.md
+      # - nodes/cisco/cisco-cat9800cl.md
+      # - nodes/cisco/cisco-cedge.md
+      - nodes/cisco/cisco-csr1000v.md
+      # - nodes/cisco/cisco-fmcv.md
+      - nodes/cisco/cisco-ftdv.md
+      # - nodes/cisco/cisco-ioll2.md
+      # - nodes/cisco/cisco-iol.md
+      # - nodes/cisco/cisco-iolserial.md
+      - nodes/cisco/cisco-iosv.md
+      - nodes/cisco/cisco-iosvl2.md
+      - nodes/cisco/cisco-iosxrv9000.md
+      - nodes/cisco/cisco-ise.md
+      - nodes/cisco/cisco-nexus9300v.md
+      # - nodes/cisco/cisco-sdwanc.md
+      # - nodes/cisco/cisco-sdwanm.md
+      # - nodes/cisco/cisco-sdwanv.md
+      # - nodes/cisco/cisco-vedge.md
+    - Fortinet:
+      - nodes/fortinet/fortinet-fortigate.md
+    - Generic:
+      - nodes/generic/container.md
+      - nodes/generic/unikernel.md
+      - nodes/generic/virtual-machine.md
+    - Juniper:
+      - nodes/juniper/juniper-vevolved.md
+      - nodes/juniper/juniper-vrouter.md
+      - nodes/juniper/juniper-vsrxv3.md
+      - nodes/juniper/juniper-vswitch.md
+    - Linux:
+      - nodes/linux/alma-linux.md
+      - nodes/linux/alpine-linux.md
+      - nodes/linux/cumulus-linux.md
+      - nodes/linux/debian-linux.md
+      - nodes/linux/fedora-linux.md
+      - nodes/linux/flatcar-linux.md
+      - nodes/linux/opensuse-linux.md
+      - nodes/linux/redhat-linux.md
+      - nodes/linux/rocky-linux.md
+      - nodes/linux/sonic-linux.md
+      - nodes/linux/suse-linux.md
+      - nodes/linux/ubuntu-linux.md
+    - Mikrotik:
+      - nodes/mikrotik/mikrotik-chr.md
+    - Nokia:
+      - nodes/nokia/nokia-srlinux.md
+    - Paloalto:
+      - nodes/paloalto/paloalto-panos.md
+    - SQL:
+      - nodes/sql/mysql.md
+      - nodes/sql/postgresql.md
+      - nodes/sql/surrealdb.md
+    - Windows:
+      - nodes/windows/windows-server.md
+
     # - nodes/unikernels.md
-  - Networking:
-    - networking/management.md
-    - networking/bridge.md
-    - networking/isolated.md
-    - networking/black-hole.md
   - Configuration:
     - configuration/sherpa.md
   - Command Reference: command-reference.md
@@ -61,32 +128,36 @@ theme:
       accent: custom
       toggle:
         icon: material/weather-night
-        name: Switch to Macchiato
-
-    - scheme: macchiato
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-partly-cloudy
-        name: Switch to Mocha
-
-    - scheme: mocha
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-cloudy
         name: Switch to Latte
+
+    # - scheme: macchiato
+    #   primary: custom
+    #   accent: custom
+    #   toggle:
+    #     icon: material/weather-partly-cloudy
+    #     name: Switch to Mocha
+
+    # - scheme: mocha
+    #   primary: custom
+    #   accent: custom
+    #   toggle:
+    #     icon: material/weather-cloudy
+    #     name: Switch to Latte
+  icon:
+    admonition:
+      note: fontawesome/solid/lightbulb
 
 extra_css:
   - stylesheets/extra.css
   - stylesheets/table.css
 
 markdown_extensions:
-  - admonition
   - toc:
       permalink: true
+  - admonition
   - pymdownx.highlight
   - pymdownx.superfences
-
+  - pymdownx.tabbed:
+      alternate_style: true
 plugins:
   - search

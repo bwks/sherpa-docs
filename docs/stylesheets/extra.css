@@ -17,7 +17,8 @@
   --ctp-latte-overlay2: #7c7f93;
   --ctp-latte-subtext0: #6c6f85;
   --ctp-latte-subtext1: #5c5f77;
-  --ctp-latte-text: #4c4f69;
+  --ctp-latte-text: #303446;
+  /* --ctp-latte-text: #4c4f69; */
 
   --ctp-latte-lavender: #7287fd;
   --ctp-latte-blue: #1e66f5;
@@ -217,14 +218,16 @@
   --md-primary-bg-color--light: var(--ctp-frappe-subtext1);
 
   /* Accent colors */
-  --md-accent-fg-color: var(--ctp-frappe-green);
+  --md-accent-fg-color: var(--ctp-frappe-mauve);
+  /* --md-accent-fg-color: var(--ctp-frappe-green); */
   --md-accent-fg-color--transparent: rgba(166, 209, 137, 0.1);
   --md-accent-bg-color: var(--ctp-frappe-text);
   --md-accent-bg-color--light: var(--ctp-frappe-subtext1);
 
   /* Typography */
   --md-typeset-color: var(--ctp-frappe-text);
-  --md-typeset-a-color: var(--ctp-frappe-green);
+  --md-typeset-a-color: var(--ctp-frappe-mauve);
+  /* --md-typeset-a-color: var(--ctp-frappe-green); */
 
   /* Code blocks */
   --md-code-hl-color: var(--ctp-frappe-surface0);
@@ -232,8 +235,9 @@
   --md-code-hl-special-color: var(--ctp-frappe-pink);
   --md-code-hl-function-color: var(--ctp-frappe-blue);
   --md-code-hl-constant-color: var(--ctp-frappe-peach);
-  --md-code-hl-keyword-color: var(--ctp-frappe-mauve);
-  --md-code-hl-string-color: var(--ctp-frappe-green);
+  --md-code-hl-keyword-color: var(--ctp-frappe-yellow);
+  --md-code-hl-string-color: var(--ctp-frappe-yellow);
+  /* --md-code-hl-string-color: var(--ctp-frappe-green); */
   --md-code-hl-name-color: var(--ctp-frappe-text);
   --md-code-hl-operator-color: var(--ctp-frappe-sky);
   --md-code-hl-punctuation-color: var(--ctp-frappe-overlay2);
@@ -259,6 +263,27 @@
   --md-shadow-z1: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.3);
   --md-shadow-z2: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.4);
   --md-shadow-z3: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.5);
+
+}
+
+/* Frappé specific heading colors */
+[data-md-color-scheme="frappe"] .md-typeset h1,
+[data-md-color-scheme="frappe"] .md-typeset h2,
+[data-md-color-scheme="frappe"] .md-typeset h3,
+[data-md-color-scheme="frappe"] .md-typeset h4,
+[data-md-color-scheme="frappe"] .md-typeset h5,
+[data-md-color-scheme="frappe"] .md-typeset h6 {
+    color: var(--ctp-frappe-mauve) !important;
+}
+
+/* Frappé specific table borders */
+[data-md-color-scheme="frappe"] .md-typeset table:not([class]) {
+  border-color: var(--ctp-frappe-surface0);
+}
+
+[data-md-color-scheme="frappe"] .md-typeset table:not([class]) th,
+[data-md-color-scheme="frappe"] .md-typeset table:not([class]) td {
+  border-color: var(--ctp-frappe-surface0);
 }
 
 /* ========================================
