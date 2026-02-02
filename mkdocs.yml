@@ -12,11 +12,15 @@ nav:
     - architecture/container.md
     - architecture/unikernel.md
     - Networking:
-      - architecture/networking/management.md
-      - architecture/networking/bridge.md
-      - architecture/networking/isolated.md
-      - architecture/networking/black-hole.md
-      - architecture/networking/point-to-point.md
+      - Host:
+        - architecture/networking/host/bridge.md
+
+      - Node:
+        - architecture/networking/node/management.md
+        - architecture/networking/node/isolated.md
+        - architecture/networking/node/reserved.md
+        - architecture/networking/node/point-to-point.md
+
     - architecture/storage.md
     - architecture/database.md
     - architecture/zero-touch-provisioning.md

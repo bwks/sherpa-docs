@@ -13,7 +13,7 @@ for packet captures via Wireshark or TCPDump.
 Node interfaces in a link are assigned to a dedicated linux bridge.
 The bridges are connected via a veth pair virtual wire.
 
-![Alt text](network-p2p.svg "Point-to-Point Link")
+![Alt text](network-p2p-bridge.svg "Point-to-Point Bridge Link")
 
 !!! Note
 
@@ -25,7 +25,11 @@ The bridges are connected via a veth pair virtual wire.
 P2P UDP links are only supported between virtual machines.
 `p2p-udp` link interfaces cannot be used as for packet captures.
 
+![Alt text](network-p2p-udp.svg "Point-to-Point UDP Link")
+
 ## P2P vEth
 
 P2P veth links are only supported between containers.
 `p2p-veth` link interface can be used for packet captures.
+
+![Alt text](network-p2p-veth.svg "Point-to-Point vEth Link")
