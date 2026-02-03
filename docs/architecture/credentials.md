@@ -1,10 +1,10 @@
-# Device Credentials
+# Node Credentials
 
-Device credential are configured via ZTP during the first boot.
+Node credential are configured via ZTP during the first boot.
 
 ## Default Credentials
 
-The default credentials for all devices are:
+The default credentials for all node are:
 
 | Username | Password       | SSH Key                      |
 | -------- | -------------- | ---------------------------- |

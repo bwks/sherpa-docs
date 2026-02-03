@@ -154,6 +154,7 @@ theme:
 extra_css:
   - stylesheets/extra.css
   - stylesheets/table.css
+  - stylesheets/image.css
 
 markdown_extensions:
   - toc:
