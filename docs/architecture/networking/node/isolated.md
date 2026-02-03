@@ -7,4 +7,4 @@ Isolated bridges, have no connectivity outside of the bridge.
 Each node is assigned an isolated bridge. Unused node interfaces in a topology are assigned to
 an isolated bridge with the state set to down.
 
-![Alt text](network-isolated.svg "Isolated Network")
+![Isolated Network](network-isolated.svg)
