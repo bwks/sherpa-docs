@@ -1,16 +1,10 @@
 # Bridge
 
-A `bridge` network, is implemented as a Libvirt
-[Routed](https://wiki.libvirt.org/VirtualNetworking.html#routed-mode) mode network.
-Nodes are connected directly to the physical interface which provides connectivity
-outside the host machine.
+A `bridge` interface allows nodes to be connected directly to the physical network.
 
-!!! Danger
+TODO: Add diagram
 
-    Be sure you understand the security posture of lab nodes and the implication of
-    direct attached bridged networking before using this connectivity method.
-
-## Bridge interface
+## Example Configuration
 
 Create bridge interface to bridge lab-router / lab nodes to the physical network.
 

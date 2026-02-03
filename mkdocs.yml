@@ -17,6 +17,8 @@ nav:
 
       - Node:
         - architecture/networking/node/management.md
+        - architecture/networking/node/public.md
+        - architecture/networking/node/bridge.md
         - architecture/networking/node/isolated.md
         - architecture/networking/node/reserved.md
         - architecture/networking/node/point-to-point.md
