@@ -1,6 +1,8 @@
-# Isolated
+# Isolated Bridge
 
-An `isolated` network is implemented as a libvert
+## Virtual Machine
+
+An `isolated` bridge is implemented as a libvirt
 [Isolated](https://wiki.libvirt.org/VirtualNetworking.html#isolated-mode) network.
 Isolated bridges, have no connectivity outside of the bridge.
 
@@ -8,3 +10,5 @@ Each node is assigned an isolated bridge. Unused node interfaces in a topology a
 an isolated bridge with the state set to down.
 
 ![Isolated Network](network-isolated.svg)
+
+## Container

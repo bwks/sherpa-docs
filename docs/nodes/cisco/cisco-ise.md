@@ -18,7 +18,7 @@ Search for `Identity Services Engine Software` and download the `eval` image.
 
 !!! note
 
-    This step is not required for the CML ref-platform image.
+    This step is not required for the CML ref-platform image.f
 
 The image downloaded from [Cisco Software](https://software.cisco.com/download/home) is in `ova` format
 and needs to be converted to `qcow2`.
