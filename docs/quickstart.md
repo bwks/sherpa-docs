@@ -6,12 +6,9 @@
 curl https://blah.bleh | sudo sh
 ```
 
-## Nodes
-
-In Sherpa, a node is a virtual machine or container
-that is managed as part of a lab environment.
-
 ## Manifest
+
+A manifest describes the lab topology and node configuration parameters.
 
 ```toml
 # manifest.toml
@@ -26,6 +23,15 @@ links = [
   { src = "dev01::eth2", dst = "dev02::eth2" },
 ]
 ```
+
+### Nodes
+
+A node is a virtual machine, container or unikernel
+that is managed as part of a lab environment.
+
+### Links
+
+Link describe how nodes are connected.
 
 ## Build
 
