@@ -1,6 +1,6 @@
-# Reserved
+# Reserved Bridge
 
-A `reserved` network is implemented as a libvert
+A `reserved` bridge is implemented as a libvert
 [Isolated](https://wiki.libvirt.org/VirtualNetworking.html#isolated-mode) network.
 Isolated bridges, have no connectivity outside of the bridge.
 

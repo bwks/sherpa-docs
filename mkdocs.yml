@@ -17,11 +17,11 @@ nav:
 
       - Node:
         - architecture/networking/node/management.md
-        - architecture/networking/node/public.md
-        - architecture/networking/node/bridge.md
-        - architecture/networking/node/isolated.md
-        - architecture/networking/node/reserved.md
         - architecture/networking/node/point-to-point.md
+        - architecture/networking/node/private-bridge.md
+        - architecture/networking/node/public-bridge.md
+        - architecture/networking/node/isolated-bridge.md
+        - architecture/networking/node/reserved-bridge.md
 
     - architecture/storage.md
     - architecture/database.md
