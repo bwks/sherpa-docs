@@ -2,25 +2,16 @@
 
 ## Base Image
 
-A Windows Server version 2012 with cloudbase-init can be downloaded from
-the makers of cloud-init for Windows [cloudbase.it](https://cloudbase.it).
-
-Download the `kvm` image from the Products [download page](https://cloudbase.it/windows-cloud-images/).
+Micorsoft does not provide ready built qcow2 images so you will need to build them yourself.
+You can use [this](https://github.com/bwks/packer-windows) packer project to build windows
+images. Currently, only Windows Server 2022 is supported, but more versions are coming soon.
 
 ## Import
 
-### Extract
-
-```
- gunzip windows_server_2012_r2_standard_eval_kvm_20170321.qcow2.gz
-```
-
-### Import Image
-
 ```
 sherpa image import \
-  --src windows_server_2012_r2_standard_eval_kvm_20170321.qcow2 \
-  --version 2012-0.9.11 \
+  --src windows_server_2022-20260307.qcow2 \
+  --version 2022-20260307 \
   --model windows_server \
   --latest
 ```
@@ -30,9 +21,9 @@ sherpa image import \
 | Property             | Value           |
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
-| Tested Version       | 2012-0.9.11     |
-| CPU                  | 2               |
-| RAM                  | 4GB             |
+| Tested Version       | 2022-20260307     |
+| CPU                  | 4               |
+| RAM                  | 8GB             |
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | SATA            |
@@ -52,4 +43,4 @@ nodes = [
 
 ## Notes
 
-- Approximate time for the system to be ready: `1 minute`
+- Approximate time for the system to be ready: `3 minutes`
