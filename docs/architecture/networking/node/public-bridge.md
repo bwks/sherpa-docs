@@ -1,5 +1,9 @@
 # Public Bridge
 
+!!! Note
+
+    This is a planned feature.
+
 A `public bridge` is implemented as network layer 2 network bridged to a physical interface.
 A node connected to a public bridge has its virtual interface directly bridged to a physical
 interface on the host machine. IP address configuration is shared with the network of the

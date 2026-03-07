@@ -1,10 +1,10 @@
 # Node Credentials
 
-Node credential are configured via ZTP during the first boot.
+Node credentials are configured via ZTP during the first boot.
 
 ## Default Credentials
 
-The default credentials for all node are:
+The default credentials for all nodes are:
 
 | Username | Password       | SSH Key                      |
 | -------- | -------------- | ---------------------------- |
@@ -19,7 +19,9 @@ The default credentials for all node are:
 
 User specific credentials can be applied via ZTP.
 
-TODO: Update process.
+!!! info
+
+    Documentation for user credential configuration is in progress.
 
 ## Custom Credentials
 

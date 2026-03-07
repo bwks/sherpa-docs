@@ -1,9 +1,5 @@
 # Nokia SR Linux
 
-!!! warning
-
-    Page under construction
-
 Nokia SR Linux is a container based image.
 
 ## Base Image
@@ -15,7 +11,7 @@ Base images can be obtained from the [Nokia SR Linux](https://github.com/nokia/s
 #### Sherpa
 
 ```
-sherpa container image pull ghcr.io/nokia/srlinux:25.10.1
+sherpa server image pull ghcr.io/nokia/srlinux:25.10.1
 ```
 
 #### Docker
@@ -35,7 +31,7 @@ docker image pull ghcr.io/nokia/srlinux:25.10.1
 | RAM                  | 4GB       |
 | ZTP Method           | Volume    |
 | Management Interface | Mgmt0.0   |
-| Interface Driver     | virtio    |
+| Interface Driver     | macvlan    |
 
 ## Example Manifest
 

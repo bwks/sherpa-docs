@@ -28,7 +28,7 @@ setting to be defined.
 ```toml
 nodes = [
     { name = "dev01", model = "arista_veos" },
-    { name = "dev02", model = "arista_ceos", version = "4.35.1F" },
+    { name = "dev02", model = "arista_ceos" },
 ]
 links = [
     { src = "dev01::eth1", dst = "dev02::eth1" },
@@ -41,6 +41,11 @@ links = [
     containers and virtual machines.
 
 ## P2P UDP
+
+!!! Note
+
+    This is a planned feature.
+
 
 P2P UDP allow for the transmission of any protocol between Virtual Machine nodes only.
 A point-to-point virtual wire is created directly between the network interfaces using
@@ -72,6 +77,10 @@ links = [
 
 ## P2P vEth
 
+!!! Note
+
+    This is a planned feature.
+
 P2P vEth allow for the transmission of any protocol between container nodes.
 A point-to-point virtual wire is created directly between the network interfaces with a vEth pair.
 
@@ -90,8 +99,8 @@ PTP vEth is configured on a per-link basis with the `mode = "p2p-veth"` setting.
 
 ```toml
 nodes = [
-    { name = "dev05", model = "arista_ceos", version = "4.35.1F" },
-    { name = "dev06", model = "arista_ceos", version = "4.35.1F" },
+    { name = "dev05", model = "arista_ceos" },
+    { name = "dev06", model = "arista_ceos" },
 ]
 links = [
     { src = "dev05::eth1", dst = "dev06::eth1", mode = "p2p-veth" },

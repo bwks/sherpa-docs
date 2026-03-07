@@ -2,8 +2,21 @@
 
 ## Install
 
+The quickest way to get started with Sherpa is to use the convenience [script](install-update/install/automated.md).
+
 ```
-curl https://blah.bleh | sudo sh
+curl https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_install.sh | sudo bash
+```
+
+## Sherpa Server
+
+```
+sherpad init
+```
+
+## Sherpa Client
+```
+sherpa init
 ```
 
 ## Manifest
@@ -31,7 +44,7 @@ that is managed as part of a lab environment.
 
 ### Links
 
-Link describe how nodes are connected.
+Links describe how nodes are connected.
 
 ## Build
 
