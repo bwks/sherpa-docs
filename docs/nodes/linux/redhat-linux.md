@@ -17,7 +17,7 @@ sherpa image import \
   --src rhel-10.1-x86_64-kvm.qcow2 \
   --model redhat_linux \
   --version 10.1 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

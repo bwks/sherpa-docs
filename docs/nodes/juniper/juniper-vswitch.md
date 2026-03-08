@@ -11,7 +11,7 @@ sherpa image import \
   --src vJunos-switch-25.2R1.9.qcow2 \
   --version 25.2R1.9 \
   --model juniper_vswitch \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

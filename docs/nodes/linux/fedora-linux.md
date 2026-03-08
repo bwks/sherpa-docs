@@ -13,7 +13,7 @@ sherpa image import \
   --src Fedora-Cloud-Base-Generic-43-1.6.x86_64.qcow2 \
   --model fedora_linux \
   --version 43-1.6 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

@@ -15,7 +15,7 @@ sherpa image import \
   --src cat9kv_prd.17.15.03.qcow2 \
   --version 17.15.03 \
   --model cisco_cat9000v \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

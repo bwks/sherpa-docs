@@ -11,7 +11,7 @@ sherpa image import \
   --src csr1000v-universalk9.17.03.08a-serial.qcow2 \
   --version 17.03.08a \
   --model cisco_csr1000v \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

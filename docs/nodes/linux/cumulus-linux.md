@@ -14,7 +14,7 @@ sherpa image import \
   --src cumulus-vx-5.9.1.qcow2 \
   --model cumulus_linux \
   --version 5.9.1 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

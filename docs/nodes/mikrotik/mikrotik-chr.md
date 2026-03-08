@@ -19,7 +19,7 @@ sherpa image import \
   --src chr-7.20.6.img \
   --model mikrotik_chr \
   --version 7.20.6 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

@@ -19,7 +19,7 @@ sherpa image import \
   --src flatcar_production_qemu_image.img \
   --model flatcar_linux \
   --version 20251215 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

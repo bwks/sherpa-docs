@@ -16,7 +16,7 @@ sherpa image import \
   --src sonic-vs.img \
   --model sonic_linux \
   --version 20251215 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

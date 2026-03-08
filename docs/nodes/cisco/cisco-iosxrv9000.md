@@ -16,7 +16,7 @@ sherpa image import \
   --src xrv9k-fullk9-x-25.1.1.qcow2 \
   --version 25.1.1 \
   --model cisco_iosxrv9000 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

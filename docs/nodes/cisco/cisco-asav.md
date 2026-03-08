@@ -11,7 +11,7 @@ sherpa image import \
   --src asav9-23-1.qcow2 \
   --version 9-23-1 \
   --model cisco_asav \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

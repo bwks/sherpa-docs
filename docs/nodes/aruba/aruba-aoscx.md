@@ -36,7 +36,7 @@ sherpa image import \
   --src aos-cx.qcow2 \
   --version 10.16 \
   --model aruba_aoscx \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

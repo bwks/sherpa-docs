@@ -11,7 +11,7 @@ sherpa image import \
   --src noble-server-cloudimg-amd64.img \
   --model ubuntu_linux \
   --version 24.04 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

@@ -11,7 +11,7 @@ sherpa image import \
   --src openbsd-min.qcow2 \
   --model open_bsd \
   --version 7.8 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

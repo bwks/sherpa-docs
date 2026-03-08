@@ -12,7 +12,7 @@ sherpa image import \
  --src freebsd-14.2-ufs-2024-12-08.qcow2 \
  --model free_bsd \
  --version 14.2 \
- --latest
+ --default
 
 ```
 

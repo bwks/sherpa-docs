@@ -15,7 +15,7 @@ sherpa image import \
   --src junos-vsrx3-x86-64-23.2R2.21.qcow2 \
   --version 23.2R2.21 \
   --model juniper_vsrxv3 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

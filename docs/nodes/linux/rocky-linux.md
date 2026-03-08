@@ -13,7 +13,7 @@ sherpa image import \
   --src Rocky-10-GenericCloud-Base.latest.x86_64.qcow2 \
   --model rocky_linux \
   --version 10-20251215 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

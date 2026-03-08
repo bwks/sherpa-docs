@@ -11,7 +11,7 @@ sherpa image import \
   --src /tmp/vios_l2-adventerprisek9-m.ssa.high_iron_20200929.qcow2 \
   --version 20200929 \
   --model cisco_iosvl2 \
-  --latest
+  --default
 ```
 
 ## ZTP Disk

@@ -11,7 +11,7 @@ sherpa image import \
   --src c8000v-universalk9_8G_serial.17.16.01a.qcow2 \
   --version 17.16.01a \
   --model cisco_cat8000v \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

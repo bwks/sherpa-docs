@@ -11,7 +11,7 @@ sherpa image import \
   --src debian-13-nocloud-amd64-20251117-2299.qcow2 \
   --model debian_linux \
   --version 13-20251117 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

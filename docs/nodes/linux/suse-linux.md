@@ -17,7 +17,7 @@ sherpa image import \
   --src SLES15-SP7-Minimal-VM.x86_64-Cloud-GM.qcow2 \
   --model suse_linux \
   --version 15.SP7 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

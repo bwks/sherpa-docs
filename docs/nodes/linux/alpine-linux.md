@@ -13,7 +13,7 @@ sherpa image import \
   --src nocloud_alpine-3.23.0-x86_64-bios-cloudinit-r0.qcow2 \
   --model alpine_linux \
   --version 3.23.0 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

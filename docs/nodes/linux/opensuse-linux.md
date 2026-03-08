@@ -13,7 +13,7 @@ sherpa image import \
   --src openSUSE-Leap-15.6.x86_64-NoCloud.qcow2 \
   --model opensuse_linux \
   --version 15.6 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

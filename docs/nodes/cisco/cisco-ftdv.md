@@ -11,7 +11,7 @@ sherpa image import \
   --src Cisco_Secure_Firewall_Threat_Defense_Virtual-7.7.0-89.qcow2 \
   --version 7.7.0-89 \
   --model cisco_ftdv \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

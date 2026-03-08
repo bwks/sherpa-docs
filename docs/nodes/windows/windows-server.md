@@ -4,7 +4,9 @@
 
 Micorsoft does not provide ready built qcow2 images so you will need to build them yourself.
 You can use [this](https://github.com/bwks/packer-windows) packer project to build windows
-images. Currently, only Windows Server 2022 is supported, but more versions are coming soon.
+images with cloudbase-init and SSH server enabled. 
+
+Currently, only Windows Server 2022 is supported, but more versions are coming soon.
 
 ## Import
 
@@ -13,7 +15,7 @@ sherpa image import \
   --src windows_server_2022-20260307.qcow2 \
   --version 2022-20260307 \
   --model windows_server \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
