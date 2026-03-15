@@ -1,10 +1,5 @@
 # Cisco IOS-XRv 9000
 
-!!! Warning
-
-    Not working. ZTP config is applied, but cannot ssh to node.
-    Outbound connectivity is ok.
-
 ## Base Image
 
 See the [general notes](general.md) for information on obtaining a base image.
@@ -12,7 +7,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src xrv9k-fullk9-x-25.1.1.qcow2 \
   --version 25.1.1 \
   --model cisco_iosxrv9000 \

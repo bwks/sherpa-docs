@@ -12,7 +12,7 @@ Base images can be downloaded from [TBC]().
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src sonic-vs.img \
   --model sonic_linux \
   --version 20251215 \

@@ -2,16 +2,16 @@
 
 ## Base Image
 
-Micorsoft does not provide ready built qcow2 images so you will need to build them yourself.
-You can use [this](https://github.com/bwks/packer-windows) packer project to build windows
-images with cloudbase-init and SSH server enabled. 
+Microsoft does not provide ready built qcow2 images so you will need to build them yourself.
+You can use [this](https://github.com/bwks/packer-windows) packer template to build windows
+images with cloudbase-init and an SSH server enabled. 
 
 Currently, only Windows Server 2022 is supported, but more versions are coming soon.
 
 ## Import
 
 ```
-sherpa image import \
+sherpa server image import \
   --src windows_server_2022-20260307.qcow2 \
   --version 2022-20260307 \
   --model windows_server \
@@ -29,7 +29,7 @@ sherpa image import \
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | SATA            |
-| ZTP Method           | Cloud-init      |
+| ZTP Method           | cloud-init      |
 | Management Interface | eth0            |
 | Interface Driver     | virtio          |
 

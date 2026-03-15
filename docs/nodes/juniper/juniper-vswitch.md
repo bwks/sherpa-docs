@@ -7,7 +7,7 @@ Base images can be downloaded from the [download](https://support.juniper.net/su
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src vJunos-switch-25.2R1.9.qcow2 \
   --version 25.2R1.9 \
   --model juniper_vswitch \

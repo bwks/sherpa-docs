@@ -68,8 +68,12 @@ nav:
       # - nodes/cisco/cisco-sdwanm.md
       # - nodes/cisco/cisco-sdwanv.md
       # - nodes/cisco/cisco-vedge.md
+    - Cumulus:
+      - nodes/cumulus/cumulus-linux.md
     - Fortinet:
       - nodes/fortinet/fortinet-fortigate.md
+    - FRRouting:
+      - nodes/frrouting/frr-linux.md
     - Generic:
       - nodes/generic/container.md
       - nodes/generic/unikernel.md
@@ -82,14 +86,12 @@ nav:
     - Linux:
       - nodes/linux/alma-linux.md
       - nodes/linux/alpine-linux.md
-      - nodes/linux/cumulus-linux.md
       - nodes/linux/debian-linux.md
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
       - nodes/linux/opensuse-linux.md
       - nodes/linux/redhat-linux.md
       - nodes/linux/rocky-linux.md
-      - nodes/linux/sonic-linux.md
       - nodes/linux/suse-linux.md
       - nodes/linux/ubuntu-linux.md
     - Mikrotik:
@@ -98,6 +100,8 @@ nav:
       - nodes/nokia/nokia-srlinux.md
     - Paloalto:
       - nodes/paloalto/paloalto-panos.md
+    - Sonic:
+      - nodes/sonic/sonic-linux.md
     - SQL:
       - nodes/sql/mysql.md
       - nodes/sql/postgresql.md

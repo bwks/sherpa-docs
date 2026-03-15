@@ -6,7 +6,7 @@ Sherpa.
 ### Import
 
 ```
-sherpa image import \
+sherpa server image import \
   --src container-registry/image \
   --version vX.Y.Z  \
   --model generic_container

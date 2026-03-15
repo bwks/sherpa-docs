@@ -7,7 +7,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src vios-adventerprisek9-m.spa.159-3.m10.qcow2 \
   --version 159-3.m10 \
   --model cisco_iosv \

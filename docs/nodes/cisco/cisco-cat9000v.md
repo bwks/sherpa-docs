@@ -11,7 +11,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src cat9kv_prd.17.15.03.qcow2 \
   --version 17.15.03 \
   --model cisco_cat9000v \

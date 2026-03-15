@@ -13,7 +13,7 @@ Look for the `KVM Guest` image with in the name.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src rhel-10.1-x86_64-kvm.qcow2 \
   --model redhat_linux \
   --version 10.1 \

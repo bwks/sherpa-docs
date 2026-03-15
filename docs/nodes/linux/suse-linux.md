@@ -13,7 +13,7 @@ Look for the `qcow2` image with `cloud` in the name.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src SLES15-SP7-Minimal-VM.x86_64-Cloud-GM.qcow2 \
   --model suse_linux \
   --version 15.SP7 \

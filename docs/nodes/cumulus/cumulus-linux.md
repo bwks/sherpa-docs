@@ -10,7 +10,7 @@
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src cumulus-vx-5.9.1.qcow2 \
   --model cumulus_linux \
   --version 5.9.1 \

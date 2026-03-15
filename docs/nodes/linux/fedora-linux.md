@@ -9,7 +9,7 @@ Look for the Generic No Cloud image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src Fedora-Cloud-Base-Generic-43-1.6.x86_64.qcow2 \
   --model fedora_linux \
   --version 43-1.6 \

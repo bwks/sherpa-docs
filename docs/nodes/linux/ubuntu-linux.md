@@ -7,7 +7,7 @@ Base images can be downloaded from [Ubuntu Cloud Images](https://cloud-images.ub
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src noble-server-cloudimg-amd64.img \
   --model ubuntu_linux \
   --version 24.04 \

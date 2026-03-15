@@ -33,7 +33,7 @@ mkdir ise-ova && \
 ### Import
 
 ```
-sherpa image import \
+sherpa server image import \
   --src Cisco-vISE-300-3.5.0.527.qcow2 \
   --version 3.5.0 \
   --model cisco_ise \

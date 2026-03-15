@@ -7,7 +7,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src nexus9300v64.10.5.3.F.qcow2 \
   --version 10.5.3.F \
   --model cisco_nexus9300v \

@@ -42,7 +42,7 @@ ln -s /opt/sherpa/images/arista_veos/aboot_iso/aboot.iso /opt/sherpa/images/aris
 ### VM Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src vEOS64-lab-4.34.4M.qcow2 \
   --version 4.34.4M \
   --model arista_veos \

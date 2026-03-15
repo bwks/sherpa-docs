@@ -32,7 +32,7 @@ mkdir aos-ova && \
 ### Import
 
 ```
-sherpa image import \
+sherpa server image import \
   --src aos-cx.qcow2 \
   --version 10.16 \
   --model aruba_aoscx \
