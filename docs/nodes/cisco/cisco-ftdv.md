@@ -7,11 +7,11 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src Cisco_Secure_Firewall_Threat_Defense_Virtual-7.7.0-89.qcow2 \
   --version 7.7.0-89 \
   --model cisco_ftdv \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -26,7 +26,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | CDROM           |
-| Management Interface | mgmt0/0         |
+| Management Interface | Management0/0   |
 | Data Interfaces      | gig0/0-7        |
 | Interface Driver     | virtio          |
 

@@ -8,7 +8,7 @@ Sherpa is designed as a client/server architecture.
 
 ### Client
 
-The `sherpa` client is is a CLI utility is used to interact with
+The `sherpa` client is a CLI utility used to interact with
 the [sherpad](#server) service. The client can be installed on
 Linux, MacOS and Windows.
 
@@ -20,7 +20,7 @@ on the host compute server.
 ## Providers
 
 Emulation technologies are supported via providers. The following
-providers are currnetly supported:
+providers are currently supported:
 
 - [Virtual Machine](virtual-machine.md)
 - [Container](container.md)
@@ -32,7 +32,9 @@ Virtual machines use the `KVM/QEMU` hypervisor stack.
 
 ### KVM/QEMU
 
-INSERT KVM/QEMU Hypervisor stack diagram
+!!! info
+
+    Diagram coming soon.
 
 ### Libvirt
 

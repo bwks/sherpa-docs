@@ -2,39 +2,32 @@
 
 ## Base Image
 
-Download the `RAW disk` image from the [Mikrotik downloads](https://mikrotik.com/download/chr) page.
+A base image that is compatible with Sherpa can be built
+using [this](https://github.com/bwks/packer-mikrotik) Packer template.
 
 ## Import Image
 
-### Unzip the download
-
 ```
-unzip chr-7.20.6.img.zip
-```
-
-### Import
-
-```
-sherpa image import \
-  --src chr-7.20.6.img \
+sherpa server image import \
+  --src chr-7.20.8.img \
   --model mikrotik_chr \
-  --version 7.20.6 \
-  --latest
+  --version 7.20.8 \
+  --default
 ```
 
 ## Default Node Parameters
 
 | Property             | Value           |
 | -------------------- | --------------- |
-| Tested Version       | 7.20.6          |
+| Tested Version       | 7.20.8          |
 | Kind                 | Virtual Machine |
-| CPU                  | 2               |
-| RAM                  | 2GB             |
-| CDROM Driver         | SATA            |
+| CPU                  | 1               |
+| RAM                  | 1GB             |
+| CDROM Driver         | IDE             |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | virtio          |
-| ZTP Method           | cloud-init      |
-| Management Interface | eth1            |
+| DISK Driver          | IDE             |
+| ZTP Method           | Disk            |
+| Management Interface | ether1          |
 | Data Interfaces      | eth1-8          |
 | Interface Driver     | virtio          |
 

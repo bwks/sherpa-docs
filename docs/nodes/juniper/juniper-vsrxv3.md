@@ -1,5 +1,8 @@
 # Juniper vSRX v3
 
+!!! Warning
+    This model is not currently working.
+
 ## Base Image
 
 Base images can be downloaded from the [download](https://support.juniper.net/support/downloads/?p=vsrxeval) page.
@@ -11,11 +14,11 @@ Base images can be downloaded from the [download](https://support.juniper.net/su
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src junos-vsrx3-x86-64-23.2R2.21.qcow2 \
   --version 23.2R2.21 \
   --model juniper_vsrxv3 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -29,8 +32,8 @@ sherpa image import \
 | CDROM Driver         | IDE             |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
-| ZTP Method           | CDROM           |
-| Management Interface | fxp0/0          |
+| ZTP Method           | TFTP            |
+| Management Interface | fxp0            |
 | Data Interfaces      | ge-0/0/0-7      |
 | Interface Driver     | virtio          |
 

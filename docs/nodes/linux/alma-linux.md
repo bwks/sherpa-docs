@@ -9,11 +9,11 @@ Look for the Generic No Cloud image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src AlmaLinux-10-GenericCloud-latest.x86_64_v2.qcow2 \
   --model alma_linux \
   --version 10-20241125 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -26,7 +26,7 @@ sherpa image import \
 | RAM                  | 1GB             |
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | virtio          |
+| DISK Driver          | SATA            |
 | ZTP Method           | cloud-init      |
 | Management Interface | eth0            |
 | Interface Driver     | virtio          |

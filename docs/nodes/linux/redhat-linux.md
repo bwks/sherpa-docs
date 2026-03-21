@@ -13,11 +13,11 @@ Look for the `KVM Guest` image with in the name.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src rhel-10.1-x86_64-kvm.qcow2 \
   --model redhat_linux \
   --version 10.1 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -30,7 +30,7 @@ sherpa image import \
 | RAM                  | 1GB             |
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | virtio          |
+| DISK Driver          | SATA            |
 | ZTP Method           | cloud-init      |
 | Management Interface | eth0            |
 | Interface Driver     | virtio          |

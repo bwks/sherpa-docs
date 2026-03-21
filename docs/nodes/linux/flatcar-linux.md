@@ -15,11 +15,11 @@ host system install process.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src flatcar_production_qemu_image.img \
   --model flatcar_linux \
   --version 20251215 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters

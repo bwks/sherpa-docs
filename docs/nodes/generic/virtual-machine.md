@@ -5,7 +5,7 @@ A generic virtual machine allows for VM models that are not natively defined wit
 ### Import
 
 ```
-sherpa image import \
+sherpa server image import \
   --src filename.qcow2 \
   --version model-version  \
   --model generic_vm
@@ -21,7 +21,7 @@ sherpa image import \
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
 | CPU                  | 1               |
-| RAM                  | 2GB             |
+| RAM                  | 1GB             |
 | CDROM Driver         | virtio          |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |

@@ -7,11 +7,11 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src asav9-23-1.qcow2 \
   --version 9-23-1 \
   --model cisco_asav \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -26,7 +26,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | SATA            |
 | ZTP Method           | CDROM           |
-| Management Interface | mgmt0/0         |
+| Management Interface | eth0            |
 | Data Interfaces      | gig0-8          |
 | Interface Driver     | virtio          |
 

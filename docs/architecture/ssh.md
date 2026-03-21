@@ -1,23 +1,37 @@
 # SSH
 
-## SSH Config File
+## Config File
 
 An SSH config file named `sherpa_ssh_config` is created per-lab which
-is used by the `sherpa ssh <device-name>` command to access lab devices.
+is used by the `sherpa ssh <node-name>` command to access lab nodes.
 
-## SSH Jumphost
+## Jumphost
 
-When the Sherpa server is running on a remote host, lab devices
-can be accessed via SSH using the server as a jump host with
-the `sherpa ssh <device-name>` command and the generated
-`sherpa_ssh_config` file.
+When the Sherpa server is running on a remote host, lab nodes
+can be accessed via SSH using the Sherpa server as a jumphost.
 
-## SSH Tunneling
+The `sherpa ssh <node-name>` command uses the generated
+`sherpa_ssh_config` file to jump to the lab nodes via the 
+Sherpa server. 
 
-SSH tunneling allows for the connection of remote resources from your local machine.
+For ease of use, it is recommeded to copy your ssh keys to the Sherpa server
+to allow passwordless connectivity to remote nodes.
 
-For example, this is useful for connecting to a HTTP server.
+## Tunneling
+
+SSH tunneling allows for the connection of remote resources from your local
+machine by tunneling through SSH.
+
+For example, connecting to a HTTP server running on a lab-node.
 
 ```
-ssh -N -L 9443:172.31.0.11:443 ubntv
+# ssh -N -L {local-port}:{node-ipv4}:{node-port} {sherpa-server}
+
+ssh -N -L 9443:172.31.0.11:443 lab01
 ```
+
+You can now open a browser and from `https://localhost:9443` access the web server
+on the lab node `172.31.0.11:443` 
+
+!!! Note
+    In a future release, SSH tunneling of service ports will be built into Sherpa.

@@ -6,7 +6,7 @@ Sherpa.
 ### Import
 
 ```
-sherpa image import \
+sherpa server image import \
   --src container-registry/image \
   --version vX.Y.Z  \
   --model generic_container
@@ -16,10 +16,10 @@ sherpa image import \
 
 | Property             | Value     |
 | -------------------- | --------- |
-| Kind                 | Container |
+| Kind                 | Unikernel |
 | CPU                  | 1         |
 | RAM                  | 1GB       |
-| ZTP Method           | Bind      |
+| ZTP Method           | cloud-init |
 | Management Interface | eth0      |
 | Interface Driver     | virtio    |
 

@@ -7,11 +7,11 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src csr1000v-universalk9.17.03.08a-serial.qcow2 \
   --version 17.03.08a \
   --model cisco_csr1000v \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -26,7 +26,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | CDROM           |
-| Management Interface | gig1            |
+| Management Interface | GigabitEthernet1 |
 | Data Interfaces      | gig2-16         |
 | Interface Driver     | vmxnet3         |
 

@@ -135,7 +135,9 @@ sudo systemctl restart libvirtd.service
 
 ### Create Blank Disks
 
-#### TODO Update
+!!! info
+
+    This section needs to be updated.
 
 ```
 bash scripts/create_blank_disks.sh

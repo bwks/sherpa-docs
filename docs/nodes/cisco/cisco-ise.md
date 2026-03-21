@@ -33,11 +33,11 @@ mkdir ise-ova && \
 ### Import
 
 ```
-sherpa image import \
+sherpa server image import \
   --src Cisco-vISE-300-3.5.0.527.qcow2 \
   --version 3.5.0 \
   --model cisco_ise \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -46,12 +46,12 @@ sherpa image import \
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
 | Tested Version       | 3.5.0           |
-| CPU                  | 16              |
-| RAM                  | 32GB            |
-| CDROM Driver         | IDE             |
+| CPU                  | 4               |
+| RAM                  | 16GB            |
+| CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
-| ZTP Method           | Disk            |
+| ZTP Method           | CDROM           |
 | Management Interface | eth0            |
 | Data Interfaces      | eth1-4          |
 | Interface Driver     | virtio          |

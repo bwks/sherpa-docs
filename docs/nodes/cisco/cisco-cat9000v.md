@@ -11,11 +11,11 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src cat9kv_prd.17.15.03.qcow2 \
   --version 17.15.03 \
   --model cisco_cat9000v \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -30,7 +30,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | SATA            |
 | ZTP Method           | CDROM           |
-| Management Interface | gig0/0          |
+| Management Interface | GigabitEthernet0/0 |
 | Data Interfaces      | gig0/0/1-8      |
 | Interface Driver     | e1000           |
 

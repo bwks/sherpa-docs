@@ -7,11 +7,11 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src c8000v-universalk9_8G_serial.17.16.01a.qcow2 \
   --version 17.16.01a \
   --model cisco_cat8000v \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -26,7 +26,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | CDROM           |
-| Management Interface | gig1            |
+| Management Interface | GigabitEthernet1 |
 | Data Interfaces      | gig2-16         |
 | Interface Driver     | virtio          |
 

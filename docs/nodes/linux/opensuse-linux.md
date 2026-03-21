@@ -9,11 +9,11 @@ Look for the Generic No Cloud image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src openSUSE-Leap-15.6.x86_64-NoCloud.qcow2 \
   --model opensuse_linux \
   --version 15.6 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -26,7 +26,7 @@ sherpa image import \
 | RAM                  | 1GB             |
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | virtio          |
+| DISK Driver          | SATA            |
 | ZTP Method           | cloud-init      |
 | Management Interface | eth0            |
 | Interface Driver     | virtio          |

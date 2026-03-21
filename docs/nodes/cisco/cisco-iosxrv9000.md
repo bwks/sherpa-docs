@@ -1,10 +1,5 @@
 # Cisco IOS-XRv 9000
 
-!!! Warning
-
-    Not working. ZTP config is applied, but cannot ssh to node.
-    Outbound connectivity is ok.
-
 ## Base Image
 
 See the [general notes](general.md) for information on obtaining a base image.
@@ -12,11 +7,11 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src xrv9k-fullk9-x-25.1.1.qcow2 \
   --version 25.1.1 \
   --model cisco_iosxrv9000 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -31,7 +26,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2        |
 | DISK Driver          | SATA                 |
 | ZTP Method           | CDROM                |
-| Management Interface | mgmt0eth0/rp0/cpu0/0 |
+| Management Interface | MgmtEth0/RP0/CPU0/0 |
 | Data Interfaces      | gig0/0/0-30          |
 | Interface Driver     | virtio               |
 

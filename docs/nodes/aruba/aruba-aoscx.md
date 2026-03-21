@@ -32,11 +32,11 @@ mkdir aos-ova && \
 ### Import
 
 ```
-sherpa image import \
+sherpa server image import \
   --src aos-cx.qcow2 \
   --version 10.16 \
   --model aruba_aoscx \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -49,7 +49,7 @@ sherpa image import \
 | RAM                  | 4GB             |
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | SATA            |
+| DISK Driver          | virtio          |
 | ZTP Method           | TFTP            |
 | Management Interface | mgmt            |
 | Data Interfaces      | 1/1/1-52        |

@@ -2,7 +2,9 @@
 
 A `bridge` interface allows nodes to be connected directly to the physical network.
 
-TODO: Add diagram
+!!! info
+
+    Diagram coming soon.
 
 ## Example Configuration
 

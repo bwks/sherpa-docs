@@ -10,11 +10,11 @@
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src cumulus-vx-5.9.1.qcow2 \
   --model cumulus_linux \
   --version 5.9.1 \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -27,7 +27,7 @@ sherpa image import \
 | RAM                  | 2GB             |
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | virtio          |
+| DISK Driver          | SATA            |
 | ZTP Method           | USB             |
 | Management Interface | eth0            |
 | Data Interfaces      | swp1-52         |

@@ -9,7 +9,7 @@ A generic container allows for the use of container models that are not natively
 Pull the image down via sherpa.
 
 ```
-sherpa container image pull nginx:1.29.4-perl
+sherpa server image pull nginx:1.29.4-perl
 ```
 
 #### Docker
@@ -29,7 +29,7 @@ docker image pull nginx:1.29.4-perl
 | RAM                  | 1GB       |
 | ZTP Method           | Volume    |
 | Management Interface | eth0      |
-| Interface Driver     | virtio    |
+| Interface Driver     | macvlan   |
 
 ## Example Manifest
 

@@ -7,11 +7,11 @@ See the [general notes](general.md) for information on obtaining a base image.
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src vios-adventerprisek9-m.spa.159-3.m10.qcow2 \
   --version 159-3.m10 \
   --model cisco_iosv \
-  --latest
+  --default
 ```
 
 ## ZTP Disk
@@ -28,12 +28,12 @@ is cloned during instance creation.
 | Kind                 | Virtual Machine |
 | Tested Version       | 159-3.m10       |
 | CPU                  | 1               |
-| RAM                  | 512MB           |
+| RAM                  | 768MB           |
 | CDROM Driver         | virtio          |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | Disk            |
-| Management Interface | gig0/0          |
+| Management Interface | GigabitEthernet0/0 |
 | Data Interfaces      | gig0/0-15       |
 | Interface Driver     | e1000           |
 

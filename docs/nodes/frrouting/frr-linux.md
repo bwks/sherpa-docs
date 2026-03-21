@@ -1,17 +1,18 @@
-# SurrealDB
+# FRR Linux
 
-SurrealDB is a container based image.
+FRRouting Linux is a container based image.
 
 ## Base Image
 
-Base images can be obtained from [Docker Hub](https://hub.docker.com/r/surrealdb/surrealdb).
+Base images can be obtained from the [FRRouting](https://quay.io/repository/frrouting/frr)
+container registry.
 
 ### Import image
 
 #### Sherpa
 
 ```
-sherpa server image pull surrealdb/surrealdb:v2.2
+sherpa server image pull -m frr_linux -v 10.5.2 
 ```
 
 #### Docker
@@ -19,7 +20,7 @@ sherpa server image pull surrealdb/surrealdb:v2.2
 Sherpa uses the system's docker images, so you can also pull the image down via the `docker` cli.
 
 ```
-docker image pull surrealdb/surrealdb:v2.2
+docker image pull quay.io/frrouting/frr:10.5.2
 ```
 
 ## Default Node Parameters
@@ -28,7 +29,7 @@ docker image pull surrealdb/surrealdb:v2.2
 | -------------------- | --------- |
 | Kind                 | Container |
 | CPU                  | 1         |
-| RAM                  | 1GB       |
+| RAM                  | 512MB       |
 | ZTP Method           | Volume    |
 | Management Interface | eth0      |
 | Interface Driver     | macvlan    |
@@ -36,10 +37,10 @@ docker image pull surrealdb/surrealdb:v2.2
 ## Example Manifest
 
 ```toml
-name = "surrealdb"
+name = "frr-linux"
 
 nodes = [
-  { name = "db01", model = "surrealdb", version = "v2.2" },
+  { name = "dev01", model = "frr_linux", version = "10.5.2" },
 ]
 ```
 

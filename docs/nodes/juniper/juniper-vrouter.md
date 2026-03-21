@@ -7,11 +7,11 @@ Base images can be downloaded from the [download](https://support.juniper.net/su
 ## Import Image
 
 ```
-sherpa image import \
+sherpa server image import \
   --src vJunos-router-25.2R1.9.qcow2 \
   --version 25.2R1.9 \
   --model juniper_vrouter \
-  --latest
+  --default
 ```
 
 ## Default Node Parameters
@@ -26,7 +26,7 @@ sherpa image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | CDROM           |
-| Management Interface | fxp0/0          |
+| Management Interface | fxp0            |
 | Data Interfaces      | ge-0/0/0-9      |
 | Interface Driver     | virtio          |
 
