@@ -18,11 +18,12 @@ nodes = [
 ]
 
 links = [
-  { src = "spine01::eth1", dst = "leaf01::eth1" },
-  { src = "spine01::eth2", dst = "leaf02::eth1" },
+  { src = "spine01::eth1", dst = "leaf01::eth51" },
+  { src = "spine01::eth2", dst = "leaf02::eth51" },
   { src = "spine02::eth1", dst = "leaf01::eth52" },
   { src = "spine02::eth2", dst = "leaf02::eth52" },
   { src = "leaf01::eth1",  dst = "srv01::eth1" },
+  { src = "leaf02::eth1",  dst = "srv01::eth2" },
 ]
 ```
 
@@ -31,7 +32,7 @@ links = [
 sherpa up
 ```
 
-That's it. Five nodes, five links, one command.
+That's it. Five nodes, six links, one command.
 
 ---
 
