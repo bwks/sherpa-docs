@@ -21,7 +21,7 @@ sherpa server image import \
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
 | CPU                  | 1               |
-| RAM                  | 2GB             |
+| RAM                  | 1GB             |
 | CDROM Driver         | virtio          |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |

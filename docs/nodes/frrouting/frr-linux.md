@@ -31,7 +31,7 @@ docker image pull quay.io/frrouting/frr:10.5.2
 | CPU                  | 1         |
 | RAM                  | 512MB       |
 | ZTP Method           | Volume    |
-| Management Interface | Eth0   |
+| Management Interface | eth0      |
 | Interface Driver     | macvlan    |
 
 ## Example Manifest

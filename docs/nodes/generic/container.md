@@ -29,7 +29,7 @@ docker image pull nginx:1.29.4-perl
 | RAM                  | 1GB       |
 | ZTP Method           | Volume    |
 | Management Interface | eth0      |
-| Interface Driver     | virtio    |
+| Interface Driver     | macvlan   |
 
 ## Example Manifest
 

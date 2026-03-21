@@ -62,7 +62,7 @@ sherpa server image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | SATA            |
 | ZTP Method           | TFTP            |
-| Management Interface | mgmt1           |
+| Management Interface | Management1     |
 | Data Interfaces      | eth1-52         |
 | Interface Driver     | virtio          |
 

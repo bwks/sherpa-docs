@@ -31,10 +31,10 @@ docker image import cEOS64-lab-4.35.1F.tar.xz arista/ceos:4.35.1F
 | -------------------- | --------- |
 | Kind                 | Container |
 | CPU                  | 2         |
-| RAM                  | 2GB       |
+| RAM                  | 4GB       |
 | ZTP Method           | Volume    |
-| Management Interface | Mgmt0     |
-| Interface Driver     | macvlan    |
+| Management Interface | eth0      |
+| Interface Driver     | macvlan   |
 
 ## Example Manifest
 

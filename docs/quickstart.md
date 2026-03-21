@@ -32,23 +32,14 @@ A manifest describes the lab topology and node configuration parameters.
 name = "labrador-infiniato"
 
 nodes = [
-  { name = "dev01", model = "sonic_vlinux" },
-  { name = "dev02", model = "sonic_vlinux" },
+  { name = "dev01", model = "sonic_linux" },
+  { name = "dev02", model = "sonic_linux" },
 ]
 
 links = [
   { src = "dev01::eth2", dst = "dev02::eth2" },
 ]
 ```
-
-### Nodes
-
-A node is a virtual machine, container or unikernel
-that is managed as part of a lab environment.
-
-### Links
-
-Links describe how nodes are connected.
 
 ## Build
 Run the following command to start a lab.

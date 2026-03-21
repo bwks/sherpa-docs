@@ -30,7 +30,7 @@ sherpa server image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | SATA            |
 | ZTP Method           | CDROM           |
-| Management Interface | gig0/0          |
+| Management Interface | GigabitEthernet0/0 |
 | Data Interfaces      | gig0/0/1-8      |
 | Interface Driver     | e1000           |
 

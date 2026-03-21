@@ -26,7 +26,7 @@ sherpa server image import \
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | SATA            |
 | ZTP Method           | CDROM           |
-| Management Interface | mgmt0/0         |
+| Management Interface | eth0            |
 | Data Interfaces      | gig0-8          |
 | Interface Driver     | virtio          |
 

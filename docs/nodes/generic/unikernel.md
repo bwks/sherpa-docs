@@ -16,10 +16,10 @@ sherpa server image import \
 
 | Property             | Value     |
 | -------------------- | --------- |
-| Kind                 | Container |
+| Kind                 | Unikernel |
 | CPU                  | 1         |
 | RAM                  | 1GB       |
-| ZTP Method           | Bind      |
+| ZTP Method           | cloud-init |
 | Management Interface | eth0      |
 | Interface Driver     | virtio    |
 

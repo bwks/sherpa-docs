@@ -28,7 +28,7 @@ sherpa server image import \
 | RAM                  | 8GB             |
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | SATA            |
+| DISK Driver          | virtio          |
 | ZTP Method           | cloud-init      |
 | Management Interface | eth0            |
 | Interface Driver     | virtio          |

@@ -28,12 +28,12 @@ is cloned during instance creation.
 | Kind                 | Virtual Machine |
 | Tested Version       | 20200929        |
 | CPU                  | 1               |
-| RAM                  | 768MB           |
+| RAM                  | 1GB             |
 | CDROM Driver         | virtio          |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | Disk            |
-| Management Interface | gig0/0          |
+| Management Interface | GigabitEthernet0/0 |
 | Data Interfaces      | gig[0-3]/0-3    |
 | Interface Driver     | e1000           |
 

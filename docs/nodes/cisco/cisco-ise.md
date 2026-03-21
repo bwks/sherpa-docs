@@ -46,12 +46,12 @@ sherpa server image import \
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
 | Tested Version       | 3.5.0           |
-| CPU                  | 16              |
-| RAM                  | 32GB            |
-| CDROM Driver         | IDE             |
+| CPU                  | 4               |
+| RAM                  | 16GB            |
+| CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
-| ZTP Method           | Disk            |
+| ZTP Method           | CDROM           |
 | Management Interface | eth0            |
 | Data Interfaces      | eth1-4          |
 | Interface Driver     | virtio          |

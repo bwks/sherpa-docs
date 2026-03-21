@@ -29,11 +29,11 @@ sherpa server image import \
 | Tested Version       | 23.2R2.21       |
 | CPU                  | 2               |
 | RAM                  | 4GB             |
-| CDROM Driver         | Sata             |
+| CDROM Driver         | IDE             |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | Sata          |
-| ZTP Method           | CDROM           |
-| Management Interface | fxp0/0          |
+| DISK Driver          | virtio          |
+| ZTP Method           | TFTP            |
+| Management Interface | fxp0            |
 | Data Interfaces      | ge-0/0/0-7      |
 | Interface Driver     | virtio          |
 

@@ -21,13 +21,13 @@ sherpa server image import \
 | -------------------- | --------------- |
 | Tested Version       | 7.20.8          |
 | Kind                 | Virtual Machine |
-| CPU                  | 2               |
-| RAM                  | 2GB             |
-| CDROM Driver         | SATA            |
+| CPU                  | 1               |
+| RAM                  | 1GB             |
+| CDROM Driver         | IDE             |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | virtio          |
-| ZTP Method           | cloud-init      |
-| Management Interface | eth1            |
+| DISK Driver          | IDE             |
+| ZTP Method           | Disk            |
+| Management Interface | ether1          |
 | Data Interfaces      | eth1-8          |
 | Interface Driver     | virtio          |
 

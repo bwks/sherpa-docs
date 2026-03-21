@@ -1,11 +1,11 @@
 # SSH
 
-## SSH Config File
+## Config File
 
 An SSH config file named `sherpa_ssh_config` is created per-lab which
 is used by the `sherpa ssh <node-name>` command to access lab nodes.
 
-## SSH Jumphost
+## Jumphost
 
 When the Sherpa server is running on a remote host, lab nodes
 can be accessed via SSH using the Sherpa server as a jumphost.
@@ -17,7 +17,7 @@ Sherpa server.
 For ease of use, it is recommeded to copy your ssh keys to the Sherpa server
 to allow passwordless connectivity to remote nodes.
 
-## SSH Tunneling
+## Tunneling
 
 SSH tunneling allows for the connection of remote resources from your local
 machine by tunneling through SSH.

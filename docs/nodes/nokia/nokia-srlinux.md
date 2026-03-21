@@ -30,7 +30,7 @@ docker image pull ghcr.io/nokia/srlinux:25.10.1
 | CPU                  | 2         |
 | RAM                  | 4GB       |
 | ZTP Method           | Volume    |
-| Management Interface | Mgmt0.0   |
+| Management Interface | mgmt0     |
 | Interface Driver     | macvlan    |
 
 ## Example Manifest
