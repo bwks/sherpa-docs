@@ -2,7 +2,7 @@
 
 Sherpa makes building IT infrastructure labs intuitive and painless.
 
-## Why?
+## Why Sherpa?
 
 I love the workflow of Vagrant, define an environment in a config file
 and manage Virtual Machine lifecycle with a few commands.
