@@ -27,7 +27,7 @@ Database credentials are managed via environment variables, not `sherpa.toml`.
 
 ## Storage
 
-By default, SurrealDB runs with an in-memory backend. Data does not persist across restarts of the database container.
+SurrealDB uses the [RocksDB](https://rocksdb.org/) storage engine for persistent, file-based storage. The database file is located at `/opt/sherpa/db/sherpa.db` on the host and is mounted into the SurrealDB container at `/data/sherpa.db`. Data persists across container and host restarts.
 
 ## Schema
 
