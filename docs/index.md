@@ -1,5 +1,9 @@
 # Sherpa
 
+!!! Warning
+
+    Sherpa is currently in Alpha stage and not ready for human consumption.
+
 Sherpa is a lab management platform that brings virtual machines, containers, and unikernels together
 under a unified control plane. Define your topology in a simple TOML file, and Sherpa handles the rest — 
 networking, storage, and initial configuration.

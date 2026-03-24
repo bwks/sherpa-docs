@@ -91,6 +91,7 @@ nav:
       - nodes/linux/alma-linux.md
       - nodes/linux/alpine-linux.md
       - nodes/linux/debian-linux.md
+      - nodes/linux/devbox-linux.md
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
       - nodes/linux/opensuse-linux.md
