@@ -5,6 +5,14 @@
 An SSH config file named `sherpa_ssh_config` is created per-lab which
 is used by the `sherpa ssh <node-name>` command to access lab nodes.
 
+### Users SSH Config File
+To allow seamless conectivity to lab nodes, the users ssh config file
+in `~/.ssh/config` will have a line added: 
+`Include <home_dir>/.ssh/sherpa_lab_hosts` to the top of the file.
+
+The `sherpa_lab_hosts` file has `Include` references to the labs SSH
+config file added and removed during start up and tear down.
+
 ## Jumphost
 
 When the Sherpa server is running on a remote host, lab nodes
@@ -21,6 +29,9 @@ to allow passwordless connectivity to remote nodes.
 
 SSH tunneling allows for the connection of remote resources from your local
 machine by tunneling through SSH.
+
+`TODO: Add diagram showing SSH tunneling`
+
 
 For example, connecting to a HTTP server running on a lab-node.
 

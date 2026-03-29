@@ -4,7 +4,6 @@ site_url: https://docs.sherpa.com
 docs_dir: docs
 
 nav:
-  - About: about.md
   - Quickstart: quickstart.md
   - Architecture:
     - architecture/overview.md
@@ -70,8 +69,11 @@ nav:
       # - nodes/cisco/cisco-vedge.md
     - Cumulus:
       - nodes/cumulus/cumulus-linux.md
-    - Fortinet:
-      - nodes/fortinet/fortinet-fortigate.md
+    - Devbox:
+      - nodes/devbox/devbox-linux.md
+      - nodes/devbox/devbox-windows.md
+    # - Fortinet:
+    #   - nodes/fortinet/fortinet-fortigate.md
     - FRRouting:
       - nodes/frrouting/frr-linux.md
     - Generic:
