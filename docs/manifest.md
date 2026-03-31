@@ -96,6 +96,18 @@ environment_variables = [
 _This parameter currently only applies to node models
 that support the `cloud-init` based ZTP method._
 
+- **text_files (list&lt;object&gt;)**: A list of text files to pass to a node.
+```toml
+text_files = [
+  { src = "~/.claude.json", dst = "/home/sherpa/.claude.json", user = "sherpa", group = "sherpa", permissions = 600 },
+]
+```
+_This parameter currently only applies to node models
+that support the `cloud-init` based ZTP method._
+
+!!! Note
+    The `dst` should be a fully qualified path.
+
 ## Optional Paramters
 
 ### Links
