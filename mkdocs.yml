@@ -115,6 +115,7 @@ nav:
     - Sonic:
       - nodes/sonic/sonic-linux.md
     - SQL:
+      - nodes/sql/mongo.md
       - nodes/sql/mysql.md
       - nodes/sql/postgresql.md
       - nodes/sql/surrealdb.md
