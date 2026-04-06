@@ -9,6 +9,54 @@ Links between nodes are defined in the `manifest.toml` file in the `links` secti
 There are multiple methods to link nodes together. The method used
 depends on the lab requirements.
 
+## P2P eBPF
+
+P2P eBPF links provide high-performance, zero-copy packet forwarding between
+nodes using an eBPF TC classifier program. An eBPF redirect program is attached
+to each end of the link, forwarding ingress packets directly to the peer
+interface's egress in kernel space — bypassing the Linux bridge and network stack
+entirely.
+
+P2P eBPF links support both virtual machines and containers, including
+mixed VM-to-container links.
+
+![Alt text](network-p2p-ebpf.svg "Point-to-Point eBPF Link")
+
+### Configuration
+
+P2P eBPF is configured on a per-link basis with the `p2p = true` setting.
+
+```toml
+nodes = [
+    { name = "dev01", model = "arista_veos" },
+    { name = "dev02", model = "arista_ceos" },
+]
+links = [
+    { src = "dev01::eth1", dst = "dev02::eth1", p2p = true },
+]
+```
+
+#### Link Impairments
+
+P2P eBPF links support optional link impairments via TC netem, which
+coexists with the eBPF redirect program.
+
+```toml
+links = [
+    { src = "dev01::eth1", dst = "dev02::eth1", p2p = true, impairment = { delay = 10, jitter = 2, loss_percent = 0.5 } },
+]
+```
+
+Available impairment parameters:
+
+| Parameter         | Description                        | Unit         |
+| ----------------- | ---------------------------------- | ------------ |
+| `delay`           | One-way delay                      | milliseconds |
+| `jitter`          | Delay jitter                       | milliseconds |
+| `loss_percent`    | Packet loss percentage             | 0.0 - 100.0  |
+| `reorder_percent` | Packet reordering percentage       | 0.0 - 100.0  |
+| `corrupt_percent` | Bit-flip corruption percentage     | 0.0 - 100.0  |
+
 ## P2P Bridge
 
 P2P Bridges are the default P2P link type. They allow for

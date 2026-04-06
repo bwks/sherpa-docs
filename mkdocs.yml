@@ -92,10 +92,12 @@ nav:
     - Linux:
       - nodes/linux/alma-linux.md
       - nodes/linux/alpine-linux.md
+      - nodes/linux/centos-linux.md
       - nodes/linux/debian-linux.md
       - nodes/linux/devbox-linux.md
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
+      - nodes/linux/kali-linux.md
       - nodes/linux/opensuse-linux.md
       - nodes/linux/redhat-linux.md
       - nodes/linux/rocky-linux.md
@@ -111,10 +113,12 @@ nav:
       - nodes/server/jenkins-server.md
       - nodes/server/nautobot-server.md
       - nodes/server/netbox-server.md
+      - nodes/server/signoz-server.md
       - nodes/server/virt-server.md
     - Sonic:
       - nodes/sonic/sonic-linux.md
     - SQL:
+      - nodes/sql/mongo.md
       - nodes/sql/mysql.md
       - nodes/sql/postgresql.md
       - nodes/sql/surrealdb.md
