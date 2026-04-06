@@ -92,6 +92,7 @@ nav:
     - Linux:
       - nodes/linux/alma-linux.md
       - nodes/linux/alpine-linux.md
+      - nodes/linux/centos-linux.md
       - nodes/linux/debian-linux.md
       - nodes/linux/devbox-linux.md
       - nodes/linux/fedora-linux.md

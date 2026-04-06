@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" style="background: #ffffff; background-color: #ffffff;" version="1.1" width="970px" height="230px" viewBox="0 0 970 230">
+  <defs>
+    <marker id="arrow-right" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e06c75"/>
+    </marker>
+    <marker id="arrow-left" markerWidth="10" markerHeight="7" refX="1" refY="3.5" orient="auto">
+      <polygon points="10 0, 0 3.5, 10 7" fill="#e06c75"/>
+    </marker>
+  </defs>
+
+  <!-- Node A: VM -->
+  <rect x="40" y="65" width="160" height="100" rx="12" ry="12" fill="#cdeb8b" stroke="#36393d" stroke-width="7"/>
+  <text x="120" y="125" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="19" font-weight="bold" fill="#36393d">VM / CR</text>
+
+  <!-- Node A: nic0 -->
+  <rect x="230" y="85" width="60" height="60" fill="#FFFFFF" stroke="#36393d" stroke-width="3"/>
+  <text x="260" y="121" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="bold" fill="#36393d">nic0</text>
+
+  <!-- Line: Node A to nic0 -->
+  <line x1="200" y1="115" x2="230" y2="115" stroke="#36393d" stroke-width="3"/>
+
+  <!-- Node A: tap-a -->
+  <rect x="320" y="85" width="60" height="60" fill="#FFFFFF" stroke="#36393d" stroke-width="3"/>
+  <text x="350" y="121" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="bold" fill="#36393d">tap-a</text>
+
+  <!-- Line: nic0 to tap-a -->
+  <line x1="290" y1="115" x2="320" y2="115" stroke="#36393d" stroke-width="3"/>
+
+  <!-- eBPF redirect zone -->
+  <rect x="410" y="40" width="150" height="150" rx="8" ry="8" fill="none" stroke="#e06c75" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="485" y="70" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#e06c75">eBPF redirect</text>
+
+  <!-- Forward arrow (top): tap-a ingress -> tap-b egress -->
+  <line x1="395" y1="100" x2="565" y2="100" stroke="#e06c75" stroke-width="2.5" marker-end="url(#arrow-right)"/>
+
+  <!-- Reverse arrow (bottom): tap-b ingress -> tap-a egress -->
+  <line x1="565" y1="130" x2="395" y2="130" stroke="#e06c75" stroke-width="2.5" marker-end="url(#arrow-left)"/>
+
+  <!-- Node B: tap-b -->
+  <rect x="590" y="85" width="60" height="60" fill="#FFFFFF" stroke="#36393d" stroke-width="3"/>
+  <text x="620" y="121" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="bold" fill="#36393d">tap-b</text>
+
+  <!-- Node B: nic0 -->
+  <rect x="680" y="85" width="60" height="60" fill="#FFFFFF" stroke="#36393d" stroke-width="3"/>
+  <text x="710" y="121" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="bold" fill="#36393d">nic0</text>
+
+  <!-- Line: tap-b to nic0 -->
+  <line x1="650" y1="115" x2="680" y2="115" stroke="#36393d" stroke-width="3"/>
+
+  <!-- Node B: VM -->
+  <rect x="770" y="65" width="160" height="100" rx="12" ry="12" fill="#cdeb8b" stroke="#36393d" stroke-width="7"/>
+  <text x="850" y="125" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="19" font-weight="bold" fill="#36393d">VM / CR</text>
+
+  <!-- Line: nic0 to Node B -->
+  <line x1="740" y1="115" x2="770" y2="115" stroke="#36393d" stroke-width="3"/>
+
+  <!-- Label: kernel space -->
+  <text x="485" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-style="italic" fill="#888888">kernel space (zero-copy)</text>
+</svg>
