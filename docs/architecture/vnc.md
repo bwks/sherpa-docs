@@ -39,12 +39,12 @@ vncviewer localhost:<vnc-port>
 Use SSH tunneling to forward the VNC port from the Sherpa server to your local machine:
 
 ```bash
-# ssh -N -L <local-port>:<server-ip>:<vnc-port> <sherpa-server>
+# ssh -N -L {local-port}:{server-ip}:{vnc-port} {sherpa-server}
 
-ssh -N -L 5900:localhost:5900 user@sherpa-server
+ssh -N -L 5900:127.0.0.1:5900 sherpa-server
 ```
 
-Then connect your VNC client to `localhost:5900`.
+Then connect your VNC client to `localhost:5900` on your local machine.
 
 ## Applicability
 
