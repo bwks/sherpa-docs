@@ -15,20 +15,12 @@ When a lab is created, Sherpa performs the following for each container node:
 
 ## Resource Allocation
 
-Every container model has default resource parameters. Typical defaults:
-
-| Model | CPU | RAM | Data Interfaces | Privileged |
-| ----- | --- | --- | --------------- | ---------- |
-| Arista cEOS | 2 | 4096 MiB | 52 | Yes |
-| Nokia SR Linux | 2 | 4096 MiB | 34 | Yes |
-| FRR | 1 | 512 MiB | 8 | Yes |
-| GitLab CE | 2 | 4096 MiB | 0 | No |
-| Generic Container | 1 | 1024 MiB | 1 | No |
+Every container model has default resource parameters for CPU, RAM, data interface count, and privileged mode. These can be overridden in the manifest.
 
 Additional options configurable in the manifest:
 
 - **`privileged`** — run the container in privileged mode
-- **`shm_size`** — shared memory size in bytes (e.g. GitLab CE defaults to 256 MiB)
+- **`shm_size`** — shared memory size in bytes
 - **`user`** — override the container user
 - **`environment_variables`** — key-value pairs passed to the container
 - **`commands`** — override the default entrypoint/command
@@ -63,16 +55,7 @@ After attachment, data interfaces are set to promiscuous mode and brought up. Di
 
 ## Provisioning
 
-Containers do not use traditional ZTP methods (TFTP, cloud-init). Instead, provisioning is handled through volume mounts, environment variables, and commands:
-
-| Model | Method |
-| ----- | ------ |
-| Arista cEOS | Configuration file mounted as a volume |
-| Nokia SR Linux | JSON configuration file mounted as a volume |
-| FRR | Daemons config, FRR config, and init script mounted as volumes |
-| HashiCorp Vault | HCL configuration file mounted as a volume |
-| GitLab CE | Environment variables |
-| Generic | User-defined volumes and environment variables |
+Containers do not use traditional ZTP methods (TFTP, cloud-init). Instead, provisioning is handled through a combination of volume mounts, environment variables, and commands. The specific method varies by model — typically configuration files mounted as volumes, environment variables, or a combination of both.
 
 ### File Injection
 
