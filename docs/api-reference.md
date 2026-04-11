@@ -2,15 +2,25 @@
 
 Sherpa provides a unified API accessible via three transports. The API specification is auto-generated from the codebase and served as a live OpenAPI 3.1 document.
 
-## Live API Specification
+## Swagger UI
 
-The full OpenAPI spec is available from any running Sherpa server:
+Sherpa ships with a built-in Swagger UI for interactive API exploration. Access it from any running Sherpa server at:
 
 ```
-GET https://<server>:3031/api/v1/spec
+https://<server>:3031/api/docs
 ```
 
-This endpoint returns the complete specification including all operations, request/response schemas, and authentication requirements.
+The Swagger UI lets you browse all available operations, inspect request/response schemas, and test endpoints directly from the browser. It is served from the Sherpa server itself, so it always reflects the exact API version running on that server.
+
+## OpenAPI Specification
+
+The raw OpenAPI 3.1 JSON specification is available at:
+
+```
+GET https://<server>:3031/api/v1/openapi.json
+```
+
+This can be imported into tools like Postman, Insomnia, or any OpenAPI-compatible client for generating API bindings or documentation.
 
 ## Transports
 
