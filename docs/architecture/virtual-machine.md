@@ -61,10 +61,10 @@ Each VM provides two console access methods:
 
 ### Serial Console
 
-A TCP-based telnet serial console is configured on each VM, bound to the loopback address with an auto-assigned port. Connect via `sherpa console <node>` or directly with:
+A TCP-based telnet serial console is configured on each VM. Each node binds to its own unique loopback IP address on port `2323`. Connect via `sherpa console <node>` or directly with:
 
 ```bash
-telnet 127.0.0.1 <console-port>
+telnet <node-loopback-ip> 2323
 ```
 
 ### VNC
