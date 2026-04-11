@@ -7,7 +7,7 @@ Sherpa provides a unified API accessible via three transports. The API specifica
 Sherpa ships with a built-in Swagger UI for interactive API exploration. Access it from any running Sherpa server at:
 
 ```
-https://<server>:3031/api/docs
+https://<server>:3030/api/docs
 ```
 
 The Swagger UI lets you browse all available operations, inspect request/response schemas, and test endpoints directly from the browser. It is served from the Sherpa server itself, so it always reflects the exact API version running on that server.
@@ -17,7 +17,7 @@ The Swagger UI lets you browse all available operations, inspect request/respons
 The raw OpenAPI 3.1 JSON specification is available at:
 
 ```
-GET https://<server>:3031/api/v1/openapi.json
+GET https://<server>:3030/api/v1/openapi.json
 ```
 
 This can be imported into tools like Postman, Insomnia, or any OpenAPI-compatible client for generating API bindings or documentation.
@@ -26,7 +26,7 @@ This can be imported into tools like Postman, Insomnia, or any OpenAPI-compatibl
 
 ### REST API
 
-Standard HTTP endpoints served on the configured `http_port` (default: `3031`). Supports JSON request/response bodies and Server-Sent Events (SSE) for streaming operations.
+Standard HTTP endpoints served on the configured `ws_port` (default: `3030`). Supports JSON request/response bodies and Server-Sent Events (SSE) for streaming operations.
 
 ### WebSocket RPC
 
@@ -50,7 +50,7 @@ Obtain a token via the login endpoint:
 sherpa login
 
 # REST
-curl -X POST https://<server>:3031/api/v1/auth/login \
+curl -X POST https://<server>:3030/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "password"}'
 ```
