@@ -62,14 +62,15 @@ nav:
     - Devbox:
       - nodes/devbox/devbox-linux.md
       - nodes/devbox/devbox-windows.md
+    - Forge:
+      - nodes/forge/forgejo-forge.md
+      - nodes/forge/gitlab-ce.md
     - FRRouting:
       - nodes/frrouting/frr-linux.md
     - Generic:
       - nodes/generic/container.md
       - nodes/generic/unikernel.md
       - nodes/generic/virtual-machine.md
-    - Gitlab:
-      - nodes/gitlab/gitlab-ce.md
     - Hashicorp:
       - nodes/hashicorp/hashicorp-vault.md
     - Juniper:
@@ -96,13 +97,13 @@ nav:
       - nodes/nokia/nokia-srlinux.md
     - Paloalto:
       - nodes/paloalto/paloalto-panos.md
+    - Message Bus:
+      - nodes/message-bus/nats-bus.md
+      - nodes/message-bus/signoz-server.md
     - Server:
-      - nodes/server/forgejo-forge.md
       - nodes/server/jenkins-server.md
       - nodes/server/nautobot-server.md
-      - nodes/server/nats-bus.md
       - nodes/server/netbox-server.md
-      - nodes/server/signoz-server.md
       - nodes/server/virt-server.md
     - Sonic:
       - nodes/sonic/sonic-linux.md
