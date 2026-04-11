@@ -27,6 +27,7 @@ nav:
     - architecture/zero-touch-provisioning.md
     - architecture/credentials.md
     - architecture/ssh.md
+    - architecture/vnc.md
   - Install / Update:
     - Install:
       - install-update/install/supported-platforms.md
