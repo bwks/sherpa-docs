@@ -205,3 +205,8 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# project related
+lab-info.toml
+sherpa_ssh_config
+sherpa_ssh_key
