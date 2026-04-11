@@ -45,6 +45,21 @@ nodes = [
 ]
 ```
 
+
+## Node Access
+
+=== "SSH"
+
+    ```
+    sherpa ssh <node-name>
+    ```
+
+=== "Docker"
+
+    ```
+    docker exec -it <node-name>-<lab-id> sh
+    ```
+
 ## Notes
 
 - Approximate time for the system to be ready: `2 minutes`

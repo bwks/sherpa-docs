@@ -49,6 +49,21 @@ nodes = [
 ]
 ```
 
+
+## Node Access
+
+=== "SSH"
+
+    ```
+    sherpa ssh <node-name>
+    ```
+
+=== "Console"
+
+    ```
+    sherpa console <node-name>
+    ```
+
 ## Notes
 
 - Approximate time for the system to be ready: `1 minute`

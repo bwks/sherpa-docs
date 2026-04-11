@@ -48,6 +48,21 @@ The Juniper documentation states that a secondary attached disk is the method to
 config on first boot. However, I could not get this to work with the latest version: `25.2R1.8`.
 Therefore, the TFTP method is selected for this device type as default.
 
+
+## Node Access
+
+=== "SSH"
+
+    ```
+    sherpa ssh <node-name>
+    ```
+
+=== "Console"
+
+    ```
+    sherpa console <node-name>
+    ```
+
 ## Notes
 
 - Approximate time for the system to be ready: `9 minutes`

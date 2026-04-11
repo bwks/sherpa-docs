@@ -39,4 +39,19 @@ nodes = [
 ]
 ```
 
+
+## Node Access
+
+=== "SSH"
+
+    ```
+    sherpa ssh <node-name>
+    ```
+
+=== "Console"
+
+    ```
+    sherpa console <node-name>
+    ```
+
 ## Notes

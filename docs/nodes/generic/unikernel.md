@@ -33,6 +33,15 @@ nodes = [
 ]
 ```
 
+
+## Node Access
+
+=== "Console"
+
+    ```
+    sherpa console <node-name>
+    ```
+
 ## Notes
 
 f
