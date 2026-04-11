@@ -99,11 +99,11 @@ nav:
       - nodes/paloalto/paloalto-panos.md
     - Message Bus:
       - nodes/message-bus/nats-bus.md
-      - nodes/message-bus/signoz-server.md
     - Server:
       - nodes/server/jenkins-server.md
       - nodes/server/nautobot-server.md
       - nodes/server/netbox-server.md
+      - nodes/server/signoz-server.md
       - nodes/server/virt-server.md
     - Sonic:
       - nodes/sonic/sonic-linux.md
