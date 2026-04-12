@@ -107,8 +107,8 @@ startup_scripts = [
 ]
 ```
 
-_This parameter currently only applies to node models
-that support the `cloud-init` based ZTP method._
+    _This parameter currently only applies to node models
+    that support the `cloud-init` based ZTP method._
 
 - **user_scripts (list&lt;string&gt;)**: A list of paths to user scripts on the client.
 ```toml
@@ -125,8 +125,8 @@ commands = [
 ]
 ```
 
-_This parameter currently only applies to node models
-that support the `cloud-init` based ZTP method._
+    _This parameter currently only applies to node models
+    that support the `cloud-init` based ZTP method._
 
 - **environment_variables (list&lt;string&gt;)**: A list of environment variables to pass
 to a node.
@@ -141,8 +141,8 @@ environment_variables = [
 ]
 ```
 
-_This parameter currently only applies to node models
-that support the `cloud-init` based ZTP method._
+    _This parameter currently only applies to node models
+    that support the `cloud-init` based ZTP method._
 
 - **text_files (list&lt;object&gt;)**: A list of text files to pass to a node.
 ```toml
@@ -151,10 +151,10 @@ text_files = [
 ]
 ```
 
-_This parameter currently only applies to node models
-that support the `cloud-init` based ZTP method._
+    _This parameter currently only applies to node models
+    that support the `cloud-init` based ZTP method._
 
-!!! note
+    !!! note
     The `dst` should be a fully qualified path.
 
 | Property | Type | Description |
@@ -224,14 +224,14 @@ volumes = [
 kernel_cmdline = "/usr/bin/nginx"
 ```
 
-_This parameter only applies to unikernel nodes using the `direct_kernel` boot mode._
+    _This parameter only applies to unikernel nodes using the `direct_kernel` boot mode._
 
 - **ready_port (int)**: TCP port to probe on the node's management IP to verify readiness. When set, Sherpa waits for a successful TCP connection to this port in addition to the libvirt domain reaching the running state.
 ```toml
 ready_port = 80
 ```
 
-_This parameter only applies to unikernel nodes._
+    _This parameter only applies to unikernel nodes._
 
 - **privileged (bool)**: Run the container in privileged mode.
 ```toml
