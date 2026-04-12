@@ -599,6 +599,7 @@
 .md-typeset h6 {
   font-weight: 700;
   color: var(--md-default-fg-color) !important;
+  text-transform: none;
 }
 
 /* Ensure h1 is very visible */
