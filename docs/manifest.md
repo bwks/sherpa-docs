@@ -22,8 +22,9 @@ links = [
 
 ## Required Parameters
 
-### Name
-**string** - The name of the lab.
+### name (string)
+
+The name of the lab.
 
 To avoid naming collisions, the `lab name` is hashed with the users `username`
 to create a `lab-id`. Resources are suffixed with the `lab-id` to create unique resource names.
@@ -32,8 +33,9 @@ to create a `lab-id`. Resources are suffixed with the `lab-id` to create unique 
 name = "sexy-salamander"
 ```
 
-### Nodes
-**list&lt;node_object&gt;** - The nodes that will be managed as part of this lab.
+### nodes (list&lt;node_object&gt;)
+
+The nodes that will be managed as part of this lab.
 
 ```toml
 nodes = []
@@ -41,12 +43,18 @@ nodes = []
 
 #### Required Node Parameters
 
-- **name (string)**: The name of the device.
+##### name (string)
+
+The name of the device.
+
 ```toml
 name = "dev01"
 ```
 
-- **model (string)**: The model of the device.
+##### model (string)
+
+The model of the device.
+
 ```toml
 model = "sonic_linux"
 ```
@@ -320,17 +328,17 @@ user = "admin"
 
 ## Optional Parameters
 
-### Ready Timeout
+### ready_timeout (int)
 
-**int** - Global timeout in seconds for node readiness checks. Overrides the default timeout for all nodes in the lab.
+Global timeout in seconds for node readiness checks. Overrides the default timeout for all nodes in the lab.
 
 ```toml
 ready_timeout = 300
 ```
 
-### Links
+### links (list&lt;link_object&gt;)
 
-**list&lt;link_object&gt;** - Links define the connectivity relationship between nodes in the topology.
+Links define the connectivity relationship between nodes in the topology.
 
 Each device is defined with its `name` and `interface` separated by a double colon `(::)`
 
@@ -369,9 +377,9 @@ links = [
 
 For more information on link types see the [point-to-point](architecture/networking/node/point-to-point.md) architecture documentation.
 
-### Bridges
+### bridges (list&lt;bridge_object&gt;)
 
-**list&lt;bridge_object&gt;** - Bridges define shared layer 2 network segments that connect multiple node interfaces.
+Bridges define shared layer 2 network segments that connect multiple node interfaces.
 
 Unlike [links](#links) which create point-to-point connections between two nodes, bridges allow
 three or more interfaces to share a common network segment.
@@ -391,9 +399,9 @@ bridges = [
 
 For more information on bridge types see the [private-bridge](architecture/networking/node/private-bridge.md) architecture documentation.
 
-### ZTP Server
+### ztp_server (object)
 
-**object** - Configure the Zero-Touch Provisioning server settings.
+Configure the Zero-Touch Provisioning server settings.
 
 ```toml
 [ztp_server]
@@ -408,9 +416,9 @@ password = "sherpa"
 | `username` | string | `"sherpa"` | Username for ZTP authentication |
 | `password` | string | `"sherpa"` | Password for ZTP authentication |
 
-### Configuration Management
+### config_management (object)
 
-**object** - Enable configuration management tool integrations. When enabled, Sherpa generates inventory files for the specified tools.
+Enable configuration management tool integrations. When enabled, Sherpa generates inventory files for the specified tools.
 
 ```toml
 [config_management]
