@@ -1,15 +1,14 @@
-# Unikernel
+# Unikraft Unikernel
 
-A generic unikernel allows for the use of unikernel models that are not natively defined within
-Sherpa.
+[Unikraft](https://unikraft.org/) unikernels are lightweight, single-purpose machine images built with the Unikraft framework. They boot via the DirectKernel mode, where QEMU loads the kernel ELF binary directly.
 
 ## Import Image
 
 ```
 sherpa server image import \
-  --src <path-to-image> \
+  --src <path-to-kernel.elf> \
   --version <version> \
-  --model generic_unikernel
+  --model unikraft_unikernel
 ```
 
 ## Default Node Parameters
@@ -27,10 +26,10 @@ sherpa server image import \
 ## Example Manifest
 
 ```toml
-name = "generic-unikernel"
+name = "unikraft-unikernel"
 
 nodes = [
-  { name = "dev01", model = "generic_unikernel", version = "v1.0.0" },
+  { name = "dev01", model = "unikraft_unikernel", version = "v1.0.0" },
 ]
 ```
 
@@ -44,5 +43,5 @@ nodes = [
 
 ## Notes
 
-- Boot mode is `direct_kernel` by default — the kernel ELF binary is loaded directly by QEMU
-- ZTP is disabled by default; configure it in the manifest if needed
+- Boot mode is `direct_kernel` — the kernel ELF binary is loaded directly by QEMU
+- Uses DHCP for IP assignment with static MAC-based binding on the management router

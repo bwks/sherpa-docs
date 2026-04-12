@@ -1,20 +1,40 @@
 # Unikernel
 
-Unikernels from [NanoVMs](https://nanovms.com/) are single-purpose machine images that run directly on the [KVM](https://linux-kvm.org/page/Main_Page) hypervisor using the [QEMU](https://wiki.qemu.org/Main_Page) emulator and the [Libvirt](https://libvirt.org) API.
+Unikernels are single-purpose machine images that package an application with only the OS primitives it needs, resulting in a minimal footprint. In Sherpa, unikernels run on the [KVM](https://linux-kvm.org/page/Main_Page) hypervisor using the [QEMU](https://wiki.qemu.org/Main_Page) emulator and the [Libvirt](https://libvirt.org) API — the same pathway used for virtual machines.
 
-Unlike traditional VMs, unikernels package an application with only the OS primitives it needs, resulting in a minimal footprint. In Sherpa, unikernels run through the same libvirt/QEMU pathway as virtual machines.
+Sherpa supports three unikernel models:
+
+| Model | Boot Mode | Description |
+| ----- | --------- | ----------- |
+| `generic_unikernel` | DirectKernel | Generic type for custom unikernels |
+| `unikraft_unikernel` | DirectKernel | [Unikraft](https://unikraft.org/)-based unikernels |
+| `nanos_unikernel` | DiskBoot | [NanoVMs](https://nanovms.com/)-based unikernels |
+
+## Boot Modes
+
+Unikernels support two boot modes that determine how the hypervisor loads the application:
+
+- **DirectKernel** — The kernel ELF binary is loaded directly by QEMU via the `<kernel>` libvirt XML element. An optional kernel command line can be passed via `<cmdline>`. No disk cloning is required.
+- **DiskBoot** — The unikernel boots from a cloned disk image, the same way as a traditional VM (`<boot dev='hd'/>`).
 
 ## How it Works
 
 When a lab is created, Sherpa performs the following for each unikernel node:
 
-1. **Clone** the base disk image from the [storage pool](storage.md) into the lab directory
-2. **Resize** the boot disk if `boot_disk_size` is specified in the manifest
-3. **Generate** a libvirt domain XML definition from the node's parameters
-4. **Apply** [zero-touch provisioning](zero-touch-provisioning.md) configuration
-5. **Define and start** the domain via the Libvirt API
+=== "DirectKernel"
 
-This is the same process used for virtual machines.
+    1. **Resolve** the kernel ELF path from the image store
+    2. **Generate** a libvirt domain XML definition with the kernel path
+    3. **Define and start** the domain via the Libvirt API
+
+=== "DiskBoot"
+
+    1. **Clone** the base disk image from the [storage pool](storage.md) into the lab directory
+    2. **Resize** the boot disk if `boot_disk_size` is specified in the manifest
+    3. **Generate** a libvirt domain XML definition from the node's parameters
+    4. **Define and start** the domain via the Libvirt API
+
+All unikernel nodes are created in parallel after VM nodes have been provisioned.
 
 ## Resource Allocation
 
@@ -23,16 +43,32 @@ Default parameters for unikernel nodes:
 | Property | Default |
 | -------- | ------- |
 | CPU | 1 vCPU |
-| RAM | 1024 MiB |
-| Data Interfaces | 1 |
+| RAM | 512 MiB |
+| Data Interfaces | 0 |
 | Interface Driver | `virtio` |
-| ZTP Method | CloudInit |
+| ZTP Method | None |
 
 These defaults can be overridden in the manifest.
 
 ## Image Management
 
-Unikernel binaries are stored as `qcow2` disk images in the `bins_dir` directory (default: `/opt/sherpa/bins/`). Images are imported via `sherpa server image import` the same way as VM images.
+Unikernel images are stored in the `bins_dir` directory (default: `/opt/sherpa/bins/`), organised by model and version. The storage format depends on the boot mode:
+
+| Boot Mode | Filename | Format |
+| --------- | -------- | ------ |
+| DirectKernel | `kernel.elf` | ELF binary |
+| DiskBoot | `disk.qcow2` | QCOW2 disk image |
+
+Images are imported via `sherpa server image import`:
+
+```bash
+sherpa server image import \
+  --src <path-to-image> \
+  --version <version> \
+  --model <model_name>
+```
+
+Use the `--unikernel` flag with `sherpa server image list` or `sherpa server image scan` to filter for unikernel images.
 
 ## Networking
 
@@ -40,10 +76,13 @@ Unikernels use the same networking as virtual machines — virtio interfaces att
 
 ## Console Access
 
-Each unikernel provides two console access methods:
+Each unikernel provides a serial console for access:
 
-- **Serial Console** — TCP-based telnet console bound to the node's loopback IP on port `2323`. Connect via `sherpa console <node>`.
-- **VNC** — graphics adapter with an auto-assigned port. See [VNC](vnc.md) for connection details.
+- **Serial Console** — TCP-based telnet console bound to the node's unique loopback IP on port `2323`. Connect via `sherpa console <node>` or directly with `telnet <node-loopback-ip> 2323`.
+
+!!! info
+
+    Unikernels do not include a VNC graphics adapter. Serial console is the only access method.
 
 ## Lifecycle
 
@@ -53,6 +92,12 @@ Each unikernel provides two console access methods:
 | Stop | Unikernel is shut down via Libvirt |
 | Resume | Stopped unikernel is restarted |
 | Destroy | Domain is undefined and all associated disks are removed |
+
+Power behaviour:
+
+- **On poweroff** — unikernel is destroyed
+- **On reboot** — unikernel is restarted
+- **On crash** — unikernel is destroyed
 
 !!! note
 

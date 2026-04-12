@@ -113,6 +113,9 @@ nav:
       - nodes/sql/mysql.md
       - nodes/sql/postgresql.md
       - nodes/sql/surrealdb.md
+    - Unikernel:
+      - nodes/unikernel/unikraft.md
+      - nodes/unikernel/nanos.md
     - Windows:
       - nodes/windows/windows-server.md
 
