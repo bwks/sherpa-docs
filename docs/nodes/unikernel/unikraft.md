@@ -29,7 +29,7 @@ sherpa server image import \
 name = "unikraft-unikernel"
 
 nodes = [
-  { name = "dev01", model = "unikraft_unikernel", version = "v1.0.0" },
+  { name = "dev01", model = "unikraft_unikernel", version = "v1.0.0", kernel_cmdline = "/usr/bin/nginx", ready_port = 80 },
 ]
 ```
 
@@ -44,4 +44,6 @@ nodes = [
 ## Notes
 
 - Boot mode is `direct_kernel` — the kernel ELF binary is loaded directly by QEMU
+- Use `kernel_cmdline` to specify the application entry point or pass runtime arguments to the unikernel
+- Use `ready_port` to have Sherpa wait for a TCP port to become available before marking the node as ready
 - Uses DHCP for IP assignment with static MAC-based binding on the management router

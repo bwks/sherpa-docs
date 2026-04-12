@@ -14,7 +14,7 @@ Sherpa supports three unikernel models:
 
 Unikernels support two boot modes that determine how the hypervisor loads the application:
 
-- **DirectKernel** — The kernel ELF binary is loaded directly by QEMU via the `<kernel>` libvirt XML element. An optional kernel command line can be passed via `<cmdline>`. No disk cloning is required.
+- **DirectKernel** — The kernel ELF binary is loaded directly by QEMU via the `<kernel>` libvirt XML element. An optional kernel command line can be passed via `<cmdline>` using the `kernel_cmdline` manifest parameter. No disk cloning is required.
 - **DiskBoot** — The unikernel boots from a cloned disk image, the same way as a traditional VM (`<boot dev='hd'/>`).
 
 ## How it Works
@@ -24,7 +24,7 @@ When a lab is created, Sherpa performs the following for each unikernel node:
 === "DirectKernel"
 
     1. **Resolve** the kernel ELF path from the image store
-    2. **Generate** a libvirt domain XML definition with the kernel path
+    2. **Generate** a libvirt domain XML definition with the kernel path and optional `kernel_cmdline`
     3. **Define and start** the domain via the Libvirt API
 
 === "DiskBoot"
@@ -83,6 +83,21 @@ Each unikernel provides a serial console for access:
 !!! info
 
     Unikernels do not include a VNC graphics adapter. Serial console is the only access method.
+
+## Manifest Configuration
+
+Unikernel nodes support the following unikernel-specific manifest parameters:
+
+- **`kernel_cmdline`** — Kernel command line arguments passed to QEMU for DirectKernel unikernels. This overrides any auto-injected command line. Use this to specify the application entry point or pass runtime configuration to the unikernel.
+- **`ready_port`** — TCP port to probe on the node's management IP to verify readiness. By default, a unikernel is considered ready when its libvirt domain reaches the running state. When `ready_port` is set, Sherpa additionally waits for a successful TCP connection to the specified port.
+
+```toml
+nodes = [
+  { name = "web01", model = "unikraft_unikernel", version = "v1.0.0", kernel_cmdline = "/usr/bin/nginx", ready_port = 80 },
+]
+```
+
+See the [manifest](../manifest.md#optional-node-parameters) documentation for all available node parameters.
 
 ## Lifecycle
 

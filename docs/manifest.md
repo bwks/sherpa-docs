@@ -219,6 +219,20 @@ volumes = [
 | `src` | string | Source path on the host |
 | `dst` | string | Destination path in the node |
 
+- **kernel_cmdline (string)**: Kernel command line arguments for DirectKernel unikernel nodes. Passed to QEMU via the libvirt `<cmdline>` XML element. Overrides any auto-injected command line.
+```toml
+kernel_cmdline = "/usr/bin/nginx"
+```
+
+_This parameter only applies to unikernel nodes using the `direct_kernel` boot mode._
+
+- **ready_port (int)**: TCP port to probe on the node's management IP to verify readiness. When set, Sherpa waits for a successful TCP connection to this port in addition to the libvirt domain reaching the running state.
+```toml
+ready_port = 80
+```
+
+_This parameter only applies to unikernel nodes._
+
 - **privileged (bool)**: Run the container in privileged mode.
 ```toml
 privileged = true
