@@ -53,53 +53,82 @@ model = "sonic_linux"
 
 #### Optional Node Parameters
 
-- **image (string)**: Custom image name to use instead of the default for this model.
+##### image (string)
+
+Custom image name to use instead of the default for this model.
+
 ```toml
 image = "custom-ubuntu"
 ```
 
-- **version (string)**: Specific image version to use instead of the default.
+##### version (string)
+
+Specific image version to use instead of the default.
+
 ```toml
 version = "22.04"
 ```
 
-- **cpu_count (int)**: Configure the number of CPUs.
+##### cpu_count (int)
+
+Configure the number of CPUs.
+
 ```toml
 cpu_count = 4
 ```
 
-- **memory (int)**: Configure the amount of RAM in `MegaBytes (MB)`.
+##### memory (int)
+
+Configure the amount of RAM in `MegaBytes (MB)`.
+
 ```toml
 memory = 4096
 ```
 
-- **boot_disk_size (int)**: Change the size of the boot disk in `GigaBytes (GB)`.
+##### boot_disk_size (int)
+
+Change the size of the boot disk in `GigaBytes (GB)`.
+
 ```toml
 boot_disk_size = 100
 ```
 
-- **ipv4_address (string)**: Static IPv4 address for the management interface.
+##### ipv4_address (string)
+
+Static IPv4 address for the management interface.
+
 ```toml
 ipv4_address = "10.0.0.10"
 ```
 
-- **ipv6_address (string)**: Static IPv6 address for the management interface.
+##### ipv6_address (string)
+
+Static IPv6 address for the management interface.
+
 ```toml
 ipv6_address = "fd00::10"
 ```
 
-- **skip_ready_check (bool)**: Skip the node readiness check after deployment.
+##### skip_ready_check (bool)
+
+Skip the node readiness check after deployment.
+
 ```toml
 skip_ready_check = true
 ```
 
-- **ztp_config (string)**: Path to a custom ZTP configuration file on the client.
+##### ztp_config (string)
+
+Path to a custom ZTP configuration file on the client.
+
 ```toml
 ztp_config = "configs/dev01.txt"
 ```
 
-- **startup_scripts (list&lt;string&gt;)**: A list of paths to scripts on the client
-that will run on node startup.
+##### startup_scripts (list&lt;string&gt;)
+
+A list of paths to scripts on the client that will run on node startup.
+
 ```toml
 startup_scripts = [
   "/path/to/script1.sh",
@@ -107,17 +136,23 @@ startup_scripts = [
 ]
 ```
 
-    _This parameter currently only applies to node models
-    that support the `cloud-init` based ZTP method._
+_This parameter currently only applies to node models
+that support the `cloud-init` based ZTP method._
 
-- **user_scripts (list&lt;string&gt;)**: A list of paths to user scripts on the client.
+##### user_scripts (list&lt;string&gt;)
+
+A list of paths to user scripts on the client.
+
 ```toml
 user_scripts = [
   "/path/to/user-script.sh",
 ]
 ```
 
-- **commands (list&lt;string&gt;)**: A list of commands to execute at boot.
+##### commands (list&lt;string&gt;)
+
+A list of commands to execute at boot.
+
 ```toml
 commands = [
   "apt-get update",
@@ -125,11 +160,13 @@ commands = [
 ]
 ```
 
-    _This parameter currently only applies to node models
-    that support the `cloud-init` based ZTP method._
+_This parameter currently only applies to node models
+that support the `cloud-init` based ZTP method._
 
-- **environment_variables (list&lt;string&gt;)**: A list of environment variables to pass
-to a node.
+##### environment_variables (list&lt;string&gt;)
+
+A list of environment variables to pass to a node.
+
 ```toml
 environment_variables = [
   # Supply the token inline. Beware, this is very insecure for sensitive vars.
@@ -141,20 +178,23 @@ environment_variables = [
 ]
 ```
 
-    _This parameter currently only applies to node models
-    that support the `cloud-init` based ZTP method._
+_This parameter currently only applies to node models
+that support the `cloud-init` based ZTP method._
 
-- **text_files (list&lt;object&gt;)**: A list of text files to pass to a node.
+##### text_files (list&lt;object&gt;)
+
+A list of text files to pass to a node.
+
 ```toml
 text_files = [
   { src = "~/.claude.json", dst = "/home/sherpa/.claude.json", user = "sherpa", group = "sherpa", permissions = 600 },
 ]
 ```
 
-    _This parameter currently only applies to node models
-    that support the `cloud-init` based ZTP method._
+_This parameter currently only applies to node models
+that support the `cloud-init` based ZTP method._
 
-    !!! note
+!!! note
     The `dst` should be a fully qualified path.
 
 | Property | Type | Description |
@@ -165,7 +205,10 @@ text_files = [
 | `group` | string | File group |
 | `permissions` | int | File permissions (e.g., `600`) |
 
-- **binary_files (list&lt;object&gt;)**: A list of binary files to include with the node.
+##### binary_files (list&lt;object&gt;)
+
+A list of binary files to include with the node.
+
 ```toml
 binary_files = [
   { source = "/path/to/binary" },
@@ -176,7 +219,10 @@ binary_files = [
 | -------- | ---- | ----------- |
 | `source` | string | Source file path on the client |
 
-- **systemd_units (list&lt;object&gt;)**: Systemd units to deploy to the node.
+##### systemd_units (list&lt;object&gt;)
+
+Systemd units to deploy to the node.
+
 ```toml
 systemd_units = [
   { name = "myservice.service", source = "units/myservice.service", enabled = true },
@@ -189,14 +235,20 @@ systemd_units = [
 | `source` | string | Source file path on the client |
 | `enabled` | bool | Whether to enable the unit |
 
-- **ssh_authorized_keys (list&lt;string&gt;)**: SSH public keys to authorize on the node (inline).
+##### ssh_authorized_keys (list&lt;string&gt;)
+
+SSH public keys to authorize on the node (inline).
+
 ```toml
 ssh_authorized_keys = [
   "ssh-ed25519 AAAA... user@host",
 ]
 ```
 
-- **ssh_authorized_key_files (list&lt;object&gt;)**: SSH public key file references.
+##### ssh_authorized_key_files (list&lt;object&gt;)
+
+SSH public key file references.
+
 ```toml
 ssh_authorized_key_files = [
   { source = "~/.ssh/id_ed25519.pub" },
@@ -207,7 +259,10 @@ ssh_authorized_key_files = [
 | -------- | ---- | ----------- |
 | `source` | string | Path to the public key file |
 
-- **volumes (list&lt;object&gt;)**: Volume mounts for the node.
+##### volumes (list&lt;object&gt;)
+
+Volume mounts for the node.
+
 ```toml
 volumes = [
   { src = "/host/path", dst = "/container/path" },
@@ -219,31 +274,46 @@ volumes = [
 | `src` | string | Source path on the host |
 | `dst` | string | Destination path in the node |
 
-- **kernel_cmdline (string)**: Kernel command line arguments for DirectKernel unikernel nodes. Passed to QEMU via the libvirt `<cmdline>` XML element. Overrides any auto-injected command line.
+##### kernel_cmdline (string)
+
+Kernel command line arguments for DirectKernel unikernel nodes. Passed to QEMU via the libvirt `<cmdline>` XML element. Overrides any auto-injected command line.
+
 ```toml
 kernel_cmdline = "/usr/bin/nginx"
 ```
 
-    _This parameter only applies to unikernel nodes using the `direct_kernel` boot mode._
+_This parameter only applies to unikernel nodes using the `direct_kernel` boot mode._
 
-- **ready_port (int)**: TCP port to probe on the node's management IP to verify readiness. When set, Sherpa waits for a successful TCP connection to this port in addition to the libvirt domain reaching the running state.
+##### ready_port (int)
+
+TCP port to probe on the node's management IP to verify readiness. When set, Sherpa waits for a successful TCP connection to this port in addition to the libvirt domain reaching the running state.
+
 ```toml
 ready_port = 80
 ```
 
-    _This parameter only applies to unikernel nodes._
+_This parameter only applies to unikernel nodes._
 
-- **privileged (bool)**: Run the container in privileged mode.
+##### privileged (bool)
+
+Run the container in privileged mode.
+
 ```toml
 privileged = true
 ```
 
-- **shm_size (int)**: Shared memory size in bytes.
+##### shm_size (int)
+
+Shared memory size in bytes.
+
 ```toml
 shm_size = 67108864
 ```
 
-- **user (string)**: Default user for command execution.
+##### user (string)
+
+Default user for command execution.
+
 ```toml
 user = "admin"
 ```
