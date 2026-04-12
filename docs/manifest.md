@@ -61,54 +61,197 @@ model = "sonic_linux"
 
 #### Optional Node Parameters
 
-##### ztp_config (string)
+##### binary_files (list&lt;object&gt;)
 
-Path to a custom ZTP configuration file on the client.
-
-```toml
-ztp_config = "configs/dev01.txt"
-```
-
-##### volumes (list&lt;object&gt;)
-
-Volume mounts for the node.
+A list of binary files to include with the node.
 
 ```toml
-volumes = [
-  { src = "/host/path", dst = "/container/path" },
+binary_files = [
+  { source = "/path/to/binary" },
 ]
 ```
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-| `src` | string | Source path on the host |
-| `dst` | string | Destination path in the node |
+| `source` | string | Source file path on the client |
 
-##### version (string)
+##### boot_disk_size (int)
 
-Specific image version to use instead of the default.
+Change the size of the boot disk in `GigaBytes (GB)`.
 
 ```toml
-version = "22.04"
+boot_disk_size = 100
 ```
 
-##### user_scripts (list&lt;string&gt;)
+##### commands (list&lt;string&gt;)
 
-A list of paths to user scripts on the client.
+A list of commands to execute at boot.
 
 ```toml
-user_scripts = [
-  "/path/to/user-script.sh",
+commands = [
+  "apt-get update",
+  "apt-get install -y curl",
 ]
 ```
 
-##### user (string)
+_This parameter currently only applies to node models
+that support the `cloud-init` based ZTP method._
 
-Default user for command execution.
+##### cpu_count (int)
+
+Configure the number of CPUs.
 
 ```toml
-user = "admin"
+cpu_count = 4
 ```
+
+##### environment_variables (list&lt;string&gt;)
+
+A list of environment variables to pass to a node.
+
+```toml
+environment_variables = [
+  # Supply the token inline. Beware, this is very insecure for sensitive vars.
+  "SOME_VAR1=hello_jimmy",
+  "MUSICAL_GENIUS='xyz-to-da-1-2-3'",
+  # Load variable from your client environment with a dollar sign ($) prefixed variable name.
+  "GH_TOKEN=$GH_TOKEN",
+  "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY",
+]
+```
+
+_This parameter currently only applies to node models
+that support the `cloud-init` based ZTP method._
+
+##### image (string)
+
+Custom image name to use instead of the default for this model.
+
+```toml
+image = "custom-ubuntu"
+```
+
+##### ipv4_address (string)
+
+Static IPv4 address for the management interface.
+
+```toml
+ipv4_address = "10.0.0.10"
+```
+
+##### ipv6_address (string)
+
+Static IPv6 address for the management interface.
+
+```toml
+ipv6_address = "fd00::10"
+```
+
+##### kernel_cmdline (string)
+
+Kernel command line arguments for DirectKernel unikernel nodes. Passed to QEMU via the libvirt `<cmdline>` XML element. Overrides any auto-injected command line.
+
+```toml
+kernel_cmdline = "/usr/bin/nginx"
+```
+
+_This parameter only applies to unikernel nodes using the `direct_kernel` boot mode._
+
+##### memory (int)
+
+Configure the amount of RAM in `MegaBytes (MB)`.
+
+```toml
+memory = 4096
+```
+
+##### privileged (bool)
+
+Run the container in privileged mode.
+
+```toml
+privileged = true
+```
+
+##### ready_port (int)
+
+TCP port to probe on the node's management IP to verify readiness. When set, Sherpa waits for a successful TCP connection to this port in addition to the libvirt domain reaching the running state.
+
+```toml
+ready_port = 80
+```
+
+_This parameter only applies to unikernel nodes._
+
+##### shm_size (int)
+
+Shared memory size in bytes.
+
+```toml
+shm_size = 67108864
+```
+
+##### skip_ready_check (bool)
+
+Skip the node readiness check after deployment.
+
+```toml
+skip_ready_check = true
+```
+
+##### ssh_authorized_key_files (list&lt;object&gt;)
+
+SSH public key file references.
+
+```toml
+ssh_authorized_key_files = [
+  { source = "~/.ssh/id_ed25519.pub" },
+]
+```
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `source` | string | Path to the public key file |
+
+##### ssh_authorized_keys (list&lt;string&gt;)
+
+SSH public keys to authorize on the node (inline).
+
+```toml
+ssh_authorized_keys = [
+  "ssh-ed25519 AAAA... user@host",
+]
+```
+
+##### startup_scripts (list&lt;string&gt;)
+
+A list of paths to scripts on the client that will run on node startup.
+
+```toml
+startup_scripts = [
+  "/path/to/script1.sh",
+  "/path/to/script2.sh",
+]
+```
+
+_This parameter currently only applies to node models
+that support the `cloud-init` based ZTP method._
+
+##### systemd_units (list&lt;object&gt;)
+
+Systemd units to deploy to the node.
+
+```toml
+systemd_units = [
+  { name = "myservice.service", source = "units/myservice.service", enabled = true },
+]
+```
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `name` | string | Unit file name |
+| `source` | string | Source file path on the client |
+| `enabled` | bool | Whether to enable the unit |
 
 ##### text_files (list&lt;object&gt;)
 
@@ -134,224 +277,95 @@ that support the `cloud-init` based ZTP method._
 | `group` | string | File group |
 | `permissions` | int | File permissions (e.g., `600`) |
 
-##### systemd_units (list&lt;object&gt;)
+##### user (string)
 
-Systemd units to deploy to the node.
+Default user for command execution.
 
 ```toml
-systemd_units = [
-  { name = "myservice.service", source = "units/myservice.service", enabled = true },
+user = "admin"
+```
+
+##### user_scripts (list&lt;string&gt;)
+
+A list of paths to user scripts on the client.
+
+```toml
+user_scripts = [
+  "/path/to/user-script.sh",
+]
+```
+
+##### version (string)
+
+Specific image version to use instead of the default.
+
+```toml
+version = "22.04"
+```
+
+##### volumes (list&lt;object&gt;)
+
+Volume mounts for the node.
+
+```toml
+volumes = [
+  { src = "/host/path", dst = "/container/path" },
 ]
 ```
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-| `name` | string | Unit file name |
-| `source` | string | Source file path on the client |
-| `enabled` | bool | Whether to enable the unit |
+| `src` | string | Source path on the host |
+| `dst` | string | Destination path in the node |
 
-##### startup_scripts (list&lt;string&gt;)
+##### ztp_config (string)
 
-A list of paths to scripts on the client that will run on node startup.
-
-```toml
-startup_scripts = [
-  "/path/to/script1.sh",
-  "/path/to/script2.sh",
-]
-```
-
-_This parameter currently only applies to node models
-that support the `cloud-init` based ZTP method._
-
-##### ssh_authorized_keys (list&lt;string&gt;)
-
-SSH public keys to authorize on the node (inline).
+Path to a custom ZTP configuration file on the client.
 
 ```toml
-ssh_authorized_keys = [
-  "ssh-ed25519 AAAA... user@host",
-]
+ztp_config = "configs/dev01.txt"
 ```
-
-##### ssh_authorized_key_files (list&lt;object&gt;)
-
-SSH public key file references.
-
-```toml
-ssh_authorized_key_files = [
-  { source = "~/.ssh/id_ed25519.pub" },
-]
-```
-
-| Property | Type | Description |
-| -------- | ---- | ----------- |
-| `source` | string | Path to the public key file |
-
-##### skip_ready_check (bool)
-
-Skip the node readiness check after deployment.
-
-```toml
-skip_ready_check = true
-```
-
-##### shm_size (int)
-
-Shared memory size in bytes.
-
-```toml
-shm_size = 67108864
-```
-
-##### ready_port (int)
-
-TCP port to probe on the node's management IP to verify readiness. When set, Sherpa waits for a successful TCP connection to this port in addition to the libvirt domain reaching the running state.
-
-```toml
-ready_port = 80
-```
-
-_This parameter only applies to unikernel nodes._
-
-##### privileged (bool)
-
-Run the container in privileged mode.
-
-```toml
-privileged = true
-```
-
-##### memory (int)
-
-Configure the amount of RAM in `MegaBytes (MB)`.
-
-```toml
-memory = 4096
-```
-
-##### kernel_cmdline (string)
-
-Kernel command line arguments for DirectKernel unikernel nodes. Passed to QEMU via the libvirt `<cmdline>` XML element. Overrides any auto-injected command line.
-
-```toml
-kernel_cmdline = "/usr/bin/nginx"
-```
-
-_This parameter only applies to unikernel nodes using the `direct_kernel` boot mode._
-
-##### ipv6_address (string)
-
-Static IPv6 address for the management interface.
-
-```toml
-ipv6_address = "fd00::10"
-```
-
-##### ipv4_address (string)
-
-Static IPv4 address for the management interface.
-
-```toml
-ipv4_address = "10.0.0.10"
-```
-
-##### image (string)
-
-Custom image name to use instead of the default for this model.
-
-```toml
-image = "custom-ubuntu"
-```
-
-##### environment_variables (list&lt;string&gt;)
-
-A list of environment variables to pass to a node.
-
-```toml
-environment_variables = [
-  # Supply the token inline. Beware, this is very insecure for sensitive vars.
-  "SOME_VAR1=hello_jimmy",
-  "MUSICAL_GENIUS='xyz-to-da-1-2-3'",
-  # Load variable from your client environment with a dollar sign ($) prefixed variable name.
-  "GH_TOKEN=$GH_TOKEN",
-  "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY",
-]
-```
-
-_This parameter currently only applies to node models
-that support the `cloud-init` based ZTP method._
-
-##### cpu_count (int)
-
-Configure the number of CPUs.
-
-```toml
-cpu_count = 4
-```
-
-##### commands (list&lt;string&gt;)
-
-A list of commands to execute at boot.
-
-```toml
-commands = [
-  "apt-get update",
-  "apt-get install -y curl",
-]
-```
-
-_This parameter currently only applies to node models
-that support the `cloud-init` based ZTP method._
-
-##### boot_disk_size (int)
-
-Change the size of the boot disk in `GigaBytes (GB)`.
-
-```toml
-boot_disk_size = 100
-```
-
-##### binary_files (list&lt;object&gt;)
-
-A list of binary files to include with the node.
-
-```toml
-binary_files = [
-  { source = "/path/to/binary" },
-]
-```
-
-| Property | Type | Description |
-| -------- | ---- | ----------- |
-| `source` | string | Source file path on the client |
 
 ## Optional Parameters
 
-### ztp_server (object)
+### bridges (list&lt;bridge_object&gt;)
 
-Configure the Zero-Touch Provisioning server settings.
+Bridges define shared layer 2 network segments that connect multiple node interfaces.
+
+Unlike [links](#links) which create point-to-point connections between two nodes, bridges allow
+three or more interfaces to share a common network segment.
+
+Each bridge link is defined with the node `name` and `interface` separated by a double colon `(::)`
 
 ```toml
-[ztp_server]
-enable = true
-username = "sherpa"
-password = "sherpa"
+bridges = [
+  { name = "shared", links = ["dev01::eth2", "dev02::eth2", "dev03::eth1"] },
+]
+```
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `name` | string | A user-friendly name for the bridge |
+| `links` | list&lt;string&gt; | A list of `<device>::<interface>` mappings to connect to the bridge |
+
+For more information on bridge types see the [private-bridge](architecture/networking/node/private-bridge.md) architecture documentation.
+
+### config_management (object)
+
+Enable configuration management tool integrations. When enabled, Sherpa generates inventory files for the specified tools.
+
+```toml
+[config_management]
+ansible = true
+pyats = false
+nornir = false
 ```
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `enable` | bool | `true` | Enable or disable the ZTP server |
-| `username` | string | `"sherpa"` | Username for ZTP authentication |
-| `password` | string | `"sherpa"` | Password for ZTP authentication |
-
-### ready_timeout (int)
-
-Global timeout in seconds for node readiness checks. Overrides the default timeout for all nodes in the lab.
-
-```toml
-ready_timeout = 300
-```
+| `ansible` | bool | `false` | Generate Ansible inventory |
+| `pyats` | bool | `false` | Generate pyATS testbed |
+| `nornir` | bool | `false` | Generate Nornir inventory |
 
 ### links (list&lt;link_object&gt;)
 
@@ -394,41 +408,27 @@ links = [
 
 For more information on link types see the [point-to-point](architecture/networking/node/point-to-point.md) architecture documentation.
 
-### config_management (object)
+### ready_timeout (int)
 
-Enable configuration management tool integrations. When enabled, Sherpa generates inventory files for the specified tools.
+Global timeout in seconds for node readiness checks. Overrides the default timeout for all nodes in the lab.
 
 ```toml
-[config_management]
-ansible = true
-pyats = false
-nornir = false
+ready_timeout = 300
+```
+
+### ztp_server (object)
+
+Configure the Zero-Touch Provisioning server settings.
+
+```toml
+[ztp_server]
+enable = true
+username = "sherpa"
+password = "sherpa"
 ```
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `ansible` | bool | `false` | Generate Ansible inventory |
-| `pyats` | bool | `false` | Generate pyATS testbed |
-| `nornir` | bool | `false` | Generate Nornir inventory |
-
-### bridges (list&lt;bridge_object&gt;)
-
-Bridges define shared layer 2 network segments that connect multiple node interfaces.
-
-Unlike [links](#links) which create point-to-point connections between two nodes, bridges allow
-three or more interfaces to share a common network segment.
-
-Each bridge link is defined with the node `name` and `interface` separated by a double colon `(::)`
-
-```toml
-bridges = [
-  { name = "shared", links = ["dev01::eth2", "dev02::eth2", "dev03::eth1"] },
-]
-```
-
-| Property | Type | Description |
-| -------- | ---- | ----------- |
-| `name` | string | A user-friendly name for the bridge |
-| `links` | list&lt;string&gt; | A list of `<device>::<interface>` mappings to connect to the bridge |
-
-For more information on bridge types see the [private-bridge](architecture/networking/node/private-bridge.md) architecture documentation.
+| `enable` | bool | `true` | Enable or disable the ZTP server |
+| `username` | string | `"sherpa"` | Username for ZTP authentication |
+| `password` | string | `"sherpa"` | Password for ZTP authentication |
