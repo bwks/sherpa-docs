@@ -51,6 +51,21 @@ The login credentials are:
 | -------- | -------------- |
 | `admin`  | `Everest1953!` |
 
+
+## Node Access
+
+=== "SSH"
+
+    ```
+    sherpa ssh <node-name>
+    ```
+
+=== "Console"
+
+    ```
+    sherpa console <node-name>
+    ```
+
 ## Notes
 
 - Approximate time for the system to be ready: `8 minutes`

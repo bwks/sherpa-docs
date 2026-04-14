@@ -27,6 +27,7 @@ nav:
     - architecture/zero-touch-provisioning.md
     - architecture/credentials.md
     - architecture/ssh.md
+    - architecture/vnc.md
   - Install / Update:
     - Install:
       - install-update/install/supported-platforms.md
@@ -50,38 +51,27 @@ nav:
       - nodes/cisco/cisco-asav.md
       - nodes/cisco/cisco-cat8000v.md
       - nodes/cisco/cisco-cat9000v.md
-      # - nodes/cisco/cisco-cat9800cl.md
-      # - nodes/cisco/cisco-cedge.md
       - nodes/cisco/cisco-csr1000v.md
-      # - nodes/cisco/cisco-fmcv.md
       - nodes/cisco/cisco-ftdv.md
-      # - nodes/cisco/cisco-ioll2.md
-      # - nodes/cisco/cisco-iol.md
-      # - nodes/cisco/cisco-iolserial.md
       - nodes/cisco/cisco-iosv.md
       - nodes/cisco/cisco-iosvl2.md
       - nodes/cisco/cisco-iosxrv9000.md
       - nodes/cisco/cisco-ise.md
       - nodes/cisco/cisco-nexus9300v.md
-      # - nodes/cisco/cisco-sdwanc.md
-      # - nodes/cisco/cisco-sdwanm.md
-      # - nodes/cisco/cisco-sdwanv.md
-      # - nodes/cisco/cisco-vedge.md
     - Cumulus:
       - nodes/cumulus/cumulus-linux.md
     - Devbox:
       - nodes/devbox/devbox-linux.md
       - nodes/devbox/devbox-windows.md
-    # - Fortinet:
-    #   - nodes/fortinet/fortinet-fortigate.md
+    - Forge:
+      - nodes/forge/forgejo-forge.md
+      - nodes/forge/gitlab-ce.md
     - FRRouting:
       - nodes/frrouting/frr-linux.md
     - Generic:
       - nodes/generic/container.md
       - nodes/generic/unikernel.md
       - nodes/generic/virtual-machine.md
-    - Gitlab:
-      - nodes/gitlab/gitlab-ce.md
     - Hashicorp:
       - nodes/hashicorp/hashicorp-vault.md
     - Juniper:
@@ -93,7 +83,6 @@ nav:
       - nodes/linux/alma-linux.md
       - nodes/linux/alpine-linux.md
       - nodes/linux/centos-linux.md
-      - nodes/linux/debian-linux.md
       - nodes/linux/devbox-linux.md
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
@@ -108,7 +97,9 @@ nav:
     - Nokia:
       - nodes/nokia/nokia-srlinux.md
     - Paloalto:
-      - nodes/paloalto/paloalto-pavm.md
+      - nodes/paloalto/paloalto-panos.md
+    - Message Bus:
+      - nodes/message-bus/nats-bus.md
     - Server:
       - nodes/server/jenkins-server.md
       - nodes/server/nautobot-server.md
@@ -122,13 +113,16 @@ nav:
       - nodes/sql/mysql.md
       - nodes/sql/postgresql.md
       - nodes/sql/surrealdb.md
+    - Unikernel:
+      - nodes/unikernel/unikraft.md
+      - nodes/unikernel/nanos.md
     - Windows:
       - nodes/windows/windows-server.md
 
-    # - nodes/unikernels.md
   - Configuration:
     - configuration/sherpa.md
   - Command Reference: command-reference.md
+  - API Reference: api-reference.md
   - Examples:
     - examples/basic.md
     - examples/clos.md

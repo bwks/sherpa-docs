@@ -4,7 +4,7 @@
 
 This is the MkDocs documentation site for the [Sherpa](https://docs.sherpa.com) project — a lab management platform for building virtual network topologies using VMs (libvirt/KVM/QEMU), containers (Docker), and unikernels.
 
-The Sherpa source code lives at `~/code/rust/sherpa`. Refer to that codebase when you need to verify features, CLI commands, models, default parameters, or implementation details.
+The Sherpa source code lives at `../sherpa`. Refer to that codebase when you need to verify features, CLI commands, models, default parameters, or implementation details.
 
 ## Tech Stack
 
@@ -110,8 +110,13 @@ Container nodes differ slightly:
 - All configuration files referenced in docs use **TOML format only** (no JSON/YAML/INI)
 - The manifest file is `manifest.toml` — document it accordingly
 - The sherpa config file is `sherpa.toml`
-- Verify model names and CLI commands against the Rust source at `~/code/rust/sherpa` when uncertain
+- Verify model names and CLI commands against the Rust source at `../sherpa` when uncertain
 - When adding a new node page, also add its entry to the `nav` section of `mkdocs.yml`
+
+## Git
+
+- Use `git config user.name "Claude"` and `git config user.email "noreply@anthropic.com"` for commits in this repo.
+- Use the `gh` CLI for all GitHub operations (push, PRs, issues). Auth is configured via `GH_TOKEN`. Run `gh auth setup-git` before `git push` if needed.
 
 ## Building / Serving Docs
 

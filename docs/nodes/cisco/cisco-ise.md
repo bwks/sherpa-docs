@@ -76,6 +76,21 @@ ISE Install progress logs can be viewed with the command:
 show logging system ade/ADE.log tail
 ```
 
+
+## Node Access
+
+=== "SSH"
+
+    ```
+    sherpa ssh <node-name>
+    ```
+
+=== "Console"
+
+    ```
+    sherpa console <node-name>
+    ```
+
 ## Notes
 
 - Approximate time for the system to be ready: `80 minutes`

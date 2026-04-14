@@ -41,4 +41,19 @@ nodes = [
 ]
 ```
 
+
+## Node Access
+
+=== "SSH"
+
+    ```
+    sherpa ssh <node-name>
+    ```
+
+=== "Docker"
+
+    ```
+    docker exec -it <node-name>-<lab-id> sh
+    ```
+
 ## Notes

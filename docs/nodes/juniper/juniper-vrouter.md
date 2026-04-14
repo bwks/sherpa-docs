@@ -44,6 +44,21 @@ nodes = [
 
 ZTP config must be provided in a file named `juniper.conf` in the root directory of an `ISO` image.
 
+
+## Node Access
+
+=== "SSH"
+
+    ```
+    sherpa ssh <node-name>
+    ```
+
+=== "Console"
+
+    ```
+    sherpa console <node-name>
+    ```
+
 ## Notes
 
 - Approximate time for the system to be ready: `4 minutes`
