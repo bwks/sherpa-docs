@@ -91,6 +91,7 @@ nav:
       - nodes/linux/redhat-linux.md
       - nodes/linux/rocky-linux.md
       - nodes/linux/suse-linux.md
+      - nodes/linux/talos-linux.md
       - nodes/linux/ubuntu-linux.md
     - Mikrotik:
       - nodes/mikrotik/mikrotik-chr.md
@@ -101,6 +102,7 @@ nav:
     - Message Bus:
       - nodes/message-bus/nats-bus.md
     - Server:
+      - nodes/server/infrahub-server.md
       - nodes/server/jenkins-server.md
       - nodes/server/nautobot-server.md
       - nodes/server/netbox-server.md
