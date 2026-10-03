@@ -11,6 +11,7 @@ nav:
     - architecture/container.md
     - architecture/unikernel.md
     - Networking:
+      - Tailscale: architecture/networking/tailscale.md
       - Host:
         - architecture/networking/host/bridge.md
 

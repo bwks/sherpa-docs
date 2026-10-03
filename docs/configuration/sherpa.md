@@ -4,7 +4,7 @@ Sherpa uses TOML configuration files for both the server and client.
 
 ## Server Configuration
 
-The server configuration file is located at `/opt/sherpa/sherpa.toml`.
+The server configuration file is located at `/opt/sherpa/config/sherpa.toml`.
 
 ### Example
 
@@ -41,6 +41,15 @@ enabled = false
 [scanner]
 enabled = true
 interval_secs = 30
+
+[tailscale]
+image = "tailscale/tailscale:v1.102.3"
+socket_path = "/run/tailscale/tailscaled.sock"
+exec_timeout_secs = 75
+daemon_ready_timeout_secs = 20
+enrollment_timeout_secs = 60
+connection_timeout_secs = 30
+stop_timeout_secs = 10
 ```
 
 ### Base Fields
@@ -125,6 +134,44 @@ Background scanner service configuration for periodic image discovery.
 | -------- | ---- | ------- | ----------- |
 | `enabled` | bool | `true` | Enable the background scanner service |
 | `interval_secs` | int | `30` | Interval between scan cycles in seconds |
+
+### `[tailscale]`
+
+Server settings for each lab's [Tailscale gateway](../architecture/networking/tailscale.md).
+These defaults are included in newly generated server configurations. Existing
+files may omit the section, and partial sections override only the listed fields.
+Restart `sherpad` after editing the server configuration.
+
+| Property | Type | Default | Description |
+| -------- | ---- | ------- | ----------- |
+| `image` | string | `tailscale/tailscale:v1.102.3` | Gateway container image; pulled if absent |
+| `socket_path` | string | `/run/tailscale/tailscaled.sock` | Absolute daemon socket path inside the gateway container |
+| `exec_timeout_secs` | int | `75` | Maximum wait for each Docker exec command |
+| `daemon_ready_timeout_secs` | int | `20` | Maximum wait for the daemon socket after starting the gateway |
+| `enrollment_timeout_secs` | int | `60` | Timeout passed to `tailscale up` for enrollment |
+| `connection_timeout_secs` | int | `30` | Maximum wait for the gateway to report connected after enrollment or resume |
+| `stop_timeout_secs` | int | `10` | Docker stop grace period before the gateway is killed |
+
+Timeouts must be positive seconds. `stop_timeout_secs` must fit a signed 32-bit
+integer. Keep `exec_timeout_secs` longer than `enrollment_timeout_secs` so the
+Docker command can finish. Socket paths must fit Linux's Unix socket path limit.
+An empty image, invalid socket path, or invalid timeout prevents server startup.
+
+For example, increase the enrollment wait while keeping the other defaults:
+
+```toml
+[tailscale]
+exec_timeout_secs = 135
+enrollment_timeout_secs = 120
+```
+
+Image changes apply to newly created gateways. Before changing `socket_path`,
+destroy existing Tailscale-enabled labs and recreate them after restarting the
+server so the daemon and CLI use the same path. Docker ownership label keys remain
+fixed to allow safe resource identification and cleanup.
+
+This server section is separate from the lab manifest's `[tailscale]` section,
+which enables Tailscale and names the client auth-key environment variable.
 
 ## Client Configuration
 

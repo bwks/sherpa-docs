@@ -45,9 +45,17 @@ Initialise a Sherpa client environment. Creates the `~/.sherpa` directory struct
 
 Build the lab environment. Reads `manifest.toml` from the current directory, sends it to the server, and deploys all nodes and links.
 
+When `[tailscale]` is enabled, resolves the auth key from the client environment
+variable named by `auth_key_env` and creates a gateway for the lab. Enrollment
+requires WSS with certificate validation enabled. Pending route approval produces
+a warning without failing creation. See the [Tailscale guide](architecture/networking/tailscale.md).
+
 ### `sherpa down`
 
 Stop all or a specific node in the lab.
+
+With Tailscale enabled, a full shutdown also stops the gateway. Using `--node`
+leaves the gateway alone.
 
 | Flag | Description |
 | ---- | ----------- |
@@ -56,6 +64,10 @@ Stop all or a specific node in the lab.
 ### `sherpa resume`
 
 Resume all or a specific stopped node in the lab.
+
+With Tailscale enabled, a full resume starts the gateway using its saved identity
+before resuming nodes. No enrollment key is required. Using `--node` leaves the
+gateway alone.
 
 | Flag | Description |
 | ---- | ----------- |
@@ -71,7 +83,10 @@ Destroy and recreate a single node with fresh ZTP configuration.
 
 ### `sherpa destroy`
 
-Destroy the lab and all its resources.
+Destroy the lab and all its resources, including its Tailscale gateway and
+identity volume when present. If either Tailscale removal fails, the server retains
+database ownership and saved lab configuration so the same owner can retry.
+Other resources may already have been removed. See [cleanup recovery](architecture/networking/tailscale.md#recovery).
 
 | Flag | Description |
 | ---- | ----------- |
@@ -79,7 +94,10 @@ Destroy the lab and all its resources.
 
 ### `sherpa inspect`
 
-Inspect the current lab environment. Shows node states, links, and lab details. This is the default command when no subcommand is specified.
+Inspect the current lab environment. Shows node states, links, and lab details.
+For Tailscale-enabled labs, refreshes gateway state, Tailscale addresses, advertised
+management routes, route approval, and warnings. This is the default command when
+no subcommand is specified.
 
 ### `sherpa validate`
 
@@ -187,7 +205,10 @@ Check if the Sherpa server is reachable.
 
 ### `sherpa server clean`
 
-Force clean all resources for a lab without ownership checks. Admin only.
+Force clean all resources for a lab without requiring lab ownership. Admin only.
+Tailscale gateway and identity-volume deletion still verify resource ownership
+labels. If either removal fails, lab ownership and saved configuration are retained
+for a cleanup retry.
 
 ```
 sherpa server clean <lab_id>

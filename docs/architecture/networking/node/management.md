@@ -24,3 +24,17 @@ and ending at the `last address -1`.
 
 A DNS service with the domain name `sherpa.lab.local`. Each node has a forward and reverse
 DNS entry allocated in DNS. Nodes can be looked up via the hostname and FQDN.
+
+
+## Access through Tailscale
+
+An optional `[tailscale]` manifest section creates a dedicated subnet router on
+the lab's management network. It advertises that lab's IPv4 and optional IPv6
+management prefixes to the owner's tailnet. The gateway uses address offset 3 in
+each prefix, below the node allocation range.
+
+Remote clients connect to the node management IPs shown by `sherpa inspect` after
+the routes are approved and tailnet access policy allows them. Generated SSH
+configurations continue to use the configured Sherpa jump host.
+
+See [Tailscale setup, lifecycle, and recovery](../tailscale.md).

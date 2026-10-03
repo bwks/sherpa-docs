@@ -332,7 +332,7 @@ ztp_config = "configs/dev01.txt"
 
 Bridges define shared layer 2 network segments that connect multiple node interfaces.
 
-Unlike [links](#links) which create point-to-point connections between two nodes, bridges allow
+Unlike [links](#links-listlink_object) which create point-to-point connections between two nodes, bridges allow
 three or more interfaces to share a common network segment.
 
 Each bridge link is defined with the node `name` and `interface` separated by a double colon `(::)`
@@ -415,6 +415,31 @@ Global timeout in seconds for node readiness checks. Overrides the default timeo
 ```toml
 ready_timeout = 300
 ```
+
+### tailscale (object)
+
+Connect the lab's management networks to the owner's Tailscale tailnet through
+a dedicated gateway. Nodes do not need their own Tailscale agent.
+
+```toml
+[tailscale]
+enabled = true
+auth_key_env = "SHERPA_TAILSCALE_KEY"
+```
+
+| Property | Type | Default | Description |
+| -------- | ---- | ------- | ----------- |
+| `enabled` | bool | `false` | Create a Tailscale gateway for the lab |
+| `auth_key_env` | string | unset | Client environment variable containing the auth key; required when enabled |
+
+Set the named variable in the client shell before running `sherpa up`. Store only
+the variable name in the manifest, never the key. The key is required only for
+initial creation; stop and resume retain the gateway identity. Omitting the section
+or setting `enabled = false` requires no credential and creates no gateway.
+
+Enrollment requires server TLS and WSS with certificate validation enabled.
+Route approval is separate from enrollment; pending approval produces a warning
+without failing lab creation. See [Tailscale setup and route approval](architecture/networking/tailscale.md).
 
 ### ztp_server (object)
 
