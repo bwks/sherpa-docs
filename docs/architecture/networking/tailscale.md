@@ -42,7 +42,7 @@ The manifest holds only the variable name, never the key. See the
 
 ### Choosing an Auth Key
 
-- Use a **non-ephemeral** key. An ephemeral key removes the gateway when the lab stops.
+- Use a **non-ephemeral** key so the gateway identity survives lab shutdown.
 - If your tailnet requires device approval, use a **pre-approved** key.
 - The key is only needed when the lab is first created. `sherpa down` and `sherpa resume` reuse
   the gateway's saved identity.
