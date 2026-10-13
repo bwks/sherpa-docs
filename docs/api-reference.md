@@ -55,6 +55,27 @@ curl -X POST https://<server>:3030/api/v1/auth/login \
   -d '{"username": "admin", "password": "password"}'
 ```
 
+## Tailscale Enrollment and Status
+
+When the lab manifest enables `[tailscale]`, the authenticated lab-creation request
+must supply `tailscale_auth_key` separately from the manifest. REST enrollment
+requires HTTPS; WebSocket enrollment requires WSS. The CLI reads this value from
+the client environment variable named by `tailscale.auth_key_env`. The server
+validates that variable name but never resolves it from its own environment.
+
+| Field | Direction | Description |
+| ----- | --------- | ----------- |
+| `tailscale_auth_key` | Creation request | Tailscale auth key; required when enabled and omitted when disabled |
+| `tailscale` | Creation, inspect, and full-resume responses | Optional gateway status with state, route approval, advertised routes, Tailscale addresses, and warnings |
+
+Auth keys are used only for initial enrollment and are not saved in manifests or
+database records. Stop and resume retain the gateway identity. Pending or unknown
+route approval is reported as a warning; enrollment failure triggers rollback.
+Web UI enrollment is not supported in this version.
+
+See [Tailscale setup and recovery](architecture/networking/tailscale.md) and the
+running server's Swagger UI for the request and response schemas.
+
 ## Operation Categories
 
 | Category | Operations | Auth Level |
