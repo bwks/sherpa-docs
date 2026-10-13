@@ -15,6 +15,7 @@ nav:
       - Host:
         - architecture/networking/host/bridge.md
 
+      - architecture/networking/ip-addressing.md
       - Node:
         - architecture/networking/node/management.md
         - architecture/networking/node/point-to-point.md
