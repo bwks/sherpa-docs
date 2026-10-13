@@ -453,6 +453,18 @@ links = [
 
 For more information on link types see the [point-to-point](architecture/networking/node/point-to-point.md) architecture documentation.
 
+### provision_current_user (bool)
+
+Create an account for the lab owner on supported Linux VMs, using the owner's Sherpa username
+and registered SSH public keys. Defaults to `false`.
+
+```toml
+provision_current_user = true
+```
+
+See [Personal Accounts](architecture/personal-accounts.md). A node with a custom `ztp_config`
+cannot be used with this setting.
+
 ### ready_timeout (int)
 
 Global timeout in seconds for node readiness checks. Overrides the default timeout for all nodes in the lab.
