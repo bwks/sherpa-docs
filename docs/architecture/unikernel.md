@@ -14,7 +14,7 @@ Sherpa supports three unikernel models:
 
 Unikernels support two boot modes that determine how the hypervisor loads the application:
 
-- **DirectKernel** — The kernel ELF binary is loaded directly by QEMU via the `<kernel>` libvirt XML element. An optional kernel command line can be passed via `<cmdline>` using the `kernel_cmdline` manifest parameter. No disk cloning is required.
+- **DirectKernel** — The kernel ELF binary is loaded directly by QEMU via the `<kernel>` libvirt XML element. An optional kernel command line can be passed via `<cmdline>` using the `kernel_cmdline` manifest parameter. The ELF is copied into the storage pool for each node, so the original image is never used directly.
 - **DiskBoot** — The unikernel boots from a cloned disk image, the same way as a traditional VM (`<boot dev='hd'/>`).
 
 ## How it Works
@@ -23,8 +23,8 @@ When a lab is created, Sherpa performs the following for each unikernel node:
 
 === "DirectKernel"
 
-    1. **Resolve** the kernel ELF path from the image store
-    2. **Generate** a libvirt domain XML definition with the kernel path and optional `kernel_cmdline`
+    1. **Copy** the kernel ELF from the image store into the storage pool
+    2. **Generate** a libvirt domain XML definition with the copied kernel path and optional `kernel_cmdline`
     3. **Define and start** the domain via the Libvirt API
 
 === "DiskBoot"
@@ -52,7 +52,7 @@ These defaults can be overridden in the manifest.
 
 ## Image Management
 
-Unikernel images are stored in the `bins_dir` directory (default: `/opt/sherpa/bins/`), organised by model and version. The storage format depends on the boot mode:
+Unikernel images are stored in the same `images_dir` directory as VM images (default: `/opt/sherpa/images/`), organised by model and version, for example `/opt/sherpa/images/unikraft_unikernel/1.0.0/kernel.elf`. The file name depends on the boot mode:
 
 | Boot Mode | Filename | Format |
 | --------- | -------- | ------ |
@@ -68,7 +68,7 @@ sherpa server image import \
   --model <model_name>
 ```
 
-Use the `--unikernel` flag with `sherpa server image list` or `sherpa server image scan` to filter for unikernel images.
+Use the `--unikernel` flag with `sherpa server image list` or `sherpa server image scan` to filter for unikernel images. To build an image, see the [Unikraft](../nodes/unikernel/unikraft.md#building-an-image) and [Nanos](../nodes/unikernel/nanos.md#building-an-image) pages.
 
 ## Networking
 

@@ -51,7 +51,7 @@ Container image archives are stored in the `containers_dir` directory (default: 
 
 ## Unikernels
 
-Unikernel binaries are stored in the `bins_dir` directory (default: `/opt/sherpa/bins/`).
+Unikernel images are stored in the `images_dir` directory alongside VM images, organised by model and version. See [Unikernel](unikernel.md#image-management).
 
 ## Libvirt Storage Pool
 
