@@ -88,6 +88,7 @@ nav:
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
       - nodes/linux/kali-linux.md
+      - nodes/linux/omarchy-linux.md
       - nodes/linux/opensuse-linux.md
       - nodes/linux/redhat-linux.md
       - nodes/linux/rocky-linux.md
