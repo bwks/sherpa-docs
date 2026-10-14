@@ -75,9 +75,31 @@ binary_files = [
 | -------- | ---- | ----------- |
 | `source` | string | Source file path on the client |
 
+##### boot_disk_clone_method (string)
+
+How a virtual machine's boot disk is created from the base image. Supported values:
+
+| Value | Description |
+| ----- | ----------- |
+| `overlay` | Default. Creates a small disk that stores only the changes from the base image. Fast to create and uses little space. |
+| `copy` | Creates an independent full copy of the base image. |
+
+```toml
+boot_disk_clone_method = "copy"
+```
+
+Use `copy` when you need a disk that does not depend on the base image, or when the
+base image cannot be used for overlays. See [Storage](architecture/storage.md#boot-disk-overlays).
+
+_This parameter only applies to virtual machine nodes. Setting `overlay` on a container or
+unikernel node is an error. It cannot be set at the lab level._
+
 ##### boot_disk_size (int)
 
 Change the size of the boot disk in `GigaBytes (GB)`.
+
+If omitted, the disk is the same size as the base image. The size can equal or exceed the base
+image, but cannot shrink it.
 
 ```toml
 boot_disk_size = 100
@@ -104,6 +126,18 @@ Configure the number of CPUs.
 ```toml
 cpu_count = 4
 ```
+
+##### data_interface_count (int)
+
+Number of data interfaces to create for this node. Overrides the default for the node model.
+
+```toml
+data_interface_count = 4
+```
+
+The count covers data interfaces only. The management interface and any interfaces reserved
+by the model are not included. Requesting more interfaces than the model supports fails
+manifest validation.
 
 ##### environment_variables (list&lt;string&gt;)
 
@@ -367,6 +401,17 @@ nornir = false
 | `pyats` | bool | `false` | Generate pyATS testbed |
 | `nornir` | bool | `false` | Generate Nornir inventory |
 
+### description (string)
+
+A short description of the lab's purpose. Optional.
+
+```toml
+name = "bgp-practice"
+description = "Practice BGP peering and route policies between two routers."
+```
+
+Multiline strings and Unicode are supported.
+
 ### links (list&lt;link_object&gt;)
 
 Links define the connectivity relationship between nodes in the topology.
@@ -407,6 +452,18 @@ links = [
 | `corrupt_percent` | float | Bit-flip corruption percentage (`0.0` - `100.0`) |
 
 For more information on link types see the [point-to-point](architecture/networking/node/point-to-point.md) architecture documentation.
+
+### provision_current_user (bool)
+
+Create an account for the lab owner on supported Linux VMs, using the owner's Sherpa username
+and registered SSH public keys. Defaults to `false`.
+
+```toml
+provision_current_user = true
+```
+
+See [Personal Accounts](architecture/personal-accounts.md). A node with a custom `ztp_config`
+cannot be used with this setting.
 
 ### ready_timeout (int)
 

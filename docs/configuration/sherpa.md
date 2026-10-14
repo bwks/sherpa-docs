@@ -64,7 +64,7 @@ stop_timeout_secs = 10
 | `vm_provider` | string | | VM provider — `"libvirt"` (required) |
 | `qemu_bin` | string | | Path to QEMU binary (required) |
 | `management_prefix_ipv4` | string | `172.31.0.0/16` | Management network IPv4 CIDR |
-| `management_prefix_ipv6` | string | | Management network IPv6 CIDR |
+| `management_prefix_ipv6` | string | `fd00:b00b::/48` when unset | Management network IPv6 CIDR. See [IP Addressing](../architecture/networking/ip-addressing.md) |
 | `images_dir` | string | | Directory for VM/unikernel images (required) |
 | `containers_dir` | string | | Directory for container images (required) |
 | `bins_dir` | string | | Directory for binary files (required) |

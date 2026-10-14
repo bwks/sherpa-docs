@@ -26,9 +26,24 @@ Sherpa organises files across several directories under `/opt/sherpa/`.
 
 Base images are stored in the `images_dir` directory (default: `/opt/sherpa/images/`). These are the source disk images imported via `sherpa server image import`.
 
-When a lab is created, Sherpa clones the base image into the lab directory rather than modifying the original. This allows the same base image to be used across multiple labs simultaneously.
+When a lab is created, Sherpa creates each VM's disk from the base image rather than modifying the original. This allows the same base image to be used across multiple labs simultaneously.
 
 Supported disk formats: `qcow2`, `iso`, `raw`, `json`, `ign`, `img`.
+
+### Boot Disk Overlays
+
+By default, a virtual machine's boot disk is a QCOW2 overlay on top of the base image. The
+overlay stores only the changes the VM makes, so creating a disk is fast and uses little space.
+Set `boot_disk_clone_method = "copy"` in the [manifest](../manifest.md#boot_disk_clone_method-string)
+to create a full independent copy instead.
+
+- Writes are kept when a lab is stopped and resumed. Redeploy replaces the disk using the
+  requested method and the image version the node was created with.
+- The base image must be a standalone, unencrypted QCOW2 file. If it is not, lab creation
+  fails before any resources are created, and `copy` can be used instead.
+- A base image cannot be deleted while any lab disk depends on it, including disks of stopped VMs.
+  Destroy those labs first.
+- Auxiliary disks and configuration media are always copied.
 
 ## Containers
 
@@ -36,7 +51,7 @@ Container image archives are stored in the `containers_dir` directory (default: 
 
 ## Unikernels
 
-Unikernel binaries are stored in the `bins_dir` directory (default: `/opt/sherpa/bins/`).
+Unikernel images are stored in the `images_dir` directory alongside VM images, organised by model and version. See [Unikernel](unikernel.md#image-management).
 
 ## Libvirt Storage Pool
 

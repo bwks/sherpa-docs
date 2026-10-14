@@ -15,6 +15,7 @@ nav:
       - Host:
         - architecture/networking/host/bridge.md
 
+      - architecture/networking/ip-addressing.md
       - Node:
         - architecture/networking/node/management.md
         - architecture/networking/node/point-to-point.md
@@ -28,6 +29,7 @@ nav:
     - architecture/zero-touch-provisioning.md
     - architecture/credentials.md
     - architecture/ssh.md
+    - architecture/personal-accounts.md
     - architecture/vnc.md
   - Install / Update:
     - Install:
@@ -88,6 +90,7 @@ nav:
       - nodes/linux/fedora-linux.md
       - nodes/linux/flatcar-linux.md
       - nodes/linux/kali-linux.md
+      - nodes/linux/omarchy-linux.md
       - nodes/linux/opensuse-linux.md
       - nodes/linux/redhat-linux.md
       - nodes/linux/rocky-linux.md
