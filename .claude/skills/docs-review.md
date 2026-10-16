@@ -54,7 +54,7 @@ For each field:
 - Is the type/description accurate?
 
 Pay particular attention to:
-- **Top-level fields**: `ready_timeout`, `ztp_server`, `config_management`
+- **Top-level fields**: `ready_timeout`, `ztp_server`
 - **Node fields**: All properties in the `Node` struct (there are 25+)
 - **Link impairment**: The `ManifestImpairment` struct has fields `delay` (u32), `jitter` (u32), `loss_percent` (f32), `reorder_percent` (f32), `corrupt_percent` (f32) — verify these are all documented
 - **Link p2p flag**: The `p2p` boolean on `Link2`
@@ -75,7 +75,7 @@ If no such page exists, flag it as missing.
 
 Check the following code areas against corresponding docs:
 
-- **Configuration**: There are TWO config structs in `crates/shared/src/data/config.rs` — `Config` (server-side, 15+ fields with sections: ztp_server, configuration_management, tls, otel, scanner) and `ClientConfig` (client-side, 7 fields with server_connection). Compare both against `./docs/configuration/sherpa.md`.
+- **Configuration**: There are TWO config structs in `crates/shared/src/data/config.rs` — `Config` (server-side, 15+ fields with sections: ztp_server, tls, otel, scanner) and `ClientConfig` (client-side, 7 fields with server_connection). Compare both against `./docs/configuration/sherpa.md`.
 - **OpenTelemetry**: Check `[otel]` config section and tracing instrumentation vs docs
 - **Network link types**: Link impairment and P2P modes vs networking docs
 - **ZTP methods**: Methods in code vs ZTP docs
