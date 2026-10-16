@@ -384,23 +384,6 @@ bridges = [
 
 For more information on bridge types see the [private-bridge](architecture/networking/node/private-bridge.md) architecture documentation.
 
-### config_management (object)
-
-Enable configuration management tool integrations. When enabled, Sherpa generates inventory files for the specified tools.
-
-```toml
-[config_management]
-ansible = true
-pyats = false
-nornir = false
-```
-
-| Property | Type | Default | Description |
-| -------- | ---- | ------- | ----------- |
-| `ansible` | bool | `false` | Generate Ansible inventory |
-| `pyats` | bool | `false` | Generate pyATS testbed |
-| `nornir` | bool | `false` | Generate Nornir inventory |
-
 ### description (string)
 
 A short description of the lab's purpose. Optional.

@@ -25,11 +25,6 @@ enable = true
 username = "sherpa"
 password = "sherpa"
 
-[configuration_management]
-ansible = false
-pyats = false
-nornir = false
-
 [tls]
 enabled = true
 auto_generate_cert = true
@@ -78,16 +73,6 @@ Zero-Touch Provisioning server settings.
 | `enable` | bool | `true` | Enable or disable the ZTP server |
 | `username` | string | `"sherpa"` | ZTP authentication username |
 | `password` | string | `"Everest1953!"` | ZTP authentication password |
-
-### `[configuration_management]`
-
-Configuration management tool integrations. When enabled, Sherpa generates inventory files.
-
-| Property | Type | Default | Description |
-| -------- | ---- | ------- | ----------- |
-| `ansible` | bool | `false` | Generate Ansible inventory |
-| `pyats` | bool | `false` | Generate pyATS testbed |
-| `nornir` | bool | `false` | Generate Nornir inventory |
 
 ### `[server_connection]`
 
