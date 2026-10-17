@@ -33,7 +33,7 @@ range `172.31.1.0/24`:
 | Offsets | Block | Used by |
 | ------- | ----- | ------- |
 | `.1`–`.10` | Sherpa infrastructure | `.1` gateway, `.2` lab router (DHCP and DNS), `.3` [Tailscale](tailscale.md) gateway when enabled. The rest are reserved. |
-| `.11`–`.20` | Lab control planes | `.11`–`.12` shared addresses for [Talos Kubernetes clusters](../../nodes/linux/talos-linux.md#control-plane-endpoint) with several control planes. The rest are reserved. |
+| `.11`–`.20` | Lab control planes | `.11`–`.12` shared addresses for [Talos Kubernetes clusters](../../nodes/linux/talos-linux.md#control-plane-endpoint) with three controllers. The rest are reserved. |
 | `.21`–`.254` | Lab nodes | Node management addresses and the DHCP range |
 
 Nodes are numbered in the order they appear in the manifest. The first node gets offset 21

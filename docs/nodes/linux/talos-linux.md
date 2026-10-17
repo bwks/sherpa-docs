@@ -75,18 +75,20 @@ The image is about 4 GB; Talos needs at least 10 GB, so nodes get a 20 GB boot d
 
 ## Sherpa-Built Clusters
 
-Declare clusters with [`clusters`](../../manifest.md#clusters-listcluster_object), and add
-nodes to them with `cluster` and `cluster_role`:
+Declare clusters with [`talos_clusters`](../../manifest.md#talos_clusters-listtalos_cluster_object). Each cluster lists its
+`controllers` (the control plane) and `workers` by node name:
 
 ```toml
 name = "k8s-lab"
 
-clusters = [{ name = "k8s" }]
+talos_clusters = [
+  { name = "k8s", controllers = ["cp01"], workers = ["worker01", "worker02"] },
+]
 
 nodes = [
-  { name = "cp01", model = "talos_linux", cluster = "k8s", cluster_role = "control_plane" },
-  { name = "worker01", model = "talos_linux", cluster = "k8s", cluster_role = "worker" },
-  { name = "worker02", model = "talos_linux", cluster = "k8s", cluster_role = "worker" },
+  { name = "cp01", model = "talos_linux" },
+  { name = "worker01", model = "talos_linux" },
+  { name = "worker02", model = "talos_linux" },
 ]
 ```
 
@@ -95,7 +97,7 @@ nodes = [
 1. generates the cluster's certificate authorities, keys and tokens, and a machine config for
    each node, delivered on the node's NoCloud CD-ROM;
 2. waits for each node's Talos API;
-3. bootstraps etcd on the first control plane and waits for every node to be a Ready
+3. bootstraps etcd on the first controller and waits for every node to be a Ready
    Kubernetes node;
 4. writes `kubeconfig-<cluster>` and `talosconfig-<cluster>` to your working directory,
    readable only by you.
@@ -110,14 +112,17 @@ talosctl -n <node-ip> version
 
 ### Control plane endpoint
 
-- One control plane: the Kubernetes API is on that node's management address.
-- Several control planes: Sherpa reserves a shared address (a Talos
+A cluster has one or three controllers. Two are refused: etcd needs a majority of its members
+to stay up, so two controllers survive no failure and are less available than one.
+
+- One controller: the Kubernetes API is on that node's management address.
+- Three controllers: Sherpa reserves a shared address (a Talos
   [VIP](https://docs.siderolabs.com/talos/v1.14/networking/advanced/vip)) from the lab's
-  management network: `.11` for the first such cluster, `.12` for the second. The control
-  planes elect which of them holds it. A lab can have up to two such clusters. See
+  management network: `.11` for the first such cluster, `.12` for the second. The
+  controllers elect which of them holds it. A lab can have up to two such clusters. See
   [IP addressing](../../architecture/networking/ip-addressing.md#addresses-in-a-range).
 
-If a cluster has no workers, workloads are allowed on its control planes.
+If a cluster has no workers, workloads are allowed on its controllers.
 
 ### Cluster defaults
 
@@ -134,7 +139,7 @@ The lab's management network must not overlap the pod or service networks.
 ### Redeploy
 
 - A **worker** can be redeployed: it is rebuilt from the cluster's saved secrets and rejoins.
-- A **control plane** cannot: its etcd member would have to be removed first. Destroy and
+- A **controller** cannot: its etcd member would have to be removed first. Destroy and
   recreate the lab instead.
 
 ## Your Own Configs
