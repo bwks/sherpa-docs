@@ -88,8 +88,10 @@ their existing tokens stop working.
 | Lab | List, create, destroy, inspect, down, resume, download | Authenticated |
 | Node | Redeploy | Authenticated |
 | Link | Update impairment | Authenticated |
-| Image | List, show, import, pull, delete, set-default, scan, download, upload | Admin |
-| User | Create, list, delete, change password, info | Admin |
+| Image | List, show | Authenticated |
+| Image | Import, pull, delete, set-default, scan, download, upload | Admin |
+| User | Change password, info | Self, or admin for any user |
+| User | Create, list, delete | Admin |
 | Admin | Force clean lab | Admin |
 
 ## Lab Access

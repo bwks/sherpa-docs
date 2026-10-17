@@ -65,6 +65,12 @@ leaves the gateway alone.
 
 Resume all or a specific stopped node in the lab.
 
+Like `sherpa up`, resume waits for each VM or unikernel it boots to become ready,
+showing progress as it goes. It uses the lab's `ready_timeout`, and each node's
+`skip_ready_check` and `ready_port`, from the manifest the lab was created with. A node
+that is not ready within the timeout is reported, but resume still succeeds. Containers
+and paused nodes do not wait, because they resume an already running guest.
+
 With Tailscale enabled, a full resume starts the gateway using its saved identity
 before resuming nodes. No enrollment key is required. Using `--node` leaves the
 gateway alone.
