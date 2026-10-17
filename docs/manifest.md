@@ -105,6 +105,23 @@ image, but cannot shrink it.
 boot_disk_size = 100
 ```
 
+##### cluster (string)
+
+Name of the [cluster](#clusters-listcluster_object) this node joins. Requires `cluster_role`.
+Only `talos_linux` nodes can join a cluster.
+
+```toml
+cluster = "k8s"
+```
+
+##### cluster_role (string)
+
+Role of the node in its cluster: `control_plane` or `worker`. Requires `cluster`.
+
+```toml
+cluster_role = "control_plane"
+```
+
 ##### commands (list&lt;string&gt;)
 
 A list of commands to execute at boot.
@@ -209,13 +226,18 @@ privileged = true
 
 ##### ready_port (int)
 
-TCP port to probe on the node's management IP to verify readiness. When set, Sherpa waits for a successful TCP connection to this port in addition to the libvirt domain reaching the running state.
+TCP port to probe on the node's management IP to verify readiness.
+
+- **Virtual machines:** replaces the model's readiness port. Most models are checked on SSH
+  port `22`; `talos_linux` is checked on the Talos API port `50000`.
+- **Unikernels:** Sherpa waits for a TCP connection to this port in addition to the libvirt
+  domain reaching the running state.
 
 ```toml
 ready_port = 80
 ```
 
-_This parameter only applies to unikernel nodes._
+_This parameter does not apply to container nodes._
 
 ##### shm_size (int)
 
@@ -360,6 +382,9 @@ Path to a custom ZTP configuration file on the client.
 ztp_config = "configs/dev01.txt"
 ```
 
+Nodes that join a [cluster](#clusters-listcluster_object) cannot set `ztp_config`: Sherpa
+generates their machine configs.
+
 ## Optional Parameters
 
 ### bridges (list&lt;bridge_object&gt;)
@@ -383,6 +408,31 @@ bridges = [
 | `links` | list&lt;string&gt; | A list of `<device>::<interface>` mappings to connect to the bridge |
 
 For more information on bridge types see the [private-bridge](architecture/networking/node/private-bridge.md) architecture documentation.
+
+### clusters (list&lt;cluster_object&gt;)
+
+Kubernetes clusters built from the lab's [Talos Linux](nodes/linux/talos-linux.md) nodes. Sherpa
+generates each cluster's secrets and machine configs, bootstraps it, and writes a
+`kubeconfig-<cluster>` and `talosconfig-<cluster>` to your working directory.
+
+Nodes join a cluster with the [`cluster`](#cluster-string) and
+[`cluster_role`](#cluster_role-string) node parameters.
+
+```toml
+clusters = [{ name = "k8s" }]
+
+nodes = [
+  { name = "cp01", model = "talos_linux", cluster = "k8s", cluster_role = "control_plane" },
+  { name = "worker01", model = "talos_linux", cluster = "k8s", cluster_role = "worker" },
+]
+```
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `name` | string | Cluster name, also the Kubernetes cluster name. 1–63 lowercase letters, digits or `-` |
+
+Each cluster needs at least one control plane. A lab can have several clusters; at most seven of
+them can have more than one control plane.
 
 ### description (string)
 
