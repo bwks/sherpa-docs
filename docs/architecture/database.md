@@ -78,7 +78,7 @@ Stores lab topology instances. Each lab belongs to a user.
 | ---------------------- | --------------- | ------------------------------- |
 | `lab_id`               | string          | Unique 8-character lab ID       |
 | `name`                 | string          | Lab name                        |
-| `user`                 | record\<user\>  | Owner (cascade delete)          |
+| `user`                 | record\<user\>  | Owner (delete rejected)         |
 | `management_network`   | string          | IPv4 management network         |
 | `gateway_ipv4`         | string          | IPv4 gateway address            |
 | `loopback_network`     | string          | IPv4 loopback network           |
@@ -126,7 +126,7 @@ Stores shared bridge network segments.
 
 ### Referential Integrity
 
-- Deleting a **user** cascades to delete all their **labs**.
+- A **user** who owns **labs** cannot be deleted. Destroy their labs first; deleting only the records would leave the labs' VMs, containers and networks running.
 - Deleting a **lab** cascades to delete all its **nodes**, **links**, and **bridges**.
 - Deleting a **node** cascades to delete its **links** and unsets references in **bridges**.
 - Deleting a **node_image** is rejected if any **nodes** reference it.
