@@ -41,6 +41,10 @@ The ISO contains three files:
 - `meta-data` — instance metadata such as hostname
 - `network-config` — network interface configuration
 
+Sherpa writes these files as JSON, which cloud-init and cloudbase-init read as YAML. Every
+value keeps its type, so a MAC address such as `52:54:00:21:47:08` or a value such as `yes`
+is never read as a number or a boolean. `user-data` still starts with the `#cloud-config` line.
+
 On boot, the cloud-init service detects the `cidata` volume and applies the configuration automatically. Windows nodes use cloudbase-init instead of cloud-init.
 
 ### Ignition

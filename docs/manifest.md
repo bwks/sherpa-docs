@@ -227,7 +227,7 @@ shm_size = 67108864
 
 ##### skip_ready_check (bool)
 
-Skip the node readiness check after deployment.
+Skip the node readiness check after deployment and after `sherpa resume`.
 
 ```toml
 skip_ready_check = true
@@ -451,6 +451,7 @@ cannot be used with this setting.
 ### ready_timeout (int)
 
 Global timeout in seconds for node readiness checks. Overrides the default timeout for all nodes in the lab.
+It applies to `sherpa up`, `sherpa redeploy` and `sherpa resume`.
 
 ```toml
 ready_timeout = 300

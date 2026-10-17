@@ -17,6 +17,11 @@ Every node receives one address from each.
 The first range in the server range is skipped, so the first lab gets `172.31.1.0/24`.
 Each new lab takes the next free range. Ranges are returned when a lab is destroyed.
 
+A range is free only if no lab holds it and it does not overlap a network already on one
+of the server's interfaces, such as another service's network or a bridge left behind by
+a lab that was not cleaned up. The database accepts each range for only one lab, so labs
+started at the same time never receive the same range.
+
 The IPv6 ranges are private (ULA) addresses. They are routed only inside the lab and its NAT
 router, not on the internet.
 
