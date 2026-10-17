@@ -431,7 +431,7 @@ nodes = [
 | -------- | ---- | ----------- |
 | `name` | string | Cluster name, also the Kubernetes cluster name. 1–63 lowercase letters, digits or `-` |
 
-Each cluster needs at least one control plane. A lab can have several clusters; at most seven of
+Each cluster needs at least one control plane. A lab can have several clusters; at most two of
 them can have more than one control plane.
 
 ### description (string)

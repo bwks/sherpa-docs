@@ -113,8 +113,9 @@ talosctl -n <node-ip> version
 - One control plane: the Kubernetes API is on that node's management address.
 - Several control planes: Sherpa reserves a shared address (a Talos
   [VIP](https://docs.siderolabs.com/talos/v1.14/networking/advanced/vip)) from the lab's
-  management network, between the router and the first node address. The control planes
-  elect which of them holds it. A lab can have up to seven such clusters.
+  management network: `.11` for the first such cluster, `.12` for the second. The control
+  planes elect which of them holds it. A lab can have up to two such clusters. See
+  [IP addressing](../../architecture/networking/ip-addressing.md#addresses-in-a-range).
 
 If a cluster has no workers, workloads are allowed on its control planes.
 
