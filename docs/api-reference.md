@@ -76,14 +76,39 @@ Web UI enrollment is not supported in this version.
 See [Tailscale setup and recovery](architecture/networking/tailscale.md) and the
 running server's Swagger UI for the request and response schemas.
 
+Admin rights are read from the user database on every request, not from the token.
+Demoting an admin removes their admin rights immediately, and deleting a user makes
+their existing tokens stop working.
+
 ## Operation Categories
 
 | Category | Operations | Auth Level |
 | -------- | ---------- | ---------- |
 | Auth | Login, validate token | None |
-| Lab | Create, destroy, inspect, down, resume | Authenticated |
+| Lab | List, create, destroy, inspect, down, resume, download | Authenticated |
 | Node | Redeploy | Authenticated |
 | Link | Update impairment | Authenticated |
 | Image | List, show, import, pull, delete, set-default, scan, download, upload | Admin |
 | User | Create, list, delete, change password, info | Admin |
 | Admin | Force clean lab | Admin |
+
+## Lab Access
+
+Every lab operation applies the same rule on REST, WebSocket RPC and the web UI:
+
+| Operation | Who may perform it |
+| --------- | ------------------ |
+| Create | Any authenticated user; the lab is owned by the caller |
+| List | The caller's own labs. Admins may list another user's labs with `GET /api/v1/labs?username=<user>` |
+| Inspect, destroy, down, resume, download, update link impairment | The lab owner or an admin |
+| Redeploy a node | The lab owner only, including for admins, because the node is rebuilt with the owner's SSH keys and account |
+| Force clean | Admins only |
+
+A request for another user's lab returns `403 Forbidden` on REST and an `AccessDenied`
+error on WebSocket RPC. A lab that does not exist returns `404 Not Found` or `NotFound`.
+
+`GET /api/v1/labs` requires authentication. Without `?username=` it lists the
+caller's labs.
+
+The caller's identity always comes from their token. Request bodies do not carry a
+`username` field, and one sent by an older client is ignored.

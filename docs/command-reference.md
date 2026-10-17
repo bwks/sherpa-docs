@@ -85,7 +85,7 @@ Destroy and recreate a single node with fresh ZTP configuration.
 
 Destroy the lab and all its resources, including its Tailscale gateway and
 identity volume when present. If either Tailscale removal fails, the server retains
-database ownership and saved lab configuration so the same owner can retry.
+database ownership and saved lab configuration so the owner or an admin can retry.
 Other resources may already have been removed. See [cleanup recovery](architecture/networking/tailscale.md#recovery).
 
 | Flag | Description |
