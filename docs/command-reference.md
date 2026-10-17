@@ -245,6 +245,13 @@ List all user accounts. Admin only.
 
 Delete a user account. Admin only.
 
+The server refuses to delete:
+
+- your own account;
+- the last admin account;
+- a user who owns labs. The error lists the labs. Destroy them first (admins can destroy
+  any lab), then delete the user.
+
 ```
 sherpa server user delete <username>
 ```

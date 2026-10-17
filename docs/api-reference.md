@@ -109,6 +109,19 @@ Every lab operation applies the same rule on REST, WebSocket RPC and the web UI:
 A request for another user's lab returns `403 Forbidden` on REST and an `AccessDenied`
 error on WebSocket RPC. A lab that does not exist returns `404 Not Found` or `NotFound`.
 
+## User Deletion
+
+Deleting a user follows the same rules on REST, WebSocket RPC and the web UI:
+
+| Refusal | REST | WebSocket RPC |
+| ------- | ---- | ------------- |
+| Deleting your own account | `403 Forbidden` | `AccessDenied` |
+| Deleting the last admin account | `403 Forbidden` | `AccessDenied` |
+| The user owns labs | `409 Conflict`, listing the labs | `ServerError`, listing the labs |
+
+Destroy the user's labs first, then delete the user. The web UI shows the same messages
+on the users page.
+
 `GET /api/v1/labs` requires authentication. Without `?username=` it lists the
 caller's labs.
 
