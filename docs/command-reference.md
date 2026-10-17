@@ -50,6 +50,12 @@ variable named by `auth_key_env` and creates a gateway for the lab. Enrollment
 requires WSS with certificate validation enabled. Pending route approval produces
 a warning without failing creation. See the [Tailscale guide](architecture/networking/tailscale.md).
 
+When the manifest declares [Talos clusters](manifest.md#talos_clusters-listtalos_cluster_object), `up` also
+bootstraps each Kubernetes cluster, waits for its nodes to be Ready, and writes
+`kubeconfig-<cluster>` and `talosconfig-<cluster>` to the current directory, readable only by
+you. A cluster that is not ready in time is reported as a warning. See
+[Talos Linux](nodes/linux/talos-linux.md).
+
 ### `sherpa down`
 
 Stop all or a specific node in the lab.
@@ -82,6 +88,9 @@ gateway alone.
 ### `sherpa redeploy`
 
 Destroy and recreate a single node with fresh ZTP configuration.
+
+A worker in a [Talos cluster](manifest.md#talos_clusters-listtalos_cluster_object) rejoins with the cluster's saved
+secrets. A cluster controller cannot be redeployed.
 
 | Flag | Description |
 | ---- | ----------- |
@@ -129,7 +138,8 @@ sherpa console <name>
 
 ### `sherpa download`
 
-Download lab files (SSH config, SSH key, lab-info) for CLI use from a remote lab.
+Download lab files (SSH config, SSH key, lab-info, and each cluster's `kubeconfig-<cluster>`
+and `talosconfig-<cluster>`) for CLI use from a remote lab.
 
 ```
 sherpa download <lab_id>

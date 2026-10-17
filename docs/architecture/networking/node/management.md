@@ -17,8 +17,8 @@ services.
 
 ### DHCP
 
-A DHCP server with a range of addresses starting from the `first address +10`
-and ending at the `last address -1`.
+A DHCP server with a range covering the lab node block, offsets 21 to 254. Each node has a
+reservation for its own address in that range. See [IP addressing](../ip-addressing.md#addresses-in-a-range).
 
 ### DNS
 

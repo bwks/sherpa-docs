@@ -209,13 +209,18 @@ privileged = true
 
 ##### ready_port (int)
 
-TCP port to probe on the node's management IP to verify readiness. When set, Sherpa waits for a successful TCP connection to this port in addition to the libvirt domain reaching the running state.
+TCP port to probe on the node's management IP to verify readiness.
+
+- **Virtual machines:** replaces the model's readiness port. Most models are checked on SSH
+  port `22`; `talos_linux` is checked on the Talos API port `50000`.
+- **Unikernels:** Sherpa waits for a TCP connection to this port in addition to the libvirt
+  domain reaching the running state.
 
 ```toml
 ready_port = 80
 ```
 
-_This parameter only applies to unikernel nodes._
+_This parameter does not apply to container nodes._
 
 ##### shm_size (int)
 
@@ -360,6 +365,9 @@ Path to a custom ZTP configuration file on the client.
 ztp_config = "configs/dev01.txt"
 ```
 
+Nodes that join a [Talos cluster](#talos_clusters-listtalos_cluster_object) cannot set
+`ztp_config`: Sherpa generates their machine configs.
+
 ## Optional Parameters
 
 ### bridges (list&lt;bridge_object&gt;)
@@ -481,6 +489,40 @@ or setting `enabled = false` requires no credential and creates no gateway.
 Enrollment requires server TLS and WSS with certificate validation enabled.
 Route approval is separate from enrollment; pending approval produces a warning
 without failing lab creation. See [Tailscale setup and route approval](architecture/networking/tailscale.md).
+
+### talos_clusters (list&lt;talos_cluster_object&gt;)
+
+Kubernetes clusters built from the lab's [Talos Linux](nodes/linux/talos-linux.md) nodes. Each
+cluster lists its member nodes by name. Sherpa generates each cluster's secrets and machine
+configs, bootstraps it, and writes a `kubeconfig-<cluster>` and `talosconfig-<cluster>` to your
+working directory.
+
+```toml
+talos_clusters = [
+  { name = "k8s", controllers = ["cp01", "cp02", "cp03"], workers = ["worker01"] },
+]
+
+nodes = [
+  { name = "cp01", model = "talos_linux" },
+  { name = "cp02", model = "talos_linux" },
+  { name = "cp03", model = "talos_linux" },
+  { name = "worker01", model = "talos_linux" },
+]
+```
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `name` | string | Cluster name, also the Kubernetes cluster name. 1–63 lowercase letters, digits or `-` |
+| `controllers` | list&lt;string&gt; | Nodes that run etcd and the Kubernetes control plane. Sherpa bootstraps the cluster on the first one |
+| `workers` | list&lt;string&gt; | Nodes that run workloads only. Optional; without workers, workloads run on the controllers |
+
+Members must be `talos_linux` nodes defined in [`nodes`](#nodes-listnode_object), and a node can
+be listed only once across all clusters. A `talos_linux` node that is not listed is a standalone
+Talos node.
+
+Each cluster needs one or three controllers. Two are refused: etcd needs a majority of its
+members to stay up, so two controllers survive no failure and are less available than one.
+A lab can have several clusters; at most two of them can have three controllers.
 
 ### ztp_server (object)
 

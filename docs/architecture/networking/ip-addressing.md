@@ -27,24 +27,29 @@ router, not on the internet.
 
 ### Addresses in a range
 
-The same offsets apply to IPv4 and IPv6. In the IPv4 range `172.31.1.0/24`:
+Each range is split into three blocks. The same offsets apply to IPv4 and IPv6. In the IPv4
+range `172.31.1.0/24`:
 
-| Offset | Address | Used by |
-| ------ | ------- | ------- |
-| `.1` | `172.31.1.1` | Gateway |
-| `.2` | `172.31.1.2` | Lab router (DHCP and DNS) |
-| `.3` | `172.31.1.3` | [Tailscale](tailscale.md) gateway, when enabled |
-| `.11` onward | `172.31.1.11` | Nodes |
+| Offsets | Block | Used by |
+| ------- | ----- | ------- |
+| `.1`–`.10` | Sherpa infrastructure | `.1` gateway, `.2` lab router (DHCP and DNS), `.3` [Tailscale](tailscale.md) gateway when enabled. The rest are reserved. |
+| `.11`–`.20` | Lab control planes | `.11`–`.12` shared addresses for [Talos Kubernetes clusters](../../nodes/linux/talos-linux.md#control-plane-endpoint) with three controllers. The rest are reserved. |
+| `.21`–`.254` | Lab nodes | Node management addresses and the DHCP range |
 
-Nodes are numbered in the order they appear in the manifest. The first node gets offset 11, the
-second 12, and so on. For IPv6 the offset is added to the `/64`, so the first node in
-`fd00:b00b:0:1::/64` gets `fd00:b00b:0:1::b`.
+Nodes are numbered in the order they appear in the manifest. The first node gets offset 21
+(`172.31.1.21`), the second 22, and so on, so a lab can have up to 234 nodes. For IPv6 the offset
+is added to the `/64`, so the first node in `fd00:b00b:0:1::/64` gets `fd00:b00b:0:1::15`.
 
 Use `sherpa inspect <lab-id>` to see the addresses assigned to each node.
 
 !!! note
     Offsets are assigned by position in the `nodes` list. Reordering the list changes
     addresses on the next `sherpa up`.
+
+!!! note
+    Labs created before Sherpa 0.3.91 numbered nodes from offset 11. They keep those addresses,
+    including when a node is redeployed. Destroy and recreate a lab to move it to the current
+    layout.
 
 ## Loopback Addresses
 
