@@ -56,6 +56,27 @@ bootstraps each Kubernetes cluster, waits for its nodes to be Ready, and writes
 you. A cluster that is not ready in time is reported as a warning. See
 [Talos Linux](nodes/linux/talos-linux.md).
 
+#### Stopping a running command
+
+`sherpa up`, `sherpa redeploy` and `sherpa resume` run on the server, which keeps them running
+if the client disconnects. Pressing Ctrl-C asks whether to stop the operation on the server too:
+
+```
+⚠️ Interrupted. The lab creation is still running on the server.
+   It stops at its next step and removes what it has created.
+Stop the lab creation on the server too? [y/N]:
+```
+
+- **No** (the default): the command exits and the operation carries on. Check on it with
+  `sherpa inspect`.
+- **Yes**: the server stops the operation at its next step and the command waits until it has.
+  A stopped `up` removes what it has created, as a failed one does. A stopped `redeploy` may
+  leave the node half rebuilt; redeploy it again. A stopped `resume` stops waiting for nodes;
+  nodes already started keep running.
+
+`sherpa destroy` also stops any of these operations still running on the lab before removing
+it.
+
 ### `sherpa down`
 
 Stop all or a specific node in the lab.
@@ -76,7 +97,8 @@ leaves the gateway alone.
 
 ### `sherpa resume`
 
-Resume all or a specific stopped node in the lab.
+Resume all or a specific stopped node in the lab. Ctrl-C asks whether to stop the resume on
+the server too; see [stopping a running command](#stopping-a-running-command).
 
 Like `sherpa up`, resume waits for each VM or unikernel it boots to become ready,
 showing progress as it goes. It uses the lab's `ready_timeout`, and each node's
@@ -94,7 +116,8 @@ gateway alone.
 
 ### `sherpa redeploy`
 
-Destroy and recreate a single node with fresh ZTP configuration.
+Destroy and recreate a single node with fresh ZTP configuration. Ctrl-C asks whether to stop
+the redeploy on the server too; see [stopping a running command](#stopping-a-running-command).
 
 A worker in a [Talos cluster](manifest.md#talos_clusters-listtalos_cluster_object) rejoins with the cluster's saved
 secrets. A cluster controller cannot be redeployed.

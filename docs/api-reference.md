@@ -85,7 +85,7 @@ their existing tokens stop working.
 | Category | Operations | Auth Level |
 | -------- | ---------- | ---------- |
 | Auth | Login, validate token | None |
-| Lab | List, create, destroy, inspect, down, resume, download | Authenticated |
+| Lab | List, create, destroy, inspect, down, resume, cancel, download | Authenticated |
 | Node | Redeploy | Authenticated |
 | Link | Update impairment | Authenticated |
 | Image | List, show | Authenticated |
@@ -93,6 +93,24 @@ their existing tokens stop working.
 | User | Change password, info | Self, or admin for any user |
 | User | Create, list, delete | Admin |
 | Admin | Force clean lab | Admin |
+
+## Long-Running Operations
+
+Lab creation, destroy, redeploy, resume, down, admin clean and image operations run on the
+server as their own tasks. They keep running when the client that started them disconnects,
+on every transport, and are never stopped partway through a step.
+
+To stop a running `up`, `redeploy` or `resume`, call **cancel** for the lab
+(`POST /api/v1/labs/{id}/cancel`, or the WebSocket RPC method `cancel` with `lab_id`). The
+server stops the operation at its next safe point and responds once it has ended:
+
+```json
+{ "lab_id": "a1b2c3d4", "stopped": true }
+```
+
+`stopped` is `false` if nothing was running. A cancelled `up` removes what it had created. The
+CLI calls cancel when you answer yes after pressing Ctrl-C. Destroying a lab also stops any of
+these operations first.
 
 ## Lab Access
 
@@ -102,7 +120,7 @@ Every lab operation applies the same rule on REST, WebSocket RPC and the web UI:
 | --------- | ------------------ |
 | Create | Any authenticated user; the lab is owned by the caller |
 | List | The caller's own labs. Admins may list another user's labs with `GET /api/v1/labs?username=<user>` |
-| Inspect, destroy, down, resume, download, update link impairment | The lab owner or an admin |
+| Inspect, destroy, down, resume, cancel, download, update link impairment | The lab owner or an admin |
 | Redeploy a node | The lab owner only, including for admins, because the node is rebuilt with the owner's SSH keys and account |
 | Force clean | Admins only |
 
