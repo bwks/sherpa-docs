@@ -142,34 +142,27 @@ nav:
 
 theme:
   name: material
+  logo: assets/images/sherpa-icon.svg
+  favicon: assets/images/sherpa-icon.svg
+  # System fonts, as in the sherpad web UI (no Google Fonts)
+  font: false
+  # Soda Pop colours from docs/stylesheets/extra.css; follows the OS until toggled
   palette:
-    - scheme: latte
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to Frappé
-
-    - scheme: frappe
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       primary: custom
       accent: custom
       toggle:
         icon: material/weather-night
-        name: Switch to Latte
+        name: Switch to dark mode
 
-    # - scheme: macchiato
-    #   primary: custom
-    #   accent: custom
-    #   toggle:
-    #     icon: material/weather-partly-cloudy
-    #     name: Switch to Mocha
-
-    # - scheme: mocha
-    #   primary: custom
-    #   accent: custom
-    #   toggle:
-    #     icon: material/weather-cloudy
-    #     name: Switch to Latte
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
   icon:
     admonition:
       note: fontawesome/solid/lightbulb
