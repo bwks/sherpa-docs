@@ -340,6 +340,25 @@ sherpa server user info [username]
 
 If no username is provided, shows the current user's information.
 
+### `sherpa server user ssh-key`
+
+Manage SSH public keys. You need at least one registered key to start labs; see
+[SSH Keys](architecture/ssh-keys.md). Each command acts on your own account. Admins can act on
+any user with `--user`.
+
+```
+sherpa server user ssh-key list [--user <username>]
+sherpa server user ssh-key add <key or .pub file> [--user <username>]
+sherpa server user ssh-key remove <key, .pub file or SHA256 fingerprint> [--user <username>]
+```
+
+| Flag | Description |
+| ---- | ----------- |
+| `--user` | User whose keys to manage (defaults to the logged-in user) |
+
+`list` shows each key's type, `SHA256:` fingerprint and comment. Adding a key that is already
+registered, even with a different comment, is refused.
+
 ## Server Image Commands
 
 Image management commands. All require admin privileges.

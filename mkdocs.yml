@@ -29,6 +29,7 @@ nav:
     - architecture/zero-touch-provisioning.md
     - architecture/credentials.md
     - architecture/ssh.md
+    - architecture/ssh-keys.md
     - architecture/personal-accounts.md
     - architecture/vnc.md
   - Install / Update:

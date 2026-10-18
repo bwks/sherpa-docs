@@ -18,9 +18,8 @@ nodes = [
 
 ## Before You Start
 
-Your Sherpa user needs at least one SSH public key registered. Add keys on the **Profile**
-page of the web UI. An administrator can also set keys when creating a user with the
-`--ssh-key` option of `sherpa server user create`.
+Your Sherpa user needs at least one SSH public key registered; every lab needs one, whether or
+not it uses personal accounts. See [SSH Keys](ssh-keys.md) to generate and register a key.
 
 Keep the matching private keys on your workstation or in your SSH agent. They are never
 sent to the server.

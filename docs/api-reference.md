@@ -131,6 +131,23 @@ destroy and clean up any lab. Start labs from a personal account, which may also
 A request for another user's lab returns `403 Forbidden` on REST and an `AccessDenied`
 error on WebSocket RPC. A lab that does not exist returns `404 Not Found` or `NotFound`.
 
+## SSH Keys
+
+Users manage their own SSH public keys, and admins may manage anyone's:
+
+| Operation | REST | WebSocket RPC |
+| --------- | ---- | ------------- |
+| Add a key | `POST /api/v1/admin/users/{username}/ssh-keys` | `user.ssh_key.add` |
+| Remove a key | `DELETE /api/v1/admin/users/{username}/ssh-keys` | `user.ssh_key.remove` |
+| List keys | `GET /api/v1/admin/users/{username}` (`ssh_keys`) | `user.info` |
+
+The request body carries `username`, `ssh_key` and `token`. For removal, `ssh_key` may be the
+key or its `SHA256:` fingerprint. Both return the user's keys after the change. A duplicate key
+returns `409 Conflict`, an invalid key `400 Bad Request`, another user's keys `403 Forbidden`,
+and a key that is not registered `404 Not Found`.
+
+Creating a lab or redeploying a node fails until the caller has at least one registered key.
+
 ## Usernames
 
 Creating a user on any transport applies the same username rules as
