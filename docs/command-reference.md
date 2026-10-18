@@ -60,6 +60,13 @@ you. A cluster that is not ready in time is reported as a warning. See
 
 Stop all or a specific node in the lab.
 
+Virtual machines are asked to shut down cleanly (through the QEMU guest agent when the guest
+has one, otherwise the ACPI power button) and are powered off only if they are still running
+after 60 seconds. Nodes in a [Talos cluster](manifest.md#talos_clusters-listtalos_cluster_object)
+are shut down through the Talos API, workers before controllers. Unikernels and other Talos
+nodes are powered off, and containers are paused. The result for each node says whether it
+shut down or was powered off.
+
 With Tailscale enabled, a full shutdown also stops the gateway. Using `--node`
 leaves the gateway alone.
 
@@ -102,6 +109,10 @@ Destroy the lab and all its resources, including its Tailscale gateway and
 identity volume when present. If either Tailscale removal fails, the server retains
 database ownership and saved lab configuration so the owner or an admin can retry.
 Other resources may already have been removed. See [cleanup recovery](architecture/networking/tailscale.md#recovery).
+
+If `sherpa up`, `sherpa redeploy` or `sherpa resume` is still running on the lab, destroy
+stops it first and waits for it to finish its current step, then removes the lab. This is
+safe to use on a lab whose `up` was interrupted.
 
 | Flag | Description |
 | ---- | ----------- |

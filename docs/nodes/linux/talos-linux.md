@@ -68,7 +68,7 @@ sherpa server image import \
 | Management Interface | eth0 (static address)      |
 | Data Interfaces      | eth1                       |
 | Interface Driver     | virtio                     |
-| Readiness            | Talos API, TCP port 50000  |
+| Readiness            | Talos API, TCP port 50000 (cluster workers: Ready Kubernetes node) |
 
 The image is about 4 GB; Talos needs at least 10 GB, so nodes get a 20 GB boot disk unless
 `boot_disk_size` is set.
@@ -96,9 +96,11 @@ nodes = [
 
 1. generates the cluster's certificate authorities, keys and tokens, and a machine config for
    each node, delivered on the node's NoCloud CD-ROM;
-2. waits for each node's Talos API;
+2. waits for each controller's Talos API;
 3. bootstraps etcd on the first controller and waits for every node to be a Ready
-   Kubernetes node;
+   Kubernetes node. Workers are only checked here: a worker's Talos API starts once it can
+   reach the cluster, which with three controllers is through the shared address that comes
+   up after the bootstrap;
 4. writes `kubeconfig-<cluster>` and `talosconfig-<cluster>` to your working directory,
    readable only by you.
 
@@ -135,6 +137,16 @@ If a cluster has no workers, workloads are allowed on its controllers.
 | Pod Security       | `baseline` enforced                   |
 
 The lab's management network must not overlap the pod or service networks.
+
+### Stopping nodes
+
+Talos ignores the ACPI power button. `sherpa down` shuts cluster nodes down through the Talos
+API instead, as `talosctl shutdown` does: each node is cordoned and drained, then powers off.
+Workers stop before controllers. A node still running after 60 seconds is powered off.
+
+Talos nodes that are not in a Sherpa-built cluster are powered off directly, because Sherpa has
+no credentials for their Talos API. Shut them down with `talosctl shutdown` first if they must
+stop cleanly.
 
 ### Redeploy
 
