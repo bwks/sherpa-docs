@@ -43,13 +43,8 @@ is added to the `/64`, so the first node in `fd00:b00b:0:1::/64` gets `fd00:b00b
 Use `sherpa inspect <lab-id>` to see the addresses assigned to each node.
 
 !!! note
-    Offsets are assigned by position in the `nodes` list. Reordering the list changes
-    addresses on the next `sherpa up`.
-
-!!! note
-    Labs created before Sherpa 0.3.91 numbered nodes from offset 11. They keep those addresses,
-    including when a node is redeployed. Destroy and recreate a lab to move it to the current
-    layout.
+    Node IP addresses are assigned based on their position in the manifest. Reordering the list
+    changes addresses on the next `sherpa up`.
 
 ## Loopback Addresses
 
