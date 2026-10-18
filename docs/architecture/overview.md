@@ -53,7 +53,7 @@ All API access (except login) requires authentication. Sherpa supports two authe
 - **JWT Bearer Token** — obtained via `sherpa login` or the login API endpoint. Tokens are valid for 7 days.
 - **Cookie** — `sherpa_token` cookie used by the Web UI.
 
-User accounts have one of two roles: **Basic** (lab operations) or **Admin** (full access including user and image management). A default `sherpa` user is created on first run.
+User accounts have one of two roles: **Basic** (lab operations) or **Admin** (full access including user and image management). `sherpad init` creates the built-in `admin` account and a first user account. The built-in `admin` account cannot be deleted, renamed or lose its admin role, and cannot start, resume or redeploy labs; labs are started from personal user accounts, which can also be admins.
 
 ## TLS
 

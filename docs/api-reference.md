@@ -124,8 +124,37 @@ Every lab operation applies the same rule on REST, WebSocket RPC and the web UI:
 | Redeploy a node | The lab owner only, including for admins, because the node is rebuilt with the owner's SSH keys and account |
 | Force clean | Admins only |
 
+The built-in `admin` account cannot create, resume or redeploy labs, on any transport: these
+return `403 Forbidden` on REST and `AccessDenied` on WebSocket RPC. It can still inspect, stop,
+destroy and clean up any lab. Start labs from a personal account, which may also be an admin.
+
 A request for another user's lab returns `403 Forbidden` on REST and an `AccessDenied`
 error on WebSocket RPC. A lab that does not exist returns `404 Not Found` or `NotFound`.
+
+## SSH Keys
+
+Users manage their own SSH public keys, and admins may manage anyone's:
+
+| Operation | REST | WebSocket RPC |
+| --------- | ---- | ------------- |
+| Add a key | `POST /api/v1/admin/users/{username}/ssh-keys` | `user.ssh_key.add` |
+| Remove a key | `DELETE /api/v1/admin/users/{username}/ssh-keys` | `user.ssh_key.remove` |
+| List keys | `GET /api/v1/admin/users/{username}` (`ssh_keys`) | `user.info` |
+
+The request body carries `username`, `ssh_key` and `token`. For removal, `ssh_key` may be the
+key or its `SHA256:` fingerprint. Both return the user's keys after the change. A duplicate key
+returns `409 Conflict`, an invalid key `400 Bad Request`, another user's keys `403 Forbidden`,
+and a key that is not registered `404 Not Found`.
+
+Creating a lab or redeploying a node fails until the caller has at least one registered key.
+
+## Usernames
+
+Creating a user on any transport applies the same username rules as
+[`sherpa server user create`](command-reference.md#sherpa-server-user-create): 3–32 letters,
+digits, underscores or hyphens, starting with a letter or underscore, and not a reserved name.
+Usernames are saved in lower case and matched without regard to case, so logging in as `BRAD`
+finds `brad`. An invalid username returns `400 Bad Request` on REST.
 
 ## User Deletion
 
@@ -134,6 +163,7 @@ Deleting a user follows the same rules on REST, WebSocket RPC and the web UI:
 | Refusal | REST | WebSocket RPC |
 | ------- | ---- | ------------- |
 | Deleting your own account | `403 Forbidden` | `AccessDenied` |
+| Deleting the built-in `admin` account | `403 Forbidden` | `AccessDenied` |
 | Deleting the last admin account | `403 Forbidden` | `AccessDenied` |
 | The user owns labs | `409 Conflict`, listing the labs | `ServerError`, listing the labs |
 

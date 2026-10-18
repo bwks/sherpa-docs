@@ -165,22 +165,6 @@ Custom image name to use instead of the default for this model.
 image = "custom-ubuntu"
 ```
 
-##### ipv4_address (string)
-
-Static IPv4 address for the management interface.
-
-```toml
-ipv4_address = "10.0.0.10"
-```
-
-##### ipv6_address (string)
-
-Static IPv6 address for the management interface.
-
-```toml
-ipv6_address = "fd00::10"
-```
-
 ##### kernel_cmdline (string)
 
 Kernel command line arguments for DirectKernel unikernel nodes. Passed to QEMU via the libvirt `<cmdline>` XML element. Overrides any auto-injected command line.

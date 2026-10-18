@@ -281,6 +281,21 @@ sherpa server user create <username>
 | `--admin` | Make the user an administrator |
 | `--ssh-key` | SSH public keys (can be specified multiple times) |
 
+Usernames are also your login name on lab nodes, so they follow Linux login name rules. A
+username must:
+
+- be 3–32 characters long
+- start with a letter or underscore
+- contain only letters, digits, underscores and hyphens
+- not be a reserved name
+
+Usernames are not case-sensitive. They are saved in lower case, so `Brad` is saved as `brad`,
+and you can log in as either.
+
+Reserved names include `admin`, `root` and `sherpa`, system accounts such as `daemon` and
+`nobody`, names starting with `systemd-`, and the default users of common images and network
+devices, such as `ubuntu`, `core`, `ec2-user`, `cisco` and `cumulus`.
+
 ### `sherpa server user list`
 
 List all user accounts. Admin only.
@@ -292,6 +307,7 @@ Delete a user account. Admin only.
 The server refuses to delete:
 
 - your own account;
+- the built-in `admin` account;
 - the last admin account;
 - a user who owns labs. The error lists the labs. Destroy them first (admins can destroy
   any lab), then delete the user.
@@ -323,6 +339,25 @@ sherpa server user info [username]
 ```
 
 If no username is provided, shows the current user's information.
+
+### `sherpa server user ssh-key`
+
+Manage SSH public keys. You need at least one registered key to start labs; see
+[SSH Keys](architecture/ssh-keys.md). Each command acts on your own account. Admins can act on
+any user with `--user`.
+
+```
+sherpa server user ssh-key list [--user <username>]
+sherpa server user ssh-key add <key or .pub file> [--user <username>]
+sherpa server user ssh-key remove <key, .pub file or SHA256 fingerprint> [--user <username>]
+```
+
+| Flag | Description |
+| ---- | ----------- |
+| `--user` | User whose keys to manage (defaults to the logged-in user) |
+
+`list` shows each key's type, `SHA256:` fingerprint and comment. Adding a key that is already
+registered, even with a different comment, is refused.
 
 ## Server Image Commands
 

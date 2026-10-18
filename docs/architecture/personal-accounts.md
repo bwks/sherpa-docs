@@ -18,9 +18,8 @@ nodes = [
 
 ## Before You Start
 
-Your Sherpa user needs at least one SSH public key registered. Add keys on the **Profile**
-page of the web UI. An administrator can also set keys when creating a user with the
-`--ssh-key` option of `sherpa server user create`.
+Your Sherpa user needs at least one SSH public key registered; every lab needs one, whether or
+not it uses personal accounts. See [SSH Keys](ssh-keys.md) to generate and register a key.
 
 Keep the matching private keys on your workstation or in your SSH agent. They are never
 sent to the server.
@@ -44,15 +43,11 @@ containers, unikernels and network devices are not changed.
 
 ### Username Rules
 
-Your username must:
+Your Sherpa username is used as the login name, so it already meets the rules for one. See
+[`sherpa server user create`](../command-reference.md#sherpa-server-user-create) for the
+username rules.
 
-- be at most 32 characters
-- start with a lowercase letter or underscore
-- contain only lowercase letters, digits, underscores and hyphens
-- not be `root` or `sherpa`
-
-If the username is invalid, or you have no valid keys registered, `sherpa up` stops before it
-creates anything.
+If you have no valid keys registered, `sherpa up` stops before it creates anything.
 
 ## Connect
 

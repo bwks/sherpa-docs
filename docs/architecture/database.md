@@ -23,7 +23,7 @@ Database credentials are managed via environment variables, not `sherpa.toml`.
 | ---------------------- | -------- | ------------------------------------------------ |
 | `SHERPA_DB_PASSWORD`   | Yes      | Database root password                           |
 | `SHERPA_DB_PORT`       | No       | Database port (default: `8000`)                  |
-| `SHERPA_ADMIN_PASSWORD`| No       | Seeds an `admin` user on startup if set          |
+| `SHERPA_ADMIN_PASSWORD`| No       | Creates the built-in `admin` account on startup if it is missing |
 
 ## Storage
 
@@ -43,7 +43,7 @@ Stores user accounts and credentials.
 
 | Field           | Type            | Description                     |
 | --------------- | --------------- | ------------------------------- |
-| `username`      | string          | Unique username (min 3 chars)   |
+| `username`      | string          | Unique lower-case username, 3–32 chars |
 | `password_hash` | string          | Argon2id password hash          |
 | `is_admin`      | bool            | Admin flag (default: false)     |
 | `ssh_keys`      | array\<string\> | Public SSH keys                 |
@@ -133,4 +133,6 @@ Stores shared bridge network segments.
 
 ## Initialization
 
-The database is initialized during `sherpa init` which connects to SurrealDB, applies the schema, and creates an initial admin user. On subsequent server starts, the schema is re-applied idempotently and an admin user is optionally seeded if `SHERPA_ADMIN_PASSWORD` is set.
+The database is initialized during `sherpad init`, which connects to SurrealDB, applies the schema, and creates the built-in `admin` account and a first user account. On subsequent server starts, the schema is re-applied idempotently. If the `admin` account is missing, the server creates it when `SHERPA_ADMIN_PASSWORD` is set, and otherwise refuses to start until you run `sherpad init`.
+
+The schema protects the built-in `admin` account: it cannot be deleted, renamed or lose its admin flag, even by a query run directly against the database.
