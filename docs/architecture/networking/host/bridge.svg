@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 460" width="640" height="460" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Sherpa host bridge networking</title>
+  <desc id="desc">The upstream switch connects to the host's physical NIC, which is a member of the br-sherpa0 Linux bridge. sherpad init creates the sherpa-bridge libvirt network on top of br-sherpa0. Attaching node interfaces to it, as public bridge interfaces, is planned.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .core { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 2; }
+    .vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 1.5; }
+    .ext { fill: var(--card); stroke: var(--border); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+    .dash { stroke-dasharray: 5 4; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="640" height="460" rx="14"/>
+
+  <!-- Physical network -->
+  <text class="h" x="32" y="40">PHYSICAL NETWORK</text>
+  <rect class="box" x="32" y="52" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="77" text-anchor="middle">Upstream switch</text>
+
+  <!-- Host -->
+  <rect class="zone" x="16" y="116" width="608" height="328" rx="12"/>
+  <text class="h" x="32" y="138">LINUX HOST</text>
+
+  <line class="ln" x1="320" y1="92" x2="320" y2="152"/>
+  <rect class="box" x="32" y="152" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="177" text-anchor="middle">Physical NIC · enp9s0</text>
+
+  <line class="ln" x1="320" y1="192" x2="320" y2="216"/>
+  <rect class="core" x="32" y="216" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="241" text-anchor="middle">br-sherpa0 · Linux bridge</text>
+
+  <line class="ln" x1="320" y1="256" x2="320" y2="280"/>
+  <rect class="vm" x="32" y="280" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="305" text-anchor="middle">sherpa-bridge · libvirt network</text>
+
+  <!-- Planned node attachments -->
+  <path class="ln dash" d="M320 320 V342 M124 342 H516 M124 342 V364 M320 342 V364 M516 342 V364"/>
+  <rect class="ext" x="32" y="364" width="184" height="40" rx="8"/>
+  <text class="t" x="124" y="389" text-anchor="middle">Node interface</text>
+  <rect class="ext" x="228" y="364" width="184" height="40" rx="8"/>
+  <text class="t" x="320" y="389" text-anchor="middle">Node interface</text>
+  <rect class="ext" x="424" y="364" width="184" height="40" rx="8"/>
+  <text class="t" x="516" y="389" text-anchor="middle">Node interface</text>
+  <text class="h" x="32" y="428">PUBLIC BRIDGE · PLANNED</text>
+</svg>
