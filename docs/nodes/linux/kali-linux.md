@@ -44,9 +44,9 @@ sherpa server image import \
 ```toml
 name = "kali-linux"
 
-nodes = [
-  { name = "dev01", model = "kali_linux" },
-]
+[[nodes]]
+name = "dev01"
+model = "kali_linux"
 ```
 
 

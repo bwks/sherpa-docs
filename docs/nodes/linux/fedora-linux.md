@@ -36,9 +36,9 @@ sherpa server image import \
 ```toml
 name = "fedora-linux"
 
-nodes = [
-  { name = "dev01", model = "fedora_linux" },
-]
+[[nodes]]
+name = "dev01"
+model = "fedora_linux"
 ```
 
 

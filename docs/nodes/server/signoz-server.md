@@ -36,9 +36,9 @@ sherpa server image import \
 ```toml
 name = "signoz-server"
 
-nodes = [
-  { name = "signoz01", model = "signoz_server" },
-]
+[[nodes]]
+name = "signoz01"
+model = "signoz_server"
 ```
 
 ## Node Access

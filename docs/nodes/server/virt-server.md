@@ -36,9 +36,9 @@ sherpa server image import \
 ```toml
 name = "virt-server"
 
-nodes = [
-  { name = "virt01", model = "virt_server" },
-]
+[[nodes]]
+name = "virt01"
+model = "virt_server"
 ```
 
 ## Node Access

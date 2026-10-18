@@ -42,9 +42,10 @@ docker image import cEOS64-lab-4.35.1F.tar.xz arista/ceos:4.35.1F
 ```toml
 name = "arista-ceos"
 
-nodes = [
-  { name = "dev01", model = "arista_ceos", version = "4.35.1F" },
-]
+[[nodes]]
+name = "dev01"
+model = "arista_ceos"
+version = "4.35.1F"
 ```
 
 ## Node Access

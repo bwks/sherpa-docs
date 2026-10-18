@@ -38,9 +38,10 @@ docker image pull mongo:8.2.7-rc0
 ```toml
 name = "mongo"
 
-nodes = [
-  { name = "db01", model = "mongo", version = "8.2.7-rc0" },
-]
+[[nodes]]
+name = "db01"
+model = "mongo"
+version = "8.2.7-rc0"
 ```
 
 

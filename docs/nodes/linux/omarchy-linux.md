@@ -43,9 +43,10 @@ sherpa server image import \
 ```toml
 name = "omarchy-lab"
 
-nodes = [
-  { name = "desktop", model = "omarchy_linux", version = "<version>" },
-]
+[[nodes]]
+name = "desktop"
+model = "omarchy_linux"
+version = "<version>"
 ```
 
 ## Node Access

@@ -42,9 +42,9 @@ sherpa server image import \
 ```toml
 name = "juniper-vsrxv3"
 
-nodes = [
-  { name = "dev01", model = "juniper_vsrxv3" },
-]
+[[nodes]]
+name = "dev01"
+model = "juniper_vsrxv3"
 ```
 
 ## ZTP

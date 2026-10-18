@@ -36,9 +36,11 @@ docker image pull nginx:1.29.4-perl
 ```toml
 name = "generic-container"
 
-nodes = [
-  { name = "dev01", model = "generic_container", image = "nginx", version = "1.29.4-perl" },
-]
+[[nodes]]
+name = "dev01"
+model = "generic_container"
+image = "nginx"
+version = "1.29.4-perl"
 ```
 
 

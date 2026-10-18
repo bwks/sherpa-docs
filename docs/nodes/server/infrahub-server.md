@@ -36,9 +36,9 @@ sherpa server image import \
 ```toml
 name = "infrahub-server"
 
-nodes = [
-  { name = "infrahub01", model = "infrahub_server" },
-]
+[[nodes]]
+name = "infrahub01"
+model = "infrahub_server"
 ```
 
 ## Node Access

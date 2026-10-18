@@ -36,9 +36,9 @@ sherpa server image import \
 ```toml
 name = "netbox-server"
 
-nodes = [
-  { name = "netbox01", model = "netbox_server" },
-]
+[[nodes]]
+name = "netbox01"
+model = "netbox_server"
 ```
 
 ## Node Access

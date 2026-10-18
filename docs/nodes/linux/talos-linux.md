@@ -81,15 +81,22 @@ Declare clusters with [`talos_clusters`](../../manifest.md#talos_clusters-listta
 ```toml
 name = "k8s-lab"
 
-talos_clusters = [
-  { name = "k8s", controllers = ["cp01"], workers = ["worker01", "worker02"] },
-]
+[[talos_clusters]]
+name = "k8s"
+controllers = ["cp01"]
+workers = ["worker01", "worker02"]
 
-nodes = [
-  { name = "cp01", model = "talos_linux" },
-  { name = "worker01", model = "talos_linux" },
-  { name = "worker02", model = "talos_linux" },
-]
+[[nodes]]
+name = "cp01"
+model = "talos_linux"
+
+[[nodes]]
+name = "worker01"
+model = "talos_linux"
+
+[[nodes]]
+name = "worker02"
+model = "talos_linux"
 ```
 
 `sherpa up` then:
@@ -177,11 +184,19 @@ talosctl apply-config --insecure -n <node-ip> --file controlplane.yaml
 ```toml
 name = "talos-byo"
 
-nodes = [
-  { name = "cp01", model = "talos_linux", ztp_config = "controlplane.yaml" },
-  { name = "worker01", model = "talos_linux", ztp_config = "worker.yaml" },
-  { name = "spare01", model = "talos_linux" },
-]
+[[nodes]]
+name = "cp01"
+model = "talos_linux"
+ztp_config = "controlplane.yaml"
+
+[[nodes]]
+name = "worker01"
+model = "talos_linux"
+ztp_config = "worker.yaml"
+
+[[nodes]]
+name = "spare01"
+model = "talos_linux"
 ```
 
 With your own configs you run `talosctl bootstrap` and fetch the kubeconfig yourself.

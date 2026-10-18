@@ -35,9 +35,9 @@ sherpa server image import \
 ```toml
 name = "cisco-ftdv"
 
-nodes = [
-  { name = "dev01", model = "cisco_ftdv" },
-]
+[[nodes]]
+name = "dev01"
+model = "cisco_ftdv"
 ```
 
 ## Credentials

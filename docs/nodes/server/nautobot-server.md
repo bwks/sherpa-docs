@@ -36,9 +36,9 @@ sherpa server image import \
 ```toml
 name = "nautobot-server"
 
-nodes = [
-  { name = "nautobot01", model = "nautobot_server" },
-]
+[[nodes]]
+name = "nautobot01"
+model = "nautobot_server"
 ```
 
 ## Node Access

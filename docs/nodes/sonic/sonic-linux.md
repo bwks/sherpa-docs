@@ -40,9 +40,9 @@ sherpa server image import \
 ```toml
 name = "sonic-linux"
 
-nodes = [
-  { name = "dev01", model = "sonic_linux" },
-]
+[[nodes]]
+name = "dev01"
+model = "sonic_linux"
 ```
 
 

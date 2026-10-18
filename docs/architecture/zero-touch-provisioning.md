@@ -24,9 +24,11 @@ file.
 
 ```toml
 # manifest.toml
-nodes = [
-  { name = "dev01", model = "sonic_linux", ztp_config = "/some/path/dev01.conf" }
-]
+
+[[nodes]]
+name = "dev01"
+model = "sonic_linux"
+ztp_config = "/some/path/dev01.conf"
 ```
 
 ## ZTP Methods

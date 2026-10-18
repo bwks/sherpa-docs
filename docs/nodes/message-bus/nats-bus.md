@@ -32,9 +32,10 @@ sherpa server image pull \
 ```toml
 name = "nats-lab"
 
-nodes = [
-  { name = "nats01", model = "nats_bus", version = "2.10" },
-]
+[[nodes]]
+name = "nats01"
+model = "nats_bus"
+version = "2.10"
 ```
 
 

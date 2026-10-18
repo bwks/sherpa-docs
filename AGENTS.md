@@ -73,9 +73,9 @@ sherpa server image import \
 ```toml
 name = "<lab-name>"
 
-nodes = [
-  { name = "dev01", model = "<model_name>" },
-]
+[[nodes]]
+name = "dev01"
+model = "<model_name>"
 ```
 
 ## Notes
@@ -109,6 +109,9 @@ Container nodes differ slightly:
 
 - All configuration files referenced in docs use **TOML format only** (no JSON/YAML/INI)
 - The manifest file is `manifest.toml` — document it accordingly
+- Manifest examples use the layout `sherpa new` writes: arrays of tables as `[[nodes]]`,
+  `[[links]]` and `[[nodes.volumes]]` blocks, nested tables as `[links.impairment]`, never
+  inline `nodes = [{ ... }]` arrays. Arrays of strings stay inline.
 - The sherpa config file is `sherpa.toml`
 - Verify model names and CLI commands against the Rust source at `../sherpa` when uncertain
 - When adding a new node page, also add its entry to the `nav` section of `mkdocs.yml`

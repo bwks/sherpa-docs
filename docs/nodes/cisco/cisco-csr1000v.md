@@ -35,9 +35,9 @@ sherpa server image import \
 ```toml
 name = "cisco-csr1000v"
 
-nodes = [
-  { name = "dev01", model = "cisco_csr1000v" },
-]
+[[nodes]]
+name = "dev01"
+model = "cisco_csr1000v"
 ```
 
 

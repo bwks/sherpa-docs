@@ -38,9 +38,9 @@ sherpa server image import \
 ```toml
 name = "cumulus-linux"
 
-nodes = [
-  { name = "dev01", model = "cumulus_linux" },
-]
+[[nodes]]
+name = "dev01"
+model = "cumulus_linux"
 ```
 
 

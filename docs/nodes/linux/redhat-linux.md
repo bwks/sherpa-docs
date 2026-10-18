@@ -40,9 +40,9 @@ sherpa server image import \
 ```toml
 name = "redhat-linux"
 
-nodes = [
-  { name = "dev01", model = "redhat_linux" },
-]
+[[nodes]]
+name = "dev01"
+model = "redhat_linux"
 ```
 
 

@@ -34,9 +34,10 @@ sherpa server image import \
 ```toml
 name = "generic-vm"
 
-nodes = [
-  { name = "dev01", model = "generic_vm", version = "model-version" },
-]
+[[nodes]]
+name = "dev01"
+model = "generic_vm"
+version = "model-version"
 ```
 
 

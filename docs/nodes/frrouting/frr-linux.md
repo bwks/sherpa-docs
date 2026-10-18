@@ -39,9 +39,10 @@ docker image pull quay.io/frrouting/frr:10.5.2
 ```toml
 name = "frr-linux"
 
-nodes = [
-  { name = "dev01", model = "frr_linux", version = "10.5.2" },
-]
+[[nodes]]
+name = "dev01"
+model = "frr_linux"
+version = "10.5.2"
 ```
 
 

@@ -38,9 +38,10 @@ docker image pull postgres:17
 ```toml
 name = "postgresql"
 
-nodes = [
-  { name = "db01", model = "postgresql", version = "17" },
-]
+[[nodes]]
+name = "db01"
+model = "postgresql"
+version = "17"
 ```
 
 

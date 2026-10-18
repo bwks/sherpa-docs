@@ -61,9 +61,9 @@ sherpa server image import \
 ```toml
 name = "cisco-ise"
 
-nodes = [
-  { name = "dev01", model = "cisco_ise" },
-]
+[[nodes]]
+name = "dev01"
+model = "cisco_ise"
 ```
 
 ## Logging

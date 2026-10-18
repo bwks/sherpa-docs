@@ -38,9 +38,9 @@ docker image pull gitlab/gitlab-ce:18.7.6-ce.0
 ```toml
 name = "gitlab-ce"
 
-nodes = [
-  { name = "gitlab01", model = "gitlab_ce" },
-]
+[[nodes]]
+name = "gitlab01"
+model = "gitlab_ce"
 ```
 
 ## Node Access
