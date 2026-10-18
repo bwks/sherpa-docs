@@ -20,7 +20,7 @@ entirely.
 P2P eBPF links support both virtual machines and containers, including
 mixed VM-to-container links.
 
-![Alt text](network-p2p-ebpf.svg "Point-to-Point eBPF Link")
+![Point-to-point eBPF link: a VM and a container connected through tap-a and tap-b, with an eBPF redirect forwarding packets between them in the kernel](network-p2p-ebpf.svg)
 
 ### Configuration
 
@@ -77,7 +77,7 @@ for packet captures on the interfaces via Wireshark or TCPDump.
 Node interfaces in a link are assigned to a dedicated linux bridge.
 The bridges are connected via a veth pair virtual wire.
 
-![Alt text](network-p2p-bridge.svg "Point-to-Point Bridge Link")
+![Point-to-point bridge link: a VM attached to bridge-a and a container attached to bridge-b, with the bridges joined by a veth pair](network-p2p-bridge.svg)
 
 ### Configuration
 
@@ -100,8 +100,8 @@ dst = "dev02::eth1"
 
 !!! Note
 
-    `p2p-bridge` is the only supported link type between
-    containers and virtual machines.
+    P2P bridge links work between any combination of virtual machines and
+    containers. P2P eBPF links do too.
 
 ## P2P UDP
 
@@ -114,7 +114,7 @@ P2P UDP allow for the transmission of any protocol between Virtual Machine nodes
 A point-to-point virtual wire is created directly between the network interfaces using
 UDP tunneling.
 
-![Alt text](network-p2p-udp.svg "Point-to-Point UDP Link")
+![Planned point-to-point UDP link: two VMs connected by a UDP tunnel](network-p2p-udp.svg)
 
 ### Caveats
 
@@ -154,7 +154,7 @@ A point-to-point virtual wire is created directly between the network interfaces
 
 P2P vEth interfaces CAN be used for packet captures.
 
-![Alt text](network-p2p-veth.svg "Point-to-Point vEth Link")
+![Planned point-to-point vEth link: two containers connected by a veth pair](network-p2p-veth.svg)
 
 ### Caveats
 
