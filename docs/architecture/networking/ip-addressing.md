@@ -45,6 +45,8 @@ Use `sherpa inspect <lab-id>` to see the addresses assigned to each node.
 !!! note
     Node IP addresses are assigned based on their position in the manifest. Reordering the list
     changes addresses on the next `sherpa up`.
+    Management addresses can't be set in the manifest. A manifest node with `ipv4_address` or
+    `ipv6_address` is rejected as an unknown field.
 
 ## Loopback Addresses
 
