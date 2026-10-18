@@ -38,11 +38,11 @@ For example, connecting to a HTTP server running on a lab-node.
 ```
 # ssh -N -L {local-port}:{node-ipv4}:{node-port} {sherpa-server}
 
-ssh -N -L 9443:172.31.0.11:443 lab01
+ssh -N -L 9443:172.31.1.21:443 lab01
 ```
 
 You can now open a browser and from `https://localhost:9443` access the web server
-on the lab node `172.31.0.11:443` 
+on the lab node `172.31.1.21:443` 
 
 !!! Note
     In a future release, SSH tunneling of service ports will be built into Sherpa.

@@ -50,9 +50,22 @@ variable named by `auth_key_env` and creates a gateway for the lab. Enrollment
 requires WSS with certificate validation enabled. Pending route approval produces
 a warning without failing creation. See the [Tailscale guide](architecture/networking/tailscale.md).
 
+When the manifest declares [Talos clusters](manifest.md#talos_clusters-listtalos_cluster_object), `up` also
+bootstraps each Kubernetes cluster, waits for its nodes to be Ready, and writes
+`kubeconfig-<cluster>` and `talosconfig-<cluster>` to the current directory, readable only by
+you. A cluster that is not ready in time is reported as a warning. See
+[Talos Linux](nodes/linux/talos-linux.md).
+
 ### `sherpa down`
 
 Stop all or a specific node in the lab.
+
+Virtual machines are asked to shut down cleanly (through the QEMU guest agent when the guest
+has one, otherwise the ACPI power button) and are powered off only if they are still running
+after 60 seconds. Nodes in a [Talos cluster](manifest.md#talos_clusters-listtalos_cluster_object)
+are shut down through the Talos API, workers before controllers. Unikernels and other Talos
+nodes are powered off, and containers are paused. The result for each node says whether it
+shut down or was powered off.
 
 With Tailscale enabled, a full shutdown also stops the gateway. Using `--node`
 leaves the gateway alone.
@@ -83,6 +96,9 @@ gateway alone.
 
 Destroy and recreate a single node with fresh ZTP configuration.
 
+A worker in a [Talos cluster](manifest.md#talos_clusters-listtalos_cluster_object) rejoins with the cluster's saved
+secrets. A cluster controller cannot be redeployed.
+
 | Flag | Description |
 | ---- | ----------- |
 | `--node`, `-n` | Target node to redeploy (required) |
@@ -93,6 +109,10 @@ Destroy the lab and all its resources, including its Tailscale gateway and
 identity volume when present. If either Tailscale removal fails, the server retains
 database ownership and saved lab configuration so the owner or an admin can retry.
 Other resources may already have been removed. See [cleanup recovery](architecture/networking/tailscale.md#recovery).
+
+If `sherpa up`, `sherpa redeploy` or `sherpa resume` is still running on the lab, destroy
+stops it first and waits for it to finish its current step, then removes the lab. This is
+safe to use on a lab whose `up` was interrupted.
 
 | Flag | Description |
 | ---- | ----------- |
@@ -129,7 +149,8 @@ sherpa console <name>
 
 ### `sherpa download`
 
-Download lab files (SSH config, SSH key, lab-info) for CLI use from a remote lab.
+Download lab files (SSH config, SSH key, lab-info, and each cluster's `kubeconfig-<cluster>`
+and `talosconfig-<cluster>`) for CLI use from a remote lab.
 
 ```
 sherpa download <lab_id>
