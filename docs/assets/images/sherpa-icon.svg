@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Sherpa">
+  <defs>
+    <linearGradient id="sherpa-icon-gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00A6FB"/>
+      <stop offset="100%" stop-color="#0CCE6B"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 3 L57 17.5 L57 46.5 L32 61 L7 46.5 L7 17.5 Z" fill="url(#sherpa-icon-gradient)" stroke="url(#sherpa-icon-gradient)" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M16 45 L32 21 L48 45" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M25 45 L32 34.5 L39 45" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="32" cy="20" r="5.5" fill="#fff"/>
+</svg>

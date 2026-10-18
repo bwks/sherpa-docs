@@ -8,7 +8,7 @@ The Sherpa source code lives at `../sherpa`. Refer to that codebase when you nee
 
 ## Tech Stack
 
-- **MkDocs** with **Material** theme (Catppuccin color schemes)
+- **MkDocs** with **Material** theme (Soda Pop colours, matching the sherpad web UI)
 - Markdown with extensions: admonition, superfences, tabbed content, TOC with permalinks
 - Custom CSS in `docs/stylesheets/`
 - Docker support for building/serving docs
