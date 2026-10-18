@@ -17,6 +17,18 @@ Initialize the Sherpa server.
 sherpad init
 ```
 
+`sherpad init` creates two accounts:
+
+- **`admin`**, the built-in server account. It manages the server, users and images, and can
+  stop, destroy and clean up any lab, but it cannot start labs. Its password is taken from
+  `SHERPA_ADMIN_PASSWORD` if that is set, otherwise you are asked for one.
+- **Your user account**, which you start labs from. You choose the username and password,
+  whether it is an administrator, and optionally an SSH public key, as a file path or the key
+  itself.
+
+Running `sherpad init` again keeps existing accounts: it only creates `admin` if it is missing,
+and only asks for a user account if there is none.
+
 ## Sherpa Client
 Initialize the Sherpa client.
 ```
