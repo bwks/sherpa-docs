@@ -3,12 +3,13 @@
 Each lab is assigned a management network with a unique IPv4 and IPv6 prefix.
 Management networks are implemented as a Libvirt
 [NAT](https://wiki.libvirt.org/VirtualNetworking.html#network-address-translation-nat)
-network with some differences.
+network with some differences. Containers join the same bridge, `brm-<lab-id>`, through a Docker
+bridge network.
 
 The allocated network acts as a NAT router and upstream DNS forwarder. The DHCP and DNS
 functions for the lab are performed by a `lab-router` container instance.
 
-![Alt text](network-mgmt.svg "Management Network")
+![Management network: the brm bridge with source NAT to the host uplink, shared by a Docker bridge network for the lab router, Tailscale gateway and containers, and a libvirt NAT network for VMs and unikernels](network-mgmt.svg)
 
 ## Lab Router
 
