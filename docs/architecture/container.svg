@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 684" width="640" height="684" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Sherpa container architecture</title>
+  <desc id="desc">sherpad drives the Docker Engine through the Bollard API, which runs each container node through containerd on the shared host Linux kernel using namespaces and cgroups. A container's root filesystem comes from its image, configuration files are bind-mounted from the lab directory, manifest volumes are bind-mounted from host paths, eth0 joins the Docker bridge management network, data interfaces use a macvlan network or a veth pair joined by eBPF, and shell access is through docker exec or SSH.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .core { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 2; }
+    .ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 1.5; }
+    .chip { fill: var(--card); stroke: var(--green); stroke-width: 1.25; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .tl { fill: var(--heading); font-size: 16px; font-weight: 700; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 1.5; }
+    .head { fill: var(--line); }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="head" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="640" height="684" rx="14"/>
+
+  <rect class="zone" x="16" y="24" width="608" height="644" rx="12"/>
+  <text class="h" x="32" y="46">LINUX HOST</text>
+
+  <!-- Control path -->
+  <rect class="core" x="32" y="60" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="85" text-anchor="middle">sherpad</text>
+  <line class="ln" x1="162" y1="100" x2="162" y2="122" marker-end="url(#arrow)"/>
+  <rect class="ct" x="32" y="124" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="149" text-anchor="middle">Docker Engine</text>
+  <line class="ln" x1="162" y1="164" x2="162" y2="186" marker-end="url(#arrow)"/>
+  <rect class="ct" x="32" y="188" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="213" text-anchor="middle">containerd</text>
+  <line class="ln" x1="162" y1="228" x2="162" y2="250" marker-end="url(#arrow)"/>
+
+  <!-- Container and what it is built from -->
+  <rect class="ct" x="32" y="252" width="260" height="336" rx="10"/>
+  <text class="tl" x="48" y="276">Container</text>
+  <text class="h" x="148" y="275">ONE PER NODE</text>
+
+  <rect class="chip" x="48" y="288" width="228" height="32" rx="6"/>
+  <text class="tc" x="162" y="309" text-anchor="middle">Env vars · command</text>
+  <rect class="chip" x="48" y="330" width="228" height="32" rx="6"/>
+  <text class="tc" x="162" y="351" text-anchor="middle">Root filesystem</text>
+  <rect class="chip" x="48" y="372" width="228" height="32" rx="6"/>
+  <text class="tc" x="162" y="393" text-anchor="middle">Config files</text>
+  <rect class="chip" x="48" y="414" width="228" height="32" rx="6"/>
+  <text class="tc" x="162" y="435" text-anchor="middle">Volumes</text>
+  <rect class="chip" x="48" y="456" width="228" height="32" rx="6"/>
+  <text class="tc" x="162" y="477" text-anchor="middle">eth0 · management</text>
+  <rect class="chip" x="48" y="498" width="228" height="32" rx="6"/>
+  <text class="tc" x="162" y="519" text-anchor="middle">eth1–N · data</text>
+  <rect class="chip" x="48" y="540" width="228" height="32" rx="6"/>
+  <text class="tc" x="162" y="561" text-anchor="middle">Shell</text>
+
+  <!-- Host resources backing each part -->
+  <text class="h" x="380" y="322">BACKED BY</text>
+  <line class="ln" x1="276" y1="346" x2="378" y2="346" marker-end="url(#arrow)"/>
+  <rect class="box" x="380" y="330" width="228" height="32" rx="6"/>
+  <text class="tc" x="494" y="351" text-anchor="middle">Container image</text>
+  <line class="ln" x1="276" y1="388" x2="378" y2="388" marker-end="url(#arrow)"/>
+  <rect class="box" x="380" y="372" width="228" height="32" rx="6"/>
+  <text class="tc" x="494" y="393" text-anchor="middle">Bind mount · lab directory</text>
+  <line class="ln" x1="276" y1="430" x2="378" y2="430" marker-end="url(#arrow)"/>
+  <rect class="box" x="380" y="414" width="228" height="32" rx="6"/>
+  <text class="tc" x="494" y="435" text-anchor="middle">Bind mount · host path</text>
+  <line class="ln" x1="276" y1="472" x2="378" y2="472" marker-end="url(#arrow)"/>
+  <rect class="box" x="380" y="456" width="228" height="32" rx="6"/>
+  <text class="tc" x="494" y="477" text-anchor="middle">Docker bridge network</text>
+  <line class="ln" x1="276" y1="514" x2="378" y2="514" marker-end="url(#arrow)"/>
+  <rect class="box" x="380" y="498" width="228" height="32" rx="6"/>
+  <text class="tc" x="494" y="519" text-anchor="middle">macvlan or veth + eBPF</text>
+  <line class="ln" x1="276" y1="556" x2="378" y2="556" marker-end="url(#arrow)"/>
+  <rect class="box" x="380" y="540" width="228" height="32" rx="6"/>
+  <text class="tc" x="494" y="561" text-anchor="middle">docker exec · SSH</text>
+
+  <!-- Shared kernel -->
+  <line class="ln" x1="162" y1="588" x2="162" y2="610" marker-end="url(#arrow)"/>
+  <rect class="box" x="32" y="612" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="637" text-anchor="middle">Host Linux kernel · namespaces · cgroups</text>
+</svg>
