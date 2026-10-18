@@ -11,7 +11,6 @@ nav:
     - architecture/container.md
     - architecture/unikernel.md
     - Networking:
-      - Tailscale: architecture/networking/tailscale.md
       - Host:
         - architecture/networking/host/bridge.md
 
@@ -23,6 +22,7 @@ nav:
         - architecture/networking/node/public-bridge.md
         - architecture/networking/node/isolated-bridge.md
         - architecture/networking/node/reserved-bridge.md
+      - Tailscale: architecture/networking/tailscale.md
 
     - architecture/storage.md
     - architecture/database.md
