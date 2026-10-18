@@ -60,9 +60,9 @@ sherpa server image import \
 ```toml
 name = "aruba-aoscx"
 
-nodes = [
-  { name = "dev01", model = "aruba_aoscx" },
-]
+[[nodes]]
+name = "dev01"
+model = "aruba_aoscx"
 ```
 
 

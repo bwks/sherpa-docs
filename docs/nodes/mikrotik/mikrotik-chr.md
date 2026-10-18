@@ -36,9 +36,9 @@ sherpa server image import \
 ```toml
 name = "silly-sausage"
 
-nodes = [
-  { name = "dev01", model = "mikrotik_chr" },
-]
+[[nodes]]
+name = "dev01"
+model = "mikrotik_chr"
 ```
 
 

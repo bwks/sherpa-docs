@@ -64,9 +64,11 @@ sherpa server image import \
 ```toml
 name = "nanos-unikernel"
 
-nodes = [
-  { name = "dev01", model = "nanos_unikernel", version = "v1.0.0", ready_port = 8083 },
-]
+[[nodes]]
+name = "dev01"
+model = "nanos_unikernel"
+version = "v1.0.0"
+ready_port = 8083
 ```
 
 ## Node Access

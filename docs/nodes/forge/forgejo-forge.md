@@ -31,9 +31,10 @@ sherpa server image pull \
 ```toml
 name = "forgejo-lab"
 
-nodes = [
-  { name = "forge01", model = "forgejo_forge", version = "11" },
-]
+[[nodes]]
+name = "forge01"
+model = "forgejo_forge"
+version = "11"
 ```
 
 

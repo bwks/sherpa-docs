@@ -10,14 +10,17 @@ in the current directory.
 # manifest.toml
 name = "sexy-salamander"
 
-nodes = [
-  { name = "dev01", model = "sonic_linux" },
-  { name = "dev02", model = "arista_ceos" },
-]
+[[nodes]]
+name = "dev01"
+model = "sonic_linux"
 
-links = [
-  { src = "dev01::gig4", dst = "dev02::gig4" },
-]
+[[nodes]]
+name = "dev02"
+model = "arista_ceos"
+
+[[links]]
+src = "dev01::gig4"
+dst = "dev02::gig4"
 ```
 
 ## Required Parameters
@@ -66,9 +69,8 @@ model = "sonic_linux"
 A list of binary files to include with the node.
 
 ```toml
-binary_files = [
-  { source = "/path/to/binary" },
-]
+[[nodes.binary_files]]
+source = "/path/to/binary"
 ```
 
 | Property | Type | Description |
@@ -227,9 +229,8 @@ skip_ready_check = true
 SSH public key file references.
 
 ```toml
-ssh_authorized_key_files = [
-  { source = "~/.ssh/id_ed25519.pub" },
-]
+[[nodes.ssh_authorized_key_files]]
+source = "~/.ssh/id_ed25519.pub"
 ```
 
 | Property | Type | Description |
@@ -265,9 +266,10 @@ that support the `cloud-init` based ZTP method._
 Systemd units to deploy to the node.
 
 ```toml
-systemd_units = [
-  { name = "myservice.service", source = "units/myservice.service", enabled = true },
-]
+[[nodes.systemd_units]]
+name = "myservice.service"
+source = "units/myservice.service"
+enabled = true
 ```
 
 | Property | Type | Description |
@@ -281,9 +283,12 @@ systemd_units = [
 A list of text files to pass to a node.
 
 ```toml
-text_files = [
-  { src = "~/.claude.json", dst = "/home/sherpa/.claude.json", user = "sherpa", group = "sherpa", permissions = 600 },
-]
+[[nodes.text_files]]
+src = "~/.claude.json"
+dst = "/home/sherpa/.claude.json"
+user = "sherpa"
+group = "sherpa"
+permissions = 600
 ```
 
 _This parameter currently only applies to node models
@@ -331,9 +336,9 @@ version = "22.04"
 Volume mounts for the node.
 
 ```toml
-volumes = [
-  { src = "/host/path", dst = "/container/path" },
-]
+[[nodes.volumes]]
+src = "/host/path"
+dst = "/container/path"
 ```
 
 | Property | Type | Description |
@@ -364,9 +369,9 @@ three or more interfaces to share a common network segment.
 Each bridge link is defined with the node `name` and `interface` separated by a double colon `(::)`
 
 ```toml
-bridges = [
-  { name = "shared", links = ["dev01::eth2", "dev02::eth2", "dev03::eth1"] },
-]
+[[bridges]]
+name = "shared"
+links = ["dev01::eth2", "dev02::eth2", "dev03::eth1"]
 ```
 
 | Property | Type | Description |
@@ -394,9 +399,9 @@ Links define the connectivity relationship between nodes in the topology.
 Each device is defined with its `name` and `interface` separated by a double colon `(::)`
 
 ```toml
-links = [
-  { src = "dev01::eth0", dst = "dev02::eth1" },
-]
+[[links]]
+src = "dev01::eth0"
+dst = "dev02::eth1"
 ```
 
 #### Link Properties
@@ -413,9 +418,14 @@ links = [
 Apply network impairment to simulate real-world link conditions.
 
 ```toml
-links = [
-  { src = "dev01::eth1", dst = "dev02::eth1", impairment = { delay = 50, jitter = 10, loss_percent = 1.0 } },
-]
+[[links]]
+src = "dev01::eth1"
+dst = "dev02::eth1"
+
+[links.impairment]
+delay = 50
+jitter = 10
+loss_percent = 1.0
 ```
 
 | Property | Type | Description |
@@ -482,16 +492,26 @@ configs, bootstraps it, and writes a `kubeconfig-<cluster>` and `talosconfig-<cl
 working directory.
 
 ```toml
-talos_clusters = [
-  { name = "k8s", controllers = ["cp01", "cp02", "cp03"], workers = ["worker01"] },
-]
+[[talos_clusters]]
+name = "k8s"
+controllers = ["cp01", "cp02", "cp03"]
+workers = ["worker01"]
 
-nodes = [
-  { name = "cp01", model = "talos_linux" },
-  { name = "cp02", model = "talos_linux" },
-  { name = "cp03", model = "talos_linux" },
-  { name = "worker01", model = "talos_linux" },
-]
+[[nodes]]
+name = "cp01"
+model = "talos_linux"
+
+[[nodes]]
+name = "cp02"
+model = "talos_linux"
+
+[[nodes]]
+name = "cp03"
+model = "talos_linux"
+
+[[nodes]]
+name = "worker01"
+model = "talos_linux"
 ```
 
 | Property | Type | Description |

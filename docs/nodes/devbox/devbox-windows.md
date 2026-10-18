@@ -36,9 +36,9 @@ sherpa server image import \
 ```toml
 name = "devbox-windows"
 
-nodes = [
-  { name = "dev01", model = "devbox_windows" },
-]
+[[nodes]]
+name = "dev01"
+model = "devbox_windows"
 ```
 
 ## Node Access

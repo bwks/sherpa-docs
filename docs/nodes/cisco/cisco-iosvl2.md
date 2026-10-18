@@ -42,9 +42,9 @@ is cloned during instance creation.
 ```toml
 name = "cisco-iosvl2"
 
-nodes = [
-  { name = "dev01", model = "cisco_iosvl2" },
-]
+[[nodes]]
+name = "dev01"
+model = "cisco_iosvl2"
 ```
 
 

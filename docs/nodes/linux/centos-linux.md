@@ -36,9 +36,9 @@ sherpa server image import \
 ```toml
 name = "centos-linux"
 
-nodes = [
-  { name = "dev01", model = "centos_linux" },
-]
+[[nodes]]
+name = "dev01"
+model = "centos_linux"
 ```
 
 

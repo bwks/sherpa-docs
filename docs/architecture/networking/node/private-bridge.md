@@ -19,13 +19,19 @@ file int the `bridges` section.
 # manifest.toml
 name = "betty-bridges"
 
-nodes = [
-  { name = "dev01", model = "cisco_cat8000v" },
-  { name = "dev02", model = "cisco_cat8000v" },
-  { name = "dev03", model = "arista_ceos" },
-]
+[[nodes]]
+name = "dev01"
+model = "cisco_cat8000v"
 
-bridges = [
-  { name = "private", links = [ "dev01::gig2", "dev02::gig2", "dev03::eth1" ] },
-]
+[[nodes]]
+name = "dev02"
+model = "cisco_cat8000v"
+
+[[nodes]]
+name = "dev03"
+model = "arista_ceos"
+
+[[bridges]]
+name = "private"
+links = ["dev01::gig2", "dev02::gig2", "dev03::eth1"]
 ```

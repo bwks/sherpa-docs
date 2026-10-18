@@ -34,9 +34,9 @@ sherpa server image import \
 ```toml
 name = "open-bsd"
 
-nodes = [
-  { name = "dev01", model = "open_bsd" },
-]
+[[nodes]]
+name = "dev01"
+model = "open_bsd"
 ```
 
 

@@ -38,9 +38,10 @@ docker image pull surrealdb/surrealdb:v2.2
 ```toml
 name = "surrealdb"
 
-nodes = [
-  { name = "db01", model = "surrealdb", version = "v2.2" },
-]
+[[nodes]]
+name = "db01"
+model = "surrealdb"
+version = "v2.2"
 ```
 
 

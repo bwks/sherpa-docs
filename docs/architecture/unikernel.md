@@ -92,9 +92,12 @@ Unikernel nodes support the following unikernel-specific manifest parameters:
 - **`ready_port`** — TCP port to probe on the node's management IP to verify readiness. By default, a unikernel is considered ready when its libvirt domain reaches the running state. When `ready_port` is set, Sherpa additionally waits for a successful TCP connection to the specified port.
 
 ```toml
-nodes = [
-  { name = "web01", model = "unikraft_unikernel", version = "v1.0.0", kernel_cmdline = "/usr/bin/nginx", ready_port = 80 },
-]
+[[nodes]]
+name = "web01"
+model = "unikraft_unikernel"
+version = "v1.0.0"
+kernel_cmdline = "/usr/bin/nginx"
+ready_port = 80
 ```
 
 See the [manifest](../manifest.md#optional-node-parameters) documentation for all available node parameters.

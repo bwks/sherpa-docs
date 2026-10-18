@@ -44,14 +44,17 @@ A manifest describes the lab topology and node configuration parameters.
 # manifest.toml
 name = "labrador-infiniato"
 
-nodes = [
-  { name = "dev01", model = "sonic_linux" },
-  { name = "dev02", model = "sonic_linux" },
-]
+[[nodes]]
+name = "dev01"
+model = "sonic_linux"
 
-links = [
-  { src = "dev01::eth2", dst = "dev02::eth2" },
-]
+[[nodes]]
+name = "dev02"
+model = "sonic_linux"
+
+[[links]]
+src = "dev01::eth2"
+dst = "dev02::eth2"
 ```
 
 ## Build

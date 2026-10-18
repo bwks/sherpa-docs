@@ -71,9 +71,9 @@ sherpa server image import \
 ```toml
 name = "arista-veos"
 
-nodes = [
-  { name = "dev01", model = "arista_veos" },
-]
+[[nodes]]
+name = "dev01"
+model = "arista_veos"
 ```
 
 

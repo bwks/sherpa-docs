@@ -9,11 +9,23 @@
 ```toml
 name = "sherpa-kubernetes"
 
-nodes = [
-  { name = "utl01", model = "flatcar_linux" },
-  { name = "ctl01", model = "flatcar_linux" },
-  { name = "wrk01", model = "flatcar_linux" },
-  { name = "wrk01", model = "flatcar_linux" },
-  { name = "wrk01", model = "flatcar_linux" },
-]
+[[nodes]]
+name = "utl01"
+model = "flatcar_linux"
+
+[[nodes]]
+name = "ctl01"
+model = "flatcar_linux"
+
+[[nodes]]
+name = "wrk01"
+model = "flatcar_linux"
+
+[[nodes]]
+name = "wrk01"
+model = "flatcar_linux"
+
+[[nodes]]
+name = "wrk01"
+model = "flatcar_linux"
 ```

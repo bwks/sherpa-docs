@@ -11,9 +11,9 @@ Set `provision_current_user` at the top of the manifest. It defaults to `false`.
 name = "personal-lab"
 provision_current_user = true
 
-nodes = [
-  { name = "vm", model = "ubuntu_linux" },
-]
+[[nodes]]
+name = "vm"
+model = "ubuntu_linux"
 ```
 
 ## Before You Start

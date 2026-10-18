@@ -29,9 +29,12 @@ sherpa server image import \
 ```toml
 name = "generic-unikernel"
 
-nodes = [
-  { name = "dev01", model = "generic_unikernel", version = "v1.0.0", kernel_cmdline = "/usr/bin/nginx", ready_port = 80 },
-]
+[[nodes]]
+name = "dev01"
+model = "generic_unikernel"
+version = "v1.0.0"
+kernel_cmdline = "/usr/bin/nginx"
+ready_port = 80
 ```
 
 ## Node Access

@@ -27,13 +27,18 @@ mixed VM-to-container links.
 P2P eBPF is configured on a per-link basis with the `p2p = true` setting.
 
 ```toml
-nodes = [
-    { name = "dev01", model = "arista_veos" },
-    { name = "dev02", model = "arista_ceos" },
-]
-links = [
-    { src = "dev01::eth1", dst = "dev02::eth1", p2p = true },
-]
+[[nodes]]
+name = "dev01"
+model = "arista_veos"
+
+[[nodes]]
+name = "dev02"
+model = "arista_ceos"
+
+[[links]]
+src = "dev01::eth1"
+dst = "dev02::eth1"
+p2p = true
 ```
 
 #### Link Impairments
@@ -42,9 +47,15 @@ P2P eBPF links support optional link impairments via TC netem, which
 coexists with the eBPF redirect program.
 
 ```toml
-links = [
-    { src = "dev01::eth1", dst = "dev02::eth1", p2p = true, impairment = { delay = 10, jitter = 2, loss_percent = 0.5 } },
-]
+[[links]]
+src = "dev01::eth1"
+dst = "dev02::eth1"
+p2p = true
+
+[links.impairment]
+delay = 10
+jitter = 2
+loss_percent = 0.5
 ```
 
 Available impairment parameters:
@@ -74,13 +85,17 @@ PTP Bridge is the default configuration and does not required any mode
 setting to be defined.
 
 ```toml
-nodes = [
-    { name = "dev01", model = "arista_veos" },
-    { name = "dev02", model = "arista_ceos" },
-]
-links = [
-    { src = "dev01::eth1", dst = "dev02::eth1" },
-]
+[[nodes]]
+name = "dev01"
+model = "arista_veos"
+
+[[nodes]]
+name = "dev02"
+model = "arista_ceos"
+
+[[links]]
+src = "dev01::eth1"
+dst = "dev02::eth1"
 ```
 
 !!! Note
@@ -110,13 +125,18 @@ PTP UDP link interfaces CANNOT be used as for packet captures.
 PTP UDP is configured on a per-link basis with the `mode = "p2p-udp"` setting.
 
 ```toml
-nodes = [
-    { name = "dev03", model = "arista_veos" },
-    { name = "dev04", model = "arista_veos" },
-]
-links = [
-    { src = "dev03::eth1", dst = "dev04::eth1", mode = "p2p-udp" },
-]
+[[nodes]]
+name = "dev03"
+model = "arista_veos"
+
+[[nodes]]
+name = "dev04"
+model = "arista_veos"
+
+[[links]]
+src = "dev03::eth1"
+dst = "dev04::eth1"
+mode = "p2p-udp"
 ```
 
 !!! Note
@@ -146,13 +166,18 @@ to a container if the container crashes.
 PTP vEth is configured on a per-link basis with the `mode = "p2p-veth"` setting.
 
 ```toml
-nodes = [
-    { name = "dev05", model = "arista_ceos" },
-    { name = "dev06", model = "arista_ceos" },
-]
-links = [
-    { src = "dev05::eth1", dst = "dev06::eth1", mode = "p2p-veth" },
-]
+[[nodes]]
+name = "dev05"
+model = "arista_ceos"
+
+[[nodes]]
+name = "dev06"
+model = "arista_ceos"
+
+[[links]]
+src = "dev05::eth1"
+dst = "dev06::eth1"
+mode = "p2p-veth"
 ```
 
 !!! Note

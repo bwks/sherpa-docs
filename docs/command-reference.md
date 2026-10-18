@@ -33,6 +33,25 @@ Create a new example `manifest.toml` in the current directory.
 | ---- | ----------- |
 | `--force`, `-f` | Overwrite manifest file if one exists |
 
+The generated manifest has a random lab name and two linked Linux nodes:
+
+```toml
+name = "absolute-grubworm"
+provision_current_user = false
+
+[[nodes]]
+name = "dev01"
+model = "ubuntu_linux"
+
+[[nodes]]
+name = "dev02"
+model = "fedora_linux"
+
+[[links]]
+src = "dev01::eth1"
+dst = "dev02::eth1"
+```
+
 ### `sherpa init`
 
 Initialise a Sherpa client environment. Creates the `~/.sherpa` directory structure and default configuration.

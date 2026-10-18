@@ -59,9 +59,12 @@ sherpa server image import \
 ```toml
 name = "unikraft-unikernel"
 
-nodes = [
-  { name = "dev01", model = "unikraft_unikernel", version = "v1.0.0", kernel_cmdline = "/usr/bin/nginx", ready_port = 80 },
-]
+[[nodes]]
+name = "dev01"
+model = "unikraft_unikernel"
+version = "v1.0.0"
+kernel_cmdline = "/usr/bin/nginx"
+ready_port = 80
 ```
 
 ## Node Access

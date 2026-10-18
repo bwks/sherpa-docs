@@ -34,9 +34,9 @@ sherpa server image import \
 ```toml
 name = "ubuntu-linux"
 
-nodes = [
-  { name = "dev01", model = "ubuntu_linux" },
-]
+[[nodes]]
+name = "dev01"
+model = "ubuntu_linux"
 ```
 
 

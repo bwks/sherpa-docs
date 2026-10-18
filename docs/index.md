@@ -13,22 +13,49 @@ networking, storage, and initial configuration.
 # manifest.toml
 name = "my-lab"
 
-nodes = [
-  { name = "spine01", model = "arista_ceos" },
-  { name = "spine02", model = "arista_ceos" },
-  { name = "leaf01",  model = "sonic_linux" },
-  { name = "leaf02",  model = "sonic_linux" },
-  { name = "srv01",   model = "ubuntu_linux" },
-]
+[[nodes]]
+name = "spine01"
+model = "arista_ceos"
 
-links = [
-  { src = "spine01::eth1", dst = "leaf01::eth51" },
-  { src = "spine01::eth2", dst = "leaf02::eth51" },
-  { src = "spine02::eth1", dst = "leaf01::eth52" },
-  { src = "spine02::eth2", dst = "leaf02::eth52" },
-  { src = "leaf01::eth1",  dst = "srv01::eth1" },
-  { src = "leaf02::eth1",  dst = "srv01::eth2" },
-]
+[[nodes]]
+name = "spine02"
+model = "arista_ceos"
+
+[[nodes]]
+name = "leaf01"
+model = "sonic_linux"
+
+[[nodes]]
+name = "leaf02"
+model = "sonic_linux"
+
+[[nodes]]
+name = "srv01"
+model = "ubuntu_linux"
+
+[[links]]
+src = "spine01::eth1"
+dst = "leaf01::eth51"
+
+[[links]]
+src = "spine01::eth2"
+dst = "leaf02::eth51"
+
+[[links]]
+src = "spine02::eth1"
+dst = "leaf01::eth52"
+
+[[links]]
+src = "spine02::eth2"
+dst = "leaf02::eth52"
+
+[[links]]
+src = "leaf01::eth1"
+dst = "srv01::eth1"
+
+[[links]]
+src = "leaf02::eth1"
+dst = "srv01::eth2"
 ```
 
 **Build the lab**

@@ -38,9 +38,10 @@ docker image pull mysql:8.0
 ```toml
 name = "mysql"
 
-nodes = [
-  { name = "db01", model = "mysql", version = "8.0" },
-]
+[[nodes]]
+name = "db01"
+model = "mysql"
+version = "8.0"
 ```
 
 

@@ -38,9 +38,9 @@ sherpa server image import \
 ```toml
 name = "silly-sausage"
 
-nodes = [
-  { name = "dev01", model = "windows_server" },
-]
+[[nodes]]
+name = "dev01"
+model = "windows_server"
 ```
 
 

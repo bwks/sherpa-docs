@@ -42,9 +42,9 @@ sherpa server image import \
 ```toml
 name = "flatcar-linux"
 
-nodes = [
-  { name = "dev01", model = "flatcar_linux" },
-]
+[[nodes]]
+name = "dev01"
+model = "flatcar_linux"
 ```
 
 

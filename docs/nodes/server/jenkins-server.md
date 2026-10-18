@@ -36,9 +36,9 @@ sherpa server image import \
 ```toml
 name = "jenkins-server"
 
-nodes = [
-  { name = "jenkins01", model = "jenkins_server" },
-]
+[[nodes]]
+name = "jenkins01"
+model = "jenkins_server"
 ```
 
 ## Node Access

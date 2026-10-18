@@ -38,9 +38,9 @@ docker image pull hashicorp/vault:1.21
 ```toml
 name = "hashicorp-vault"
 
-nodes = [
-  { name = "vault01", model = "hashicorp_vault" },
-]
+[[nodes]]
+name = "vault01"
+model = "hashicorp_vault"
 ```
 
 ## Node Access
