@@ -43,7 +43,7 @@ Stores user accounts and credentials.
 
 | Field           | Type            | Description                     |
 | --------------- | --------------- | ------------------------------- |
-| `username`      | string          | Unique username (min 3 chars)   |
+| `username`      | string          | Unique lower-case username, 3–32 chars |
 | `password_hash` | string          | Argon2id password hash          |
 | `is_admin`      | bool            | Admin flag (default: false)     |
 | `ssh_keys`      | array\<string\> | Public SSH keys                 |

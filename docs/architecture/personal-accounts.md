@@ -44,15 +44,11 @@ containers, unikernels and network devices are not changed.
 
 ### Username Rules
 
-Your username must:
+Your Sherpa username is used as the login name, so it already meets the rules for one. See
+[`sherpa server user create`](../command-reference.md#sherpa-server-user-create) for the
+username rules.
 
-- be at most 32 characters
-- start with a lowercase letter or underscore
-- contain only lowercase letters, digits, underscores and hyphens
-- not be `root` or `sherpa`
-
-If the username is invalid, or you have no valid keys registered, `sherpa up` stops before it
-creates anything.
+If you have no valid keys registered, `sherpa up` stops before it creates anything.
 
 ## Connect
 

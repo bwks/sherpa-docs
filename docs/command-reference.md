@@ -281,6 +281,21 @@ sherpa server user create <username>
 | `--admin` | Make the user an administrator |
 | `--ssh-key` | SSH public keys (can be specified multiple times) |
 
+Usernames are also your login name on lab nodes, so they follow Linux login name rules. A
+username must:
+
+- be 3–32 characters long
+- start with a letter or underscore
+- contain only letters, digits, underscores and hyphens
+- not be a reserved name
+
+Usernames are not case-sensitive. They are saved in lower case, so `Brad` is saved as `brad`,
+and you can log in as either.
+
+Reserved names include `admin`, `root` and `sherpa`, system accounts such as `daemon` and
+`nobody`, names starting with `systemd-`, and the default users of common images and network
+devices, such as `ubuntu`, `core`, `ec2-user`, `cisco` and `cumulus`.
+
 ### `sherpa server user list`
 
 List all user accounts. Admin only.
