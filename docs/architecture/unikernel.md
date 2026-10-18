@@ -2,6 +2,8 @@
 
 Unikernels are single-purpose machine images that package an application with only the OS primitives it needs, resulting in a minimal footprint. In Sherpa, unikernels run on the [KVM](https://linux-kvm.org/page/Main_Page) hypervisor using the [QEMU](https://wiki.qemu.org/Main_Page) emulator and the [Libvirt](https://libvirt.org) API — the same pathway used for virtual machines.
 
+![Unikernel architecture: sherpad drives libvirtd, which runs one QEMU process per unikernel on KVM; the kernel ELF or boot disk is a copy in sherpa-pool](unikernel.svg)
+
 Sherpa supports three unikernel models:
 
 | Model | Boot Mode | Description |
@@ -15,7 +17,7 @@ Sherpa supports three unikernel models:
 Unikernels support two boot modes that determine how the hypervisor loads the application:
 
 - **DirectKernel** — The kernel ELF binary is loaded directly by QEMU via the `<kernel>` libvirt XML element. An optional kernel command line can be passed via `<cmdline>` using the `kernel_cmdline` manifest parameter. The ELF is copied into the storage pool for each node, so the original image is never used directly.
-- **DiskBoot** — The unikernel boots from a cloned disk image, the same way as a traditional VM (`<boot dev='hd'/>`).
+- **DiskBoot** — The unikernel boots from a copy of its disk image in the storage pool, the same way as a traditional VM (`<boot dev='hd'/>`).
 
 ## How it Works
 
@@ -29,7 +31,7 @@ When a lab is created, Sherpa performs the following for each unikernel node:
 
 === "DiskBoot"
 
-    1. **Clone** the base disk image from the [storage pool](storage.md) into the lab directory
+    1. **Copy** the disk image from the image store into the [storage pool](storage.md)
     2. **Resize** the boot disk if `boot_disk_size` is specified in the manifest
     3. **Generate** a libvirt domain XML definition from the node's parameters
     4. **Define and start** the domain via the Libvirt API
