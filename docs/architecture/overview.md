@@ -2,7 +2,7 @@
 
 Sherpa is a lab management platform for building virtual network topologies using virtual machines, containers, and unikernels. It is designed as a client/server architecture with multiple access methods.
 
-![Client/Server Architecture](client-server-architecture.svg)
+![Sherpa architecture: the sherpa CLI and web browsers connect to sherpad, which drives Libvirt, Docker and SurrealDB and manages host networking and storage](overview.svg)
 
 ## Client/Server
 
@@ -28,7 +28,7 @@ Sherpa supports three node kinds through different virtualisation providers:
 | -------- | ---------- | --------- |
 | [Virtual Machine](virtual-machine.md) | KVM/QEMU via Libvirt | Virtual Machine |
 | [Container](container.md) | Docker (Bollard API) | Container |
-| [Unikernel](unikernel.md) | NanoVMs via Libvirt | Unikernel |
+| [Unikernel](unikernel.md) | Nanos and Unikraft via Libvirt | Unikernel |
 
 ### Virtual Machines
 
@@ -40,11 +40,11 @@ Containers run on the Docker engine. Sherpa communicates with Docker via the Bol
 
 ### Unikernels
 
-Unikernels from NanoVMs are single-purpose machine images that run directly on KVM/QEMU via Libvirt, similar to virtual machines but with a minimal footprint.
+Unikernels are single-purpose machine images that run directly on KVM/QEMU via Libvirt, similar to virtual machines but with a minimal footprint. Sherpa supports [Nanos](../nodes/unikernel/nanos.md) and [Unikraft](../nodes/unikernel/unikraft.md) unikernels.
 
 ## Database
 
-Sherpa uses [SurrealDB](https://surrealdb.com/) as its embedded database for storing lab state, node configurations, user accounts, and image metadata. The database runs in-process with the server — no external database service is required. See [Database](database.md) for details.
+Sherpa uses [SurrealDB](https://surrealdb.com/) to store lab state, node configurations, user accounts, and image metadata. SurrealDB runs on the same host as the `sherpa-db` Docker container, and `sherpad` connects to it over WebSocket on port `8000`. See [Database](database.md) for details.
 
 ## Authentication
 

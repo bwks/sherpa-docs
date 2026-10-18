@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 572" width="640" height="572" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Sherpa architecture overview</title>
+  <desc id="desc">The sherpa CLI connects to sherpad over WSS and browsers over HTTPS, both on port 3030. sherpad drives Libvirt for KVM/QEMU virtual machines and unikernels, Docker for containers, stores state in SurrealDB over WebSocket on port 8000, and can export telemetry to an OTLP collector.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --body: #47585c;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+      --orange: #ed7d3a;
+      --orange-fill: #fef4ec;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --body: #9aabae;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+        --orange-fill: #33200f;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .core { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 2; }
+    .chip { fill: var(--card); stroke: var(--blue); stroke-width: 1.25; }
+    .vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 1.5; }
+    .ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 1.5; }
+    .db { fill: var(--orange-fill); stroke: var(--orange); stroke-width: 1.5; }
+    .ext { fill: var(--card); stroke: var(--border); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .tl { fill: var(--heading); font-size: 18px; font-weight: 700; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 1.5; }
+    .dash { stroke-dasharray: 5 4; }
+    .head { fill: var(--line); }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="head" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="640" height="572" rx="14"/>
+
+  <!-- Clients and external services -->
+  <text class="h" x="32" y="40">CLIENTS</text>
+  <rect class="box" x="32" y="52" width="180" height="48" rx="8"/>
+  <text class="t" x="122" y="81" text-anchor="middle">sherpa CLI</text>
+  <rect class="box" x="230" y="52" width="180" height="48" rx="8"/>
+  <text class="t" x="320" y="81" text-anchor="middle">Web browser</text>
+
+  <text class="h" x="428" y="40">EXTERNAL · OPTIONAL</text>
+  <rect class="ext" x="428" y="52" width="180" height="48" rx="8"/>
+  <text class="t" x="518" y="81" text-anchor="middle">OTel collector</text>
+
+  <!-- Server -->
+  <rect class="zone" x="16" y="124" width="608" height="432" rx="12"/>
+  <text class="h" x="32" y="146">SHERPA SERVER</text>
+
+  <rect class="core" x="32" y="164" width="576" height="120" rx="10"/>
+  <text class="tl" x="48" y="200">sherpad</text>
+
+  <rect class="chip" x="48" y="220" width="127" height="48" rx="6"/>
+  <text class="tc" x="111.5" y="249" text-anchor="middle">WebSocket RPC</text>
+  <rect class="chip" x="187" y="220" width="127" height="48" rx="6"/>
+  <text class="tc" x="250.5" y="249" text-anchor="middle">Web UI</text>
+  <rect class="chip" x="326" y="220" width="127" height="48" rx="6"/>
+  <text class="tc" x="389.5" y="249" text-anchor="middle">REST API</text>
+  <rect class="chip" x="465" y="220" width="127" height="48" rx="6"/>
+  <text class="tc" x="528.5" y="249" text-anchor="middle">API docs</text>
+
+  <!-- Client connections -->
+  <line class="ln" x1="160" y1="100" x2="160" y2="162" marker-end="url(#arrow)"/>
+  <line class="ln" x1="320" y1="100" x2="320" y2="162" marker-end="url(#arrow)"/>
+  <line class="ln dash" x1="560" y1="164" x2="560" y2="102" marker-end="url(#arrow)"/>
+
+  <!-- sherpad to providers -->
+  <line class="ln" x1="123" y1="284" x2="123" y2="342" marker-end="url(#arrow)"/>
+  <line class="ln" x1="320" y1="284" x2="320" y2="342" marker-end="url(#arrow)"/>
+  <line class="ln" x1="517" y1="284" x2="517" y2="342" marker-end="url(#arrow)"/>
+
+  <!-- Virtual machines and unikernels -->
+  <rect class="vm" x="32" y="344" width="182" height="52" rx="8"/>
+  <text class="t" x="123" y="375" text-anchor="middle">Libvirt</text>
+  <line class="ln" x1="123" y1="396" x2="123" y2="414" marker-end="url(#arrow)"/>
+  <rect class="vm" x="32" y="416" width="182" height="52" rx="8"/>
+  <text class="t" x="123" y="447" text-anchor="middle">KVM / QEMU</text>
+  <path class="ln" d="M123 468 V480 H75.5 V498" marker-end="url(#arrow)"/>
+  <path class="ln" d="M123 480 H170.5 V498" marker-end="url(#arrow)"/>
+  <rect class="box" x="32" y="500" width="87" height="40" rx="8"/>
+  <text class="tc" x="75.5" y="524" text-anchor="middle">VMs</text>
+  <rect class="box" x="127" y="500" width="87" height="40" rx="8"/>
+  <text class="tc" x="170.5" y="524" text-anchor="middle">Unikernels</text>
+
+  <!-- Containers -->
+  <rect class="ct" x="229" y="344" width="182" height="52" rx="8"/>
+  <text class="t" x="320" y="375" text-anchor="middle">Docker Engine</text>
+  <line class="ln" x1="320" y1="396" x2="320" y2="414" marker-end="url(#arrow)"/>
+  <rect class="ct" x="229" y="416" width="182" height="52" rx="8"/>
+  <text class="t" x="320" y="447" text-anchor="middle">containerd</text>
+  <line class="ln" x1="320" y1="468" x2="320" y2="498" marker-end="url(#arrow)"/>
+  <rect class="box" x="229" y="500" width="182" height="40" rx="8"/>
+  <text class="tc" x="320" y="524" text-anchor="middle">Containers</text>
+
+  <!-- Database -->
+  <rect class="db" x="426" y="344" width="182" height="52" rx="8"/>
+  <text class="t" x="517" y="375" text-anchor="middle">SurrealDB</text>
+</svg>
