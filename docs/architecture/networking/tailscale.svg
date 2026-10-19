@@ -50,6 +50,7 @@
     .tunnel { fill: none; stroke: var(--orange); stroke-width: 3; stroke-dasharray: 8 5; opacity: 0.8; }
     .fwd { fill: none; stroke: var(--orange); stroke-width: 3; opacity: 0.8; }
     .flow-head { fill: var(--orange); }
+    .halo { stroke: var(--zone); stroke-width: 8; stroke-linejoin: round; paint-order: stroke; }
   </style>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse">
@@ -74,7 +75,6 @@
 
   <!-- Host -->
   <rect class="zone" x="16" y="180" width="608" height="332" rx="12"/>
-  <text class="h" x="32" y="202">LINUX HOST</text>
 
   <line class="ln" x1="320" y1="156" x2="320" y2="216"/>
   <rect class="box" x="32" y="216" width="576" height="40" rx="8"/>
@@ -118,13 +118,16 @@
   <text class="ic" x="568" y="425" text-anchor="middle">UK</text>
 
   <!-- Traffic from your device to a node -->
-  <line class="tunnel" x1="140" y1="92" x2="140" y2="370" marker-end="url(#arrow)"/>
+  <line class="tunnel" x1="106" y1="92" x2="106" y2="370" marker-end="url(#arrow)"/>
   <line class="fwd" x1="106" y1="400" x2="106" y2="416"/>
   <line class="fwd" x1="106" y1="444" x2="106" y2="460"/>
   <line class="fwd" x1="168" y1="474" x2="568" y2="474"/>
   <line class="fwd" x1="392" y1="474" x2="392" y2="450" marker-end="url(#arrow)"/>
   <line class="fwd" x1="480" y1="474" x2="480" y2="450" marker-end="url(#arrow)"/>
   <line class="fwd" x1="568" y1="474" x2="568" y2="454" marker-end="url(#arrow)"/>
+
+  <!-- Host label drawn over the tunnel, with a halo so the line stops short of it -->
+  <text class="h halo" x="32" y="202">LINUX HOST</text>
 
   <!-- Legend -->
   <line class="tunnel" x1="32" y1="536" x2="64" y2="536"/>
