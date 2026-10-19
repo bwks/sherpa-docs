@@ -379,7 +379,7 @@ links = ["dev01::eth2", "dev02::eth2", "dev03::eth1"]
 | `name` | string | A user-friendly name for the bridge |
 | `links` | list&lt;string&gt; | A list of `<device>::<interface>` mappings to connect to the bridge |
 
-For more information on bridge types see the [private-bridge](architecture/networking/node/private-bridge.md) architecture documentation.
+For more information on bridge types see the [private-bridge](architecture/networking/modes/private-bridge.md) architecture documentation.
 
 ### description (string)
 
@@ -436,7 +436,7 @@ loss_percent = 1.0
 | `reorder_percent` | float | Packet reordering percentage (`0.0` - `100.0`) |
 | `corrupt_percent` | float | Bit-flip corruption percentage (`0.0` - `100.0`) |
 
-For more information on link types see the [point-to-point](architecture/networking/node/point-to-point.md) architecture documentation.
+For more information on link types see the [point-to-point](architecture/networking/modes/point-to-point.md) architecture documentation.
 
 ### provision_current_user (bool)
 

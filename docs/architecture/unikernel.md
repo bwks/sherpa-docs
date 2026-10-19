@@ -74,7 +74,7 @@ Use the `--unikernel` flag with `sherpa server image list` or `sherpa server ima
 
 ## Networking
 
-Unikernels use the same networking as virtual machines — virtio interfaces attached to the [management network](networking/node/management.md) and data plane links as defined in the manifest. See [Virtual Machine — Networking](virtual-machine.md#networking) for details.
+Unikernels use the same networking as virtual machines — virtio interfaces attached to the [management network](networking/modes/management.md) and data plane links as defined in the manifest. See [Virtual Machine — Networking](virtual-machine.md#networking) for details.
 
 ## Console Access
 

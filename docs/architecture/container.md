@@ -51,7 +51,7 @@ By default, data plane links use Docker **macvlan** networks for Layer 2 connect
 | Passthru | Link interfaces. Each link has its own Linux bridge, passed straight through to one container. Pure L2, no IP addressing. |
 | Bridge | Unconnected interfaces. Several macvlan networks share the node's isolated bridge. |
 
-Links with `p2p = true` use a veth pair instead of macvlan. The container end is moved into the container's network namespace, and the host end is joined to its peer by an [eBPF redirect program](networking/node/point-to-point.md#p2p-ebpf).
+Links with `p2p = true` use a veth pair instead of macvlan. The container end is moved into the container's network namespace, and the host end is joined to its peer by an [eBPF redirect program](networking/modes/point-to-point.md#p2p-ebpf).
 
 After attachment, data interfaces are set to promiscuous mode and brought up. Disabled interfaces (unconnected links) are left admin-down.
 

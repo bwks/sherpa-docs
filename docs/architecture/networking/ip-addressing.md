@@ -5,7 +5,7 @@ so labs never overlap with each other on the same server.
 
 ## Management Network
 
-Each lab has a [management network](node/management.md) with both an IPv4 and an IPv6 range.
+Each lab has a [management network](modes/management.md) with both an IPv4 and an IPv6 range.
 Every node receives one address from each.
 
 | | IPv4 | IPv6 |
@@ -51,7 +51,7 @@ Use `sherpa inspect <lab-id>` to see the addresses assigned to each node.
 ## Loopback Addresses
 
 Each lab also has a loopback range, used for node console access and
-[point-to-point links](node/point-to-point.md).
+[point-to-point links](modes/point-to-point.md).
 
 | | IPv4 | IPv6 |
 | - | ---- | ---- |

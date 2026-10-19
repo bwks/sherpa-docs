@@ -63,14 +63,12 @@ TLS is enabled by default. On first startup, the server auto-generates a self-si
 
 Sherpa manages several network types for connecting nodes:
 
-- **Management Network** — connects all nodes to the server for SSH access and ZTP
-- **Point-to-Point Links** — direct connections between two nodes
-- **Private Bridges** — shared segments visible only within a lab
-- **Public Bridges** — connects nodes to existing host bridges for external access
-- **Isolated Bridges** — segments with no external connectivity
-- **Reserved Bridges** — pre-allocated bridges managed outside of Sherpa
-
-See [Networking](networking/host/bridge.md) for the full networking architecture.
+- **[Management Network](networking/modes/management.md)** — connects all nodes to the server for SSH access and ZTP
+- **[Point-to-Point Links](networking/modes/point-to-point.md)** — direct connections between two nodes
+- **[Private Bridges](networking/modes/private-bridge.md)** — shared segments visible only within a lab
+- **[Public Bridges](networking/modes/public-bridge.md)** — connects nodes to the host's physical network (planned)
+- **[Isolated Bridges](networking/modes/isolated-bridge.md)** — holds a node's unused interfaces, link down
+- **[Reserved Bridges](networking/modes/reserved-bridge.md)** — holds interfaces a node reserves for its own control plane
 
 ## Zero-Touch Provisioning
 
