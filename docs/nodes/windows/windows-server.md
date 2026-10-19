@@ -12,7 +12,7 @@ Currently, only Windows Server 2022 is supported, but more versions are coming s
 
 ```
 sherpa server image import \
-  --src windows_server_2022-20260307.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 2022-20260307 \
   --model windows_server \
   --default

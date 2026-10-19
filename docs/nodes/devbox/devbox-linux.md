@@ -11,7 +11,7 @@ You can use [this](https://github.com/bwks/packer-devbox-linux) packer template 
 
 ```
 sherpa server image import \
-  --src devbox.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version ubuntu2404-20260320 \
   --model devbox_linux \
   --default

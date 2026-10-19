@@ -11,7 +11,7 @@
 
 ```
 sherpa server image import \
-  --src cumulus-vx-5.9.1.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --model cumulus_linux \
   --version 5.9.1 \
   --default

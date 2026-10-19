@@ -8,7 +8,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 
 ```
 sherpa server image import \
-  --src /tmp/vios_l2-adventerprisek9-m.ssa.high_iron_20200929.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 20200929 \
   --model cisco_iosvl2 \
   --default

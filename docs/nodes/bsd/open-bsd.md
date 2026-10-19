@@ -8,7 +8,7 @@ Base images can be downloaded from [BSD Cloud Images](https://bsd-cloud-image.or
 
 ```
 sherpa server image import \
-  --src openbsd-min.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --model open_bsd \
   --version 7.8 \
   --default

@@ -26,14 +26,14 @@ The extracted file is in `ova` format and needs to be converted to `qcow2`.
 mkdir aos-ova && \
   tar -xvf AOS-CX_10_16_1010.ova -C aos-ova && \
   cd aos-ova && \
-  qemu-img convert -p -f vmdk -O qcow2 arubaoscx-disk-image-genericx86-p4-20251110170622.vmdk aos-cx.qcow2
+  qemu-img convert -p -f vmdk -O qcow2 arubaoscx-disk-image-genericx86-p4-20251110170622.vmdk /some/path/<image_name>.qcow2
 ```
 
 ### Import
 
 ```
 sherpa server image import \
-  --src aos-cx.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 10.16 \
   --model aruba_aoscx \
   --default

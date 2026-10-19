@@ -8,7 +8,7 @@ Base images can be downloaded from [Ubuntu Cloud Images](https://cloud-images.ub
 
 ```
 sherpa server image import \
-  --src noble-server-cloudimg-amd64.img \
+  --src /some/path/<image_name>.qcow2 \
   --model ubuntu_linux \
   --version 24.04 \
   --default

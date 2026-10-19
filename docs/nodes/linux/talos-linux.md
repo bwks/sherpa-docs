@@ -46,7 +46,7 @@ Or import a downloaded image:
 
 ```
 sherpa server image import \
-  --src nocloud-amd64.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --model talos_linux \
   --version 1.14.4 \
   --default

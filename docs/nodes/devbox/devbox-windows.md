@@ -11,7 +11,7 @@ You can use [this](https://github.com/bwks/packer-devbox-windows) packer templat
 
 ```
 sherpa server image import \
-  --src devbox.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version windows11-20260320 \
   --model devbox_windows \
   --default

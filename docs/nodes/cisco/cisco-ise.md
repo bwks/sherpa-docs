@@ -27,14 +27,14 @@ and needs to be converted to `qcow2`.
 mkdir ise-ova && \
   tar -xvf Cisco-vISE-300-3.5.0.527.ova -C ise-ova && \
   cd ise-ova && \
-  qemu-img convert -p -f vmdk -O qcow2 Cisco-vISE-300-3.5.0.527-disk1.vmdk Cisco-vISE-300-3.5.0.527.qcow2
+  qemu-img convert -p -f vmdk -O qcow2 Cisco-vISE-300-3.5.0.527-disk1.vmdk /some/path/<image_name>.qcow2
 ```
 
 ### Import
 
 ```
 sherpa server image import \
-  --src Cisco-vISE-300-3.5.0.527.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 3.5.0 \
   --model cisco_ise \
   --default

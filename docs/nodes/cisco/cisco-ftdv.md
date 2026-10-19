@@ -8,7 +8,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 
 ```
 sherpa server image import \
-  --src Cisco_Secure_Firewall_Threat_Defense_Virtual-7.7.0-89.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 7.7.0-89 \
   --model cisco_ftdv \
   --default

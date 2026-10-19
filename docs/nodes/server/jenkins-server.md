@@ -11,7 +11,7 @@ You can use [this](https://github.com/bwks/packer-jenkins) packer template to bu
 
 ```
 sherpa server image import \
-  --src jenkins-server.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 0.1.0 \
   --model jenkins_server \
   --default

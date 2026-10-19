@@ -11,7 +11,7 @@ You can use [this](https://github.com/bwks/packer-virt) packer template to build
 
 ```
 sherpa server image import \
-  --src virt-server.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 0.1.0 \
   --model virt_server \
   --default

@@ -13,7 +13,7 @@ Base images can be downloaded from [TBC]().
 
 ```
 sherpa server image import \
-  --src sonic-vs.img \
+  --src /some/path/<image_name>.qcow2 \
   --model sonic_linux \
   --version 20251215 \
   --default

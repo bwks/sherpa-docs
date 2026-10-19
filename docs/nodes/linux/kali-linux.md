@@ -11,14 +11,14 @@ tar -xvf kali-linux-2026.1-cloud-genericcloud-amd64.tar.xz
 
 ## Convert image
 ```
-sudo virt-sparsify --format raw disk.raw --convert qcow2 kali.qcow2
+sudo virt-sparsify --format raw disk.raw --convert qcow2 /some/path/<image_name>.qcow2
 ```
 
 ## Import Image
 
 ```
 sherpa server image import \
-  --src kali.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --model kali_linux \
   --version 2026.1 \
   --default

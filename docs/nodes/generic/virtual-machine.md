@@ -6,7 +6,7 @@ A generic virtual machine allows for VM models that are not natively defined wit
 
 ```
 sherpa server image import \
-  --src filename.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version model-version  \
   --model generic_vm
 ```
