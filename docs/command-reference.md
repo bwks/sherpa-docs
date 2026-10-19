@@ -127,7 +127,9 @@ and paused nodes do not wait, because they resume an already running guest.
 
 With Tailscale enabled, a full resume starts the gateway using its saved identity
 before resuming nodes. No enrollment key is required. Using `--node` leaves the
-gateway alone.
+gateway alone. If the lab used an ephemeral key and was down long enough for
+Tailscale to remove the gateway device, the gateway cannot reconnect; see
+[Tailscale](architecture/networking/tailscale.md#choosing-an-auth-key).
 
 | Flag | Description |
 | ---- | ----------- |
