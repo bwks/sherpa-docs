@@ -10,7 +10,7 @@ Look for the Generic Cloud image.
 
 ```
 sherpa server image import \
-  --src CentOS-Stream-GenericCloud-x86_64-10-latest.x86_64.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --model centos_linux \
   --version 10-20260401 \
   --default

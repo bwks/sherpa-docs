@@ -10,7 +10,7 @@ Look for the `No Cloud` image with `cloud-init` enabled.
 
 ```
 sherpa server image import \
-  --src nocloud_alpine-3.23.0-x86_64-bios-cloudinit-r0.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --model alpine_linux \
   --version 3.23.0 \
   --default

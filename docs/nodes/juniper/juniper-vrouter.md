@@ -8,7 +8,7 @@ Base images can be downloaded from the [download](https://support.juniper.net/su
 
 ```
 sherpa server image import \
-  --src vJunos-router-25.2R1.9.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 25.2R1.9 \
   --model juniper_vrouter \
   --default

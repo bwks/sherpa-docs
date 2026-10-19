@@ -8,7 +8,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 
 ```
 sherpa server image import \
-  --src asav9-23-1.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 9-23-1 \
   --model cisco_asav \
   --default

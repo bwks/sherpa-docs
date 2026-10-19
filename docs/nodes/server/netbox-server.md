@@ -11,7 +11,7 @@ You can use [this](https://github.com/bwks/packer-netbox) packer template to bui
 
 ```
 sherpa server image import \
-  --src netbox-server.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 0.1.0 \
   --model netbox_server \
   --default

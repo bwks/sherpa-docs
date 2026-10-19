@@ -10,7 +10,7 @@ Look for the Generic No Cloud image.
 
 ```
 sherpa server image import \
-  --src Rocky-10-GenericCloud-Base.latest.x86_64.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --model rocky_linux \
   --version 10-20251215 \
   --default

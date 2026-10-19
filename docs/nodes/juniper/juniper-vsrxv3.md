@@ -15,7 +15,7 @@ Base images can be downloaded from the [download](https://support.juniper.net/su
 
 ```
 sherpa server image import \
-  --src junos-vsrx3-x86-64-23.2R2.21.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 23.2R2.21 \
   --model juniper_vsrxv3 \
   --default

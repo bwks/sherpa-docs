@@ -10,7 +10,7 @@ Look for the Generic No Cloud image.
 
 ```
 sherpa server image import \
-  --src AlmaLinux-10-GenericCloud-latest.x86_64_v2.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --model alma_linux \
   --version 10-20241125 \
   --default

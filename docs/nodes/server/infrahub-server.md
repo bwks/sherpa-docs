@@ -11,7 +11,7 @@ You can use [this](https://github.com/bwks/packer-infrahub) packer template to b
 
 ```
 sherpa server image import \
-  --src infrahub-server.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 0.1.0 \
   --model infrahub_server \
   --default

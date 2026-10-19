@@ -8,7 +8,7 @@ Base images can be downloaded from the [download](https://support.juniper.net/su
 
 ```
 sherpa server image import \
-  --src vJunosEvolved-25.2R1.8-EVO.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 25.2R1.8 \
   --model juniper_vevolved \
   --default

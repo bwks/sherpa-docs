@@ -2,8 +2,10 @@
 
 ## Base Image
 
-Omarchy does not publish a cloud-ready disk image. Install Omarchy, then prepare the installed
-disk with `cloud-init` installed and enabled and a clean instance state. Save it as a `qcow2` file.
+Omarchy does not publish a cloud-ready disk image. A cloud-init enabled Omarchy qcow2 image is
+required. You can use [this](https://github.com/bwks/packer-omarchy-linux) packer template to
+build the image. It runs the official Omarchy installer unattended, adds `cloud-init`, and writes
+the image to `output/omarchy.qcow2`.
 
 !!! Warning
     The Omarchy installer ISO cannot be used as an image. Sherpa does not run the installer.
@@ -12,14 +14,11 @@ disk with `cloud-init` installed and enabled and a clean instance state. Save it
 
 ```
 sherpa server image import \
-  --src /absolute/path/omarchy.qcow2 \
-  --version <version> \
+  --src /some/path/<image_name>.qcow2 \
+  --version 4.0.4 \
   --model omarchy_linux \
   --default
 ```
-
-!!! Note
-    The `--src` path is on the server.
 
 ## Default Node Parameters
 

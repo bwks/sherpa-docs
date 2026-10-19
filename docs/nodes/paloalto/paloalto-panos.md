@@ -14,7 +14,7 @@ Base images can be downloaded from the Paloalto support portal.
 
 ```
 sherpa server image import \
-  --src PA-VM-KVM-11.1.6-h7.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 11.1.6-h7  \
   --model paloalto_panos
 ```

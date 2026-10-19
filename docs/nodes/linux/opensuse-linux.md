@@ -10,7 +10,7 @@ Look for the Generic No Cloud image.
 
 ```
 sherpa server image import \
-  --src openSUSE-Leap-15.6.x86_64-NoCloud.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --model opensuse_linux \
   --version 15.6 \
   --default

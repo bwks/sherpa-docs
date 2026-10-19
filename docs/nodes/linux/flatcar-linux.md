@@ -16,7 +16,7 @@ host system install process.
 
 ```
 sherpa server image import \
-  --src flatcar_production_qemu_image.img \
+  --src /some/path/<image_name>.qcow2 \
   --model flatcar_linux \
   --version 20251215 \
   --default

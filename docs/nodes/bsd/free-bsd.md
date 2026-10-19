@@ -9,7 +9,7 @@ Base images can be downloaded from [BSD Cloud Images](https://bsd-cloud-image.or
 ```
 
 sherpa server image import \
- --src freebsd-14.2-ufs-2024-12-08.qcow2 \
+ --src /some/path/<image_name>.qcow2 \
  --model free_bsd \
  --version 14.2 \
  --default

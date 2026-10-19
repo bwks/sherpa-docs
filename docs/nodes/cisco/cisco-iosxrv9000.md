@@ -8,7 +8,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 
 ```
 sherpa server image import \
-  --src xrv9k-fullk9-x-25.1.1.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --version 25.1.1 \
   --model cisco_iosxrv9000 \
   --default

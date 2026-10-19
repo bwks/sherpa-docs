@@ -9,7 +9,7 @@ using [this](https://github.com/bwks/packer-mikrotik) Packer template.
 
 ```
 sherpa server image import \
-  --src chr-7.20.8.img \
+  --src /some/path/<image_name>.qcow2 \
   --model mikrotik_chr \
   --version 7.20.8 \
   --default

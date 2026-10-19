@@ -14,7 +14,7 @@ Look for the `qcow2` image with `cloud` in the name.
 
 ```
 sherpa server image import \
-  --src SLES15-SP7-Minimal-VM.x86_64-Cloud-GM.qcow2 \
+  --src /some/path/<image_name>.qcow2 \
   --model suse_linux \
   --version 15.SP7 \
   --default
