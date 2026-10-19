@@ -11,17 +11,14 @@ nav:
     - architecture/container.md
     - architecture/unikernel.md
     - Networking:
-      - Host:
-        - architecture/networking/host/bridge.md
-
       - architecture/networking/ip-addressing.md
-      - Node:
-        - architecture/networking/node/management.md
-        - architecture/networking/node/point-to-point.md
-        - architecture/networking/node/private-bridge.md
-        - architecture/networking/node/public-bridge.md
-        - architecture/networking/node/isolated-bridge.md
-        - architecture/networking/node/reserved-bridge.md
+      - Modes:
+        - architecture/networking/modes/management.md
+        - architecture/networking/modes/point-to-point.md
+        - architecture/networking/modes/private-bridge.md
+        - architecture/networking/modes/public-bridge.md
+        - architecture/networking/modes/isolated-bridge.md
+        - architecture/networking/modes/reserved-bridge.md
       - Tailscale: architecture/networking/tailscale.md
 
     - architecture/storage.md
@@ -133,8 +130,8 @@ nav:
   - Examples:
     - examples/basic.md
     - examples/clos.md
-    - examples/test-servers.md
     - examples/kubernetes.md
+    - examples/test-servers.md
   - Help:
     - help/libvirt.md
     - help/docker.md

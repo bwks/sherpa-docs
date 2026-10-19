@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 688 488" width="688" height="488" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Sherpa management network</title>
+  <desc id="desc">Each lab has a management bridge, brm followed by the lab ID. Outbound traffic flows from the nodes up through the bridge and leaves the host through source NAT on the host uplink. Two networks share the bridge: a Docker bridge network for the lab router, the optional Tailscale gateway and container nodes, and a libvirt NAT network for VM and unikernel nodes.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+      --yellow: #f7ce5b;
+      --yellow-fill: #fef8e8;
+      --orange: #ed7d3a;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+        --yellow-fill: #332a0c;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .core { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 2; }
+    .vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 1.5; }
+    .nat { fill: var(--yellow-fill); stroke: var(--yellow); stroke-width: 2; }
+    .ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 1.5; }
+    .chip-vm { fill: var(--card); stroke: var(--blue); stroke-width: 1.25; }
+    .chip-ct { fill: var(--card); stroke: var(--green); stroke-width: 1.25; }
+    .ext { fill: var(--card); stroke: var(--border); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+    .flow { fill: var(--orange); opacity: 0.35; }
+    .flow-t { fill: var(--heading); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .icon-ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 3; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .icon-ext { fill: var(--card); stroke: var(--muted); stroke-width: 2.5; stroke-dasharray: 5 4; }
+    .ic { fill: var(--heading); font-size: 14px; font-weight: 700; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="688" height="488" rx="14"/>
+
+  <g transform="translate(48 0)">
+
+  <!-- Physical network -->
+  <text class="h" x="32" y="40">PHYSICAL NETWORK</text>
+  <rect class="box" x="32" y="52" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="77" text-anchor="middle">Upstream network</text>
+
+  <!-- Host -->
+  <rect class="zone" x="16" y="116" width="608" height="348" rx="12"/>
+  <text class="h" x="32" y="138">LINUX HOST</text>
+
+  <line class="ln" x1="320" y1="92" x2="320" y2="152"/>
+  <rect class="box" x="32" y="152" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="177" text-anchor="middle">Host uplink</text>
+
+  <line class="ln" x1="320" y1="192" x2="320" y2="224"/>
+  <rect class="core" x="32" y="224" width="576" height="40" rx="8"/>
+  <rect class="nat" x="40" y="230" width="112" height="28" rx="6"/>
+  <text class="tc" x="96" y="249" text-anchor="middle">Source NAT</text>
+  <text class="t" x="320" y="249" text-anchor="middle">brm-&lt;lab-id&gt; (gateway)</text>
+
+  <!-- Docker side -->
+  <line class="ln" x1="173" y1="264" x2="173" y2="296"/>
+  <rect class="ct" x="32" y="296" width="282" height="40" rx="8"/>
+  <text class="t" x="173" y="321" text-anchor="middle">Docker bridge network</text>
+
+  <line class="ln" x1="79" y1="336" x2="79" y2="372"/>
+  <circle class="icon-ct" cx="79" cy="396" r="24"/>
+  <text class="ic" x="79" y="401" text-anchor="middle">RT</text>
+  <text class="tc" x="79" y="444" text-anchor="middle">Lab router</text>
+
+  <line class="ln" x1="173" y1="336" x2="173" y2="372"/>
+  <circle class="icon-ext" cx="173" cy="396" r="24"/>
+  <text class="ic" x="173" y="401" text-anchor="middle">TS</text>
+  <text class="tc" x="173" y="444" text-anchor="middle">Tailscale</text>
+
+  <line class="ln" x1="267" y1="336" x2="267" y2="372"/>
+  <circle class="icon-ct" cx="267" cy="396" r="24"/>
+  <text class="ic" x="267" y="401" text-anchor="middle">CT</text>
+  <text class="tc" x="267" y="444" text-anchor="middle">Container</text>
+
+  <!-- libvirt side -->
+  <line class="ln" x1="467" y1="264" x2="467" y2="296"/>
+  <rect class="vm" x="326" y="296" width="282" height="40" rx="8"/>
+  <text class="t" x="467" y="321" text-anchor="middle">libvirt NAT network</text>
+
+  <line class="ln" x1="420" y1="336" x2="420" y2="372"/>
+  <rect class="icon-vm" x="396" y="372" width="48" height="48" rx="10"/>
+  <text class="ic" x="420" y="401" text-anchor="middle">VM</text>
+  <text class="tc" x="420" y="444" text-anchor="middle">VM</text>
+
+  <line class="ln" x1="514" y1="336" x2="514" y2="368"/>
+  <polygon class="icon-vm" points="514,368 542,396 514,424 486,396"/>
+  <text class="ic" x="514" y="401" text-anchor="middle">UK</text>
+  <text class="tc" x="514" y="444" text-anchor="middle">Unikernel</text>
+
+  </g>
+
+  <!-- Outbound flow -->
+  <polygon class="flow" points="16,460 40,460 40,126 52,126 28,94 4,126 16,126"/>
+  <text class="flow-t" transform="translate(32.5 293) rotate(-90)" text-anchor="middle">OUTBOUND TRAFFIC</text>
+</svg>

@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 688 560" width="688" height="560" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Sherpa Tailscale gateway</title>
+  <desc id="desc">Your tailnet device and the Tailscale coordination server reach the Sherpa host over the internet. The lab's Tailscale gateway is a container on the lab's management bridge, brm followed by the lab ID, alongside the lab nodes. A WireGuard tunnel from your device enters through the host uplink and the management bridge to the gateway's tailscale0 interface. In the gateway the traffic passes tailscale0, a route filter that only allows the lab's management subnets, and source NAT, then is forwarded back onto the management bridge to the nodes. The gateway keeps its Tailscale identity in a volume. Outbound traffic from the lab, including the gateway's own tunnel traffic, leaves through source NAT on the management bridge and the host uplink.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+      --yellow: #f7ce5b;
+      --yellow-fill: #fef8e8;
+      --orange: #ed7d3a;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+        --yellow-fill: #332a0c;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .ext { fill: var(--card); stroke: var(--border); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .core { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 2; }
+    .ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 1.5; }
+    .nat { fill: var(--yellow-fill); stroke: var(--yellow); stroke-width: 2; }
+    .chip { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+    .icon-ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 3; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .ic { fill: var(--heading); font-size: 14px; font-weight: 700; }
+    .tunnel { fill: none; stroke: var(--orange); stroke-width: 3; stroke-dasharray: 8 5; opacity: 0.8; }
+    .fwd { fill: none; stroke: var(--orange); stroke-width: 3; opacity: 0.8; }
+    .flow-head { fill: var(--orange); }
+    .flow { fill: var(--orange); opacity: 0.35; }
+    .flow-t { fill: var(--heading); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .halo { stroke: var(--zone); stroke-width: 8; stroke-linejoin: round; paint-order: stroke; }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse">
+      <path class="flow-head" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="688" height="560" rx="14"/>
+
+  <!-- Tailnet -->
+  <text class="h" x="32" y="40">TAILNET</text>
+  <rect class="box" x="32" y="52" width="276" height="40" rx="8"/>
+  <text class="t" x="170" y="77" text-anchor="middle">Your device</text>
+  <rect class="ext" x="332" y="52" width="276" height="40" rx="8"/>
+  <text class="t" x="470" y="77" text-anchor="middle">Coordination server</text>
+
+  <!-- Internet -->
+  <line class="ln" x1="170" y1="92" x2="170" y2="116"/>
+  <line class="ln" x1="470" y1="92" x2="470" y2="116"/>
+  <rect class="box" x="32" y="116" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="141" text-anchor="middle">Internet</text>
+
+  <!-- Host -->
+  <rect class="zone" x="16" y="180" width="608" height="332" rx="12"/>
+
+  <line class="ln" x1="320" y1="156" x2="320" y2="216"/>
+  <rect class="box" x="32" y="216" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="241" text-anchor="middle">Host uplink</text>
+
+  <!-- Management bridge -->
+  <line class="ln" x1="320" y1="256" x2="320" y2="288"/>
+  <rect class="core" x="32" y="288" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="313" text-anchor="middle">brm-&lt;lab-id&gt; (gateway)</text>
+  <rect class="nat" x="488" y="294" width="112" height="28" rx="6"/>
+  <text class="tc" x="544" y="313" text-anchor="middle">Source NAT</text>
+  <rect class="chip" x="162" y="322" width="12" height="12" rx="2"/>
+  <rect class="chip" x="386" y="322" width="12" height="12" rx="2"/>
+  <rect class="chip" x="474" y="322" width="12" height="12" rx="2"/>
+  <rect class="chip" x="562" y="322" width="12" height="12" rx="2"/>
+
+  <!-- Tailscale gateway container: packets pass tailscale0, the route filter, then source NAT -->
+  <line class="ln" x1="168" y1="334" x2="168" y2="360"/>
+  <rect class="ct" x="32" y="360" width="284" height="140" rx="10"/>
+  <rect class="chip" x="44" y="372" width="124" height="28" rx="6"/>
+  <text class="tc" x="106" y="391" text-anchor="middle">tailscale0</text>
+  <rect class="chip" x="44" y="416" width="124" height="28" rx="6"/>
+  <text class="tc" x="106" y="435" text-anchor="middle">Route filter</text>
+  <rect class="nat" x="44" y="460" width="124" height="28" rx="6"/>
+  <text class="tc" x="106" y="479" text-anchor="middle">Source NAT</text>
+  <text class="tc" x="304" y="391" text-anchor="end">Tailscale gateway</text>
+  <rect class="chip" x="180" y="416" width="124" height="28" rx="6"/>
+  <text class="tc" x="242" y="435" text-anchor="middle">Identity volume</text>
+
+  <!-- Lab nodes -->
+  <line class="ln" x1="392" y1="334" x2="392" y2="392"/>
+  <rect class="icon-vm" x="364" y="392" width="56" height="56" rx="12"/>
+  <text class="ic" x="392" y="425" text-anchor="middle">VM</text>
+
+  <line class="ln" x1="480" y1="334" x2="480" y2="392"/>
+  <circle class="icon-ct" cx="480" cy="420" r="28"/>
+  <text class="ic" x="480" y="425" text-anchor="middle">CT</text>
+
+  <line class="ln" x1="568" y1="334" x2="568" y2="388"/>
+  <polygon class="icon-vm" points="568,388 600,420 568,452 536,420"/>
+  <text class="ic" x="568" y="425" text-anchor="middle">UK</text>
+
+  <!-- Traffic from your device to a node -->
+  <line class="tunnel" x1="106" y1="92" x2="106" y2="370" marker-end="url(#arrow)"/>
+  <line class="fwd" x1="106" y1="400" x2="106" y2="416"/>
+  <line class="fwd" x1="106" y1="444" x2="106" y2="460"/>
+  <line class="fwd" x1="168" y1="474" x2="568" y2="474"/>
+  <line class="fwd" x1="392" y1="474" x2="392" y2="450" marker-end="url(#arrow)"/>
+  <line class="fwd" x1="480" y1="474" x2="480" y2="450" marker-end="url(#arrow)"/>
+  <line class="fwd" x1="568" y1="474" x2="568" y2="454" marker-end="url(#arrow)"/>
+
+  <!-- Host label drawn over the tunnel, with a halo so the line stops short of it -->
+  <text class="h halo" x="32" y="202">LINUX HOST</text>
+
+  <!-- Outbound management traffic, as in the management network diagram -->
+  <polygon class="flow" points="648,508 672,508 672,152 684,152 660,120 636,152 648,152"/>
+  <text class="flow-t" transform="translate(664.5 314) rotate(-90)" text-anchor="middle">OUTBOUND TRAFFIC</text>
+
+  <!-- Legend -->
+  <line class="tunnel" x1="32" y1="536" x2="64" y2="536"/>
+  <text class="h" x="76" y="540">WIREGUARD TUNNEL</text>
+  <line class="fwd" x1="232" y1="536" x2="264" y2="536"/>
+  <text class="h" x="276" y="540">FORWARDED TO THE LAB</text>
+</svg>

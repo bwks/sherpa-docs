@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 476" width="640" height="476" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Public bridge</title>
+  <desc id="desc">The upstream network connects to the host's physical NIC, which is a member of the public bridge. Two containers, a VM and a unikernel each connect one interface to a port on the public bridge, which places them directly on the physical network.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .core { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 2; }
+    .chip { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .icon-ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 3; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .ic { fill: var(--heading); font-size: 15px; font-weight: 700; }
+    .tc { fill: var(--heading); font-size: 12px; font-weight: 600; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="640" height="476" rx="14"/>
+
+  <!-- Physical network -->
+  <text class="h" x="32" y="40">PHYSICAL NETWORK</text>
+  <rect class="box" x="32" y="52" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="77" text-anchor="middle">Upstream network</text>
+
+  <!-- Host -->
+  <rect class="zone" x="16" y="116" width="608" height="344" rx="12"/>
+  <text class="h" x="32" y="138">LINUX HOST</text>
+
+  <line class="ln" x1="320" y1="92" x2="320" y2="152"/>
+  <rect class="box" x="32" y="152" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="177" text-anchor="middle">Physical NIC</text>
+
+  <!-- Public bridge with one port per member interface -->
+  <line class="ln" x1="320" y1="192" x2="320" y2="224"/>
+  <rect class="core" x="32" y="224" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="249" text-anchor="middle">Public bridge</text>
+  <rect class="chip" x="98" y="258" width="12" height="12" rx="2"/>
+  <rect class="chip" x="242" y="258" width="12" height="12" rx="2"/>
+  <rect class="chip" x="386" y="258" width="12" height="12" rx="2"/>
+  <rect class="chip" x="530" y="258" width="12" height="12" rx="2"/>
+
+  <!-- Container -->
+  <line class="ln" x1="104" y1="270" x2="104" y2="300"/>
+  <rect class="chip" x="76" y="300" width="56" height="32" rx="6"/>
+  <text class="tc" x="104" y="320" text-anchor="middle">eth1</text>
+  <line class="ln" x1="104" y1="332" x2="104" y2="356"/>
+  <circle class="icon-ct" cx="104" cy="392" r="36"/>
+  <text class="ic" x="104" y="397" text-anchor="middle">CT</text>
+
+  <!-- Container -->
+  <line class="ln" x1="248" y1="270" x2="248" y2="300"/>
+  <rect class="chip" x="220" y="300" width="56" height="32" rx="6"/>
+  <text class="tc" x="248" y="320" text-anchor="middle">eth1</text>
+  <line class="ln" x1="248" y1="332" x2="248" y2="356"/>
+  <circle class="icon-ct" cx="248" cy="392" r="36"/>
+  <text class="ic" x="248" y="397" text-anchor="middle">CT</text>
+
+  <!-- VM -->
+  <line class="ln" x1="392" y1="270" x2="392" y2="300"/>
+  <rect class="chip" x="364" y="300" width="56" height="32" rx="6"/>
+  <text class="tc" x="392" y="320" text-anchor="middle">eth1</text>
+  <line class="ln" x1="392" y1="332" x2="392" y2="356"/>
+  <rect class="icon-vm" x="356" y="356" width="72" height="72" rx="14"/>
+  <text class="ic" x="392" y="397" text-anchor="middle">VM</text>
+
+  <!-- Unikernel -->
+  <line class="ln" x1="536" y1="270" x2="536" y2="300"/>
+  <rect class="chip" x="508" y="300" width="56" height="32" rx="6"/>
+  <text class="tc" x="536" y="320" text-anchor="middle">eth1</text>
+  <line class="ln" x1="536" y1="332" x2="536" y2="352"/>
+  <polygon class="icon-vm" points="536,352 576,392 536,432 496,392"/>
+  <text class="ic" x="536" y="397" text-anchor="middle">UK</text>
+</svg>

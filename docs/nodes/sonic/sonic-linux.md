@@ -54,10 +54,10 @@ model = "sonic_linux"
     sherpa ssh <node-name>
     ```
 
-=== "Docker"
+=== "Console"
 
     ```
-    docker exec -it <node-name>-<lab-id> sh
+    sherpa console <node-name>
     ```
 
 ## Notes

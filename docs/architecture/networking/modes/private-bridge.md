@@ -8,12 +8,12 @@ Private bridge networks have no connectivity outside of the bridge.
 All interfaces in the bridge are in the same layer 2 broadcast domain
 and set to the up state.
 
-![Bridge Network](network-private-bridge.svg)
+![Private bridge: two VMs and a container connected to the same isolated bridge](network-private-bridge.svg)
 
 ## Example Manifest
 
 Bridges are defined in the `manifest.toml`
-file int the `bridges` section.
+file in the `bridges` section.
 
 ```toml
 # manifest.toml

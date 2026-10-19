@@ -2,11 +2,13 @@
 
 Virtual machines are supported via the [KVM](https://linux-kvm.org/page/Main_Page) hypervisor using the [QEMU](https://wiki.qemu.org/Main_Page) emulator and the [Libvirt](https://libvirt.org) virtualisation API.
 
+![Virtual machine architecture: sherpad drives libvirtd, which runs one QEMU process per VM on KVM; each virtual device is backed by a host resource](virtual-machine.svg)
+
 ## How it Works
 
 When a lab is created, Sherpa performs the following for each VM node:
 
-1. **Clone** the base disk image from the [storage pool](storage.md) into the lab directory
+1. **Create** the boot disk in the [storage pool](storage.md): a QCOW2 overlay on the base image by default, or a full copy when `boot_disk_clone_method = "copy"`
 2. **Resize** the boot disk if `boot_disk_size` is specified in the manifest
 3. **Generate** a libvirt domain XML definition from the node's parameters
 4. **Apply** [zero-touch provisioning](zero-touch-provisioning.md) configuration (cloud-init ISO, ZTP scripts, etc.)
@@ -29,7 +31,7 @@ CPU mode defaults to `host-model`, which auto-detects the host CPU capabilities.
 
 ## Disk Management
 
-Base images are stored in the Sherpa [storage pool](storage.md) (`sherpa-pool`). When a lab starts, each VM's base image is cloned into the lab directory at `/opt/sherpa/labs/<lab-id>/`. The original base image is never modified.
+Base images are imported into `/opt/sherpa/images/`. When a lab starts, each VM's boot disk is created in the Sherpa [storage pool](storage.md) (`sherpa-pool`, at `/opt/sherpa/libvirt/images/`) as a QCOW2 overlay on the base image, or as a full copy when `boot_disk_clone_method = "copy"`. See [Boot Disk Overlays](storage.md#boot-disk-overlays). The original base image is never modified. ZTP configuration disks, such as cloud-init ISOs, are created in the same pool.
 
 Supported disk formats: `qcow2`, `raw`, `iso`, `img`.
 
@@ -53,7 +55,7 @@ VM network interfaces are attached as libvirt network devices. The interface dri
 | `e1000` | Models that require Intel NIC emulation |
 | `vmxnet3` | VMware-compatible models |
 
-Each VM is connected to the [management network](networking/node/management.md) on its first interface. Additional interfaces are attached for data plane links as defined in the manifest. Point-to-point links between VMs use UDP tunnels over the loopback address.
+Each VM is connected to the [management network](networking/modes/management.md) on its first interface. Additional interfaces are attached for data plane links as defined in the manifest. By default each [point-to-point link](networking/modes/point-to-point.md) gets its own Linux bridge; with `p2p = true` the interface is a tap device joined to its peer by an eBPF redirect program.
 
 ## Console Access
 

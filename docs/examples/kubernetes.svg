@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 292" width="640" height="292" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Kubernetes example topology</title>
+  <desc id="desc">A Talos Linux Kubernetes cluster named k8s. Three controllers, cp01 to cp03, and two workers, wrk01 and wrk02, are Talos Linux VMs on the management network.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .chip { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .icon-ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 3; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .ic { fill: var(--heading); font-size: 15px; font-weight: 700; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="640" height="292" rx="14"/>
+
+  <!-- Management network -->
+  <rect class="box" x="32" y="24" width="576" height="44" rx="8"/>
+  <text class="t" x="320" y="51" text-anchor="middle">Management network</text>
+
+  <!-- Controllers -->
+  <rect class="zone" x="32" y="100" width="320" height="168" rx="12"/>
+  <text class="h" x="48" y="252">CONTROLLERS</text>
+
+  <!-- Workers -->
+  <rect class="zone" x="376" y="100" width="232" height="168" rx="12"/>
+  <text class="h" x="392" y="252">WORKERS</text>
+
+  <!-- cp01 -->
+  <line class="ln" x1="88" y1="68" x2="88" y2="116"/>
+  <rect class="icon-vm" x="52" y="116" width="72" height="72" rx="14"/>
+  <text class="ic" x="88" y="157" text-anchor="middle">VM</text>
+  <text class="tc" x="88" y="212" text-anchor="middle">cp01</text>
+
+  <!-- cp02 -->
+  <line class="ln" x1="192" y1="68" x2="192" y2="116"/>
+  <rect class="icon-vm" x="156" y="116" width="72" height="72" rx="14"/>
+  <text class="ic" x="192" y="157" text-anchor="middle">VM</text>
+  <text class="tc" x="192" y="212" text-anchor="middle">cp02</text>
+
+  <!-- cp03 -->
+  <line class="ln" x1="296" y1="68" x2="296" y2="116"/>
+  <rect class="icon-vm" x="260" y="116" width="72" height="72" rx="14"/>
+  <text class="ic" x="296" y="157" text-anchor="middle">VM</text>
+  <text class="tc" x="296" y="212" text-anchor="middle">cp03</text>
+
+  <!-- wrk01 -->
+  <line class="ln" x1="448" y1="68" x2="448" y2="116"/>
+  <rect class="icon-vm" x="412" y="116" width="72" height="72" rx="14"/>
+  <text class="ic" x="448" y="157" text-anchor="middle">VM</text>
+  <text class="tc" x="448" y="212" text-anchor="middle">wrk01</text>
+
+  <!-- wrk02 -->
+  <line class="ln" x1="552" y1="68" x2="552" y2="116"/>
+  <rect class="icon-vm" x="516" y="116" width="72" height="72" rx="14"/>
+  <text class="ic" x="552" y="157" text-anchor="middle">VM</text>
+  <text class="tc" x="552" y="212" text-anchor="middle">wrk02</text>
+</svg>

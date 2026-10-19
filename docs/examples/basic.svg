@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 164" width="640" height="164" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Basic example topology</title>
+  <desc id="desc">dev01, a Cisco IOSv VM, connects its gig0/1 interface to eth-1/1 on dev02, a Nokia SR Linux container.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .chip { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .icon-ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 3; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .ic { fill: var(--heading); font-size: 15px; font-weight: 700; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="640" height="164" rx="14"/>
+
+  <!-- dev01 -->
+  <rect class="icon-vm" x="36" y="36" width="72" height="72" rx="14"/>
+  <text class="ic" x="72" y="77" text-anchor="middle">VM</text>
+  <text class="tc" x="72" y="136" text-anchor="middle">dev01</text>
+
+  <!-- Link -->
+  <line class="ln" x1="108" y1="72" x2="124" y2="72"/>
+  <rect class="chip" x="124" y="56" width="72" height="32" rx="6"/>
+  <text class="tc" x="160" y="76" text-anchor="middle">gig0/1</text>
+  <line class="ln" x1="196" y1="72" x2="444" y2="72"/>
+  <rect class="chip" x="444" y="56" width="72" height="32" rx="6"/>
+  <text class="tc" x="480" y="76" text-anchor="middle">eth-1/1</text>
+  <line class="ln" x1="516" y1="72" x2="532" y2="72"/>
+
+  <!-- dev02 -->
+  <circle class="icon-ct" cx="568" cy="72" r="36"/>
+  <text class="ic" x="568" y="77" text-anchor="middle">CT</text>
+  <text class="tc" x="568" y="136" text-anchor="middle">dev02</text>
+</svg>

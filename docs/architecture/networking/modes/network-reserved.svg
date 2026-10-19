@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 264" width="640" height="264" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Reserved bridge</title>
+  <desc id="desc">A VM's management interface eth0 connects to the management network. Its two reserved interfaces connect to the node's reserved bridge with their link state set to up. The reserved bridge has no connectivity outside itself.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .core { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 2; }
+    .chip { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .ic { fill: var(--heading); font-size: 15px; font-weight: 700; }
+    .tc { fill: var(--heading); font-size: 12px; font-weight: 600; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+    .dash { stroke-dasharray: 5 4; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="640" height="264" rx="14"/>
+
+  <!-- Node -->
+  <rect class="icon-vm" x="32" y="152" width="576" height="88" rx="14"/>
+  <text class="ic" x="320" y="209" text-anchor="middle">VM</text>
+
+  <!-- Management network -->
+  <rect class="box" x="32" y="24" width="160" height="44" rx="8"/>
+  <text class="t" x="112" y="51" text-anchor="middle">Management</text>
+  <rect class="chip" x="106" y="62" width="12" height="12" rx="2"/>
+  <line class="ln" x1="112" y1="74" x2="112" y2="136"/>
+  <rect class="chip" x="84" y="136" width="56" height="32" rx="6"/>
+  <text class="tc" x="112" y="156" text-anchor="middle">eth0</text>
+
+  <!-- Reserved bridge, reserved interfaces with link up -->
+  <rect class="core" x="224" y="24" width="384" height="44" rx="8"/>
+  <text class="t" x="416" y="51" text-anchor="middle">Reserved bridge</text>
+  <rect class="chip" x="354" y="62" width="12" height="12" rx="2"/>
+  <rect class="chip" x="466" y="62" width="12" height="12" rx="2"/>
+  <line class="ln" x1="360" y1="74" x2="360" y2="136"/>
+  <rect class="chip" x="332" y="136" width="56" height="32" rx="6"/>
+  <text class="tc" x="360" y="156" text-anchor="middle">rsv1</text>
+  <line class="ln" x1="472" y1="74" x2="472" y2="136"/>
+  <rect class="chip" x="444" y="136" width="56" height="32" rx="6"/>
+  <text class="tc" x="472" y="156" text-anchor="middle">rsv2</text>
+</svg>

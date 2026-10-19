@@ -2,6 +2,8 @@
 
 Containers are supported via the [Docker](https://docs.docker.com/) engine runtime. Sherpa communicates with Docker through the [Bollard](https://github.com/fussybeaver/bollard) async API library — all operations are native API calls, not shell-outs to the Docker CLI.
 
+![Container architecture: sherpad drives the Docker Engine, which runs each container through containerd on the shared host kernel; each part of the container is backed by a host resource](container.svg)
+
 ## How it Works
 
 When a lab is created, Sherpa performs the following for each container node:
@@ -42,14 +44,14 @@ A Docker **bridge** network provides management connectivity. All containers are
 
 ### Data Networks
 
-Data plane links use Docker **macvlan** networks for Layer 2 connectivity:
+By default, data plane links use Docker **macvlan** networks for Layer 2 connectivity:
 
 | Mode | Description |
 | ---- | ----------- |
-| Passthru | Single container per parent bridge. Pure L2, no IP addressing. |
-| Bridge | Multiple containers share a parent bridge. Used for shared segments. |
+| Passthru | Link interfaces. Each link has its own Linux bridge, passed straight through to one container. Pure L2, no IP addressing. |
+| Bridge | Unconnected interfaces. Several macvlan networks share the node's isolated bridge. |
 
-Point-to-point links between containers use veth pairs moved directly into the container network namespace.
+Links with `p2p = true` use a veth pair instead of macvlan. The container end is moved into the container's network namespace, and the host end is joined to its peer by an [eBPF redirect program](networking/modes/point-to-point.md#p2p-ebpf).
 
 After attachment, data interfaces are set to promiscuous mode and brought up. Disabled interfaces (unconnected links) are left admin-down.
 
