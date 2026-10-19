@@ -111,7 +111,7 @@ Stopping or resuming an individual node leaves the gateway alone.
 | Routes are pending | Approve them as described above. No restart is needed. |
 | Routes approved but unreachable | Check your ACLs, that your client accepts routes, the node state, and address conflicts. |
 | Address conflicts | Management ranges must not overlap other advertised networks or your client's local networks. Sherpa avoids conflicts on one server, but cannot see other servers or tailnets. Configure distinct management ranges before creating labs. |
-| Destroy failed part way | Run destroy or clean again. Sherpa keeps the lab record and only deletes gateways it can verify belong to that lab. |
+| Destroy failed part way | Resolve the Docker error or volume attachment, then run `sherpa destroy` again as the lab owner, or `sherpa server clean <lab_id>` as an administrator. Sherpa keeps the lab record and only deletes gateways it can verify belong to that lab. Other lab resources may already have been removed. |
 | Stale device in Tailscale | Remove it in the Tailscale admin console. Sherpa stores no admin credential and cannot remove it. |
 
 ## Server Settings
