@@ -6,6 +6,23 @@ and two workers.
 
 ![A Talos Linux Kubernetes cluster with three controllers and two workers on the management network](kubernetes.svg)
 
+| Role       | Nodes                    | Model                                           |
+| ---------- | ------------------------ | ----------------------------------------------- |
+| Controller | `cp01`, `cp02`, `cp03`   | [Talos Linux](../nodes/linux/talos-linux.md)    |
+| Worker     | `wrk01`, `wrk02`         | [Talos Linux](../nodes/linux/talos-linux.md)    |
+
+- **Controllers** run the Kubernetes control plane and etcd. Three controllers let the
+  cluster survive the loss of one, because etcd keeps a majority with two of three members.
+  A cluster has either one or three controllers.
+- **Workers** run your workloads. With no workers, workloads would be allowed on the
+  controllers instead.
+- **Virtual IP.** The controllers share an address on the management network, which follows
+  whichever controller holds it. The Kubernetes API stays on that address if a controller
+  fails.
+
+There are no data plane links: the nodes talk to each other, and Kubernetes pods talk across
+nodes, over the management network.
+
 ```toml
 name = "sherpa-kubernetes"
 
