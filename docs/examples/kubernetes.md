@@ -54,10 +54,16 @@ name = "wrk02"
 model = "talos_linux"
 ```
 
+## Access
+
 After `sherpa up`, the cluster's `kubeconfig-k8s` and `talosconfig-k8s` are in your working
-directory:
+directory. Use `kubectl` for Kubernetes and `talosctl` for the Talos nodes:
 
 ```
 export KUBECONFIG=$PWD/kubeconfig-k8s TALOSCONFIG=$PWD/talosconfig-k8s
 kubectl get nodes
+talosctl -n <node-ip> version
 ```
+
+Talos nodes have no SSH or shell, so `sherpa ssh` does not apply. If you lose the config files,
+`sherpa download` writes them again.
