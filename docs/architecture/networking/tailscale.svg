@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 560" width="640" height="560" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 688 560" width="688" height="560" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <title id="title">Sherpa Tailscale gateway</title>
-  <desc id="desc">Your tailnet device and the Tailscale coordination server reach the Sherpa host over the internet. The lab's Tailscale gateway is a container on the lab's management bridge, brm followed by the lab ID, alongside the lab nodes. A WireGuard tunnel from your device enters through the host uplink and the management bridge to the gateway's tailscale0 interface. In the gateway the traffic passes tailscale0, a route filter that only allows the lab's management subnets, and source NAT, then is forwarded back onto the management bridge to the nodes. The gateway keeps its Tailscale identity in a volume.</desc>
+  <desc id="desc">Your tailnet device and the Tailscale coordination server reach the Sherpa host over the internet. The lab's Tailscale gateway is a container on the lab's management bridge, brm followed by the lab ID, alongside the lab nodes. A WireGuard tunnel from your device enters through the host uplink and the management bridge to the gateway's tailscale0 interface. In the gateway the traffic passes tailscale0, a route filter that only allows the lab's management subnets, and source NAT, then is forwarded back onto the management bridge to the nodes. The gateway keeps its Tailscale identity in a volume. Outbound traffic from the lab, including the gateway's own tunnel traffic, leaves through source NAT on the management bridge and the host uplink.</desc>
   <style>
     svg {
       --bg: #fdffff;
@@ -50,6 +50,8 @@
     .tunnel { fill: none; stroke: var(--orange); stroke-width: 3; stroke-dasharray: 8 5; opacity: 0.8; }
     .fwd { fill: none; stroke: var(--orange); stroke-width: 3; opacity: 0.8; }
     .flow-head { fill: var(--orange); }
+    .flow { fill: var(--orange); opacity: 0.35; }
+    .flow-t { fill: var(--heading); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
     .halo { stroke: var(--zone); stroke-width: 8; stroke-linejoin: round; paint-order: stroke; }
   </style>
   <defs>
@@ -58,7 +60,7 @@
     </marker>
   </defs>
 
-  <rect class="bg" x="0" y="0" width="640" height="560" rx="14"/>
+  <rect class="bg" x="0" y="0" width="688" height="560" rx="14"/>
 
   <!-- Tailnet -->
   <text class="h" x="32" y="40">TAILNET</text>
@@ -128,6 +130,10 @@
 
   <!-- Host label drawn over the tunnel, with a halo so the line stops short of it -->
   <text class="h halo" x="32" y="202">LINUX HOST</text>
+
+  <!-- Outbound management traffic, as in the management network diagram -->
+  <polygon class="flow" points="648,508 672,508 672,152 684,152 660,120 636,152 648,152"/>
+  <text class="flow-t" transform="translate(664.5 314) rotate(-90)" text-anchor="middle">OUTBOUND TRAFFIC</text>
 
   <!-- Legend -->
   <line class="tunnel" x1="32" y1="536" x2="64" y2="536"/>
