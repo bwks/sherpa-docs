@@ -130,8 +130,8 @@ nav:
   - Examples:
     - examples/basic.md
     - examples/clos.md
-    - examples/test-servers.md
     - examples/kubernetes.md
+    - examples/test-servers.md
   - Help:
     - help/libvirt.md
     - help/docker.md
