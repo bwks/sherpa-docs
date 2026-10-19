@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 232" width="640" height="232" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Test servers example topology</title>
+  <desc id="desc">Five VMs, dev01 to dev05, running Fedora, Ubuntu, Windows Server, FreeBSD and OpenBSD, each connected only to the management network.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .chip { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .icon-ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 3; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .ic { fill: var(--heading); font-size: 15px; font-weight: 700; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="640" height="232" rx="14"/>
+
+  <!-- Management network -->
+  <rect class="box" x="32" y="24" width="576" height="44" rx="8"/>
+  <text class="t" x="320" y="51" text-anchor="middle">Management network</text>
+
+  <!-- dev01 -->
+  <line class="ln" x1="80" y1="68" x2="80" y2="112"/>
+  <rect class="icon-vm" x="44" y="112" width="72" height="72" rx="14"/>
+  <text class="ic" x="80" y="153" text-anchor="middle">VM</text>
+  <text class="tc" x="80" y="208" text-anchor="middle">dev01</text>
+
+  <!-- dev02 -->
+  <line class="ln" x1="200" y1="68" x2="200" y2="112"/>
+  <rect class="icon-vm" x="164" y="112" width="72" height="72" rx="14"/>
+  <text class="ic" x="200" y="153" text-anchor="middle">VM</text>
+  <text class="tc" x="200" y="208" text-anchor="middle">dev02</text>
+
+  <!-- dev03 -->
+  <line class="ln" x1="320" y1="68" x2="320" y2="112"/>
+  <rect class="icon-vm" x="284" y="112" width="72" height="72" rx="14"/>
+  <text class="ic" x="320" y="153" text-anchor="middle">VM</text>
+  <text class="tc" x="320" y="208" text-anchor="middle">dev03</text>
+
+  <!-- dev04 -->
+  <line class="ln" x1="440" y1="68" x2="440" y2="112"/>
+  <rect class="icon-vm" x="404" y="112" width="72" height="72" rx="14"/>
+  <text class="ic" x="440" y="153" text-anchor="middle">VM</text>
+  <text class="tc" x="440" y="208" text-anchor="middle">dev04</text>
+
+  <!-- dev05 -->
+  <line class="ln" x1="560" y1="68" x2="560" y2="112"/>
+  <rect class="icon-vm" x="524" y="112" width="72" height="72" rx="14"/>
+  <text class="ic" x="560" y="153" text-anchor="middle">VM</text>
+  <text class="tc" x="560" y="208" text-anchor="middle">dev05</text>
+</svg>

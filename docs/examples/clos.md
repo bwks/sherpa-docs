@@ -1,5 +1,7 @@
 # CLOS
 
+![Two SONiC spine VMs, each linked to all four SONiC leaf VMs](clos.svg)
+
 ```toml
 name = "sherpa-clos"
 

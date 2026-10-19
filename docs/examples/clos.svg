@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 324" width="640" height="324" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">CLOS example topology</title>
+  <desc id="desc">Two SONiC spine VMs, spine01 and spine02, each connect to all four SONiC leaf VMs, leaf01 to leaf04. Each leaf uses eth51 towards spine01 and eth52 towards spine02.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .chip { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .icon-ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 3; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .ic { fill: var(--heading); font-size: 15px; font-weight: 700; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="640" height="324" rx="14"/>
+
+  <!-- Spine to leaf links -->
+  <line class="ln" x1="224" y1="104" x2="104" y2="220"/>
+  <line class="ln" x1="224" y1="104" x2="248" y2="220"/>
+  <line class="ln" x1="224" y1="104" x2="392" y2="220"/>
+  <line class="ln" x1="224" y1="104" x2="536" y2="220"/>
+  <line class="ln" x1="416" y1="104" x2="104" y2="220"/>
+  <line class="ln" x1="416" y1="104" x2="248" y2="220"/>
+  <line class="ln" x1="416" y1="104" x2="392" y2="220"/>
+  <line class="ln" x1="416" y1="104" x2="536" y2="220"/>
+
+  <!-- Spines -->
+  <text class="tc" x="224" y="36" text-anchor="middle">spine01</text>
+  <rect class="icon-vm" x="196" y="48" width="56" height="56" rx="12"/>
+  <text class="ic" x="224" y="81" text-anchor="middle">VM</text>
+  <text class="tc" x="416" y="36" text-anchor="middle">spine02</text>
+  <rect class="icon-vm" x="388" y="48" width="56" height="56" rx="12"/>
+  <text class="ic" x="416" y="81" text-anchor="middle">VM</text>
+
+  <!-- Leaves -->
+  <rect class="icon-vm" x="76" y="220" width="56" height="56" rx="12"/>
+  <text class="ic" x="104" y="253" text-anchor="middle">VM</text>
+  <text class="tc" x="104" y="300" text-anchor="middle">leaf01</text>
+  <rect class="icon-vm" x="220" y="220" width="56" height="56" rx="12"/>
+  <text class="ic" x="248" y="253" text-anchor="middle">VM</text>
+  <text class="tc" x="248" y="300" text-anchor="middle">leaf02</text>
+  <rect class="icon-vm" x="364" y="220" width="56" height="56" rx="12"/>
+  <text class="ic" x="392" y="253" text-anchor="middle">VM</text>
+  <text class="tc" x="392" y="300" text-anchor="middle">leaf03</text>
+  <rect class="icon-vm" x="508" y="220" width="56" height="56" rx="12"/>
+  <text class="ic" x="536" y="253" text-anchor="middle">VM</text>
+  <text class="tc" x="536" y="300" text-anchor="middle">leaf04</text>
+</svg>

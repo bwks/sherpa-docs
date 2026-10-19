@@ -1,5 +1,7 @@
 # Basic
 
+![dev01, a Cisco IOSv VM, linked from gig0/1 to eth-1/1 on dev02, a Nokia SR Linux container](basic.svg)
+
 ```toml
 name = "sherpa-basic"
 

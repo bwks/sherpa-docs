@@ -1,31 +1,44 @@
 # Kubernetes
 
-!!! tip
+Sherpa builds and bootstraps a Kubernetes cluster on [Talos Linux](../nodes/linux/talos-linux.md#sherpa-built-clusters)
+nodes. This example has three controllers, which share a virtual IP for the Kubernetes API,
+and two workers.
 
-    For a Kubernetes cluster that Sherpa builds and bootstraps for you, see
-    [Talos Linux](../nodes/linux/talos-linux.md#sherpa-built-clusters). The example below builds
-    the nodes only, on Flatcar Linux.
+![A Talos Linux Kubernetes cluster with three controllers and two workers on the management network](kubernetes.svg)
 
 ```toml
 name = "sherpa-kubernetes"
 
-[[nodes]]
-name = "utl01"
-model = "flatcar_linux"
+[[talos_clusters]]
+name = "k8s"
+controllers = ["cp01", "cp02", "cp03"]
+workers = ["wrk01", "wrk02"]
 
 [[nodes]]
-name = "ctl01"
-model = "flatcar_linux"
+name = "cp01"
+model = "talos_linux"
+
+[[nodes]]
+name = "cp02"
+model = "talos_linux"
+
+[[nodes]]
+name = "cp03"
+model = "talos_linux"
 
 [[nodes]]
 name = "wrk01"
-model = "flatcar_linux"
+model = "talos_linux"
 
 [[nodes]]
-name = "wrk01"
-model = "flatcar_linux"
+name = "wrk02"
+model = "talos_linux"
+```
 
-[[nodes]]
-name = "wrk01"
-model = "flatcar_linux"
+After `sherpa up`, the cluster's `kubeconfig-k8s` and `talosconfig-k8s` are in your working
+directory:
+
+```
+export KUBECONFIG=$PWD/kubeconfig-k8s TALOSCONFIG=$PWD/talosconfig-k8s
+kubectl get nodes
 ```

@@ -3,6 +3,8 @@
 Sherpa makes it convenient to deploy different platforms and operating systems
 for testing software and configurations.
 
+![Five VMs running Fedora, Ubuntu, Windows Server, FreeBSD and OpenBSD, each on the management network](test-servers.svg)
+
 ```toml
 name = "sherpa-testservers"
 
