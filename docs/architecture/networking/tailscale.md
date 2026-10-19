@@ -4,7 +4,7 @@ Sherpa can connect a lab to your [Tailscale](https://tailscale.com) tailnet. It 
 gateway per lab that makes the lab's management addresses reachable from your other tailnet
 devices. Lab nodes do not need Tailscale installed.
 
-![Traffic from a tailnet device enters the lab's Tailscale gateway container, which source NATs it onto the lab's management bridge and its nodes](tailscale.svg)
+![A WireGuard tunnel from your device reaches the lab's Tailscale gateway container through the host uplink and management bridge, and the gateway forwards the traffic back onto the bridge to the nodes](tailscale.svg)
 
 ## Requirements
 
@@ -128,8 +128,16 @@ network, with an identity volume named `sherpa-tailnet-state-<lab_id>`.
 
 - It uses `/dev/net/tun` with the `NET_ADMIN` and `NET_RAW` capabilities, not host networking
   or full privilege.
+- Its only interface is on the management network, beside the lab nodes. Your device reaches it
+  over a WireGuard tunnel that enters through the host uplink and the management bridge, the
+  same way the gateway reaches the internet. The gateway decrypts the traffic and forwards it
+  back onto the management bridge to the node.
+- The Tailscale coordination server exchanges keys, advertised routes and policy with the
+  gateway, but carries no lab traffic. When a direct tunnel cannot be set up, Tailscale relays
+  it through a DERP server.
 - The gateway's address is offset 3 in each management subnet, below the node range.
-- Forwarding uses nftables and only permits that lab's management subnets, with source NAT.
+- Forwarding uses nftables and only permits that lab's management subnets. Forwarded traffic is
+  source NATed to the gateway's address, so nodes need no route back to the tailnet.
 - The auth key is passed over Docker exec stdin into a temporary in-memory file that is removed
   after enrollment. It is not stored in manifests, environment variables, command arguments or
   the database.
