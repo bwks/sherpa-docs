@@ -20,6 +20,8 @@ for example to test a script, package or agent across all of them.
 The servers can reach each other over the management network, and reach outside the lab
 through it. See [Management](../architecture/networking/modes/management.md).
 
+## Manifest
+
 ```toml
 name = "sherpa-testservers"
 

@@ -30,6 +30,8 @@ The interfaces follow a fixed pattern, which makes the cabling easy to read and 
 To add a leaf, add the node and connect its `eth51` and `eth52` to the next free interface on
 each spine, for example `eth5` for `leaf05`.
 
+## Manifest
+
 ```toml
 name = "sherpa-clos"
 

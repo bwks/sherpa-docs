@@ -23,6 +23,8 @@ and two workers.
 There are no data plane links: the nodes talk to each other, and Kubernetes pods talk across
 nodes, over the management network.
 
+## Manifest
+
 ```toml
 name = "sherpa-kubernetes"
 

@@ -20,6 +20,8 @@ multi-vendor labs can combine both kinds of node. See
 Both nodes are also on the lab's management network on their management interfaces, which
 the diagram leaves out.
 
+## Manifest
+
 ```toml
 name = "sherpa-basic"
 
