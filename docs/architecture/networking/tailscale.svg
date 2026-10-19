@@ -121,7 +121,10 @@
   <line class="tunnel" x1="140" y1="92" x2="140" y2="370" marker-end="url(#arrow)"/>
   <line class="fwd" x1="106" y1="400" x2="106" y2="416"/>
   <line class="fwd" x1="106" y1="444" x2="106" y2="460"/>
-  <polyline class="fwd" points="168,474 336,474 336,346 480,346 480,390" marker-end="url(#arrow)"/>
+  <line class="fwd" x1="168" y1="474" x2="568" y2="474"/>
+  <line class="fwd" x1="392" y1="474" x2="392" y2="450" marker-end="url(#arrow)"/>
+  <line class="fwd" x1="480" y1="474" x2="480" y2="450" marker-end="url(#arrow)"/>
+  <line class="fwd" x1="568" y1="474" x2="568" y2="454" marker-end="url(#arrow)"/>
 
   <!-- Legend -->
   <line class="tunnel" x1="32" y1="536" x2="64" y2="536"/>
