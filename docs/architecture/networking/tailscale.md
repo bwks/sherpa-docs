@@ -4,6 +4,8 @@ Sherpa can connect a lab to your [Tailscale](https://tailscale.com) tailnet. It 
 gateway per lab that makes the lab's management addresses reachable from your other tailnet
 devices. Lab nodes do not need Tailscale installed.
 
+![Traffic from a tailnet device enters the lab's Tailscale gateway container, which source NATs it onto the lab's management bridge and its nodes](tailscale.svg)
+
 ## Requirements
 
 - A Linux Sherpa server with Docker, `/dev/net/tun` and nftables.

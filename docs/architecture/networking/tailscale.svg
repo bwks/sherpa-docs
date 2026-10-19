@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 688 424" width="688" height="424" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">Sherpa Tailscale gateway</title>
+  <desc id="desc">Inbound traffic flows from a device on your tailnet to the lab's Tailscale gateway, a container on the Sherpa host with its own identity volume. The gateway source NATs the traffic onto the lab's management bridge, brm followed by the lab ID, which connects the VM, container and unikernel nodes.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+      --yellow: #f7ce5b;
+      --yellow-fill: #fef8e8;
+      --orange: #ed7d3a;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+        --yellow-fill: #332a0c;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .core { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 2; }
+    .ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 1.5; }
+    .nat { fill: var(--yellow-fill); stroke: var(--yellow); stroke-width: 2; }
+    .chip { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+    .flow { fill: var(--orange); opacity: 0.35; }
+    .flow-t { fill: var(--heading); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .icon-ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 3; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .ic { fill: var(--heading); font-size: 15px; font-weight: 700; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="688" height="424" rx="14"/>
+
+  <g transform="translate(48 0)">
+
+  <!-- Tailnet -->
+  <text class="h" x="32" y="40">TAILNET</text>
+  <rect class="box" x="32" y="52" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="77" text-anchor="middle">Your tailnet device</text>
+
+  <!-- Host -->
+  <rect class="zone" x="16" y="116" width="608" height="284" rx="12"/>
+  <text class="h" x="32" y="138">LINUX HOST</text>
+
+  <!-- Gateway container and its identity volume -->
+  <line class="ln" x1="232" y1="92" x2="232" y2="152"/>
+  <rect class="ct" x="32" y="152" width="400" height="44" rx="8"/>
+  <rect class="nat" x="40" y="160" width="112" height="28" rx="6"/>
+  <text class="tc" x="96" y="179" text-anchor="middle">Source NAT</text>
+  <text class="t" x="292" y="179" text-anchor="middle">Tailscale gateway</text>
+  <line class="ln" x1="432" y1="174" x2="448" y2="174"/>
+  <rect class="box" x="448" y="152" width="160" height="44" rx="8"/>
+  <text class="t" x="528" y="179" text-anchor="middle">Identity volume</text>
+
+  <!-- Management bridge -->
+  <line class="ln" x1="232" y1="196" x2="232" y2="228"/>
+  <rect class="core" x="32" y="228" width="576" height="40" rx="8"/>
+  <text class="t" x="320" y="253" text-anchor="middle">brm-&lt;lab-id&gt;</text>
+  <rect class="chip" x="122" y="262" width="12" height="12" rx="2"/>
+  <rect class="chip" x="314" y="262" width="12" height="12" rx="2"/>
+  <rect class="chip" x="506" y="262" width="12" height="12" rx="2"/>
+
+  <!-- Nodes -->
+  <line class="ln" x1="128" y1="274" x2="128" y2="304"/>
+  <rect class="icon-vm" x="92" y="304" width="72" height="72" rx="14"/>
+  <text class="ic" x="128" y="345" text-anchor="middle">VM</text>
+
+  <line class="ln" x1="320" y1="274" x2="320" y2="304"/>
+  <circle class="icon-ct" cx="320" cy="340" r="36"/>
+  <text class="ic" x="320" y="345" text-anchor="middle">CT</text>
+
+  <line class="ln" x1="512" y1="274" x2="512" y2="300"/>
+  <polygon class="icon-vm" points="512,300 552,340 512,380 472,340"/>
+  <text class="ic" x="512" y="345" text-anchor="middle">UK</text>
+
+  </g>
+
+  <!-- Inbound flow -->
+  <polygon class="flow" points="16,56 40,56 40,364 52,364 28,396 4,364 16,364"/>
+  <text class="flow-t" transform="translate(32.5 216) rotate(-90)" text-anchor="middle">INBOUND TRAFFIC</text>
+</svg>
