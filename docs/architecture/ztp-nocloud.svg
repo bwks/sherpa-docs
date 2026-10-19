@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" width="640" height="200" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">NoCloud ZTP</title>
+  <desc id="desc">sherpad writes the node's user-data, either your own config or a machine config it generated, with meta-data and a static management network-config to a cidata ISO, attached to the VM as a CD-ROM.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .core { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 2; }
+    .chip { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .icon-ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 3; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .ic { fill: var(--heading); font-size: 15px; font-weight: 700; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 1.5; }
+    .head { fill: var(--line); }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="head" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="640" height="200" rx="14"/>
+
+  <!-- sherpad builds the config -->
+  <rect class="core" x="24" y="76" width="104" height="48" rx="8"/>
+  <text class="t" x="76" y="105" text-anchor="middle">sherpad</text>
+  <line class="ln" x1="128" y1="100" x2="158" y2="100" marker-end="url(#arrow)"/>
+
+  <!-- What carries the config -->
+  <rect class="zone" x="160" y="26" width="200" height="150" rx="10"/>
+  <text class="h" x="176" y="48">CIDATA ISO</text>
+  <rect class="chip" x="176" y="60" width="168" height="28" rx="6"/>
+  <text class="tc" x="260" y="79" text-anchor="middle">user-data</text>
+  <rect class="chip" x="176" y="96" width="168" height="28" rx="6"/>
+  <text class="tc" x="260" y="115" text-anchor="middle">meta-data</text>
+  <rect class="chip" x="176" y="132" width="168" height="28" rx="6"/>
+  <text class="tc" x="260" y="151" text-anchor="middle">network-config</text>
+
+  <!-- How it reaches the node -->
+  <line class="ln" x1="360" y1="100" x2="382" y2="100" marker-end="url(#arrow)"/>
+  <rect class="chip" x="384" y="86" width="112" height="28" rx="6"/>
+  <text class="tc" x="440" y="105" text-anchor="middle">CD-ROM</text>
+  <line class="ln" x1="496" y1="100" x2="534" y2="100" marker-end="url(#arrow)"/>
+
+  <!-- Node -->
+  <rect class="icon-vm" x="536" y="64" width="72" height="72" rx="14"/>
+  <text class="ic" x="572" y="105" text-anchor="middle">VM</text>
+</svg>
