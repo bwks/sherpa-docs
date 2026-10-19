@@ -2,8 +2,7 @@
 
 !!! Note
 
-    Attaching nodes to a public bridge is a planned feature. The host bridge setup below is
-    available now.
+    Attaching nodes to a public bridge is a planned feature.
 
 A `public bridge` is implemented as a layer 2 network bridged to a physical interface.
 A node connected to a public bridge has its virtual interface directly bridged to a physical
