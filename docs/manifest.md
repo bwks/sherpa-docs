@@ -297,6 +297,11 @@ that support the `cloud-init` based ZTP method._
 !!! note
     The `dst` should be a fully qualified path.
 
+!!! note
+    Text files are written late in the first boot, after cloud-init has created
+    users, so `user` and `group` can name the `sherpa` user. They must name a user
+    and group that exist on the node, otherwise cloud-init does not write the file.
+
 | Property | Type | Description |
 | -------- | ---- | ----------- |
 | `src` | string | Source file path on the client |
@@ -322,6 +327,10 @@ user_scripts = [
   "/path/to/user-script.sh",
 ]
 ```
+
+User scripts run at the end of the first boot, as your personal account when
+[`provision_current_user`](#provision_current_user-bool) is enabled, otherwise as the
+`sherpa` user. They run in a login shell, so `environment_variables` are set.
 
 ##### version (string)
 

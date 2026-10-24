@@ -35,6 +35,8 @@ Each supported VM gets an account with:
 
 No password is copied into the VM. The `sherpa` account is still created as usual.
 
+Manifest `user_scripts` run as your account instead of `sherpa`.
+
 Personal accounts apply to Linux VMs that use `cloud-init`, and to Flatcar. Windows, BSD,
 containers, unikernels and network devices are not changed.
 
