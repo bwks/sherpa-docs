@@ -147,14 +147,23 @@ A list of environment variables to pass to a node.
 
 ```toml
 environment_variables = [
-  # Supply the token inline. Beware, this is very insecure for sensitive vars.
   "SOME_VAR1=hello_jimmy",
   "MUSICAL_GENIUS='xyz-to-da-1-2-3'",
   # Load variable from your client environment with a dollar sign ($) prefixed variable name.
-  "GH_TOKEN=$GH_TOKEN",
-  "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY",
+  "GIT_AUTHOR_NAME=$GIT_AUTHOR_NAME",
 ]
 ```
+
+!!! warning "Not for secrets"
+    Do not put passwords, API keys or tokens in `environment_variables`, `text_files`,
+    `startup_scripts` or `user_scripts`. Their contents are sent to the Sherpa server, which
+    stores them with the lab: in the saved manifest, the node's generated configuration and its
+    first-boot media. Sherpa server administrators can read them there. Values loaded from your
+    client environment with `$` are stored the same way. For containers, environment variables
+    also appear in `docker inspect` on the server.
+
+    Copy secrets to a node yourself once it is running, for example with
+    `scp -F sherpa_ssh_config <file> <node>.<lab-id>:` from the lab's folder on your client.
 
 Where the variables are set depends on the node:
 
@@ -279,6 +288,9 @@ startup_scripts = [
 _This parameter currently only applies to node models
 that support the `cloud-init` based ZTP method._
 
+Like [`environment_variables`](#environment_variables-liststring), startup scripts are
+stored on the Sherpa server and are not for secrets.
+
 Startup scripts run as root. Each script is run directly, so start it with a shebang line,
 such as `#!/bin/bash`, to choose its interpreter. A script without one runs with the node's
 `/bin/sh`. Alpine, FreeBSD and OpenBSD do not ship Bash, so use `#!/bin/sh` there.
@@ -319,6 +331,10 @@ that support the `cloud-init` based ZTP method._
 !!! note
     The `dst` should be a fully qualified path.
 
+!!! warning
+    Text files are stored on the Sherpa server and are not for secrets. See
+    [`environment_variables`](#environment_variables-liststring).
+
 !!! note
     Text files are written late in the first boot, after cloud-init has created
     users, so `user` and `group` can name the `sherpa` user. They must name a user
@@ -349,6 +365,9 @@ user_scripts = [
   "/path/to/user-script.sh",
 ]
 ```
+
+User scripts are stored on the Sherpa server and are not for secrets. See
+[`environment_variables`](#environment_variables-liststring).
 
 User scripts run at the end of the first boot, as your personal account when
 [`provision_current_user`](#provision_current_user-bool) is enabled, otherwise as the

@@ -122,12 +122,18 @@ sudo mkdir -p /opt/sherpa && \
     sudo chmod 2775 /opt/sherpa
 ```
 
+Create the lab directory, readable only by the `sherpa` user and group
+
+```
+sudo install -d -o sherpa -g sherpa -m 2750 /opt/sherpa/labs
+```
+
 ### AppArmor
 
 Update AppArmor policy to allow `qemu` to access config files.
 
 ```
-sudo mkdir -p /opt/sherpa/libvirt/images/
+sudo install -d -o sherpa -g kvm -m 2750 /opt/sherpa/libvirt/images
 sudo sh -c 'echo "  # For ignition files" >> /etc/apparmor.d/abstractions/libvirt-qemu'
 sudo sh -c 'echo "  /opt/sherpa/libvirt/images/** r," >> /etc/apparmor.d/abstractions/libvirt-qemu'
 sudo systemctl restart libvirtd.service
