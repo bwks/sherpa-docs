@@ -37,13 +37,18 @@ Alpine keeps its own tools: your account gets the `ash` shell (`/bin/sh`) and pa
 `doas` instead of Bash and `sudo`. Install `bash` or `sudo` yourself if you want them, for
 example with a `startup_scripts` entry that runs `apk add bash sudo`.
 
+FreeBSD and OpenBSD also keep their own tools: your account gets the `sh` shell and joins the
+`wheel` group. On OpenBSD, admin rights use `doas`, part of the base system, which lets `wheel`
+run commands as root without a password. On FreeBSD they use passwordless `sudo`, which the
+image includes. The `sherpa` account is set up the same way.
+
 No password is copied into the VM. The `sherpa` account is still created as usual.
 
 Manifest `user_scripts` run as your account instead of `sherpa`, and manifest
 `environment_variables` are set in your account's login shells instead of the `sherpa`
 user's.
 
-Personal accounts apply to Linux VMs that use `cloud-init`, and to Flatcar. Windows, BSD,
+Personal accounts apply to Linux and BSD VMs that use `cloud-init`, and to Flatcar. Windows,
 containers, unikernels and network devices are not changed.
 
 !!! note

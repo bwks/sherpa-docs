@@ -28,7 +28,10 @@ nav:
     - architecture/ssh.md
     - architecture/ssh-keys.md
     - architecture/personal-accounts.md
-    - architecture/provisioners.md
+    - Provisioners:
+      - architecture/provisioners/overview.md
+      - architecture/provisioners/ssh.md
+      - architecture/provisioners/container.md
     - architecture/vnc.md
   - Install / Update:
     - Install:

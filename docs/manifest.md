@@ -162,8 +162,9 @@ environment_variables = [
     client environment with `$` are stored the same way. For containers, environment variables
     also appear in `docker inspect` on the server.
 
-    Use [`provisioners`](#provisioners-listobject) for secrets: the CLI copies them to the node
-    itself, and the server never sees them.
+    Use [`provisioners`](#provisioners-listobject) for secrets. On virtual machines the CLI
+    copies them to the node itself, so the server never sees them; containers get them as files
+    the server keeps in memory only.
 
 Where the variables are set depends on the node:
 
@@ -222,9 +223,10 @@ privileged = true
 
 ##### provisioners (list&lt;object&gt;)
 
-Provisioners the `sherpa` CLI runs on the node once it is ready, for secrets and setup that must
-not pass through the Sherpa server. They are never sent to the server. See
-[Provisioners](architecture/provisioners.md) for how they work and when they run.
+Provisioners get secrets onto the node, run by the `sherpa` CLI. They are never saved with the
+lab. There are two types: `ssh` for Linux and BSD virtual machines, and `container` for
+containers. See [Provisioners](architecture/provisioners/overview.md) for how they work and when
+they run.
 
 ```toml
 [[nodes.provisioners]]
@@ -238,12 +240,15 @@ dst = "~/.config/gh/hosts.yml"
 mode = 600
 ```
 
-_Provisioners run only on Linux and BSD virtual machines, and only from the `sherpa` CLI. A
-manifest with provisioners is refused from the web UI and the REST API._
+_Provisioners run only from the `sherpa` CLI. A manifest with provisioners is refused from the
+web UI and the REST API._
+
+[`ssh`](architecture/provisioners/ssh.md) provisioner properties, for Linux and BSD virtual
+machines:
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-| `type` | string | Provisioner type. `ssh` is the only type |
+| `type` | string | `ssh` |
 | `files` | list&lt;object&gt; | Files copied to the node with `scp` |
 | `env_files` | list&lt;string&gt; | Env files copied to `~/.env.d/`, which login shells load |
 | `scripts` | list&lt;string&gt; | Scripts run on the node, through their shebang line |
@@ -262,6 +267,41 @@ The SSH provisioner runs as the node's login user, in this order: `files`, `env_
 Env files hold `KEY=value` lines and are copied as `~/.env.d/<file name>`, so two env files on a
 node cannot share a name. Scripts get the variables from `environment_variables` and
 `~/.env.d/`.
+
+[`container`](architecture/provisioners/container.md) provisioner, for containers: secret
+files, mounted read-only at `/run/secrets/<name>` before the container starts.
+
+```toml
+[[nodes]]
+name = "db01"
+model = "mongo_db"
+environment_variables = [
+  "MONGO_INITDB_ROOT_USERNAME=admin",
+  "MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo_password",
+]
+
+[[nodes.provisioners]]
+type = "container"
+
+[[nodes.provisioners.files]]
+src = "secrets/mongo-password"
+name = "mongo_password"
+```
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `type` | string | `container` |
+| `files` | list&lt;object&gt; | Secret files |
+
+`files` properties:
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `src` | string | Path on the client |
+| `name` | string | File name in `/run/secrets`. Letters, digits and `. _ - + @` only |
+| `mode` | int | File permissions (e.g., `400`). Defaults to `444`, so a container that does not run as root can read it |
+
+Many images read a secret from a file named in a `*_FILE` environment variable, as above.
 
 ##### ready_port (int)
 
