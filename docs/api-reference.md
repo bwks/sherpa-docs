@@ -65,13 +65,15 @@ validates that variable name but never resolves it from its own environment.
 
 | Field | Direction | Description |
 | ----- | --------- | ----------- |
-| `tailscale_auth_key` | Creation request | Tailscale auth key; required when enabled and omitted when disabled |
+| `tailscale_auth_key` | Creation and resume requests | Tailscale auth key. Creation: required when enabled, omitted when disabled. Resume: required to resume a whole lab with a gateway, omitted otherwise |
 | `tailscale` | Creation, inspect, and full-resume responses | Optional gateway status with state, route approval, advertised routes, Tailscale addresses, and warnings |
 
-Auth keys are used only for initial enrollment and are not saved in manifests or
-database records. Stop and resume retain the gateway identity. Pending or unknown
-route approval is reported as a warning; enrollment failure triggers rollback.
-Web UI enrollment is not supported in this version.
+Auth keys are used for enrollment and are not saved in manifests or database
+records. Stopping a lab logs the gateway out, so resuming the whole lab enrolls it
+again with the key from the resume request. Pending or unknown route approval is
+reported as a warning; enrollment failure during creation triggers rollback.
+Web UI enrollment is not supported, so the web UI cannot resume a whole lab with a
+gateway.
 
 See [Tailscale setup and recovery](architecture/networking/tailscale.md) and the
 running server's Swagger UI for the request and response schemas.

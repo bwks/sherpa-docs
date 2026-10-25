@@ -24,7 +24,7 @@ devices. Lab nodes do not need Tailscale installed.
     auth_key_env = "SHERPA_TAILSCALE_KEY"
     ```
 
-2. Set the auth key in the shell that runs `sherpa up`:
+2. Set the auth key in the shell that runs `sherpa up` and `sherpa resume`:
 
     ```bash
     export SHERPA_TAILSCALE_KEY=<your-auth-key>
@@ -47,25 +47,24 @@ The manifest holds only the variable name, never the key. See the
 Use a **reusable, ephemeral, pre-approved** key with the tag your route auto-approval uses
 (see [Automatic approval](#automatic-approval)):
 
-- **Ephemeral** means Tailscale removes the gateway device from your tailnet by itself after it
-  goes offline, so destroyed labs do not leave devices behind for you to delete by hand.
+- **Ephemeral** means the gateway device leaves your tailnet as soon as Sherpa logs it out on
+  `sherpa down` and `sherpa destroy`, so labs do not leave devices behind for you to delete by
+  hand.
 - **Pre-approved** is needed if your tailnet requires device approval.
-- **Reusable** lets one key enroll many labs.
+- **Reusable** lets one key enroll many labs, and enroll a lab again each time it resumes.
 
-The key is only needed when the lab is first created. While the gateway's device still exists,
-`sherpa down` and `sherpa resume` reuse its saved identity.
+The key is needed when the lab is created and each time the whole lab is resumed, because
+`sherpa down` logs the gateway out. Sherpa never stores the key; keep it in the variable named
+by `auth_key_env`.
 
-!!! warning "Ephemeral keys and stopped labs"
+!!! warning "Non-ephemeral keys"
 
-    Tailscale removes an ephemeral device typically 30 to 60 minutes after it goes offline,
-    and `sherpa down` stops the gateway. If a lab stays down longer than that, `sherpa resume`
-    cannot reconnect the gateway, because Sherpa does not yet re-enroll it with a new key.
-    Destroy and recreate the lab instead. Re-enrollment on resume is planned.
+    Both kinds of key work, but logging out does not remove a device enrolled with a
+    non-ephemeral key. It stays in your tailnet, offline, after each `sherpa down` and
+    `sherpa destroy` until you remove it in the Tailscale admin console.
 
-    `sherpa destroy` does not yet log the gateway out, so its device stays in the tailnet until
-    Tailscale removes it, up to about an hour later.
-- REST API callers send the key as `tailscale_auth_key` in the creation request. The web UI
-  cannot enroll a lab.
+- REST API callers send the key as `tailscale_auth_key` in the creation and resume requests.
+  The web UI cannot enroll a lab, so it cannot resume a whole lab that uses Tailscale.
 
 ## Route Approval
 
@@ -80,12 +79,16 @@ approved, other devices cannot reach the lab. Lab creation still succeeds, with 
 3. Generate the auth key with that tag attached.
 4. Create the lab.
 
+Each resume enrolls a new gateway device, so with automatic approval its routes are approved
+again without you doing anything.
+
 The policy lives in Tailscale. Sherpa never changes it and needs no Tailscale admin credential.
 
 ### Manual approval
 
 Open the gateway device in the Tailscale admin console and approve its advertised IPv4 and
-IPv6 routes.
+IPv6 routes. Each `sherpa resume` enrolls a new device, so approve its routes again after every
+resume.
 
 ### Check the result
 
@@ -112,9 +115,13 @@ uses the Sherpa server as a jump host. Per-node DNS names are not provided.
 | Command | Gateway |
 | ------- | ------- |
 | `sherpa up` | Created and joined to the tailnet. If enrollment fails, the lab is rolled back. A route approval warning does not fail the lab. |
-| `sherpa down` | Stopped along with the lab. With an ephemeral key, Tailscale removes the device after it has been offline for a while. |
-| `sherpa resume` | Started with its saved identity before nodes resume. This fails if Tailscale has already removed an ephemeral device. |
-| `sherpa destroy` or `sherpa server clean <lab_id>` | Removed, with its identity volume. If removal fails, the lab record is kept so you can retry. With an ephemeral key, Tailscale removes the device once it has been offline for a while. |
+| `sherpa down` | Logged out of the tailnet, then stopped along with the lab. An ephemeral device is removed at once. |
+| `sherpa resume` | Started and enrolled again with the key from `auth_key_env` before nodes resume, as a new device with new Tailscale addresses. Its routes need approval again, which is automatic with [automatic approval](#automatic-approval). |
+| `sherpa destroy` or `sherpa server clean <lab_id>` | Logged out if it is running, then removed with its identity volume. If removal fails, the lab record is kept so you can retry. |
+
+If logging out fails, for example because the server has no internet access, Sherpa still
+stops or removes the gateway. Tailscale then removes an ephemeral device by itself, typically
+30 to 60 minutes after it goes offline.
 
 Stopping or resuming an individual node leaves the gateway alone.
 
@@ -123,14 +130,15 @@ Stopping or resuming an individual node leaves the gateway alone.
 | Problem | What to do |
 | ------- | ---------- |
 | Environment variable is not set | Set the variable named by `auth_key_env` in your client shell, then retry. |
+| Resume asks for an auth key | Run `sherpa resume` in the lab folder, so it can read `auth_key_env` from `manifest.toml`, with that variable set. REST callers send `tailscale_auth_key`. |
 | Plaintext connection, or certificate validation disabled | Enable server TLS, connect over WSS and trust the server certificate without `--insecure`. |
 | Invalid or expired key, or enrollment timed out | Check the key, device approval, the server's internet access and `/dev/net/tun`. The lab is rolled back. Retry with a fresh key. A one-use key may already be spent. |
-| Gateway needs reauthentication on resume | Usually an ephemeral device that Tailscale removed while the lab was down. Destroy and recreate the lab. With a non-ephemeral key, an administrator can instead log the existing gateway in interactively inside its container. Sherpa does not keep keys for automatic reauthentication. |
+| Gateway does not reconnect on resume | Check the key as for enrollment: it may have expired, been revoked, or been a one-use key that is already spent. Generate a new key and run `sherpa resume` again. |
 | Routes are pending | Approve them as described above. No restart is needed. |
 | Routes approved but unreachable | Check your ACLs, that your client accepts routes, the node state, and address conflicts. |
 | Address conflicts | Management ranges must not overlap other advertised networks or your client's local networks. Sherpa avoids conflicts on one server, but cannot see other servers or tailnets. Configure distinct management ranges before creating labs. |
 | Destroy failed part way | Resolve the Docker error or volume attachment, then run `sherpa destroy` again as the lab owner, or `sherpa server clean <lab_id>` as an administrator. Sherpa keeps the lab record and only deletes gateways it can verify belong to that lab. Other lab resources may already have been removed. |
-| Stale device in Tailscale | An ephemeral device is removed by Tailscale once it has been offline for a while. A device enrolled with a non-ephemeral key stays until you remove it in the Tailscale admin console. Sherpa stores no admin credential and cannot remove it. |
+| Stale device in Tailscale | An ephemeral device that Sherpa could not log out is removed by Tailscale once it has been offline for a while. A device enrolled with a non-ephemeral key stays until you remove it in the Tailscale admin console. Sherpa stores no admin credential and cannot remove it. |
 
 ## Server Settings
 
