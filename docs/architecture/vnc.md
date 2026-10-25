@@ -4,15 +4,14 @@ VNC (Virtual Network Computing) provides graphical console access to virtual mac
 
 ## How it Works
 
-Every virtual machine node in Sherpa is configured with a VNC graphics adapter via libvirt. The VNC server is automatically started by QEMU when the VM is created, with an auto-assigned port.
-
-The libvirt domain definition includes:
+Every virtual machine node in Sherpa has a VNC graphics adapter. When the lab is created, Sherpa
+reserves a VNC port on the server for each VM, from `5900` to `6999`, and the VM keeps it for its
+life: stopping, resuming and redeploying the node do not change it. The port is written into the
+libvirt domain, for example:
 
 ```xml
-<graphics type='vnc' port='-1' autoport='yes'/>
+<graphics type='vnc' port='5901' autoport='no'/>
 ```
-
-Setting `port='-1'` with `autoport='yes'` tells QEMU to automatically assign an available port starting from `5900`.
 
 ## Finding the VNC Port
 
@@ -22,7 +21,7 @@ The VNC port for each VM node is displayed in the `sherpa inspect` output under 
 sherpa inspect
 ```
 
-The VNC port is extracted from the running libvirt domain at inspect time. Container and unikernel nodes do not have VNC ports.
+The web UI's node page shows it too. Container and unikernel nodes do not have VNC ports.
 
 ## Connecting
 
@@ -39,12 +38,12 @@ vncviewer localhost:<vnc-port>
 Use SSH tunneling to forward the VNC port from the Sherpa server to your local machine:
 
 ```bash
-# ssh -N -L {local-port}:{node-ipv4}:{vnc-port} {sherpa-server}
+# ssh -N -L {local-port}:localhost:{vnc-port} {sherpa-server}
 
-ssh -N -L 5900:172.31.1.21:5900 sherpa-server
+ssh -N -L 5901:localhost:5901 sherpa-server
 ```
 
-Then connect your VNC client to `localhost:5900` on your local machine.
+Then connect your VNC client to `localhost:5901` on your local machine.
 
 ## Applicability
 
@@ -52,7 +51,7 @@ Then connect your VNC client to `localhost:5900` on your local machine.
 | --------- | ------------- |
 | Virtual Machine | Yes |
 | Container | No |
-| Unikernel | Yes |
+| Unikernel | No |
 
 !!! note
 
