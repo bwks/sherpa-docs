@@ -13,9 +13,12 @@ Sherpa organises files across several directories under `/opt/sherpa/`.
 ├── bins/                    # Unikernel binaries
 ├── labs/                    # Per-lab runtime files
 │   └── <lab-id>/
-│       ├── <node>.qcow2     # Cloned VM disks
-│       ├── ssh_config       # Lab SSH config
+│       ├── manifest.toml    # Saved manifest
+│       ├── sherpa_ssh_config
+│       ├── ztp/             # Generated node configs
 │       └── ...
+├── libvirt/
+│   └── images/              # Storage pool: VM disks and ZTP media
 ├── ssh/                     # SSH keys
 └── .certs/                  # TLS certificates
     ├── server.crt
@@ -74,12 +77,37 @@ virsh pool-info sherpa-pool
 
 Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This directory contains:
 
-- **Cloned disk images** for each VM node in the lab
+- The **saved manifest** used for redeploys
 - **SSH configuration** files for node access
-- **ZTP configuration** files generated for each node
-- **Cloud-init** ISO images (for VMs using cloud-init ZTP)
+- **ZTP configuration** files generated for each node, including cloud-init `user-data`
+- **TLS certificates** for the lab's nodes
+
+VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
+`/opt/sherpa/libvirt/images/`.
 
 When a lab is destroyed, its entire lab directory is cleaned up.
+
+## Permissions
+
+Lab files hold node configuration and the data from your manifest, so only Sherpa can read them:
+
+| Directory | Owner | Mode | Readable by |
+|---|---|---|---|
+| `/opt/sherpa/labs/` | `sherpa:sherpa` | `2750` | The `sherpa` user and the `sherpa` group (administrators) |
+| `/opt/sherpa/libvirt/images/` | `sherpa:kvm` | `2750` | The `sherpa` user, and QEMU, which runs in the `kvm` group |
+
+Volumes in the storage pool are created with mode `0600`. While a VM runs, libvirt hands its
+disks and ISO to the QEMU user. Flatcar's Ignition file is `0644`, because QEMU reads it
+directly.
+
+`sherpad` applies these directory modes each time it starts, and the install and update
+scripts set them too. If `sherpad` cannot apply them, for example because another user owns a
+directory, it logs a warning and starts anyway. Fix the owner with:
+
+```bash
+sudo install -d -o sherpa -g sherpa -m 2750 /opt/sherpa/labs
+sudo install -d -o sherpa -g kvm -m 2750 /opt/sherpa/libvirt/images
+```
 
 ## Client Storage
 
