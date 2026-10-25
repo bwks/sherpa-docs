@@ -147,6 +147,22 @@ secrets. A cluster controller cannot be redeployed.
 | ---- | ----------- |
 | `--node`, `-n` | Target node to redeploy (required) |
 
+When the node has [provisioners](architecture/provisioners.md), the CLI runs them once the node
+is back.
+
+### `sherpa provision`
+
+Run node [provisioners](architecture/provisioners.md) again from the lab's folder: copy their
+files and run their scripts over SSH. `sherpa up` and `sherpa redeploy` run them already; use
+this after a failure or after changing a file.
+
+The CLI prints the result for each node and exits with an error if any node was not
+provisioned.
+
+| Flag | Description |
+| ---- | ----------- |
+| `--node`, `-n` | Target a specific node (omit for all nodes with provisioners) |
+
 ### `sherpa destroy`
 
 Destroy the lab and all its resources, including its Tailscale gateway and

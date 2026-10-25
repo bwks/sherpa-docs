@@ -25,6 +25,10 @@ Sherpa server.
 For ease of use, it is recommeded to copy your ssh keys to the Sherpa server
 to allow passwordless connectivity to remote nodes.
 
+[Provisioners](provisioners.md) connect the same way, but cannot answer prompts: the jump host
+login must work without a password or passphrase prompt, for example with your key loaded in
+your SSH agent.
+
 ## Tunneling
 
 SSH tunneling allows for the connection of remote resources from your local

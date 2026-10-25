@@ -28,6 +28,7 @@ nav:
     - architecture/ssh.md
     - architecture/ssh-keys.md
     - architecture/personal-accounts.md
+    - architecture/provisioners.md
     - architecture/vnc.md
   - Install / Update:
     - Install:

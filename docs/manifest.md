@@ -162,8 +162,8 @@ environment_variables = [
     client environment with `$` are stored the same way. For containers, environment variables
     also appear in `docker inspect` on the server.
 
-    Copy secrets to a node yourself once it is running, for example with
-    `scp -F sherpa_ssh_config <file> <node>.<lab-id>:` from the lab's folder on your client.
+    Use [`provisioners`](#provisioners-listobject) for secrets: the CLI copies them to the node
+    itself, and the server never sees them.
 
 Where the variables are set depends on the node:
 
@@ -219,6 +219,49 @@ Run the container in privileged mode.
 ```toml
 privileged = true
 ```
+
+##### provisioners (list&lt;object&gt;)
+
+Provisioners the `sherpa` CLI runs on the node once it is ready, for secrets and setup that must
+not pass through the Sherpa server. They are never sent to the server. See
+[Provisioners](architecture/provisioners.md) for how they work and when they run.
+
+```toml
+[[nodes.provisioners]]
+type = "ssh"
+env_files = ["secrets/dev.env"]
+scripts = ["secrets/setup.sh"]
+
+[[nodes.provisioners.files]]
+src = "~/.config/gh/hosts.yml"
+dst = "~/.config/gh/hosts.yml"
+mode = 600
+```
+
+_Provisioners run only on Linux and BSD virtual machines, and only from the `sherpa` CLI. A
+manifest with provisioners is refused from the web UI and the REST API._
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `type` | string | Provisioner type. `ssh` is the only type |
+| `files` | list&lt;object&gt; | Files copied to the node with `scp` |
+| `env_files` | list&lt;string&gt; | Env files copied to `~/.env.d/`, which login shells load |
+| `scripts` | list&lt;string&gt; | Scripts run on the node, through their shebang line |
+
+The SSH provisioner runs as the node's login user, in this order: `files`, `env_files`, then
+`scripts`. Client paths expand `~`, and relative paths start at the manifest's folder.
+
+`files` properties:
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `src` | string | Path on the client |
+| `dst` | string | Path on the node: absolute, or starting with `~/` for the login user's home. Letters, digits and `. _ - + @` only |
+| `mode` | int | File permissions (e.g., `600`). Defaults to `600` |
+
+Env files hold `KEY=value` lines and are copied as `~/.env.d/<file name>`, so two env files on a
+node cannot share a name. Scripts get the variables from `environment_variables` and
+`~/.env.d/`.
 
 ##### ready_port (int)
 
