@@ -156,8 +156,26 @@ environment_variables = [
 ]
 ```
 
-_This parameter currently only applies to node models
-that support the `cloud-init` based ZTP method._
+Where the variables are set depends on the node:
+
+- **Linux and BSD VMs using `cloud-init`, and Flatcar**: the variables are written to
+  `~/.sherpa_env` in the home directory of the login user, which is your personal account
+  when [`provision_current_user`](#provision_current_user-bool) is enabled, otherwise the
+  `sherpa` user. The file is readable only by that user, and nothing is written system-wide.
+  A line that sources it is added to `~/.bash_profile`, or to `~/.profile` when there is no
+  `~/.bash_profile`, so the variables are set in login shells, including
+  [`user_scripts`](#user_scripts-liststring).
+- **Windows VMs**: the variables are set machine-wide.
+- **Containers**: the variables are set in the container environment.
+
+!!! note
+    On VMs, the variables are not set in non-login sessions, such as `ssh <node> <command>`,
+    cron jobs and systemd services, or in `startup_scripts`, which run as root. If your
+    dotfiles replace `~/.bash_profile` or `~/.profile`, keep this line in them:
+
+    ```sh
+    if [ -r "$HOME/.sherpa_env" ]; then . "$HOME/.sherpa_env"; fi
+    ```
 
 ##### image (string)
 
@@ -261,6 +279,10 @@ startup_scripts = [
 _This parameter currently only applies to node models
 that support the `cloud-init` based ZTP method._
 
+Startup scripts run as root. Each script is run directly, so start it with a shebang line,
+such as `#!/bin/bash`, to choose its interpreter. A script without one runs with the node's
+`/bin/sh`. Alpine, FreeBSD and OpenBSD do not ship Bash, so use `#!/bin/sh` there.
+
 ##### systemd_units (list&lt;object&gt;)
 
 Systemd units to deploy to the node.
@@ -297,6 +319,11 @@ that support the `cloud-init` based ZTP method._
 !!! note
     The `dst` should be a fully qualified path.
 
+!!! note
+    Text files are written late in the first boot, after cloud-init has created
+    users, so `user` and `group` can name the `sherpa` user. They must name a user
+    and group that exist on the node, otherwise cloud-init does not write the file.
+
 | Property | Type | Description |
 | -------- | ---- | ----------- |
 | `src` | string | Source file path on the client |
@@ -322,6 +349,12 @@ user_scripts = [
   "/path/to/user-script.sh",
 ]
 ```
+
+User scripts run at the end of the first boot, as your personal account when
+[`provision_current_user`](#provision_current_user-bool) is enabled, otherwise as the
+`sherpa` user. They run in a login shell, so `environment_variables` are set. Like
+[`startup_scripts`](#startup_scripts-liststring), each script is run directly, so its shebang
+line chooses the interpreter.
 
 ##### version (string)
 

@@ -60,3 +60,5 @@ model = "free_bsd"
 
 - Approximate time for the system to be ready: `1 minute`
 - Tested with the `UFS` image.
+- Home directories are under `/usr/home`, for example `/usr/home/sherpa`. Use these paths for
+  [`text_files`](../../manifest.md#text_files-listobject) destinations.

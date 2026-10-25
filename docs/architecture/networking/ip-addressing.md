@@ -98,6 +98,9 @@ configures that address itself depends on its model.
 
 These models do not yet configure an IPv6 management address:
 
+- OpenBSD. cloud-init's OpenBSD network renderer never configures IPv6 addresses, and it fails
+  on an IPv6 default route, which would leave the node with no network. Sherpa therefore sends
+  OpenBSD nodes IPv4 settings only. See [OpenBSD](../../nodes/bsd/open-bsd.md#notes).
 - Palo Alto PAN-OS
 - SONiC Linux
 

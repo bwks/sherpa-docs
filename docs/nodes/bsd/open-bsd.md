@@ -57,3 +57,7 @@ model = "open_bsd"
 ## Notes
 
 - Approximate time for the system to be ready: `1 minute`
+- IPv4 only. The node is allocated an IPv6 management address, but it is not configured on the
+  node. cloud-init's OpenBSD network renderer does not configure IPv6 addresses, and it fails
+  on an IPv6 default route, which would leave the node with no network. Sherpa therefore sends
+  OpenBSD nodes IPv4 settings only.
