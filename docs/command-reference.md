@@ -107,8 +107,8 @@ are shut down through the Talos API, workers before controllers. Unikernels and 
 nodes are powered off, and containers are paused. The result for each node says whether it
 shut down or was powered off.
 
-With Tailscale enabled, a full shutdown also stops the gateway. Using `--node`
-leaves the gateway alone.
+With Tailscale enabled, a full shutdown also logs the gateway out of the tailnet and
+stops it. Using `--node` leaves the gateway alone.
 
 | Flag | Description |
 | ---- | ----------- |
@@ -125,11 +125,11 @@ showing progress as it goes. It uses the lab's `ready_timeout`, and each node's
 that is not ready within the timeout is reported, but resume still succeeds. Containers
 and paused nodes do not wait, because they resume an already running guest.
 
-With Tailscale enabled, a full resume starts the gateway using its saved identity
-before resuming nodes. No enrollment key is required. Using `--node` leaves the
-gateway alone. If the lab used an ephemeral key and was down long enough for
-Tailscale to remove the gateway device, the gateway cannot reconnect; see
-[Tailscale](architecture/networking/tailscale.md#choosing-an-auth-key).
+With Tailscale enabled, a full resume enrolls the gateway again before resuming
+nodes, as `sherpa down` logged it out. Run it in the lab folder with the variable
+named by `auth_key_env` set, as for `sherpa up`; it needs WSS with certificate
+validation. Using `--node` leaves the gateway alone and needs no key. See
+[Tailscale](architecture/networking/tailscale.md#lab-lifecycle).
 
 | Flag | Description |
 | ---- | ----------- |
@@ -167,7 +167,7 @@ provisioned.
 ### `sherpa destroy`
 
 Destroy the lab and all its resources, including its Tailscale gateway and
-identity volume when present. If either Tailscale removal fails, the server retains
+identity volume when present. A running gateway is logged out of the tailnet first. If either Tailscale removal fails, the server retains
 database ownership and saved lab configuration so the owner or an admin can retry.
 Other resources may already have been removed. See [cleanup recovery](architecture/networking/tailscale.md#recovery).
 

@@ -610,9 +610,10 @@ auth_key_env = "SHERPA_TAILSCALE_KEY"
 | `enabled` | bool | `false` | Create a Tailscale gateway for the lab |
 | `auth_key_env` | string | unset | Client environment variable containing the auth key; required when enabled |
 
-Set the named variable in the client shell before running `sherpa up`. Store only
-the variable name in the manifest, never the key. The key is required only for
-initial creation; stop and resume retain the gateway identity. Omitting the section
+Set the named variable in the client shell before running `sherpa up` and
+`sherpa resume`. Store only the variable name in the manifest, never the key. The
+key is required for creation and for each whole-lab resume, because `sherpa down`
+logs the gateway out. Omitting the section
 or setting `enabled = false` requires no credential and creates no gateway.
 
 Enrollment requires server TLS and WSS with certificate validation enabled.
