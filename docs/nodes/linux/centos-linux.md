@@ -4,7 +4,10 @@
 
 Base images can be downloaded from the [CentOS Stream](https://www.centos.org/download/) page.
 
-Look for the Generic Cloud image.
+Look for the Generic Cloud image, for example
+`CentOS-Stream-GenericCloud-10-20261021.0.x86_64.qcow2` from
+<https://cloud.centos.org/centos/10-stream/x86_64/images/>. Check it against the matching
+`.SHA256SUM` file with `sha256sum -c`.
 
 ## Import Image
 
@@ -12,7 +15,7 @@ Look for the Generic Cloud image.
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
   --model centos_linux \
-  --version 10-20260401 \
+  --version 10-20261021.0 \
   --default
 ```
 
@@ -20,7 +23,7 @@ sherpa server image import \
 
 | Property             | Value           |
 | -------------------- | --------------- |
-| Tested Version       | 10-20260401     |
+| Tested Version       | 10-20261021.0   |
 | Kind                 | Virtual Machine |
 | CPU                  | 1               |
 | RAM                  | 1GB             |
