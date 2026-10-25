@@ -147,14 +147,15 @@ secrets. A cluster controller cannot be redeployed.
 | ---- | ----------- |
 | `--node`, `-n` | Target node to redeploy (required) |
 
-When the node has [provisioners](architecture/provisioners.md), the CLI runs them once the node
-is back.
+When the node has [provisioners](architecture/provisioners/overview.md), the CLI sends a container's
+secret files with the redeploy, and runs `ssh` provisioners once the node is back.
 
 ### `sherpa provision`
 
-Run node [provisioners](architecture/provisioners.md) again from the lab's folder: copy their
-files and run their scripts over SSH. `sherpa up` and `sherpa redeploy` run them already; use
-this after a failure or after changing a file.
+Run node [provisioners](architecture/provisioners/overview.md) again from the lab's folder: send
+containers' secret files to the server again, and copy files and run scripts over SSH. `sherpa
+up` and `sherpa redeploy` run them already; use this after a failure, after changing a file, or
+after a server reboot.
 
 The CLI prints the result for each node and exits with an error if any node was not
 provisioned.
