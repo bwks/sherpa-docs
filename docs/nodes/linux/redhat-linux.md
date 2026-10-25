@@ -4,11 +4,14 @@
 
 Base images can be downloaded from the [Red Hat Enterprise Linux Downloads](https://access.redhat.com/downloads/content/rhel) page.
 
-Look for the `KVM Guest` image with in the name.
+Look for the `KVM Guest Image`, for example `rhel-10.2-x86_64-kvm.qcow2`.
 
 !!! Note
 
     An account is required. Creating a free developer account allows you to access Red Hat Enterprise Linux images.
+
+    Nodes start unregistered, so they cannot install packages from Red Hat's repositories until
+    you register them with `subscription-manager register`.
 
 ## Import Image
 
@@ -16,7 +19,7 @@ Look for the `KVM Guest` image with in the name.
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
   --model redhat_linux \
-  --version 10.1 \
+  --version 10.2 \
   --default
 ```
 
@@ -24,7 +27,7 @@ sherpa server image import \
 
 | Property             | Value           |
 | -------------------- | --------------- |
-| Tested Version       | 10.1            |
+| Tested Version       | 10.2            |
 | Kind                 | Virtual Machine |
 | CPU                  | 1               |
 | RAM                  | 1GB             |
