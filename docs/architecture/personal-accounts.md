@@ -33,9 +33,15 @@ Each supported VM gets an account with:
 - Your registered public keys as authorized keys
 - Passwordless `sudo`
 
+Alpine keeps its own tools: your account gets the `ash` shell (`/bin/sh`) and passwordless
+`doas` instead of Bash and `sudo`. Install `bash` or `sudo` yourself if you want them, for
+example with a `startup_scripts` entry that runs `apk add bash sudo`.
+
 No password is copied into the VM. The `sherpa` account is still created as usual.
 
-Manifest `user_scripts` run as your account instead of `sherpa`.
+Manifest `user_scripts` run as your account instead of `sherpa`, and manifest
+`environment_variables` are set in your account's login shells instead of the `sherpa`
+user's.
 
 Personal accounts apply to Linux VMs that use `cloud-init`, and to Flatcar. Windows, BSD,
 containers, unikernels and network devices are not changed.
