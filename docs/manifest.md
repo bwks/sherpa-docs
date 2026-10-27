@@ -423,6 +423,13 @@ that support the `cloud-init` based ZTP method._
     users, so `user` and `group` can name the `sherpa` user. They must name a user
     and group that exist on the node, otherwise cloud-init does not write the file.
 
+!!! note "Windows nodes"
+    Windows has no file modes, so `user`, `group` and `permissions` are not applied as on
+    Linux. A file whose `permissions` give others no access (such as `600` or `640`) can be
+    read only by Administrators and SYSTEM. Any other file takes the access of the folder it
+    is written to, which on most folders lets every local user read it. The `dst` cannot
+    contain `"` or `%`.
+
 | Property | Type | Description |
 | -------- | ---- | ----------- |
 | `src` | string | Source file path on the client |
