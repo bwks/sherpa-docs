@@ -211,8 +211,9 @@ sherpa ssh <name>
 - The first time you connect to a Sherpa server, you are shown its host key fingerprint and
   asked to confirm it, as with OpenSSH. A confirmed key is added to `~/.ssh/known_hosts`. A
   server whose key has changed is refused.
-- The login to the Sherpa server cannot prompt for a password or key passphrase. Use a key
-  loaded in your SSH agent, or a key without a passphrase. See [SSH](architecture/ssh.md).
+- If your key has a passphrase, or the Sherpa server needs your password, you are asked for
+  it, as with OpenSSH. A key loaded in your SSH agent needs no prompt. See
+  [SSH](architecture/ssh.md).
 
 ### `sherpa console`
 

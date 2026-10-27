@@ -23,9 +23,11 @@ The `sherpa ssh <node-name>` command uses the generated
 Sherpa server. 
 
 `sherpa ssh` uses Sherpa's own SSH client, which reads `sherpa_ssh_config` as
-`ssh -F sherpa_ssh_config` would. [SSH provisioners](provisioners/ssh.md) connect the same way
-through the system `ssh`. Neither can answer password or passphrase prompts, so the jump host
-login must work without one:
+`ssh -F sherpa_ssh_config` would. Like `ssh`, it asks for your key's passphrase or your
+password on the Sherpa server when it needs them.
+
+[SSH provisioners](provisioners/ssh.md) connect the same way through the system `ssh`, but
+cannot answer prompts, so for them the jump host login must work without one:
 
 - copy your public key to your account on the Sherpa server, and
 - load the private key in your SSH agent (`ssh-add`), or use a key without a passphrase. On
