@@ -305,10 +305,12 @@ Many images read a secret from a file named in a `*_FILE` environment variable, 
 
 ##### ready_port (int)
 
-TCP port to probe on the node's management IP to verify readiness.
+Port to probe on the node's management IP to verify readiness.
 
 - **Virtual machines:** replaces the model's readiness port. Most models are checked on SSH
-  port `22`; `talos_linux` is checked on the Talos API port `50000`.
+  port `22`; `talos_linux` is checked on the Talos API port `50000`. On port `22` an SSH
+  server must answer: the port must be open and complete an SSH handshake (no login is
+  attempted). Any other port only needs to accept a TCP connection.
 - **Unikernels:** Sherpa waits for a TCP connection to this port in addition to the libvirt
   domain reaching the running state.
 
