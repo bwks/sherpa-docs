@@ -22,20 +22,16 @@ The `sherpa ssh <node-name>` command uses the generated
 `sherpa_ssh_config` file to jump to the lab nodes via the 
 Sherpa server. 
 
-`sherpa ssh` uses Sherpa's own SSH client, which reads `sherpa_ssh_config` as
-`ssh -F sherpa_ssh_config` would. Like `ssh`, it asks for your key's passphrase or your
-password on the Sherpa server when it needs them.
+`sherpa ssh` and [SSH provisioners](provisioners/ssh.md) use Sherpa's own SSH client, which
+reads `sherpa_ssh_config` as `ssh -F sherpa_ssh_config` would. No `ssh` or `scp` program is
+needed. Like `ssh`, they ask for your key's passphrase or your password on the Sherpa server
+when they need them. Provisioners ask once per run and reuse the answer for every node. A key
+loaded in your SSH agent (`ssh-add`; on Windows the OpenSSH agent service, or Pageant) needs no
+prompt.
 
-[SSH provisioners](provisioners/ssh.md) connect the same way through the system `ssh`, but
-cannot answer prompts, so for them the jump host login must work without one:
-
-- copy your public key to your account on the Sherpa server, and
-- load the private key in your SSH agent (`ssh-add`), or use a key without a passphrase. On
-  Windows the OpenSSH agent service is used; Pageant works too.
-
-The Sherpa server's host key is checked against `~/.ssh/known_hosts`. `sherpa ssh` asks you to
-confirm an unknown server's fingerprint and records it; provisioners cannot ask, so connect
-once with `sherpa ssh` (or `ssh`) first.
+The Sherpa server's host key is checked against `~/.ssh/known_hosts`. The first time you
+connect, you are shown its fingerprint and asked to confirm it, as with OpenSSH; a confirmed
+key is recorded there. A server whose key has changed is refused.
 
 ## Tunneling
 

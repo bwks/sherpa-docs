@@ -42,8 +42,9 @@ Everything runs as the node's login user: your [personal account](../personal-ac
 `provision_current_user` is enabled, otherwise the `sherpa` user. In order:
 
 1. **Waits for the node.** It retries the login until the account exists, then waits for
-   cloud-init to finish first-boot work, so your files are not overwritten by it.
-2. **Copies `files`** with `scp`. Missing parent directories are created, private to the user.
+   cloud-init to finish first-boot work, so your files are not overwritten by it. Every step
+   on the node then uses that one connection.
+2. **Copies `files`** over SFTP. Missing parent directories are created, private to the user.
    Each file is made private before its contents arrive, then given its `mode` (default `600`).
 3. **Copies `env_files`** into `~/.env.d/`, mode `600`, and adds a line to `~/.bash_profile`, or
    to `~/.profile` when there is no `~/.bash_profile`, that loads every file in `~/.env.d/` in
@@ -64,9 +65,11 @@ Everything runs as the node's login user: your [personal account](../personal-ac
 ## Requirements
 
 - Run the command from the lab's folder, where `sherpa up` wrote `sherpa_ssh_config`.
-- `ssh` and `scp` (OpenSSH) on your machine. Windows includes them.
-- You can log in to the Sherpa server as the jump host without a prompt: your key in your SSH
-  agent or `~/.ssh/config`, with no password or passphrase prompt. See
+- Nothing extra on your machine: the `sherpa` CLI has its own SSH client. No `ssh` or `scp`
+  program is used.
+- A login to the Sherpa server as the jump host. If your key has a passphrase or the server
+  needs your password, you are asked once, when the first node is provisioned, and the
+  answer is used for the other nodes. A key loaded in your SSH agent needs no prompt. See
   [SSH](../ssh.md#jumphost).
 - Linux and BSD virtual machines only: the `cloud-init` Linux and BSD models, Alpine and
   Flatcar.
