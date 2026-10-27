@@ -13,7 +13,7 @@ Currently, only Windows Server 2022 is supported, but more versions are coming s
 ```
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
-  --version 2022-20260307 \
+  --version 2022-20261026 \
   --model windows_server \
   --default
 ```
@@ -23,7 +23,7 @@ sherpa server image import \
 | Property             | Value           |
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
-| Tested Version       | 2022-20260307     |
+| Tested Version       | 2022-20261026   |
 | CPU                  | 4               |
 | RAM                  | 8GB             |
 | CDROM Driver         | SATA            |
