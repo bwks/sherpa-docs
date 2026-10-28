@@ -33,6 +33,55 @@ The Sherpa server's host key is checked against `~/.ssh/known_hosts`. The first 
 connect, you are shown its fingerprint and asked to confirm it, as with OpenSSH; a confirmed
 key is recorded there. A server whose key has changed is refused.
 
+## Node Host Keys
+
+When a lab node answers on SSH, the Sherpa server records the host key it offers with the
+node. The lab's keys are saved in a `known_hosts` file named `sherpa_known_hosts`, next to
+`sherpa_ssh_config`, which `sherpa up` and `sherpa download` write to the lab folder. For each
+node with a recorded key, `sherpa_ssh_config` points to the file and checks the key strictly:
+
+```
+Host 172.31.1.21 dev01.abcd1234 dev01.abcd1234.sherpa.lab.local
+    ...
+    StrictHostKeyChecking yes
+    UserKnownHostsFile /home/me/labs/dev/sherpa_known_hosts
+```
+
+So you are never asked to confirm a node's key. This applies to `sherpa ssh`, provisioners,
+and `ssh` itself through the `~/.ssh/config` include.
+
+- **Which nodes:** virtual machines whose readiness check is SSH, on port 22. Containers,
+  unikernels, nodes with another `ready_port`, nodes with `skip_ready_check`, and labs created
+  before this feature keep `StrictHostKeyChecking no`.
+- **When keys change:** some network operating systems, such as Cisco IOSv, make a new key
+  every time they boot, and a redeployed node has a new one. The server records the new key
+  when the node starts, whether from `sherpa resume`, `sherpa redeploy` or the web UI.
+- **Keys that do not match:** when `sherpa ssh` or a provisioner finds that a node's key is
+  missing from `sherpa_known_hosts`, or is not the one recorded, it asks the server to read
+  the node's key again, saves the lab's current keys and connects once more. A changed key
+  is reported with a warning:
+
+    ```
+    Warning: the SSH host key of dev01 has changed. Loaded its new key from the Sherpa server.
+    ```
+
+- **`ssh` itself** cannot fetch keys. After a node's key changes, run any `sherpa` command
+  that connects to it, or `sherpa download <lab-id> --force`, to update the file.
+
+### Using the File Elsewhere
+
+`sherpa_known_hosts` is a standard OpenSSH `known_hosts` file, so other SSH tools can use it.
+`UserKnownHostsFile` takes several files, so you can check lab nodes against it as well as
+your own file:
+
+```
+Host 172.31.1.*
+    UserKnownHostsFile ~/.ssh/known_hosts /home/me/labs/dev/sherpa_known_hosts
+```
+
+Keys are recorded by address, as `172.31.1.21`, or `[172.31.1.21]:2222` for a port other than
+22, the names `ssh` looks up when it connects to the address in `HostName`.
+
 ## Tunneling
 
 SSH tunneling allows for the connection of remote resources from your local

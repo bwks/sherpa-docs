@@ -125,6 +125,10 @@ showing progress as it goes. It uses the lab's `ready_timeout`, and each node's
 that is not ready within the timeout is reported, but resume still succeeds. Containers
 and paused nodes do not wait, because they resume an already running guest.
 
+Nodes that boot may offer a new SSH host key, which the server records. Resume then
+downloads the lab files again, as `sherpa download --force` does, so `sherpa_known_hosts`
+matches. See [Node Host Keys](architecture/ssh.md#node-host-keys).
+
 With Tailscale enabled, a full resume enrolls the gateway again before resuming
 nodes, as `sherpa down` logged it out. Run it in the lab folder with the variable
 named by `auth_key_env` set, as for `sherpa up`; it needs WSS with certificate
@@ -211,6 +215,10 @@ sherpa ssh <name>
 - The first time you connect to a Sherpa server, you are shown its host key fingerprint and
   asked to confirm it, as with OpenSSH. A confirmed key is added to `~/.ssh/known_hosts`. A
   server whose key has changed is refused.
+- A node's host key is checked against the lab's `sherpa_known_hosts` file, which the server
+  fills in as nodes become ready, so you are not asked about it. If the node's key has
+  changed, as after a restart from the web UI, the new key is fetched from the server with a
+  warning. See [Node Host Keys](architecture/ssh.md#node-host-keys).
 - If your key has a passphrase, or the Sherpa server needs your password, you are asked for
   it, as with OpenSSH. A key loaded in your SSH agent needs no prompt. See
   [SSH](architecture/ssh.md).
@@ -225,8 +233,9 @@ sherpa console <name>
 
 ### `sherpa download`
 
-Download lab files (SSH config, SSH key, lab-info, and each cluster's `kubeconfig-<cluster>`
-and `talosconfig-<cluster>`) for CLI use from a remote lab.
+Download lab files (SSH config, SSH key, lab-info, the nodes' host keys in
+`sherpa_known_hosts`, and each cluster's `kubeconfig-<cluster>` and `talosconfig-<cluster>`)
+for CLI use from a remote lab.
 
 ```
 sherpa download <lab_id>
