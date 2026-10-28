@@ -58,9 +58,12 @@ Everything runs as the node's login user: your [personal account](../personal-ac
    to `~/.profile` when there is no `~/.bash_profile`, that loads every file in `~/.env.d/` in
    login shells, exporting its variables.
 4. **Runs `scripts`.** The script is sent through the SSH session's input, never on a command
-   line, and runs through its shebang line. It gets the variables from the manifest's
-   `environment_variables` and from `~/.env.d/`. A script that exits with an error stops the
-   node's remaining steps.
+   line, and runs through its shebang line in a login shell, as when you log in: the login
+   files (`/etc/profile`, `/etc/profile.d/`, and `~/.bash_profile` or `~/.profile`) run first,
+   so tools they put on your `PATH`, such as mise or Cargo, are found. It then gets the
+   variables from the manifest's `environment_variables` and from `~/.env.d/`, which take
+   priority over the login files. A script that exits with an error stops the node's remaining
+   steps.
 
 ## When It Runs
 
