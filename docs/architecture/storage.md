@@ -15,6 +15,7 @@ Sherpa organises files across several directories under `/opt/sherpa/`.
 │   └── <lab-id>/
 │       ├── manifest.toml    # Saved manifest
 │       ├── sherpa_ssh_config
+│       ├── sherpa_known_hosts  # Recorded node host keys
 │       ├── ztp/             # Generated node configs
 │       └── ...
 ├── libvirt/
