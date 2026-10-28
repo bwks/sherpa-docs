@@ -194,11 +194,26 @@ Validate the `manifest.toml` in the current directory without deploying.
 
 ### `sherpa ssh`
 
-SSH to a device in the lab.
+Open an interactive shell on a lab node over SSH, through the Sherpa server as the lab's
+`sherpa_ssh_config` describes. Sherpa has its own SSH client, so no `ssh` program needs to be
+installed.
 
 ```
 sherpa ssh <name>
 ```
+
+- The terminal type (`TERM`) and window size are passed to the node, and resizing the window
+  resizes the remote terminal.
+- Type `~.` at the start of a line to disconnect, for example from a node that stopped
+  answering. Type `~~` to send a single `~`.
+- `sherpa ssh` exits with the exit code of the node's shell, or 255 if the node did not
+  report one. Windows nodes do not report it, so it is 0 there.
+- The first time you connect to a Sherpa server, you are shown its host key fingerprint and
+  asked to confirm it, as with OpenSSH. A confirmed key is added to `~/.ssh/known_hosts`. A
+  server whose key has changed is refused.
+- If your key has a passphrase, or the Sherpa server needs your password, you are asked for
+  it, as with OpenSSH. A key loaded in your SSH agent needs no prompt. See
+  [SSH](architecture/ssh.md).
 
 ### `sherpa console`
 

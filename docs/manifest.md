@@ -249,7 +249,7 @@ machines:
 | Property | Type | Description |
 | -------- | ---- | ----------- |
 | `type` | string | `ssh` |
-| `files` | list&lt;object&gt; | Files copied to the node with `scp` |
+| `files` | list&lt;object&gt; | Files copied to the node over SFTP |
 | `env_files` | list&lt;string&gt; | Env files copied to `~/.env.d/`, which login shells load |
 | `scripts` | list&lt;string&gt; | Scripts run on the node, through their shebang line |
 

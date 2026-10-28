@@ -22,12 +22,16 @@ The `sherpa ssh <node-name>` command uses the generated
 `sherpa_ssh_config` file to jump to the lab nodes via the 
 Sherpa server. 
 
-For ease of use, it is recommeded to copy your ssh keys to the Sherpa server
-to allow passwordless connectivity to remote nodes.
+`sherpa ssh` and [SSH provisioners](provisioners/ssh.md) use Sherpa's own SSH client, which
+reads `sherpa_ssh_config` as `ssh -F sherpa_ssh_config` would. No `ssh` or `scp` program is
+needed. Like `ssh`, they ask for your key's passphrase or your password on the Sherpa server
+when they need them. Provisioners ask once per run and reuse the answer for every node. A key
+loaded in your SSH agent (`ssh-add`; on Windows the OpenSSH agent service, or Pageant) needs no
+prompt.
 
-[SSH provisioners](provisioners/ssh.md) connect the same way, but cannot answer prompts: the jump host
-login must work without a password or passphrase prompt, for example with your key loaded in
-your SSH agent.
+The Sherpa server's host key is checked against `~/.ssh/known_hosts`. The first time you
+connect, you are shown its fingerprint and asked to confirm it, as with OpenSSH; a confirmed
+key is recorded there. A server whose key has changed is refused.
 
 ## Tunneling
 
