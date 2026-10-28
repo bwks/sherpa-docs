@@ -17,7 +17,7 @@ builds the image for that hardware, so other Windows 11 images may not boot.
 
 ```
 sherpa server image import \
-  --src <filename> \
+  --src /some/path/<image_name>.qcow2 \
   --version windows11-20261028 \
   --model devbox_windows \
   --default
