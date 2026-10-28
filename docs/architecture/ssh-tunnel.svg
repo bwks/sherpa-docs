@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 688 556" width="688" height="556" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="title">SSH tunnel to a lab node</title>
+  <desc id="desc">On your machine, ssh -N -L 9443:172.31.1.21:443 lab01 listens on localhost port 9443. A browser opens https://localhost:9443, and ssh carries the connection over its encrypted SSH connection, across the network, to sshd on the Sherpa server. sshd opens a TCP connection from the server to the lab node 172.31.1.21 on port 443, through the lab's management bridge, brm followed by the lab ID, and forwards the traffic both ways. The node sees a connection from the Sherpa server.</desc>
+  <style>
+    svg {
+      --bg: #fdffff;
+      --zone: #f3f5f5;
+      --card: #ffffff;
+      --border: #c5c2c3;
+      --heading: #071013;
+      --muted: #7a8b8f;
+      --line: #7a8b8f;
+      --blue: #00a6fb;
+      --blue-fill: #e6f5fe;
+      --green: #0cce6b;
+      --green-fill: #e6faf0;
+      --orange: #ed7d3a;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --bg: #071013;
+        --zone: #0e1c20;
+        --card: #13252a;
+        --border: #2e4448;
+        --heading: #eef3f4;
+        --muted: #7f9397;
+        --line: #7f9397;
+        --blue-fill: #0b2a3a;
+        --green-fill: #0b2e22;
+      }
+    }
+    .bg { fill: var(--bg); }
+    .zone { fill: var(--zone); stroke: var(--border); stroke-width: 1.5; }
+    .box { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .core { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 2; }
+    .chip { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+    .t { fill: var(--heading); font-size: 14px; font-weight: 600; }
+    .tc { fill: var(--heading); font-size: 13px; font-weight: 600; }
+    .code { fill: var(--muted); font-size: 12px; font-weight: 600; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .h { fill: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+    .ln { fill: none; stroke: var(--line); stroke-width: 2; }
+    .icon-ct { fill: var(--green-fill); stroke: var(--green); stroke-width: 3; }
+    .icon-vm { fill: var(--blue-fill); stroke: var(--blue); stroke-width: 3; }
+    .ic { fill: var(--heading); font-size: 14px; font-weight: 700; }
+    .tunnel { fill: none; stroke: var(--orange); stroke-width: 3; stroke-dasharray: 8 5; opacity: 0.8; }
+    .fwd { fill: none; stroke: var(--orange); stroke-width: 3; opacity: 0.8; }
+    .flow-head { fill: var(--orange); }
+    .halo { stroke: var(--zone); stroke-width: 8; stroke-linejoin: round; paint-order: stroke; }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse">
+      <path class="flow-head" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="688" height="556" rx="14"/>
+
+  <!-- Your machine: the browser connects to the port ssh listens on -->
+  <rect class="zone" x="16" y="24" width="608" height="120" rx="12"/>
+  <rect class="box" x="32" y="60" width="252" height="64" rx="8"/>
+  <text class="t" x="158" y="86" text-anchor="middle">Browser</text>
+  <text class="code" x="158" y="108" text-anchor="middle">https://localhost:9443</text>
+  <rect class="box" x="332" y="60" width="276" height="64" rx="8"/>
+  <text class="t" x="470" y="86" text-anchor="middle">ssh client</text>
+  <text class="code" x="470" y="108" text-anchor="middle">-L 9443:172.31.1.21:443</text>
+  <rect class="chip" x="326" y="86" width="12" height="12" rx="2"/>
+  <line class="fwd" x1="284" y1="92" x2="322" y2="92" marker-end="url(#arrow)"/>
+
+  <!-- Network -->
+  <line class="ln" x1="470" y1="124" x2="470" y2="168"/>
+  <rect class="box" x="32" y="168" width="576" height="40" rx="8"/>
+  <text class="t" x="250" y="193" text-anchor="middle">Network</text>
+
+  <!-- Sherpa server -->
+  <rect class="zone" x="16" y="232" width="608" height="268" rx="12"/>
+
+  <line class="ln" x1="470" y1="208" x2="470" y2="268"/>
+  <rect class="box" x="332" y="268" width="276" height="40" rx="8"/>
+  <text class="t" x="470" y="293" text-anchor="middle">sshd</text>
+
+  <!-- Management bridge -->
+  <line class="ln" x1="470" y1="308" x2="470" y2="340"/>
+  <rect class="core" x="32" y="340" width="576" height="40" rx="8"/>
+  <text class="t" x="180" y="365" text-anchor="middle">brm-&lt;lab-id&gt; (gateway)</text>
+  <rect class="chip" x="374" y="374" width="12" height="12" rx="2"/>
+  <rect class="chip" x="464" y="374" width="12" height="12" rx="2"/>
+  <rect class="chip" x="554" y="374" width="12" height="12" rx="2"/>
+
+  <!-- Lab nodes: the web server is the tunnel's target -->
+  <line class="ln" x1="380" y1="386" x2="380" y2="412"/>
+  <circle class="icon-ct" cx="380" cy="440" r="28"/>
+  <text class="ic" x="380" y="445" text-anchor="middle">CT</text>
+
+  <line class="ln" x1="470" y1="386" x2="470" y2="412"/>
+  <rect class="icon-vm" x="442" y="412" width="56" height="56" rx="12"/>
+  <text class="ic" x="470" y="445" text-anchor="middle">VM</text>
+  <text class="code" x="470" y="488" text-anchor="middle">172.31.1.21:443</text>
+
+  <line class="ln" x1="560" y1="386" x2="560" y2="412"/>
+  <rect class="icon-vm" x="532" y="412" width="56" height="56" rx="12"/>
+  <text class="ic" x="560" y="445" text-anchor="middle">VM</text>
+
+  <!-- The SSH connection carries the traffic to sshd, which opens the connection to the node -->
+  <line class="tunnel" x1="440" y1="124" x2="440" y2="264" marker-end="url(#arrow)"/>
+  <line class="fwd" x1="440" y1="308" x2="440" y2="326"/>
+  <line class="fwd" x1="440" y1="326" x2="458" y2="326"/>
+  <line class="fwd" x1="458" y1="326" x2="458" y2="408" marker-end="url(#arrow)"/>
+
+  <!-- Zone labels drawn over the lines, with a halo so the lines stop short of them -->
+  <text class="h halo" x="32" y="46">YOUR MACHINE</text>
+  <text class="h halo" x="32" y="254">SHERPA SERVER</text>
+
+  <!-- Legend -->
+  <line class="tunnel" x1="32" y1="532" x2="64" y2="532"/>
+  <text class="h" x="76" y="536">SSH CONNECTION (ENCRYPTED)</text>
+  <line class="fwd" x1="320" y1="532" x2="352" y2="532"/>
+  <text class="h" x="364" y="536">PLAIN TCP</text>
+</svg>

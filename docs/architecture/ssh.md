@@ -87,8 +87,7 @@ Keys are recorded by address, as `172.31.1.21`, or `[172.31.1.21]:2222` for a po
 SSH tunneling allows for the connection of remote resources from your local
 machine by tunneling through SSH.
 
-`TODO: Add diagram showing SSH tunneling`
-
+![An SSH tunnel: ssh on your machine listens on a local port, carries the connection over its encrypted SSH connection to sshd on the Sherpa server, and sshd connects through the lab's management bridge to the port on the lab node](ssh-tunnel.svg)
 
 For example, connecting to a HTTP server running on a lab-node.
 
