@@ -250,7 +250,7 @@ machines:
 | -------- | ---- | ----------- |
 | `type` | string | `ssh` |
 | `files` | list&lt;object&gt; | Files copied to the node over SFTP |
-| `env_files` | list&lt;string&gt; | Env files copied to `~/.env.d/`, which login shells load |
+| `env_files` | list&lt;string&gt; | Env files copied to `~/.env.d/`, which login shells load. A value of exactly `$NAME` or `${NAME}` is replaced with that variable from your environment |
 | `scripts` | list&lt;string&gt; | Scripts run on the node, through their shebang line |
 
 The SSH provisioner runs as the node's login user, in this order: `files`, `env_files`, then

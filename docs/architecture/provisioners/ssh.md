@@ -29,9 +29,16 @@ mode = 600
 With `secrets/dev.env` holding `KEY=value` lines:
 
 ```sh
-GH_TOKEN=ghp_example
+GH_TOKEN=$GH_TOKEN
 ANTHROPIC_API_KEY='sk-example'
 ```
+
+A value that is exactly one variable reference, `KEY=$NAME` or `KEY=${NAME}`, is replaced with
+that variable's value from the environment you run `sherpa` in, as in the manifest's
+`environment_variables`. Here `GH_TOKEN` is copied from your shell, so the token does not have
+to be written in the file. If the variable is not set, provisioning stops before anything on
+the node changes. Other lines are copied as written, so a value such as `$HOME/bin:$PATH` is
+still expanded by the node's shell when it loads the file.
 
 See [`provisioners`](../../manifest.md#provisioners-listobject) in the manifest reference for
 every field.
@@ -46,7 +53,8 @@ Everything runs as the node's login user: your [personal account](../personal-ac
    on the node then uses that one connection.
 2. **Copies `files`** over SFTP. Missing parent directories are created, private to the user.
    Each file is made private before its contents arrive, then given its `mode` (default `600`).
-3. **Copies `env_files`** into `~/.env.d/`, mode `600`, and adds a line to `~/.bash_profile`, or
+3. **Copies `env_files`** into `~/.env.d/`, mode `600`, with `$NAME` values replaced from
+   your environment and quoted for the shell, and adds a line to `~/.bash_profile`, or
    to `~/.profile` when there is no `~/.bash_profile`, that loads every file in `~/.env.d/` in
    login shells, exporting its variables.
 4. **Runs `scripts`.** The script is sent through the SSH session's input, never on a command
