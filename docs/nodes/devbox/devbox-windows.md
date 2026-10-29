@@ -18,25 +18,26 @@ builds the image for that hardware, so other Windows 11 images may not boot.
 ```
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
-  --version windows11-20261028 \
+  --version windows11-20261029 \
   --model devbox_windows \
   --default
 ```
 
 ## Default Node Parameters
 
-| Property             | Value           |
-| -------------------- | --------------- |
-| Kind                 | Virtual Machine |
-| CPU                  | 4               |
-| RAM                  | 8GB             |
-| CDROM Driver         | SATA            |
-| DISK                 | virtioa.qcow2   |
-| DISK Driver          | virtio          |
-| ZTP Method           | cloud-init      |
-| Management Interface | eth0            |
-| Data Interfaces      | eth1            |
-| Interface Driver     | virtio          |
+| Property             | Value              |
+| -------------------- | ------------------ |
+| Kind                 | Virtual Machine    |
+| Tested Version       | windows11-20261029 |
+| CPU                  | 4                  |
+| RAM                  | 8GB                |
+| CDROM Driver         | SATA               |
+| DISK                 | virtioa.qcow2      |
+| DISK Driver          | virtio             |
+| ZTP Method           | cloud-init         |
+| Management Interface | eth0               |
+| Data Interfaces      | eth1               |
+| Interface Driver     | virtio             |
 
 ## Example Manifest
 
@@ -81,6 +82,10 @@ are installed for all users, as mise cannot manage them on Windows.
 
 ## Notes
 
+- Approximate time for the system to be ready: `5 minutes`. SSH answers after about 3.5
+  minutes; cloudbase-init then reboots once to apply the hostname, which can close an early
+  session.
+- `mise install` takes about 8 minutes on first run.
 - The Windows 11 Enterprise Evaluation expires 90 days after the image is built.
 - Docker, QEMU/KVM and other tools from [Devbox Linux](devbox-linux.md) that need nested
   virtualization or have no Windows release are not included.
