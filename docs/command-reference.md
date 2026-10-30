@@ -161,8 +161,9 @@ containers' secret files to the server again, and copy files and run scripts ove
 up` and `sherpa redeploy` run them already; use this after a failure, after changing a file, or
 after a server reboot.
 
-The CLI prints the result for each node and exits with an error if any node was not
-provisioned.
+Nodes are provisioned at the same time, up to the manifest's
+[`provision_concurrency`](manifest.md#provision_concurrency-int) (default 8). The CLI prints the
+result for each node and exits with an error if any node was not provisioned.
 
 | Flag | Description |
 | ---- | ----------- |

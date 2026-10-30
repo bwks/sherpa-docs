@@ -603,6 +603,16 @@ It applies to `sherpa up`, `sherpa redeploy` and `sherpa resume`.
 ready_timeout = 300
 ```
 
+### provision_concurrency (int)
+
+How many nodes the `sherpa` CLI runs [ssh provisioners](architecture/provisioners/ssh.md) on at
+the same time. Defaults to `8`, and must be from `1` to `255`. Use `1` to provision one node at a
+time. Only the CLI reads it: it is not sent to the server.
+
+```toml
+provision_concurrency = 4
+```
+
 ### tailscale (object)
 
 Connect the lab's management networks to the owner's Tailscale tailnet through

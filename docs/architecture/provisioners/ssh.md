@@ -60,10 +60,35 @@ Everything runs as the node's login user: your [personal account](../personal-ac
 4. **Runs `scripts`.** The script is sent through the SSH session's input, never on a command
    line, and runs through its shebang line in a login shell, as when you log in: the login
    files (`/etc/profile`, `/etc/profile.d/`, and `~/.bash_profile` or `~/.profile`) run first,
-   so tools they put on your `PATH`, such as mise or Cargo, are found. It then gets the
+   so tools they put on your `PATH`, such as mise or Cargo, are found. On FreeBSD, whose `sh`
+   has no login option, `/etc/profile` and `~/.profile` are read instead, so anything
+   `~/.profile` prints at login, such as FreeBSD's `fortune` tip, shows in the output. It then gets the
    variables from the manifest's `environment_variables` and from `~/.env.d/`, which take
    priority over the login files. A script that exits with an error stops the node's remaining
    steps.
+
+## Several Nodes at Once
+
+Nodes are provisioned at the same time, up to 8 at once by default. Each node starts as soon
+as there is room: it does not wait for the others to be ready or finish. Set
+[`provision_concurrency`](../../manifest.md#provision_concurrency-int) to change the limit, for
+example to `1` to provision one node at a time.
+
+Every line of output starts with the node's name, so the lines of nodes running at once can be
+told apart, and each node ends with a `provisioned` or `failed` line:
+
+```
+alpine01 | provisioning alpine01.a7343ce5
+alpine02 | provisioning alpine02.a7343ce5
+alpine01 | copying files/note.txt to ~/note.txt
+alpine01 | running files/setup.sh
+alpine02 | running files/setup.sh
+alpine02 | provisioned
+alpine01 | provisioned
+```
+
+A node that fails does not stop the others. The table at the end lists every node in manifest
+order.
 
 ## When It Runs
 
@@ -79,8 +104,8 @@ Everything runs as the node's login user: your [personal account](../personal-ac
 - Nothing extra on your machine: the `sherpa` CLI has its own SSH client. No `ssh` or `scp`
   program is used.
 - A login to the Sherpa server as the jump host. If your key has a passphrase or the server
-  needs your password, you are asked once, when the first node is provisioned, and the
-  answer is used for the other nodes. A key loaded in your SSH agent needs no prompt. See
+  needs your password, you are asked once, even when nodes are provisioned at the same time,
+  and the answer is used for the other nodes. A key loaded in your SSH agent needs no prompt. See
   [SSH](../ssh.md#jumphost).
 - Linux and BSD virtual machines only: the `cloud-init` Linux and BSD models, Alpine and
   Flatcar.
