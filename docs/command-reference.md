@@ -9,6 +9,18 @@ These flags are available on all commands.
 | `--server-url` | Remote server URL for WebSocket RPC (env: `SHERPA_SERVER_URL`) |
 | `--insecure` | Skip TLS certificate validation (development only) |
 
+## Exit Status
+
+A command exits with a non-zero status when any part of what it asked for failed, after
+printing what did not work, so scripts can rely on it:
+
+- `sherpa up`: the lab was only partly created.
+- `sherpa down` and `sherpa resume`: a node did not stop or start.
+- `sherpa redeploy`: the node was not redeployed.
+- `sherpa provision`: a node was not provisioned.
+- `sherpa destroy` and `sherpa server clean`: a resource of the lab was not removed.
+- `sherpa server image` commands: the import, pull, delete or default change failed.
+
 ## Authentication
 
 ### `sherpa login`
@@ -179,6 +191,11 @@ Other resources may already have been removed. See [cleanup recovery](architectu
 If `sherpa up`, `sherpa redeploy` or `sherpa resume` is still running on the lab, destroy
 stops it first and waits for it to finish its current step, then removes the lab. This is
 safe to use on a lab whose `up` was interrupted.
+
+If the server cannot remove every resource, destroy prints what failed and exits with an
+error. While the lab still exists on the server, the local SSH config, key and known hosts
+are kept, so nodes that are still running stay reachable, and running `sherpa destroy` again
+removes them.
 
 | Flag | Description |
 | ---- | ----------- |
