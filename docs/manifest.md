@@ -556,12 +556,13 @@ dst = "dev02::eth1"
 | -------- | ---- | -------- | ----------- |
 | `src` | string | yes | Source `<device>::<interface>` mapping |
 | `dst` | string | yes | Destination `<device>::<interface>` mapping |
-| `p2p` | bool | no | Enable point-to-point link mode (default: `false`) |
 | `impairment` | object | no | Network impairment configuration |
 
 #### Link Impairment
 
-Apply network impairment to simulate real-world link conditions.
+Apply network impairment to simulate real-world link conditions. The values apply to both
+directions. To impair each direction differently, or to change it on a running lab, use
+[`sherpa link impair`](command-reference.md#sherpa-link-impair).
 
 ```toml
 [[links]]
@@ -579,10 +580,11 @@ loss_percent = 1.0
 | `delay` | int | One-way delay in milliseconds |
 | `jitter` | int | Delay jitter in milliseconds |
 | `loss_percent` | float | Packet loss percentage (`0.0` - `100.0`) |
-| `reorder_percent` | float | Packet reordering percentage (`0.0` - `100.0`) |
+| `reorder_percent` | float | Packet reordering percentage (`0.0` - `100.0`). Reordered packets skip the delay, so set a `delay` too |
 | `corrupt_percent` | float | Bit-flip corruption percentage (`0.0` - `100.0`) |
 
-For more information on link types see the [point-to-point](architecture/networking/modes/point-to-point.md) architecture documentation.
+Every link is a P2P eBPF link. The `p2p` setting has been removed, and a manifest that still
+sets it fails validation; see [the removed `p2p` setting](architecture/networking/modes/point-to-point.md#the-removed-p2p-setting).
 
 ### provision_current_user (bool)
 
