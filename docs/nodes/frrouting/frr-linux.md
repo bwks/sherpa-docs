@@ -58,3 +58,7 @@ version = "10.5.2"
 ## Notes
 
 - Approximate time for the system to be ready: `1 minute`
+- The node installs OpenSSH, sudo and lldpd from the Alpine package repositories when it boots,
+  so the Sherpa server needs internet access. It tries 10 times, 3 seconds apart. If every try
+  fails, the node has no SSH: use `docker exec` instead, and check the node's log with
+  `docker logs <node-name>-<lab-id>`.
