@@ -71,3 +71,8 @@ version = "4.35.1F"
 ## Notes
 
 - Approximate time for the system to be ready: `1 minutes`
+- The node boots from its ZTP configuration, copied to `flash:startup-config` the first time the
+  container starts. `write memory` saves to it as usual (since Sherpa 0.4.16; before, it failed
+  with `Device or resource busy`). The saved configuration is kept across `sherpa down` and
+  `sherpa resume`. `sherpa redeploy` creates a new container, so it starts again from the ZTP
+  configuration.
