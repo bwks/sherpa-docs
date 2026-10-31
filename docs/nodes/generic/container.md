@@ -4,21 +4,19 @@ A generic container allows for the use of container models that are not natively
 
 ### Import
 
-#### Sherpa
-
-Pull the image down via sherpa.
+Pull the image through Sherpa, giving the full image reference:
 
 ```
-sherpa server image pull nginx:1.29.4-perl
+sherpa server image pull --model generic_container --repo nginx:1.29.4-perl
 ```
 
-#### Docker
+Sherpa records the version (`1.29.4-perl`) and the repo it was pulled from (`nginx`). A node with
+that version runs that repo, unless it sets `image` in the manifest. An image pulled only with
+the `docker` CLI is not known to Sherpa, so a lab cannot use it.
 
-Sherpa uses the system's docker images, so you can also pull the image down via the `docker` cli.
-
-```
-docker image pull nginx:1.29.4-perl
-```
+Sherpa tells generic images apart by version, so two images with the same tag (such as
+`nginx:latest` and `redis:latest`) share one entry, holding the repo pulled last. Set `image` on
+each node to pick between them.
 
 ## Default Node Parameters
 
