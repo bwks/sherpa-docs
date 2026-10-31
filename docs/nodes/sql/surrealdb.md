@@ -8,19 +8,14 @@ Base images can be obtained from [Docker Hub](https://hub.docker.com/r/surrealdb
 
 ### Import image
 
-#### Sherpa
+Pull the image through Sherpa:
 
 ```
-sherpa server image pull surrealdb/surrealdb:v2.2
+sherpa server image pull --model surreal_db --repo surrealdb/surrealdb:v2.2
 ```
 
-#### Docker
-
-Sherpa uses the system's docker images, so you can also pull the image down via the `docker` cli.
-
-```
-docker image pull surrealdb/surrealdb:v2.2
-```
+Sherpa records the version, so a lab can use it. An image pulled only with the `docker` CLI is
+not known to Sherpa, so a lab cannot use it.
 
 ## Default Node Parameters
 

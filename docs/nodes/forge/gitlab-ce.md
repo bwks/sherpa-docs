@@ -8,19 +8,14 @@ Base images can be obtained from [Docker Hub](https://hub.docker.com/r/gitlab/gi
 
 ### Import Image
 
-#### Sherpa
+Pull the image through Sherpa:
 
 ```
-sherpa server image pull -m gitlab_ce -v 18.7.6-ce.0
+sherpa server image pull --model gitlab_ce --version 18.7.6-ce.0
 ```
 
-#### Docker
-
-Sherpa uses the system's docker images, so you can also pull the image down via the `docker` cli.
-
-```
-docker image pull gitlab/gitlab-ce:18.7.6-ce.0
-```
+Sherpa records the version, so a lab can use it. An image pulled only with the `docker` CLI is
+not known to Sherpa, so a lab cannot use it.
 
 ## Default Node Parameters
 
