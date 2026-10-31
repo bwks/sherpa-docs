@@ -9,19 +9,14 @@ container registry.
 
 ### Import image
 
-#### Sherpa
+Pull the image through Sherpa:
 
 ```
-sherpa server image pull -m frr_linux -v 10.5.2 
+sherpa server image pull --model frr_linux --version 10.5.2
 ```
 
-#### Docker
-
-Sherpa uses the system's docker images, so you can also pull the image down via the `docker` cli.
-
-```
-docker image pull quay.io/frrouting/frr:10.5.2
-```
+Sherpa records the version, so a lab can use it. An image pulled only with the `docker` CLI is
+not known to Sherpa, so a lab cannot use it.
 
 ## Default Node Parameters
 
