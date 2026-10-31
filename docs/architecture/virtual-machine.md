@@ -55,7 +55,7 @@ VM network interfaces are attached as libvirt network devices. The interface dri
 | `e1000` | Models that require Intel NIC emulation |
 | `vmxnet3` | VMware-compatible models |
 
-Each VM is connected to the [management network](networking/modes/management.md) on its first interface. Additional interfaces are attached for data plane links as defined in the manifest. By default each [point-to-point link](networking/modes/point-to-point.md) gets its own Linux bridge; with `p2p = true` the interface is a tap device joined to its peer by an eBPF redirect program.
+Each VM is connected to the [management network](networking/modes/management.md) on its first interface. Additional interfaces are attached for data plane links as defined in the manifest. Each end of a [point-to-point link](networking/modes/point-to-point.md) is a tap device joined to its peer by an eBPF redirect program.
 
 ## Console Access
 

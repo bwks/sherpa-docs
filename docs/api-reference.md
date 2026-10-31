@@ -114,6 +114,42 @@ server stops the operation at its next safe point and responds once it has ended
 CLI calls cancel when you answer yes after pressing Ctrl-C. Destroying a lab also stops any of
 these operations first.
 
+## Link Impairment
+
+Change the impairment on a running P2P link with
+`POST /api/v1/labs/{lab_id}/links/{link_index}/impairment`, or the WebSocket RPC method
+`link.update_impairment`. `link_index` is the link's position in the manifest's `[[links]]`,
+starting at `0`.
+
+```json
+{
+  "lab_id": "a1b2c3d4",
+  "link_index": 0,
+  "direction": "src_to_dst",
+  "delay": 20,
+  "jitter": 2,
+  "loss_percent": 1.0,
+  "reorder_percent": 0.0,
+  "corrupt_percent": 0.0
+}
+```
+
+| Field | Description |
+| ----- | ----------- |
+| `direction` | `src_to_dst` (traffic from the link's `src` to its `dst`), `dst_to_src`, or `both`. Defaults to `both`. |
+| `delay` | One-way delay in milliseconds |
+| `jitter` | Delay jitter in milliseconds |
+| `loss_percent` | Packet loss percentage (`0.0` - `100.0`) |
+| `reorder_percent` | Packet reordering percentage (`0.0` - `100.0`). Reordered packets skip the delay, so it needs a `delay`. |
+| `corrupt_percent` | Bit-flip corruption percentage (`0.0` - `100.0`) |
+
+The values replace the impairment on the directions named; the other direction keeps its own.
+Omitted values are `0`, and all zeros remove the impairment from those directions. The change
+applies at once and is kept across `down`/`resume` and redeploying either end.
+
+An unknown `direction` returns `422 Unprocessable Entity` on REST and `InvalidParams` on
+WebSocket RPC.
+
 ## Lab Access
 
 Every lab operation applies the same rule on REST, WebSocket RPC and the web UI:

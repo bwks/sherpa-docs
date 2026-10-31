@@ -105,11 +105,15 @@ Stores point-to-point connections between nodes.
 | Field      | Type             | Description                        |
 | ---------- | ---------------- | ---------------------------------- |
 | `index`    | number           | Link index                         |
-| `kind`     | string           | Bridge kind (p2p_bridge, etc.)     |
+| `kind`     | string           | Link kind (`p2p`)                  |
 | `node_a`   | record\<node\>   | Source node (cascade delete)       |
 | `node_b`   | record\<node\>   | Destination node (cascade delete)  |
 | `int_a`    | string           | Source interface                    |
 | `int_b`    | string           | Destination interface              |
+| `tap_a`    | string           | Host end of the source side        |
+| `tap_b`    | string           | Host end of the destination side   |
+| `impairment_a_to_b` | object  | Impairment from source to destination |
+| `impairment_b_to_a` | object  | Impairment from destination to source |
 | `lab`      | record\<lab\>    | Lab reference (cascade delete)     |
 
 #### bridge
@@ -122,13 +126,13 @@ Stores shared bridge network segments.
 | `bridge_name`  | string                  | Linux bridge name                 |
 | `network_name` | string                  | Network name                      |
 | `lab`          | record\<lab\>           | Lab reference (cascade delete)    |
-| `nodes`        | array\<record\<node\>\> | Connected nodes (unset on delete) |
+| `members`      | array\<object\>          | Connected node interfaces, each a `node` and `interface` |
 
 ### Referential Integrity
 
 - A **user** who owns **labs** cannot be deleted. Destroy their labs first; deleting only the records would leave the labs' VMs, containers and networks running.
 - Deleting a **lab** cascades to delete all its **nodes**, **links**, and **bridges**.
-- Deleting a **node** cascades to delete its **links** and unsets references in **bridges**.
+- Deleting a **node** cascades to delete its **links**.
 - Deleting a **node_image** is rejected if any **nodes** reference it.
 
 ## Initialization

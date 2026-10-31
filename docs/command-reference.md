@@ -18,6 +18,7 @@ printing what did not work, so scripts can rely on it:
 - `sherpa down` and `sherpa resume`: a node did not stop or start.
 - `sherpa redeploy`: the node was not redeployed.
 - `sherpa provision`: a node was not provisioned.
+- `sherpa link impair`: the impairment was not changed.
 - `sherpa destroy` and `sherpa server clean`: a resource of the lab was not removed.
 - `sherpa server image` commands: the import, pull, delete or default change failed.
 
@@ -262,6 +263,34 @@ sherpa download <lab_id>
 | Flag | Description |
 | ---- | ----------- |
 | `--force`, `-f` | Overwrite existing lab files if they exist |
+
+## Link Commands
+
+### `sherpa link impair`
+
+Change the impairment on a running P2P link. Run it in the lab's directory: the link is found in
+`manifest.toml` by either of its ends.
+
+```
+sherpa link impair dev01::eth1 --delay 20 --loss 1.5
+sherpa link impair dev01::eth1 --direction src-to-dst --delay 30
+sherpa link impair dev01::eth1 --clear
+```
+
+| Flag | Description |
+| ---- | ----------- |
+| `--direction` | `src-to-dst` (traffic from the link's `src` to its `dst`), `dst-to-src`, or `both` (default) |
+| `--delay` | One-way delay in milliseconds |
+| `--jitter` | Delay jitter in milliseconds |
+| `--loss` | Packet loss percentage (`0.0` - `100.0`) |
+| `--reorder` | Packet reordering percentage (`0.0` - `100.0`). Reordered packets skip the delay, so set `--delay` too |
+| `--corrupt` | Bit-flip corruption percentage (`0.0` - `100.0`) |
+| `--clear` | Remove the impairment from the directions named |
+
+Give at least one value, or `--clear`. The values replace the impairment on the directions
+named, and a value left out is `0`; the other direction keeps its own. The change applies at
+once and is kept across `sherpa down`/`sherpa resume` and redeploying either end. See
+[Link Impairment](api-reference.md#link-impairment) for the API.
 
 ## Image Commands
 
