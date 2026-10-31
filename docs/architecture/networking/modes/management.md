@@ -6,6 +6,11 @@ Management networks are implemented as a Libvirt
 network with some differences. Containers join the same bridge, `brm-<lab-id>`, through a Docker
 bridge network.
 
+Spanning tree is off on the management bridge, so a node's management interface forwards as
+soon as it is attached, and nodes receive no STP BPDUs on it. A lab created before Sherpa 0.4.14
+keeps spanning tree on, and each new management interface in it passes no traffic for its first
+four seconds, until the lab is destroyed and created again.
+
 The allocated network acts as a NAT router and upstream DNS forwarder. The DHCP and DNS
 functions for the lab are performed by a `lab-router` container instance.
 
