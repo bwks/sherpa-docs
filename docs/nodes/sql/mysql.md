@@ -8,19 +8,15 @@ Base images can be obtained from [Docker Hub](https://hub.docker.com/_/mysql).
 
 ### Import image
 
-#### Sherpa
+Pull the image through Sherpa, giving the full image reference:
 
 ```
-sherpa server image pull mysql:8.0
+sherpa server image pull --model mysql_db --repo mysql:8.0
 ```
 
-#### Docker
-
-Sherpa uses the system's docker images, so you can also pull the image down via the `docker` cli.
-
-```
-docker image pull mysql:8.0
-```
+Sherpa records the version (`8.0`) and the repo it was pulled from (`mysql`). A node with
+that version runs that repo, unless it sets `image` in the manifest. An image pulled only with
+the `docker` CLI is not known to Sherpa, so a lab cannot use it.
 
 ## Default Node Parameters
 
@@ -40,7 +36,7 @@ name = "mysql"
 
 [[nodes]]
 name = "db01"
-model = "mysql"
+model = "mysql_db"
 version = "8.0"
 ```
 

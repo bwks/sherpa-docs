@@ -8,19 +8,15 @@ Base images can be obtained from [Docker Hub](https://hub.docker.com/_/postgres)
 
 ### Import image
 
-#### Sherpa
+Pull the image through Sherpa, giving the full image reference:
 
 ```
-sherpa server image pull postgres:17
+sherpa server image pull --model postgresql_db --repo postgres:17
 ```
 
-#### Docker
-
-Sherpa uses the system's docker images, so you can also pull the image down via the `docker` cli.
-
-```
-docker image pull postgres:17
-```
+Sherpa records the version (`17`) and the repo it was pulled from (`postgres`). A node with
+that version runs that repo, unless it sets `image` in the manifest. An image pulled only with
+the `docker` CLI is not known to Sherpa, so a lab cannot use it.
 
 ## Default Node Parameters
 
@@ -40,7 +36,7 @@ name = "postgresql"
 
 [[nodes]]
 name = "db01"
-model = "postgresql"
+model = "postgresql_db"
 version = "17"
 ```
 
