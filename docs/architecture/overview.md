@@ -2,7 +2,7 @@
 
 Sherpa is a lab management platform for building virtual network topologies using virtual machines, containers, and unikernels. It is designed as a client/server architecture with multiple access methods.
 
-![Sherpa architecture: the sherpa CLI and web browsers connect to sherpad, which drives Libvirt, Docker and SurrealDB and manages host networking and storage](overview.svg)
+![Sherpa architecture: the sherpa CLI and web browsers connect to sherpad, which drives Libvirt and Docker, keeps its own embedded database, and manages host networking and storage](overview.svg)
 
 ## Client/Server
 
@@ -44,7 +44,7 @@ Unikernels are single-purpose machine images that run directly on KVM/QEMU via L
 
 ## Database
 
-Sherpa uses [SurrealDB](https://surrealdb.com/) to store lab state, node configurations, user accounts, and image metadata. SurrealDB runs on the same host as the `sherpa-db` Docker container, and `sherpad` connects to it over WebSocket on port `8000`. See [Database](database.md) for details.
+Sherpa stores lab state, node configurations, user accounts, and image metadata in an embedded [Turso](https://github.com/tursodatabase/turso) database, a Rust rewrite of SQLite that runs inside `sherpad`. The data is a single file, `/opt/sherpa/db/sherpa.sqlite`; there is no database server. See [Database](database.md) for details.
 
 ## Authentication
 
