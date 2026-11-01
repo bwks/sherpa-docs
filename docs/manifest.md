@@ -213,6 +213,61 @@ Configure the amount of RAM in `MegaBytes (MB)`.
 memory = 4096
 ```
 
+##### performance_tuning (object)
+
+Tune a virtual machine for performance: how its CPU is presented, which host CPUs it runs on,
+which NUMA node holds its memory, and how its disks and interfaces work. Every setting is
+optional, and one left out keeps the default.
+
+```toml
+[[nodes]]
+name = "dev"
+model = "ubuntu_linux"
+cpu_count = 14
+memory = 49152
+
+[nodes.performance_tuning]
+cpu_mode = "host-passthrough"
+cpu_topology = { sockets = 1, cores = 7, threads = 2 }
+cpu_pinning = [9, 25, 10, 26, 11, 27, 12, 28, 13, 29, 14, 30, 15, 31]
+qemu_cpus = [8, 24]
+numa_node = 1
+disk_cache = "none"
+disk_io = "io_uring"
+disk_io_thread_cpus = [8, 24]
+interface_queues = 4
+```
+
+| Setting | Type | Description |
+|---|---|---|
+| `cpu_mode` | string | `host-model` (the default) or `host-passthrough`, which gives the guest the host CPU exactly. `host-passthrough` gives the best performance for nested virtual machines |
+| `cpu_topology` | object | The CPU layout the guest sees: `sockets`, `cores` and `threads`. Their product must equal `cpu_count` |
+| `cpu_pinning` | list&lt;int&gt; | The host CPU for each vCPU, in vCPU order: one per vCPU, none repeated |
+| `qemu_cpus` | list&lt;int&gt; | Host CPUs for QEMU's own threads, everything in the virtual machine's QEMU process except its vCPUs |
+| `numa_node` | int | The host NUMA node the guest's memory is held on, strictly |
+| `disk_cache` | string | `none`, `writeback` or `writethrough` |
+| `disk_io` | string | `native`, `io_uring` or `threads`. `native` needs `disk_cache = "none"` |
+| `disk_io_thread_cpus` | list&lt;int&gt; | Give the disks their own I/O thread, pinned to these host CPUs. Needs virtio disks |
+| `interface_queues` | int | virtio-net queues on each interface, from 1 to `cpu_count`. Needs virtio interfaces; the management interface gets them only if it is virtio too |
+
+Host CPUs and NUMA nodes are numbered from 0, as on the host (`lscpu`, `numactl -H`).
+
+Rules for pinned host CPUs:
+
+- `cpu_topology`, `cpu_pinning` and `interface_queues` need `cpu_count` to be set.
+- **A CPU in `cpu_pinning` belongs to that node alone.** No other node can pin a vCPU to it,
+  in any lab on the server, and no node can run its QEMU or I/O threads on it, the same
+  node included.
+- **`qemu_cpus` and `disk_io_thread_cpus` may share CPUs** with each other and with the
+  same settings on other nodes.
+- **The checks run at `sherpa up` and `sherpa redeploy`.** Every CPU and the NUMA node must
+  exist on the server.
+
+Pinning keeps a virtual machine's threads on those CPUs. It does not reserve the CPUs: the
+host can still run other work on them.
+
+_This parameter only applies to virtual machine nodes._
+
 ##### privileged (bool)
 
 Run the container in privileged mode.

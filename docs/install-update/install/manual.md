@@ -69,6 +69,17 @@ Set the default libvirt URI.
 echo 'export LIBVIRT_DEFAULT_URI=qemu:///system' > ~/.zshrc
 ```
 
+### Transparent Hugepages
+
+Let QEMU back VM memory with 2 MiB pages. Skip this if
+`/sys/kernel/mm/transparent_hugepage/enabled` already shows `[always]`.
+
+```
+echo madvise | sudo tee /sys/kernel/mm/transparent_hugepage/enabled
+echo 'w /sys/kernel/mm/transparent_hugepage/enabled - - - - madvise' | \
+  sudo tee /etc/tmpfiles.d/sherpa-thp.conf
+```
+
 ## Networking
 
 ### Bridge Interface

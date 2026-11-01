@@ -29,6 +29,23 @@ Every node model has default resource parameters that can be overridden in the m
 
 CPU mode defaults to `host-model`, which auto-detects the host CPU capabilities. Nested virtualisation is supported via the VMX CPU flag when required.
 
+## Performance Tuning
+
+A node's [`performance_tuning`](../manifest.md#performance_tuning-object) can tune it further:
+- give it the host CPU exactly (`host-passthrough`) and a CPU topology;
+- pin its vCPUs, and QEMU's own threads, to host CPUs;
+- hold its memory on one NUMA node;
+- set its disk cache and I/O mode, and give its disks an I/O thread;
+- add virtio-net queues to its interfaces.
+
+Sherpa refuses a node whose pinned CPUs overlap another node's, in any lab on the server.
+
+Guest memory can also be backed by 2 MiB huge pages through the host's transparent hugepages.
+QEMU already asks for them, so this needs no manifest setting; the host's
+`/sys/kernel/mm/transparent_hugepage/enabled` must be `madvise` or `always`. The
+[installer](../install-update/install/automated.md#transparent-hugepages) sets `madvise` unless it
+is already `always`.
+
 ## Disk Management
 
 Base images are imported into `/opt/sherpa/images/`. When a lab starts, each VM's boot disk is created in the Sherpa [storage pool](storage.md) (`sherpa-pool`, at `/opt/sherpa/libvirt/images/`) as a QCOW2 overlay on the base image, or as a full copy when `boot_disk_clone_method = "copy"`. See [Boot Disk Overlays](storage.md#boot-disk-overlays). The original base image is never modified. ZTP configuration disks, such as cloud-init ISOs, are created in the same pool.
