@@ -42,7 +42,9 @@ Sherpa refuses a node whose pinned CPUs overlap another node's, in any lab on th
 
 Guest memory can also be backed by 2 MiB huge pages through the host's transparent hugepages.
 QEMU already asks for them, so this needs no manifest setting; the host's
-`/sys/kernel/mm/transparent_hugepage/enabled` must be `madvise` or `always`.
+`/sys/kernel/mm/transparent_hugepage/enabled` must be `madvise` or `always`. The
+[installer](../install-update/install/automated.md#transparent-hugepages) sets `madvise` unless it
+is already `always`.
 
 ## Disk Management
 
