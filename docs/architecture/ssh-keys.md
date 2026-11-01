@@ -64,7 +64,8 @@ If you already have a key pair, use its existing `.pub` file.
 Administrators can manage another user's keys with `--user <username>`, and can add keys when
 creating a user with `sherpa server user create --ssh-key`.
 
-`sherpad init` also asks for a key when it creates the first user account.
+`sherpad init` also asks for a key when it creates the first user account, or takes it from
+`SHERPA_USER_SSH_KEY`.
 
 ## Supported Keys
 

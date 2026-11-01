@@ -26,7 +26,10 @@ printing what did not work, so scripts can rely on it:
 
 ### `sherpa login`
 
-Login to the Sherpa server. Prompts for username and password.
+Login to the Sherpa server. The username and password come from `SHERPA_USER_NAME` and
+`SHERPA_USER_PASSWORD` when they are set, otherwise you are prompted for them. Use the variables
+for scripts; the password is never taken as a flag, so it stays out of the process list and shell
+history.
 
 ### `sherpa logout`
 
