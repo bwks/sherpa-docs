@@ -30,6 +30,30 @@ sherpad init
 Running `sherpad init` again keeps existing accounts: it only creates `admin` if it is missing,
 and only asks for a user account if there is none.
 
+### Unattended initialization
+
+Every answer can come from an environment variable instead of a prompt, so `sherpad init` can
+run from a script. A variable that is not set is prompted for.
+
+| Variable | Answer |
+|---|---|
+| `SHERPA_ADMIN_PASSWORD` | Password for `admin`. Also read from `/opt/sherpa/env/sherpa.env` |
+| `SHERPA_USER_NAME` | Your username |
+| `SHERPA_USER_PASSWORD` | Your password |
+| `SHERPA_USER_IS_ADMIN` | `yes` or `no`; empty means `yes` |
+| `SHERPA_USER_SSH_KEY` | SSH public key, as a file path or the key itself; empty adds none |
+
+The `SHERPA_USER_*` variables are only read from the environment, never from the env file, so
+your password is not kept on the server. Passwords must meet the server's rules: at least 8
+characters, with upper and lower case letters and one of `!@#$%^&*_+-=`.
+
+```
+sudo -u sherpa -H --preserve-env=SHERPA_ADMIN_PASSWORD,SHERPA_USER_NAME,SHERPA_USER_PASSWORD,SHERPA_USER_IS_ADMIN,SHERPA_USER_SSH_KEY \
+  sherpad init
+```
+
+`sherpa login` reads `SHERPA_USER_NAME` and `SHERPA_USER_PASSWORD` too.
+
 ## Sherpa Client
 Initialize the Sherpa client.
 ```
