@@ -14,16 +14,23 @@ Look for the 64 bit `cEOS Lab` image.
 
 ### Import image
 
-The downloaded image must be imported with the `docker image import` command.
+The download is a root filesystem archive, so it is imported into Docker with
+`docker image import`, tagged with the cEOS version, and then registered with Sherpa by scanning
+the local container images:
 
 ```
-docker image import cEOS64-lab-4.35.1F.tar.xz arista/ceos:4.35.1F
+docker image import cEOS64-lab-4.35.1F.tar.xz localrepo/arista_ceos:4.35.1F
+sherpa server image scan --container
 ```
 
 !!! warning
 
-    Arista cEOS images must be imported with the repo set to: `arista/ceos`.
-    This allows for the definition of `arista_ceos` as a node model in the manifest file.
+    Arista cEOS images must be imported with the repo set to `localrepo/arista_ceos`. The scan
+    only registers images with that repo as the `arista_ceos` node model, and labs start cEOS
+    from it. The first version registered becomes the default.
+
+`sherpa server image import` does not work for cEOS: it loads `docker save` archives, not root
+filesystem archives.
 
 ## Default Node Parameters
 
