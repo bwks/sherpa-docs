@@ -35,7 +35,10 @@ The update:
 1. stops `sherpad`, keeping a copy of the old binary as `/opt/sherpa/bin/sherpad.previous`;
 2. installs the new binaries;
 3. starts the `sherpa-db` container if it is stopped, and runs `sherpad migrate-db`, which copies
-   every user, image, lab, node, link and bridge into the new database file and checks the counts;
+   every user, image, lab, node, link and bridge into the new database file and checks the counts.
+   It runs through systemd with `/opt/sherpa/env/sherpa.env`, as the `sherpad` service does, so
+   it reads the SurrealDB password exactly as the old release did, quotes included, and it
+   connects on the port Docker publishes `sherpa-db` on;
 4. stops the `sherpa-db` container and turns off its automatic restart;
 5. starts `sherpad`.
 
@@ -72,22 +75,26 @@ sudo docker image rm surrealdb/surrealdb:v3.0.0
 `/opt/sherpa/db/sherpa.db` is the old SurrealDB data directory. Do not confuse it with the new
 database, `/opt/sherpa/db/sherpa.sqlite`.
 
-The `SHERPA_DB_PASSWORD` and `SHERPA_DB_PORT` entries in `/opt/sherpa/env/sherpa.env` are only read
-by `sherpad migrate-db`, and can be removed afterwards.
+The `SHERPA_DB_PASSWORD` and `SHERPA_DB_PORT` entries in `/opt/sherpa/env/sherpa.env` are only used
+to move the data, and can be removed afterwards.
 
 ### Moving the data by hand
 
 `sherpad migrate-db` can also run by hand, for example after installing a binary yourself. Run
-it as the `sherpa` user, with `sherpad` stopped and the `sherpa-db` container running:
+it with `sherpad` stopped and the `sherpa-db` container running. This runs it the way the update
+script does, as the `sherpa` user with the variables from `/opt/sherpa/env/sherpa.env`:
 
 ```
 sudo systemctl stop sherpad
-sudo -u sherpa -H sherpad migrate-db
+sudo systemd-run --quiet --wait --pipe --collect --uid=sherpa \
+  --property=EnvironmentFile=-/opt/sherpa/env/sherpa.env \
+  /opt/sherpa/bin/sherpad migrate-db
 sudo systemctl start sherpad
 ```
 
-It reads the SurrealDB password and port from `--db-pass` and `--db-port`, the
-`SHERPA_DB_PASSWORD` and `SHERPA_DB_PORT` environment variables, or `/opt/sherpa/env/sherpa.env`.
+It takes the SurrealDB password and port from `--db-pass` and `--db-port`, or the
+`SHERPA_DB_PASSWORD` and `SHERPA_DB_PORT` environment variables; it does not read the env file
+itself. With the command above, systemd sets both variables from the env file.
 It refuses to import into a database that already has users or labs. Run it before `sherpad`
 first starts on the new release: with `SHERPA_ADMIN_PASSWORD` set, starting creates the `admin`
 account in the new database, and the import then refuses it.

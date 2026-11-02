@@ -594,21 +594,24 @@ the database, the built-in `admin` account and a first user account. See the
 | Flag | Description |
 | ---- | ----------- |
 | `--force` | Overwrite an existing config and SSH keys |
-| `--server-ipv4` | Server listen address (env: `SHERPA_SERVER_IPV4`) |
-| `--ws-port` | Server listen port (env: `SHERPA_SERVER_WS_PORT`) |
-| `--http-port` | HTTP certificate endpoint port (env: `SHERPA_SERVER_HTTP_PORT`) |
+| `--server-ipv4` | Server listen IPv4 address, default `0.0.0.0` (env: `SHERPA_SERVER_IPV4`) |
+| `--server-ipv6` | Server listen IPv6 address, if any (env: `SHERPA_SERVER_IPV6`) |
+| `--ws-port` | Server listen port, default `3030` (env: `SHERPA_SERVER_WS_PORT`) |
+| `--http-port` | HTTP certificate endpoint port, default `3031` (env: `SHERPA_SERVER_HTTP_PORT`) |
 
-Each value is also read from `/opt/sherpa/env/sherpa.env`. Since 0.5.0 there are no database
-flags: the database is a file `sherpad` manages itself.
+Values come from the flags or the environment variables only. From 0.5.1, `sherpad init` no
+longer reads `/opt/sherpa/env/sherpa.env`: the install script prints the `sherpad init` command
+with the address and ports you gave it. Since 0.5.0 there are no database flags: the database is
+a file `sherpad` manages itself.
 
 ### `sherpad migrate-db`
 
 Move the data of a server older than 0.5.0 from its SurrealDB container into the embedded
 database. The update script runs it for you; see
-[Updating to 0.5.0](install-update/update/sherpa.md#updating-to-050). Run it as the `sherpa` user
-with `sherpad` stopped.
+[Updating to 0.5.0](install-update/update/sherpa.md#updating-to-050). To run it by hand, see
+[Moving the data by hand](install-update/update/sherpa.md#moving-the-data-by-hand).
 
 | Flag | Description |
 | ---- | ----------- |
-| `--db-pass` | SurrealDB password (env: `SHERPA_DB_PASSWORD`, or `/opt/sherpa/env/sherpa.env`) |
-| `--db-port` | SurrealDB port, default `8000` (env: `SHERPA_DB_PORT`, or `/opt/sherpa/env/sherpa.env`) |
+| `--db-pass` | SurrealDB password, required (env: `SHERPA_DB_PASSWORD`) |
+| `--db-port` | SurrealDB port, default `8000` (env: `SHERPA_DB_PORT`) |
