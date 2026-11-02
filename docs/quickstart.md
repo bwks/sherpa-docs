@@ -12,10 +12,13 @@ This will install all the dependencies as well as the Sherpa,
 server and client binaries.
 
 ## Sherpa Server
-Initialize the Sherpa server.
+Initialize the Sherpa server. The install script prints this command with the listen address and
+ports you gave it:
 ```
-sherpad init
+sherpad init --server-ipv4 <address> --ws-port 3030 --http-port 3031
 ```
+Leave a flag out to use its default: `0.0.0.0`, `3030` and `3031`. Add `--server-ipv6 <address>`
+to also listen on IPv6. See [`sherpad init`](command-reference.md#sherpad-init).
 
 `sherpad init` creates two accounts:
 
@@ -37,18 +40,24 @@ run from a script. A variable that is not set is prompted for.
 
 | Variable | Answer |
 |---|---|
-| `SHERPA_ADMIN_PASSWORD` | Password for `admin`. Also read from `/opt/sherpa/env/sherpa.env` |
+| `SHERPA_SERVER_IPV4` | Listen IPv4 address, as `--server-ipv4` |
+| `SHERPA_SERVER_IPV6` | Listen IPv6 address, as `--server-ipv6` |
+| `SHERPA_SERVER_WS_PORT` | Listen port, as `--ws-port` |
+| `SHERPA_SERVER_HTTP_PORT` | Certificate endpoint port, as `--http-port` |
+| `SHERPA_ADMIN_PASSWORD` | Password for `admin` |
 | `SHERPA_USER_NAME` | Your username |
 | `SHERPA_USER_PASSWORD` | Your password |
 | `SHERPA_USER_IS_ADMIN` | `yes` or `no`; empty means `yes` |
 | `SHERPA_USER_SSH_KEY` | SSH public key, as a file path or the key itself; empty adds none |
 
-The `SHERPA_USER_*` variables are only read from the environment, never from the env file, so
-your password is not kept on the server. Passwords must meet the server's rules: at least 8
-characters, with upper and lower case letters and one of `!@#$%^&*_+-=`.
+These are read from the environment only, never from `/opt/sherpa/env/sherpa.env`, so your
+password is not kept on the server. The install script reads `SHERPA_SERVER_IPV4`,
+`SHERPA_SERVER_WS_PORT` and `SHERPA_SERVER_HTTP_PORT` too, so exporting them once covers both the
+install and `sherpad init`. Passwords must meet the server's rules: at least 8 characters, with
+upper and lower case letters and one of `!@#$%^&*_+-=`.
 
 ```
-sudo -u sherpa -H --preserve-env=SHERPA_ADMIN_PASSWORD,SHERPA_USER_NAME,SHERPA_USER_PASSWORD,SHERPA_USER_IS_ADMIN,SHERPA_USER_SSH_KEY \
+sudo -u sherpa -H --preserve-env=SHERPA_SERVER_IPV4,SHERPA_SERVER_IPV6,SHERPA_SERVER_WS_PORT,SHERPA_SERVER_HTTP_PORT,SHERPA_ADMIN_PASSWORD,SHERPA_USER_NAME,SHERPA_USER_PASSWORD,SHERPA_USER_IS_ADMIN,SHERPA_USER_SSH_KEY \
   sherpad init
 ```
 
