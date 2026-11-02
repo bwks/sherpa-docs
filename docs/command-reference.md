@@ -376,6 +376,17 @@ for a cleanup retry.
 sherpa server clean <lab_id>
 ```
 
+### `sherpa server backup`
+
+Back up the server's database while the server keeps running. Admin only. The server writes a
+consistent copy to `/opt/sherpa/db/backups/sherpa-<time>.sqlite`, named after the UTC time, and
+prints its path and size. The backup stays on the server. See
+[Database backups](architecture/database.md#backups) for restoring one.
+
+```
+sherpa server backup
+```
+
 ## Server User Commands
 
 User management commands. Most require admin privileges.
@@ -568,3 +579,36 @@ sherpa server image set-default --model <model> --version <version>
 | ---- | ----------- |
 | `--model`, `-m` | Model of the device image (required) |
 | `--version`, `-v` | Version to set as default (required) |
+
+## Server Daemon
+
+`sherpad` runs on the server. Besides `start`, `stop`, `restart`, `status`, `logs` and `doctor`,
+it has two setup commands.
+
+### `sherpad init`
+
+Initialize the server: directories, `sherpa.toml`, SSH keys, libvirt network and storage pool,
+the database, the built-in `admin` account and a first user account. See the
+[Quickstart](quickstart.md) for the accounts and unattended use.
+
+| Flag | Description |
+| ---- | ----------- |
+| `--force` | Overwrite an existing config and SSH keys |
+| `--server-ipv4` | Server listen address (env: `SHERPA_SERVER_IPV4`) |
+| `--ws-port` | Server listen port (env: `SHERPA_SERVER_WS_PORT`) |
+| `--http-port` | HTTP certificate endpoint port (env: `SHERPA_SERVER_HTTP_PORT`) |
+
+Each value is also read from `/opt/sherpa/env/sherpa.env`. Since 0.5.0 there are no database
+flags: the database is a file `sherpad` manages itself.
+
+### `sherpad migrate-db`
+
+Move the data of a server older than 0.5.0 from its SurrealDB container into the embedded
+database. The update script runs it for you; see
+[Updating to 0.5.0](install-update/update/sherpa.md#updating-to-050). Run it as the `sherpa` user
+with `sherpad` stopped.
+
+| Flag | Description |
+| ---- | ----------- |
+| `--db-pass` | SurrealDB password (env: `SHERPA_DB_PASSWORD`, or `/opt/sherpa/env/sherpa.env`) |
+| `--db-port` | SurrealDB port, default `8000` (env: `SHERPA_DB_PORT`, or `/opt/sherpa/env/sherpa.env`) |

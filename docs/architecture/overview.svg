@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 544" width="640" height="544" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <title id="title">Sherpa architecture overview</title>
-  <desc id="desc">The sherpa CLI connects to sherpad over WSS and browsers over HTTPS, both on port 3030. sherpad drives Libvirt for KVM/QEMU virtual machines and unikernels, Docker for containers, stores state in SurrealDB over WebSocket on port 8000, and can export telemetry to an OTLP collector.</desc>
+  <desc id="desc">The sherpa CLI connects to sherpad over WSS and browsers over HTTPS, both on port 3030. sherpad drives Libvirt for KVM/QEMU virtual machines and unikernels, Docker for containers, keeps its state in an embedded Turso database file, and can export telemetry to an OTLP collector.</desc>
   <style>
     svg {
       --bg: #fdffff;
@@ -120,5 +120,5 @@
 
   <!-- Database -->
   <rect class="db" x="426" y="316" width="182" height="44" rx="8"/>
-  <text class="t" x="517" y="343" text-anchor="middle">SurrealDB</text>
+  <text class="t" x="517" y="343" text-anchor="middle">Turso (embedded)</text>
 </svg>

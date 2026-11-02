@@ -95,6 +95,11 @@ their existing tokens stop working.
 | User | Change password, info | Self, or admin for any user |
 | User | Create, list, delete | Admin |
 | Admin | Force clean lab | Admin |
+| Admin | Back up database | Admin |
+
+The database backup is WebSocket RPC only: the method `server.backup` takes only `token` and
+returns `path`, the backup file on the server, and `size_bytes`. See
+[`sherpa server backup`](command-reference.md#sherpa-server-backup).
 
 ## Long-Running Operations
 
