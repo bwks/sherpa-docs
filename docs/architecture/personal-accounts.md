@@ -37,6 +37,9 @@ Alpine keeps its own tools: your account gets the `ash` shell (`/bin/sh`) and pa
 `doas` instead of Bash and `sudo`. Install `bash` or `sudo` yourself if you want them, for
 example with a `startup_scripts` entry that runs `apk add bash sudo`.
 
+On NixOS your account gets Bash from the system profile, `/run/current-system/sw/bin/bash`,
+because NixOS has no `/bin/bash`, and passwordless `sudo` through the `wheel` group.
+
 FreeBSD and OpenBSD also keep their own tools: your account gets the `sh` shell and joins the
 `wheel` group. On OpenBSD, admin rights use `doas`, part of the base system, which lets `wheel`
 run commands as root without a password. On FreeBSD they use passwordless `sudo`, which the
