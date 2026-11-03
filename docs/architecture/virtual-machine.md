@@ -108,7 +108,7 @@ Power behaviour:
 
 ## Additional Features
 
-- **Watchdog** — i6300esb hardware watchdog with reset action for crash recovery
+- **No watchdog** — VMs get no hardware watchdog. Cisco IOS images arm one early in boot and feed it only after a long init phase, so under nested virtualization they reset in a loop
 - **QEMU Guest Agent** — virtio channel for host-guest communication
 - **NVRAM** — UEFI VMs store NVRAM at `/var/lib/libvirt/qemu/nvram/`
 - **Windows support** — Hyper-V enlightenments (relaxed, vapic, spinlocks, vpindex, runtime, synic, stimer, frequencies, tlbflush, ipi) and the Hyper-V clock are enabled for Windows VMs
