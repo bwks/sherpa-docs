@@ -34,7 +34,7 @@ is cloned during instance creation.
 | DISK Driver          | virtio          |
 | ZTP Method           | Disk            |
 | Management Interface | GigabitEthernet0/0 |
-| Data Interfaces      | gig0/1-3/3 (15) |
+| Data Interfaces      | gig0/1-3, gig[1-3]/0-3 |
 | Interface Driver     | e1000           |
 
 ## Example Manifest
