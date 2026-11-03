@@ -9,7 +9,6 @@
 ```
 sudo apt install \
   cpu-checker \
-  genisoimage \
   telnet \
   ssh \
   mtools \
