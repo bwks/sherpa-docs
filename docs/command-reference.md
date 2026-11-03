@@ -80,6 +80,10 @@ Initialise a Sherpa client environment. Creates the `~/.sherpa` directory struct
 
 Build the lab environment. Reads `manifest.toml` from the current directory, sends it to the server, and deploys all nodes and links.
 
+The server records where the lab was started from: your machine's hostname and the current
+directory. `sherpa inspect` and the web UI's lab page show them as **Client Host** and
+**Client Folder**, so you can find the folder of a lab later.
+
 When `[tailscale]` is enabled, resolves the auth key from the client environment
 variable named by `auth_key_env` and creates a gateway for the lab. Enrollment
 requires WSS with certificate validation enabled. Pending route approval produces
@@ -208,6 +212,9 @@ removes them.
 ### `sherpa inspect`
 
 Inspect the current lab environment. Shows node states, links, and lab details.
+The lab details include **Client Host** and **Client Folder**, the machine and directory
+`sherpa up` ran in. Labs started from the web UI or the API, and labs started before Sherpa
+0.5.6, have neither.
 For Tailscale-enabled labs, refreshes gateway state, Tailscale addresses, advertised
 management routes, route approval, and warnings. This is the default command when
 no subcommand is specified.

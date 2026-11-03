@@ -108,7 +108,7 @@ Power behaviour:
 
 ## Additional Features
 
-- **No watchdog** — VMs get no hardware watchdog. Cisco IOS images arm one early in boot and feed it only after a long init phase, so under nested virtualization they reset in a loop
+- **Watchdog only when asked** — Sherpa adds a hardware watchdog only when the node sets [`watchdog`](../manifest.md#watchdog-string). (`q35` VMs always have the chipset's iTCO watchdog, which libvirt adds; it does nothing unless the guest starts it.) Cisco IOS images arm one early in boot and feed it only after a long init phase, so under nested virtualization a `reset` watchdog resets them in a loop
 - **QEMU Guest Agent** — virtio channel for host-guest communication
 - **NVRAM** — UEFI VMs store NVRAM at `/var/lib/libvirt/qemu/nvram/`
 - **Windows support** — Hyper-V enlightenments (relaxed, vapic, spinlocks, vpindex, runtime, synic, stimer, frequencies, tlbflush, ipi) and the Hyper-V clock are enabled for Windows VMs
