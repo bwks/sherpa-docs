@@ -547,6 +547,42 @@ dst = "/container/path"
 | `src` | string | Source path on the host |
 | `dst` | string | Destination path in the node |
 
+##### watchdog (string)
+
+Give a virtual machine a hardware watchdog, and choose what happens when it expires. Without
+`watchdog`, Sherpa adds none.
+
+```toml
+watchdog = "reset"
+```
+
+| Action | What happens when the watchdog expires |
+|---|---|
+| `reset` | The VM is reset, as with the reset button |
+| `poweroff` | The VM is powered off at once |
+| `shutdown` | The guest is asked to shut down, as with the power button |
+| `pause` | The VM is paused |
+| `dump` | The VM's memory is dumped, and it keeps running |
+| `inject-nmi` | The guest receives a non-maskable interrupt |
+| `none` | Nothing; the device is present but has no effect |
+
+The watchdog is an emulated Intel 6300ESB timer. It does nothing until the guest starts it, and
+the guest must then keep resetting it: if the guest hangs and stops, the action is taken. It
+helps only guests that run a watchdog driver and something that feeds it, for example Linux with
+the `i6300esb` module and systemd's `RuntimeWatchdogSec`.
+
+VMs with the `q35` machine type also have the chipset's own iTCO watchdog, which libvirt adds by
+itself and gives the same action, `reset` when `watchdog` is not set. It also does nothing until
+the guest starts it.
+
+_This parameter only applies to virtual machine nodes._ Sherpa refuses it on containers and
+unikernels.
+
+!!! warning
+    Images that start the watchdog early in boot and feed it only once booted can reset in a
+    loop when the boot takes longer than the watchdog's timeout. Cisco IOS images do this,
+    especially under nested virtualization, so do not give them a `reset` watchdog.
+
 ##### ztp_config (string)
 
 Path to a custom ZTP configuration file on the client.
