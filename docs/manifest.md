@@ -679,15 +679,15 @@ sets it fails validation; see [the removed `p2p` setting](architecture/networkin
 
 ### provision_current_user (bool)
 
-Create an account for the lab owner on supported Linux VMs, using the owner's Sherpa username
-and registered SSH public keys. Defaults to `false`.
+Create an account for the lab owner on lab nodes, using the owner's Sherpa username and
+registered SSH public keys: Linux, BSD and Windows VMs, and network devices. Defaults to `false`.
 
 ```toml
 provision_current_user = true
 ```
 
-See [Personal Accounts](architecture/personal-accounts.md). A node with a custom `ztp_config`
-cannot be used with this setting.
+See [Personal Accounts](architecture/personal-accounts.md) for the nodes it applies to and the
+key types each network device takes. A node with a custom `ztp_config` gets no account.
 
 ### ready_timeout (int)
 
