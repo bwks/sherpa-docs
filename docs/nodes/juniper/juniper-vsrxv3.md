@@ -1,8 +1,5 @@
 # Juniper vSRX v3
 
-!!! Warning
-    This model is not currently working.
-
 ## Base Image
 
 Base images can be downloaded from the [download](https://support.juniper.net/support/downloads/?p=vsrxeval) page.
@@ -32,10 +29,16 @@ sherpa server image import \
 | CDROM Driver         | IDE             |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
-| ZTP Method           | TFTP            |
+| ZTP Method           | CDROM           |
 | Management Interface | fxp0            |
 | Data Interfaces      | ge-0/0/0-7      |
 | Interface Driver     | virtio          |
+
+!!! note
+
+    vSRX reads its startup config from a CD-ROM. Its factory config runs no DHCP client, so the
+    TFTP method that older Sherpa releases used left it without a config. Upgrading the server to
+    Sherpa 0.5.8 moves existing vSRX images to the CD-ROM method.
 
 ## Example Manifest
 
