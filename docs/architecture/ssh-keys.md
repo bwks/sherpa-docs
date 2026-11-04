@@ -9,8 +9,8 @@ SSH agent.
 
 ## Generate a Key
 
-Ed25519 keys are short and widely supported. Use RSA (`-t rsa -b 4096`) only if a device in
-your labs cannot use Ed25519.
+Ed25519 keys are short and widely supported. If your labs have network devices that take RSA
+only, register an RSA key as well; see [Which Key Type](#which-key-type).
 
 === "Linux and macOS"
 
@@ -33,6 +33,27 @@ your labs cannot use Ed25519.
     The public key is written to `C:\Users\<you>\.ssh\id_ed25519.pub`.
 
 If you already have a key pair, use its existing `.pub` file.
+
+## Which Key Type
+
+Linux, BSD and Windows nodes take every key you register. Many network devices take only some
+types, so a lab with [personal accounts](personal-accounts.md) needs a key each device takes:
+
+- Cisco IOS, IOS XE, IOS XR and ISE take RSA only.
+- Cisco NX-OS takes ECDSA or RSA, not Ed25519.
+- PAN-OS and MikroTik take Ed25519 or RSA, not ECDSA.
+
+RSA is the only type every device takes. To cover all of them, keep an Ed25519 key and add an
+RSA key:
+
+```
+ssh-keygen -t rsa -b 4096 -C "you@example.com"
+sherpa server user ssh-key add ~/.ssh/id_rsa.pub
+```
+
+Your SSH client offers each of your keys in turn, so both work without extra settings.
+[Personal Accounts](personal-accounts.md#network-devices) lists the key types and number of keys
+each device takes.
 
 ## Register a Key
 

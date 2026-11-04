@@ -51,10 +51,16 @@ sherpa server image import \
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
-| ZTP Method           | CDROM           |
+| ZTP Method           | Disk            |
 | Management Interface | eth0            |
 | Data Interfaces      | eth1-4          |
 | Interface Driver     | virtio          |
+
+!!! note
+
+    ISE reads its ZTP config from a disk. Images imported before Sherpa 0.5.7 had the CD-ROM
+    method, which ISE does not support, so `sherpa up` failed on them; upgrading the server
+    moves them to the disk method.
 
 ## Example Manifest
 

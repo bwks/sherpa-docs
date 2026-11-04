@@ -1,7 +1,7 @@
 # Personal Accounts
 
-By default, you log in to lab VMs as the generated `sherpa` user. Personal accounts let you
-log in as yourself instead, with your own SSH keys and passwordless sudo.
+By default, you log in to lab nodes as the generated `sherpa` user. Personal accounts let you
+log in as yourself instead, with your own SSH keys and administrator rights.
 
 ## Enable
 
@@ -26,7 +26,9 @@ sent to the server.
 
 ## What You Get
 
-Each supported VM gets an account with:
+### Linux and BSD
+
+Each Linux and BSD VM gets an account with:
 
 - Your Sherpa username
 - A home directory at `/home/<username>` and the Bash shell
@@ -51,11 +53,53 @@ Manifest `user_scripts` run as your account instead of `sherpa`, and manifest
 `environment_variables` are set in your account's login shells instead of the `sherpa`
 user's.
 
-Personal accounts apply to Linux and BSD VMs that use `cloud-init`, and to Flatcar. Windows,
-containers, unikernels and network devices are not changed.
+`generic_vm` nodes are set up as a Linux VM that uses `cloud-init`.
+
+### Windows
+
+Windows VMs get a local administrator account with your username and your keys. Each account
+has its own keys file, `C:\ProgramData\ssh\authorized_keys\<username>`, so your keys log in
+only as you, and the `sherpa` key only as `sherpa`. The account has a random password that is
+never shown; log in with your key.
+
+### Network Devices
+
+Network devices get an administrator account with your username next to the `sherpa` account.
+You log in with your key. Where the device needs a password, the account gets a random one that
+is never shown.
+
+| Models | Admin rights | Key types | Keys used |
+|---|---|---|---|
+| `cisco_iosv`, `cisco_iosvl2`, `cisco_csr1000v`, `cisco_cat8000v`, `cisco_cat9000v` | privilege 15 | RSA | first 2 |
+| `cisco_iosxrv9000` | `root-lr` and `netadmin` groups | RSA | first 4 |
+| `cisco_asav` | privilege 15 | Ed25519, ECDSA, RSA | first 1 |
+| `cisco_nexus9300v` | `network-admin` | ECDSA, RSA | first 1 |
+| `arista_veos`, `arista_ceos` | privilege 15 | Ed25519, ECDSA, RSA | first 2 |
+| `aruba_aoscx` | `administrators` | Ed25519, ECDSA, RSA | first 32 |
+| `juniper_vrouter`, `juniper_vswitch`, `juniper_vsrxv3`, `juniper_vevolved` | `super-user` | Ed25519, ECDSA, RSA | all |
+| `nokia_srlinux` | superuser role | Ed25519, ECDSA, RSA | first 32 |
+| `paloalto_panos` | superuser | Ed25519, RSA | first 1 |
+| `mikrotik_chr` | `full` group | Ed25519, RSA | all |
+| `cumulus_linux` | `system-admin` | Ed25519, ECDSA, RSA | all |
+| `sonic_linux`, `frr_linux` | passwordless `sudo` | all | all |
+
+Keys of a type a device does not take, and keys past its limit, are left out, and `sherpa up`
+lists them. If none of your keys fits a node, `sherpa up` stops before it creates anything and
+shows the command that makes a key of the right type. RSA is the only type every device takes;
+see [SSH Keys](ssh-keys.md#which-key-type).
+
+Cisco ISE has a single administrator, `sherpa`, which takes one key. With personal accounts it
+takes your first RSA key instead of the server's, so you log in to ISE as `sherpa` with your own
+key.
+
+### Not Changed
+
+Cisco FTDv, Talos, application containers such as databases and Git servers, and unikernels
+have no way to add an account at boot. They keep their usual login.
 
 !!! note
-    A node with a custom `ztp_config` cannot use this setting.
+    A node with a custom `ztp_config` gets no personal account, because your config replaces
+    the one the account would be written into. `sherpa up` says which nodes this applies to.
 
 ### Username Rules
 

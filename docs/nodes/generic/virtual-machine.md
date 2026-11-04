@@ -22,12 +22,18 @@ sherpa server image import \
 | Kind                 | Virtual Machine |
 | CPU                  | 1               |
 | RAM                  | 1GB             |
-| CDROM Driver         | virtio          |
+| CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP Method           | Cloud-Init      |
 | Management Interface | eth0            |
 | Interface Driver     | virtio          |
+
+The image must run `cloud-init` with the NoCloud data source, like a Linux cloud image. Sherpa
+sets it up as a Linux VM: the `sherpa` user with passwordless `sudo`, the management address,
+and your [personal account](../../architecture/personal-accounts.md) when
+`provision_current_user` is set. For an image without `cloud-init`, turn off ZTP on the image's
+edit page in the web UI (**Admin > Images**), so it boots without ZTP.
 
 ## Example Manifest
 
