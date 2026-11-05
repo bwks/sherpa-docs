@@ -81,7 +81,9 @@ Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This direct
 - The **saved manifest** used for redeploys
 - **SSH configuration** files for node access
 - **ZTP configuration** files generated for each node, including cloud-init `user-data`
-- **TLS certificates** for the lab's nodes
+- **TLS certificates**: the [lab CA](certificates.md) and each node's certificate
+- **Vault credentials**: the unseal key and root token of each
+  [Vault](../nodes/hashicorp/hashicorp-vault.md) node Sherpa initialised
 
 VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
 `/opt/sherpa/libvirt/images/`.
