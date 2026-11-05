@@ -779,6 +779,7 @@ model = "talos_linux"
 | `name` | string | Cluster name, also the Kubernetes cluster name. 1–63 lowercase letters, digits or `-` |
 | `controllers` | list&lt;string&gt; | Nodes that run etcd and the Kubernetes control plane. Sherpa bootstraps the cluster on the first one |
 | `workers` | list&lt;string&gt; | Nodes that run workloads only. Optional; without workers, workloads run on the controllers |
+| `cni` | string | `flannel` (the default) or `cilium`. See [Cilium](nodes/linux/talos-linux.md#cilium) |
 
 Members must be `talos_linux` nodes defined in [`nodes`](#nodes-listnode_object), and a node can
 be listed only once across all clusters. A `talos_linux` node that is not listed is a standalone
@@ -786,7 +787,8 @@ Talos node.
 
 Each cluster needs one or three controllers. Two are refused: etcd needs a majority of its
 members to stay up, so two controllers survive no failure and are less available than one.
-A lab can have several clusters; at most two of them can have three controllers.
+A lab can have several clusters; at most two of them can have three controllers, and at most
+two can use Cilium.
 
 ### ztp_server (object)
 

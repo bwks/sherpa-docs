@@ -92,7 +92,8 @@ a warning without failing creation. See the [Tailscale guide](architecture/netwo
 When the manifest declares [Talos clusters](manifest.md#talos_clusters-listtalos_cluster_object), `up` also
 bootstraps each Kubernetes cluster, waits for its nodes to be Ready, and writes
 `kubeconfig-<cluster>` and `talosconfig-<cluster>` to the current directory, readable only by
-you. A cluster that is not ready in time is reported as a warning. See
+you. For a [Cilium](nodes/linux/talos-linux.md#cilium) cluster it also prints the Gateway and
+Hubble UI addresses. A cluster that is not ready in time is reported as a warning. See
 [Talos Linux](nodes/linux/talos-linux.md).
 
 #### Stopping a running command
@@ -264,7 +265,8 @@ sherpa console <name>
 
 Download lab files (SSH config, SSH key, lab-info, the nodes' host keys in
 `sherpa_known_hosts`, and each cluster's `kubeconfig-<cluster>` and `talosconfig-<cluster>`)
-for CLI use from a remote lab.
+for CLI use from a remote lab. Like `up`, it prints each Cilium cluster's Gateway and Hubble UI
+addresses.
 
 ```
 sherpa download <lab_id>
