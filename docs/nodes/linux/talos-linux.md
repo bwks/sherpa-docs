@@ -191,6 +191,100 @@ starts, so nodes need internet access, as they do for the Kubernetes images.
 
 See the [Kubernetes example](../../examples/kubernetes.md) for a cluster to try it on.
 
+### Keycloak login
+
+Set `oidc` to a [Keycloak](../keycloak/keycloak-server.md) node in the lab, and users of that
+node's `sherpa` realm can log in to the cluster:
+
+```toml
+[[talos_clusters]]
+name = "k8s"
+controllers = ["cp01"]
+workers = ["worker01"]
+oidc = "kc01"
+
+[[nodes]]
+name = "kc01"
+model = "keycloak_server"
+```
+
+- The cluster accepts the realm's tokens. A user's Kubernetes name is `oidc:<username>`, and
+  their Keycloak groups become `oidc:<group>`.
+- Members of the realm's `cluster-admins` group are cluster admins (`cluster-admin`), and
+  members of `cluster-viewers` can read most resources (`view`). Bind other groups to your own
+  roles in the same way, for example `oidc:developers`.
+- `kubeconfig-<cluster>` gets a second context, `oidc@<cluster>`, which logs in through
+  Keycloak. The admin certificate context, `admin@<cluster>`, stays the default.
+
+The `oidc@<cluster>` context uses the [kubelogin](https://github.com/int128/kubelogin) plugin,
+`kubectl oidc-login`. Install it, for example with `kubectl krew install oidc-login`, then:
+
+```
+kubectl --context oidc@k8s get nodes
+```
+
+The first command opens a browser at Keycloak's login page. Sign in with a user from
+`keycloak-<node>.toml`; kubelogin keeps the token until it expires. See the
+[Keycloak](../keycloak/keycloak-server.md#sherpa-realm) page for the realm's users.
+
+Keycloak can start after the cluster: the Kubernetes API keeps retrying the realm until it
+answers.
+
+### Vault secrets
+
+Set `vault` to a [Hashicorp Vault](../hashicorp/hashicorp-vault.md) node in the lab, and the
+cluster's workloads can read secrets from it:
+
+```toml
+[[talos_clusters]]
+name = "k8s"
+controllers = ["cp01"]
+workers = ["worker01"]
+vault = "vault01"
+
+[[nodes]]
+name = "vault01"
+model = "hashicorp_vault"
+```
+
+Sherpa:
+
+- installs the [Vault Secrets Operator](https://developer.hashicorp.com/vault/docs/platform/k8s/vso)
+  1.6.2 in the `vault-secrets-operator-system` namespace, connected to the Vault node over
+  HTTPS. It is installed about two minutes after the cluster starts, so it may still be
+  installing when `sherpa up` finishes;
+- sets up Vault for the cluster: a KV secrets engine at `secret/`, and a login for the
+  cluster's service accounts. Workloads can read the secrets under `secret/<cluster>/` and no
+  others.
+
+Write a secret with the `vault` CLI, using the root token from `vault-<node>.toml`:
+
+```
+vault kv put secret/k8s/demo password=s3cret
+```
+
+Then sync it into a Kubernetes Secret, in any namespace:
+
+```yaml
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: demo
+  namespace: my-namespace
+spec:
+  type: kv-v2
+  mount: secret
+  path: k8s/demo
+  destination:
+    name: demo
+    create: true
+  refreshAfter: 30s
+```
+
+The operator logs in with the namespace's `default` service account. The Vault node must run
+the config Sherpa generates, without `ztp_config`. The operator's chart and images are
+downloaded when it is installed, so nodes need internet access.
+
 ### Cluster defaults
 
 | Setting            | Value                                 |
@@ -218,6 +312,10 @@ stop cleanly.
 - A **worker** can be redeployed: it is rebuilt from the cluster's saved secrets and rejoins.
 - A **controller** cannot: its etcd member would have to be removed first. Destroy and
   recreate the lab instead.
+- A cluster's **Vault** node can be redeployed. It starts empty: Sherpa sets it up for the
+  cluster again, but you must write its secrets again.
+- A cluster's **Keycloak** node can be redeployed. Sherpa makes the `sherpa` realm again, with
+  the same users and passwords.
 
 ## Your Own Configs
 

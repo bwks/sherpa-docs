@@ -64,6 +64,40 @@ can use it directly:
 curl --cacert lab-ca.crt https://<keycloak_mgmt_ip>:8443/realms/master/.well-known/openid-configuration
 ```
 
+## Sherpa Realm
+
+After the node starts, Sherpa makes a realm named `sherpa`, which
+[Kubernetes clusters](../linux/talos-linux.md#keycloak-login) accept logins from:
+
+| | |
+| - | - |
+| Users | `sherpa`, with the Sherpa password, and you, the lab owner, with a generated password |
+| Groups | `cluster-admins`, which both users are in, and `cluster-viewers` |
+| Client | `kubernetes`, a public client for `kubectl oidc-login` |
+| Issuer | `https://<keycloak_mgmt_ip>:8443/realms/sherpa` |
+| Account console | `https://<keycloak_mgmt_ip>:8443/realms/sherpa/account` |
+
+`sherpa up` and `sherpa download` write the realm's users and passwords to
+`keycloak-<node>.toml` in your working directory, readable only by you:
+
+```toml
+address = "https://172.31.1.23:8443"
+realm = "sherpa"
+issuer = "https://172.31.1.23:8443/realms/sherpa"
+account_console = "https://172.31.1.23:8443/realms/sherpa/account"
+
+[[users]]
+username = "sherpa"
+password = "Everest1953!"
+
+[[users]]
+username = "alice"
+password = "…"
+```
+
+Add your own users and groups to the realm in the admin console. A Kubernetes cluster sees a
+user's groups as `oidc:<group>`.
+
 ## Settings
 
 Sherpa sets these environment variables. Values you set in the node's
@@ -86,4 +120,5 @@ Sherpa sets these environment variables. Values you set in the node's
   `sherpa up` reports a container as ready when it has started.
 - The container runs as root, so it can read the lab certificate key mounted from the server.
 - Keycloak's data is kept in the container. `sherpa down` and `sherpa resume` keep it;
-  `sherpa redeploy` starts an empty Keycloak.
+  `sherpa redeploy` starts an empty Keycloak. Sherpa then makes the `sherpa` realm again, with
+  the same users and passwords; users and groups you added are gone.
