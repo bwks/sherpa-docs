@@ -84,6 +84,8 @@ Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This direct
 - **TLS certificates**: the [lab CA](certificates.md) and each node's certificate
 - **Vault credentials**: the unseal key and root token of each
   [Vault](../nodes/hashicorp/hashicorp-vault.md) node Sherpa initialised
+- **Keycloak users**: the users and passwords of each
+  [Keycloak](../nodes/keycloak/keycloak-server.md) node's `sherpa` realm
 
 VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
 `/opt/sherpa/libvirt/images/`.

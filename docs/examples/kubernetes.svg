@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 292" width="640" height="292" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 292" width="880" height="292" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <title id="title">Kubernetes example topology</title>
-  <desc id="desc">A Talos Linux Kubernetes cluster named k8s. Three controllers, cp01 to cp03, and two workers, wrk01 and wrk02, are Talos Linux VMs on the management network.</desc>
+  <desc id="desc">A Talos Linux Kubernetes cluster named k8s. Three controllers, cp01 to cp03, and two workers, wrk01 and wrk02, are Talos Linux VMs on the management network. A Keycloak container, kc01, and a Vault container, vault01, are on the same network.</desc>
   <style>
     svg {
       --bg: #fdffff;
@@ -41,11 +41,11 @@
     .ln { fill: none; stroke: var(--line); stroke-width: 2; }
   </style>
 
-  <rect class="bg" x="0" y="0" width="640" height="292" rx="14"/>
+  <rect class="bg" x="0" y="0" width="880" height="292" rx="14"/>
 
   <!-- Management network -->
-  <rect class="box" x="32" y="24" width="576" height="44" rx="8"/>
-  <text class="t" x="320" y="51" text-anchor="middle">Management network</text>
+  <rect class="box" x="32" y="24" width="816" height="44" rx="8"/>
+  <text class="t" x="440" y="51" text-anchor="middle">Management network</text>
 
   <!-- Controllers -->
   <rect class="zone" x="32" y="100" width="320" height="168" rx="12"/>
@@ -84,4 +84,20 @@
   <rect class="icon-vm" x="516" y="116" width="72" height="72" rx="14"/>
   <text class="ic" x="552" y="157" text-anchor="middle">VM</text>
   <text class="tc" x="552" y="212" text-anchor="middle">wrk02</text>
+
+  <!-- Services -->
+  <rect class="zone" x="632" y="100" width="216" height="168" rx="12"/>
+  <text class="h" x="648" y="252">SERVICES</text>
+
+  <!-- kc01 -->
+  <line class="ln" x1="692" y1="68" x2="692" y2="116"/>
+  <rect class="icon-ct" x="656" y="116" width="72" height="72" rx="14"/>
+  <text class="ic" x="692" y="157" text-anchor="middle">CT</text>
+  <text class="tc" x="692" y="212" text-anchor="middle">kc01</text>
+
+  <!-- vault01 -->
+  <line class="ln" x1="788" y1="68" x2="788" y2="116"/>
+  <rect class="icon-ct" x="752" y="116" width="72" height="72" rx="14"/>
+  <text class="ic" x="788" y="157" text-anchor="middle">CT</text>
+  <text class="tc" x="788" y="212" text-anchor="middle">vault01</text>
 </svg>

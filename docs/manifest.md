@@ -780,6 +780,8 @@ model = "talos_linux"
 | `controllers` | list&lt;string&gt; | Nodes that run etcd and the Kubernetes control plane. Sherpa bootstraps the cluster on the first one |
 | `workers` | list&lt;string&gt; | Nodes that run workloads only. Optional; without workers, workloads run on the controllers |
 | `cni` | string | `flannel` (the default) or `cilium`. See [Cilium](nodes/linux/talos-linux.md#cilium) |
+| `oidc` | string | A `keycloak_server` node whose `sherpa` realm users log in to the cluster. Optional. See [Keycloak login](nodes/linux/talos-linux.md#keycloak-login) |
+| `vault` | string | A `hashicorp_vault` node, without `ztp_config`, the cluster's workloads read secrets from. Optional. See [Vault secrets](nodes/linux/talos-linux.md#vault-secrets) |
 
 Members must be `talos_linux` nodes defined in [`nodes`](#nodes-listnode_object), and a node can
 be listed only once across all clusters. A `talos_linux` node that is not listed is a standalone

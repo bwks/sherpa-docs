@@ -91,6 +91,18 @@ Vault serves its web UI and API over HTTPS on port `8200`, on the node's managem
     docker exec -it <container> vault status
     ```
 
+## Kubernetes Clusters
+
+A [Kubernetes cluster](../linux/talos-linux.md#vault-secrets) that sets `vault` to this node
+gets the Vault Secrets Operator. For each such cluster, Sherpa sets up Vault:
+
+| | |
+| - | - |
+| Secrets engine | KV version 2 at `secret/` |
+| Auth method | `kubernetes-<cluster>`, which accepts the cluster's service account tokens |
+| Role | `workload`, for any service account in the cluster |
+| Policy | `kubernetes-<cluster>`: read the secrets under `secret/<cluster>/` |
+
 ## Your Own Config
 
 A node with its own [`ztp_config`](../../manifest.md) runs that config instead. Sherpa then
@@ -102,5 +114,6 @@ The lab certificate is still mounted at `/etc/sherpa/certs/` for your config to 
 - Approximate time for the system to be ready: `1 minute`
 - Vault is configured with Raft integrated storage and the web UI enabled.
 - Vault's data is kept in the container. `sherpa down` and `sherpa resume` pause and resume
-  it, so it stays unsealed. `sherpa redeploy` starts an empty Vault: Sherpa initialises it again
-  and writes its new root token and unseal key.
+  it, so it stays unsealed. `sherpa redeploy` starts an empty Vault: Sherpa initialises it again,
+  writes its new root token and unseal key, and sets it up again for the clusters that use it.
+  Secrets you wrote are gone.
