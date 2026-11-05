@@ -76,7 +76,7 @@ is never shown.
 | `cisco_nexus9300v` | `network-admin` | ECDSA, RSA | first 1 |
 | `arista_veos`, `arista_ceos` | privilege 15 | Ed25519, ECDSA, RSA | first 2 |
 | `aruba_aoscx` | `administrators` | Ed25519, ECDSA, RSA | first 32 |
-| `juniper_vrouter`, `juniper_vswitch`, `juniper_vsrxv3`, `juniper_vevolved` | `super-user` | Ed25519, ECDSA, RSA | all |
+| `juniper_vrouter`, `juniper_vswitch`, `juniper_vsrxv3`, `juniper_vevolved`, `juniper_cevolved` | `super-user` | Ed25519, ECDSA, RSA | all |
 | `nokia_srlinux` | superuser role | Ed25519, ECDSA, RSA | first 32 |
 | `paloalto_panos` | superuser | Ed25519, RSA | first 1 |
 | `mikrotik_chr` | `full` group | Ed25519, RSA | all |
