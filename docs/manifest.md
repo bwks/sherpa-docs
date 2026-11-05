@@ -268,6 +268,16 @@ host can still run other work on them.
 
 _This parameter only applies to virtual machine nodes._
 
+##### platform (string)
+
+The PTX router a `juniper_cevolved` node emulates: `bt` (PTX10001-36MR, 12 data interfaces) or
+`bx` (PTX10002-36QDD, up to 36). Without `platform`, the node is `bt`. Other models do not take
+`platform`. See [Juniper cEvolved](nodes/juniper/juniper-cevolved.md#platforms).
+
+```toml
+platform = "bx"
+```
+
 ##### privileged (bool)
 
 Run the container in privileged mode.

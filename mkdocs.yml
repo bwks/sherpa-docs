@@ -80,6 +80,7 @@ nav:
     - Hashicorp:
       - nodes/hashicorp/hashicorp-vault.md
     - Juniper:
+      - nodes/juniper/juniper-cevolved.md
       - nodes/juniper/juniper-vevolved.md
       - nodes/juniper/juniper-vrouter.md
       - nodes/juniper/juniper-vsrxv3.md
