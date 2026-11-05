@@ -15,7 +15,7 @@ the image to `output/omarchy.qcow2`.
 ```
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
-  --version 4.0.4 \
+  --version 4.5.0 \
   --model omarchy_linux \
   --default
 ```
