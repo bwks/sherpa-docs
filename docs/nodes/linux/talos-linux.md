@@ -133,12 +133,70 @@ to stay up, so two controllers survive no failure and are less available than on
 
 If a cluster has no workers, workloads are allowed on its controllers.
 
+### Cilium
+
+Set `cni = "cilium"` on a cluster to run [Cilium](https://cilium.io) instead of Flannel:
+
+```toml
+[[talos_clusters]]
+name = "k8s"
+controllers = ["cp01", "cp02", "cp03"]
+workers = ["worker01", "worker02"]
+cni = "cilium"
+```
+
+Talos installs Cilium while the cluster bootstraps, so the nodes are Ready when `sherpa up`
+finishes. The cluster gets:
+
+- **Cilium 1.20.4** as the CNI, replacing kube-proxy.
+- **Load balancer addresses** on the lab's management network, announced by Cilium. Sherpa
+  reserves four for each Cilium cluster: `.13`–`.16` for the first, `.17`–`.20` for the
+  second. A lab can have up to two Cilium clusters. See
+  [IP addressing](../../architecture/networking/ip-addressing.md#addresses-in-a-range).
+- **A Gateway** named `sherpa`, in the `default` namespace, at the first address. It accepts
+  HTTP on port 80 for [HTTPRoutes](https://gateway-api.sigs.k8s.io/api-types/httproute/) from
+  any namespace. The Gateway API CRDs (v1.6.3, standard channel) are installed.
+- **Hubble UI**, Cilium's view of traffic between pods, at the second address.
+- The other two addresses for your own `LoadBalancer` services.
+
+`sherpa up` and `sherpa download` print the Gateway and Hubble UI addresses:
+
+```
+✅ Cluster k8s credentials: kubeconfig-k8s and talosconfig-k8s
+   export KUBECONFIG=kubeconfig-k8s TALOSCONFIG=talosconfig-k8s
+   Gateway: http://172.31.1.13
+   Hubble UI: http://172.31.1.14
+```
+
+Route a service through the Gateway:
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: my-app
+  namespace: my-namespace
+spec:
+  parentRefs:
+    - name: sherpa
+      namespace: default
+  rules:
+    - backendRefs:
+        - name: my-app
+          port: 80
+```
+
+The Cilium settings are fixed. Cilium's images are pulled from `quay.io` when the cluster
+starts, so nodes need internet access, as they do for the Kubernetes images.
+
+See the [Kubernetes example](../../examples/kubernetes.md) for a cluster to try it on.
+
 ### Cluster defaults
 
 | Setting            | Value                                 |
 | ------------------ | ------------------------------------- |
 | Kubernetes version | 1.37.1 (the Talos 1.14 default)       |
-| CNI                | Flannel                               |
+| CNI                | Flannel, or [Cilium](#cilium)         |
 | Pod network        | `10.244.0.0/16`                       |
 | Service network    | `10.96.0.0/12`                        |
 | Pod Security       | `baseline` enforced                   |
