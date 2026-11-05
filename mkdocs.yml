@@ -25,6 +25,7 @@ nav:
     - architecture/database.md
     - architecture/zero-touch-provisioning.md
     - architecture/credentials.md
+    - architecture/certificates.md
     - architecture/ssh.md
     - architecture/ssh-keys.md
     - architecture/personal-accounts.md
@@ -79,6 +80,8 @@ nav:
       - nodes/generic/virtual-machine.md
     - Hashicorp:
       - nodes/hashicorp/hashicorp-vault.md
+    - Keycloak:
+      - nodes/keycloak/keycloak-server.md
     - Juniper:
       - nodes/juniper/juniper-cevolved.md
       - nodes/juniper/juniper-vevolved.md

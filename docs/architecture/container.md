@@ -62,7 +62,8 @@ Files can be injected into containers via volume mounts defined in the manifest:
 - **`binary_files`** — binary artifacts mounted into the container
 - **`volumes`** — arbitrary host-to-container path bindings
 
-TLS certificates are automatically mounted when certificate paths are configured.
+Every container gets the [lab CA and its node certificate](certificates.md), mounted read-only
+at `/etc/sherpa/certs/`.
 
 ## Console Access
 

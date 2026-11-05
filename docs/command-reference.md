@@ -96,6 +96,10 @@ you. For a [Cilium](nodes/linux/talos-linux.md#cilium) cluster it also prints th
 Hubble UI addresses. A cluster that is not ready in time is reported as a warning. See
 [Talos Linux](nodes/linux/talos-linux.md).
 
+`up` writes the [lab CA](architecture/certificates.md) to `lab-ca.crt`, and for each
+[Vault](nodes/hashicorp/hashicorp-vault.md) node Sherpa initialised, its address, root token and
+unseal key to `vault-<node>.toml`, readable only by you.
+
 #### Stopping a running command
 
 `sherpa up`, `sherpa redeploy` and `sherpa resume` run on the server, which keeps them running
@@ -266,7 +270,7 @@ sherpa console <name>
 Download lab files (SSH config, SSH key, lab-info, the nodes' host keys in
 `sherpa_known_hosts`, and each cluster's `kubeconfig-<cluster>` and `talosconfig-<cluster>`)
 for CLI use from a remote lab. Like `up`, it prints each Cilium cluster's Gateway and Hubble UI
-addresses.
+addresses, and writes `lab-ca.crt` and each Vault node's `vault-<node>.toml`.
 
 ```
 sherpa download <lab_id>
