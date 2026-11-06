@@ -505,7 +505,7 @@ that support the `cloud-init` based ZTP method._
 | `dst` | string | Destination path on the node |
 | `user` | string | File owner |
 | `group` | string | File group |
-| `permissions` | int | File permissions (e.g., `600`) |
+| `permissions` | int | File permissions as octal digits (e.g., `600`), up to `777`. `sherpa validate` and `sherpa up` refuse other values. Write the digits as a plain number: `0644` is not valid TOML, and TOML's octal literal `0o644` is the number 420, which Sherpa reads as mode `420` |
 
 ##### user (string)
 
