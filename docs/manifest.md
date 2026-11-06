@@ -678,11 +678,13 @@ loss_percent = 1.0
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-| `delay` | int | One-way delay in milliseconds |
-| `jitter` | int | Delay jitter in milliseconds |
+| `delay` | int | One-way delay in milliseconds, up to `274877` (about 4.5 minutes) |
+| `jitter` | int | Delay jitter in milliseconds, up to `274877` |
 | `loss_percent` | float | Packet loss percentage (`0.0` - `100.0`) |
 | `reorder_percent` | float | Packet reordering percentage (`0.0` - `100.0`). Reordered packets skip the delay, so set a `delay` too |
 | `corrupt_percent` | float | Bit-flip corruption percentage (`0.0` - `100.0`) |
+
+`sherpa validate` and `sherpa up` refuse a value outside these ranges, naming the link.
 
 Every link is a P2P eBPF link. The `p2p` setting has been removed, and a manifest that still
 sets it fails validation; see [the removed `p2p` setting](architecture/networking/modes/point-to-point.md#the-removed-p2p-setting).
