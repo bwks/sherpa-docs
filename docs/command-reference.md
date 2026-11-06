@@ -37,9 +37,17 @@ Logout from the Sherpa server. Removes the stored authentication token.
 
 ### `sherpa whoami`
 
-Show the current authentication status and user information.
+Show the current authentication status and user information. When your token is invalid or
+has expired, it says so and exits with an error, so a script can run
+`sherpa whoami || sherpa login`.
 
 ## Lab Lifecycle
+
+Lab commands act on the lab of the current folder: the one `lab-info.toml` names, written by
+`sherpa up` and `sherpa download`, or else the one `manifest.toml` describes. When both files
+are present and name different labs, as after renaming the lab in `manifest.toml` or
+downloading another lab into the folder, the commands refuse to run and name both labs.
+Destroy the old lab, or remove `lab-info.toml`, before using the folder for the other one.
 
 ### `sherpa new`
 
@@ -207,10 +215,16 @@ If `sherpa up`, `sherpa redeploy` or `sherpa resume` is still running on the lab
 stops it first and waits for it to finish its current step, then removes the lab. This is
 safe to use on a lab whose `up` was interrupted.
 
+Once the lab is gone, destroy deletes the files `sherpa up` and `sherpa download` saved in
+the lab folder: `sherpa_ssh_config`, `sherpa_ssh_key`, `sherpa_known_hosts`, `lab-ca.crt`,
+`lab-info.toml`, each Vault node's `vault-<node>.toml`, each Keycloak node's
+`keycloak-<node>.toml`, and each Talos cluster's `kubeconfig-<cluster>` and
+`talosconfig-<cluster>`. Cluster names come from `manifest.toml`, so run destroy in the lab
+folder. Other files, such as your own `kubeconfig-prod`, are left alone.
+
 If the server cannot remove every resource, destroy prints what failed and exits with an
-error. While the lab still exists on the server, the local SSH config, key and known hosts
-are kept, so nodes that are still running stay reachable, and running `sherpa destroy` again
-removes them.
+error. While the lab still exists on the server, the local files are kept, so nodes that are
+still running stay reachable, and running `sherpa destroy` again removes them.
 
 | Flag | Description |
 | ---- | ----------- |
@@ -341,9 +355,17 @@ sherpa image list [model]
 | `--unikernel` | List unikernel images only |
 | `--virtual-machine` | List virtual machine images only |
 
+Give at most one of `--container`, `--unikernel` and `--virtual-machine`; with none, every
+kind is listed.
+
 ## Certificate Commands
 
 Manage trusted server certificates using the Trust-On-First-Use (TOFU) system.
+
+`cert show`, `cert trust` and `cert delete` take the server as a host (`10.100.58.10`), a
+`host:port` (`10.100.58.10:3030`) or a `ws://` or `wss://` URL (`wss://10.100.58.10:3030/ws`).
+A host without a port uses the Sherpa server's port, `3030`. Other URLs, such as `https://`
+ones, are refused.
 
 ### `sherpa cert list`
 
@@ -376,6 +398,8 @@ sherpa cert delete <server_url>
 ## Server Commands
 
 Server administration commands. Use `sherpa server --verbose` for debug logging and `sherpa server --output json` for JSON output.
+Progress lines, such as those of an image import or pull, go to stderr, so with
+`--output json` stdout holds only the JSON.
 
 ### `sherpa server status`
 
@@ -431,6 +455,9 @@ username must:
 Usernames are not case-sensitive. They are saved in lower case, so `Brad` is saved as `brad`,
 and you can log in as either.
 
+You are asked for the new user's password twice, and it cannot be empty. It is always typed:
+`SHERPA_USER_PASSWORD` is not used, as it holds your own password for `sherpa login`.
+
 Reserved names include `admin`, `root` and `sherpa`, system accounts such as `daemon` and
 `nobody`, names starting with `systemd-`, and the default users of common images and network
 devices, such as `ubuntu`, `core`, `ec2-user`, `cisco` and `cumulus`.
@@ -467,7 +494,8 @@ Change a user's password.
 sherpa server user passwd [username]
 ```
 
-If no username is provided, changes the current user's password.
+If no username is provided, changes the current user's password. You are asked for the new
+password twice, and it cannot be empty; `SHERPA_USER_PASSWORD` is not used.
 
 ### `sherpa server user info`
 
@@ -528,6 +556,9 @@ sherpa server image list [model]
 | `--unikernel` | List unikernel images only |
 | `--virtual-machine` | List virtual machine images only |
 
+Give at most one of `--container`, `--unikernel` and `--virtual-machine`; with none, every
+kind is listed.
+
 ### `sherpa server image scan`
 
 Scan the images directory for on-disk images and import them to the database.
@@ -538,6 +569,9 @@ Scan the images directory for on-disk images and import them to the database.
 | `--unikernel` | Scan unikernel images |
 | `--virtual-machine` | Scan virtual machine images |
 | `--dry-run` | Show what would be imported without making changes |
+
+Give at most one of `--container`, `--unikernel` and `--virtual-machine`; with none, every
+kind is scanned.
 
 ### `sherpa server image import`
 
@@ -566,7 +600,7 @@ sherpa server image pull --model <model>
 | ---- | ----------- |
 | `--model`, `-m` | Model of the device image to pull (required) |
 | `--version`, `-v` | Version of the image |
-| `--repo`, `-r` | Full container image reference (e.g., `registry.io/account/image:version`) |
+| `--repo`, `-r` | Full container image reference with a tag (e.g., `registry.io/account/image:version` or `localhost:5000/image:1`); digests (`@sha256:...`) are not supported |
 | `--url`, `-u` | VM image download URL |
 | `--default` | Set this image as the default version |
 

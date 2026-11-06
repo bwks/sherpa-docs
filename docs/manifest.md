@@ -329,6 +329,10 @@ The SSH provisioner runs as the node's login user, in this order: `files`, `env_
 | `dst` | string | Path on the node: absolute, or starting with `~/` for the login user's home. Letters, digits and `. _ - + @` only |
 | `mode` | int | File permissions (e.g., `600`). Defaults to `600` |
 
+A file is written with its `mode` from the start and replaces any file at `dst` in one step, so
+it is never more readable than `mode` allows, and a failed copy leaves the old file as it was.
+Missing folders on the way to `dst` are created readable only by the login user.
+
 Env files hold `KEY=value` lines and are copied as `~/.env.d/<file name>`, so two env files on a
 node cannot share a name. Scripts get the variables from `environment_variables` and
 `~/.env.d/`.
@@ -428,7 +432,8 @@ ssh_authorized_keys = [
 
 ##### startup_scripts (list&lt;string&gt;)
 
-A list of paths to scripts on the client that will run on node startup.
+A list of paths to scripts on the client that will run on node startup. A path may start
+with `~`; a relative path starts at the manifest's folder.
 
 ```toml
 startup_scripts = [
@@ -517,7 +522,8 @@ user = "admin"
 
 ##### user_scripts (list&lt;string&gt;)
 
-A list of paths to user scripts on the client.
+A list of paths to user scripts on the client. A path may start with `~`; a relative path
+starts at the manifest's folder.
 
 ```toml
 user_scripts = [
@@ -595,7 +601,8 @@ unikernels.
 
 ##### ztp_config (string)
 
-Path to a custom ZTP configuration file on the client.
+Path to a custom ZTP configuration file on the client. It may start with `~`; a relative
+path starts at the manifest's folder.
 
 ```toml
 ztp_config = "configs/dev01.txt"
