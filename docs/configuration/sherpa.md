@@ -189,3 +189,8 @@ enabled = true
 | `http_port` | int | `3031` | Server HTTP port |
 
 The client also supports the `[server_connection]` and `[tls]` sections with the same fields as the server configuration.
+A field left out of a section takes its default. `timeout_secs` limits connecting to the
+server; a long operation such as `sherpa up` then runs for as long as it needs.
+
+Without the file, the client uses these defaults. A file that exists but cannot be read or
+parsed is an error naming the file, rather than being silently replaced by the defaults.
