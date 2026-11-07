@@ -129,7 +129,7 @@ Stop the lab creation on the server too? [y/N]:
   `sherpa inspect`.
 - **Yes**: the server stops the operation at its next step and the command waits until it has.
   A stopped `up` removes what it has created, as a failed one does. A stopped `redeploy` may
-  leave the node half rebuilt; redeploy it again. A stopped `resume` stops waiting for nodes;
+  leave the node half rebuilt, marked `failed`; redeploy it again. A stopped `resume` stops waiting for nodes;
   nodes already started keep running.
 
 `sherpa destroy` also stops any of these operations still running on the lab before removing
@@ -194,6 +194,10 @@ secrets. A cluster controller cannot be redeployed.
 
 When the node has [provisioners](architecture/provisioners/overview.md), the CLI sends a container's
 secret files with the redeploy, and runs `ssh` provisioners once the node is back.
+
+The server checks the manifest, the node's image and the server's resources before it destroys
+the node, so a refused redeploy leaves the node running as it was. A redeploy that fails once the
+node is destroyed marks it `failed` in `sherpa inspect`; fix the cause and redeploy it again.
 
 ### `sherpa provision`
 
