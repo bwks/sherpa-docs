@@ -83,7 +83,6 @@ The combination of `model`, `kind` and `version` is unique.
 | `interface_prefix`              | text           | Interface naming prefix                  |
 | `interface_type`                | text           | Interface driver type                    |
 | `management_interface`          | text           | Management interface name                |
-| `dedicated_management_interface`| boolean        | Dedicated management interface flag      |
 | `ztp_method`                    | text           | Zero touch provisioning method           |
 | `default`                       | boolean        | Default image flag                       |
 
