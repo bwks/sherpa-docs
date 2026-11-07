@@ -157,8 +157,8 @@ starting at `0`.
 | Field | Description |
 | ----- | ----------- |
 | `direction` | `src_to_dst` (traffic from the link's `src` to its `dst`), `dst_to_src`, or `both`. Defaults to `both`. |
-| `delay` | One-way delay in milliseconds |
-| `jitter` | Delay jitter in milliseconds |
+| `delay` | One-way delay in milliseconds, up to `274877` |
+| `jitter` | Delay jitter in milliseconds, up to `274877` |
 | `loss_percent` | Packet loss percentage (`0.0` - `100.0`) |
 | `reorder_percent` | Packet reordering percentage (`0.0` - `100.0`). Reordered packets skip the delay, so it needs a `delay`. |
 | `corrupt_percent` | Bit-flip corruption percentage (`0.0` - `100.0`) |
@@ -167,8 +167,11 @@ The values replace the impairment on the directions named; the other direction k
 Omitted values are `0`, and all zeros remove the impairment from those directions. The change
 applies at once and is kept across `down`/`resume` and redeploying either end.
 
-An unknown `direction` returns `422 Unprocessable Entity` on REST and `InvalidParams` on
-WebSocket RPC.
+An unknown `direction`, or a number out of range for its field, returns
+`422 Unprocessable Entity` on REST and `InvalidParams` on WebSocket RPC. A delay or jitter
+over `274877` ms (the longest netem holds) or a percentage outside `0` - `100` returns
+`400 Bad Request` and `InvalidParams`. When `direction` is `both` and the second direction
+cannot be changed, the first is put back, so the link is never left half changed.
 
 ## Lab Access
 

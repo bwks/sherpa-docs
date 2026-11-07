@@ -19,7 +19,8 @@ printing what did not work, so scripts can rely on it:
 - `sherpa redeploy`: the node was not redeployed.
 - `sherpa provision`: a node was not provisioned.
 - `sherpa link impair`: the impairment was not changed.
-- `sherpa destroy` and `sherpa server clean`: a resource of the lab was not removed.
+- `sherpa destroy` and `sherpa server clean`: a resource of the lab was not removed. The lab is
+  kept, so run the command again once the cause is fixed.
 - `sherpa server image` commands: the import, pull, delete or default change failed.
 
 ## Authentication
@@ -92,6 +93,9 @@ The server records where the lab was started from: your machine's hostname and t
 directory. `sherpa inspect` and the web UI's lab page show them as **Client Host** and
 **Client Folder**, so you can find the folder of a lab later.
 
+A container whose process exits right after it starts is reported as a failed node, and the
+rest of the lab is kept: see `docker logs <node>-<lab_id>` on the server for why it exited.
+
 When `[tailscale]` is enabled, resolves the auth key from the client environment
 variable named by `auth_key_env` and creates a gateway for the lab. Enrollment
 requires WSS with certificate validation enabled. Pending route approval produces
@@ -140,7 +144,8 @@ has one, otherwise the ACPI power button) and are powered off only if they are s
 after 60 seconds. Nodes in a [Talos cluster](manifest.md#talos_clusters-listtalos_cluster_object)
 are shut down through the Talos API, workers before controllers. Unikernels and other Talos
 nodes are powered off, and containers are paused. The result for each node says whether it
-shut down or was powered off.
+shut down or was powered off. A node that is already stopped or paused is reported as such, so
+running `sherpa down` twice is not an error.
 
 With Tailscale enabled, a full shutdown also logs the gateway out of the tailnet and
 stops it. Using `--node` leaves the gateway alone.
@@ -158,7 +163,8 @@ Like `sherpa up`, resume waits for each VM or unikernel it boots to become ready
 showing progress as it goes. It uses the lab's `ready_timeout`, and each node's
 `skip_ready_check` and `ready_port`, from the manifest the lab was created with. A node
 that is not ready within the timeout is reported, but resume still succeeds. Containers
-and paused nodes do not wait, because they resume an already running guest.
+and paused nodes do not wait, because they resume an already running guest. A paused
+container is unpaused, a stopped one is started, and a running node is left as it is.
 
 Nodes that boot may offer a new SSH host key, which the server records. Resume then
 downloads the lab files again, as `sherpa download --force` does, so `sherpa_known_hosts`
@@ -313,8 +319,8 @@ sherpa link impair dev01::eth1 --clear
 | Flag | Description |
 | ---- | ----------- |
 | `--direction` | `src-to-dst` (traffic from the link's `src` to its `dst`), `dst-to-src`, or `both` (default) |
-| `--delay` | One-way delay in milliseconds |
-| `--jitter` | Delay jitter in milliseconds |
+| `--delay` | One-way delay in milliseconds, up to `274877` |
+| `--jitter` | Delay jitter in milliseconds, up to `274877` |
 | `--loss` | Packet loss percentage (`0.0` - `100.0`) |
 | `--reorder` | Packet reordering percentage (`0.0` - `100.0`). Reordered packets skip the delay, so set `--delay` too |
 | `--corrupt` | Bit-flip corruption percentage (`0.0` - `100.0`) |
@@ -595,9 +601,15 @@ sherpa server image import --src <path> --version <version> --model <model>
 | Flag | Description |
 | ---- | ----------- |
 | `--src`, `-s` | Source path of the disk image (required) |
-| `--version`, `-v` | Version of the device model (required) |
+| `--version`, `-v` | Version of the device model (required). See [image versions](#image-versions) |
 | `--model`, `-m` | Model of the device (required) |
 | `--default` | Set this image as the default version |
+
+#### Image versions
+
+An image version names the image's folder on the server and, for containers, its tag. It is
+1 to 64 letters, digits, `.`, `_`, `+` or `-`, starting with a letter or digit, such as `24.4`,
+`9-23-1` or `26.2R1.7-EVO`. `import`, `pull`, `download` and `delete` refuse any other version.
 
 ### `sherpa server image pull`
 
