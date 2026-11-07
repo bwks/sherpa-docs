@@ -55,6 +55,15 @@ curl -X POST https://<server>:3030/api/v1/auth/login \
   -d '{"username": "admin", "password": "password"}'
 ```
 
+Check a token with the validate endpoint, the REST form of `sherpa whoami`. It answers
+`"valid": false` for a token that is invalid or expired, rather than an error:
+
+```bash
+curl -X POST https://<server>:3030/api/v1/auth/validate \
+  -H "Content-Type: application/json" \
+  -d '{"token": "<jwt>"}'
+```
+
 ## Tailscale Enrollment and Status
 
 When the lab manifest enables `[tailscale]`, the authenticated lab-creation request
