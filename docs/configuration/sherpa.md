@@ -19,6 +19,7 @@ management_prefix_ipv4 = "172.31.0.0/16"
 images_dir = "/opt/sherpa/images"
 containers_dir = "/opt/sherpa/containers"
 bins_dir = "/opt/sherpa/bins"
+allow_signup = false
 
 [ztp_server]
 enable = true
@@ -63,6 +64,7 @@ stop_timeout_secs = 10
 | `images_dir` | string | | Directory for VM/unikernel images (required) |
 | `containers_dir` | string | | Directory for container images (required) |
 | `bins_dir` | string | | Directory for binary files (required) |
+| `allow_signup` | bool | `false` | Let anyone create an account on the web UI's signup page. Off, the page returns 404 and only admins create accounts, with [`sherpa server user create`](../command-reference.md#sherpa-server-user-create) |
 
 ### `[ztp_server]`
 

@@ -106,6 +106,12 @@ their existing tokens stop working.
 | Admin | Force clean lab | Admin |
 | Admin | Back up database | Admin |
 
+To change your own password, admins included, send `current_password` with `new_password`
+(`POST /api/v1/admin/users/{username}/password`, or the RPC method `user.passwd`). An admin
+resetting another user's password leaves it out.
+
+The server sends no CORS headers, so a web page on another origin cannot call the API.
+
 The database backup is WebSocket RPC only: the method `server.backup` takes only `token` and
 returns `path`, the backup file on the server, and `size_bytes`. See
 [`sherpa server backup`](command-reference.md#sherpa-server-backup).

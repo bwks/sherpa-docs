@@ -48,7 +48,8 @@ nodes = []
 
 ##### name (string)
 
-The name of the device.
+The name of the device: 1 to 63 letters, digits, `-` or `_`, starting with a letter or digit.
+It becomes the node's host name, so it cannot contain dots, spaces or other characters.
 
 ```toml
 name = "dev01"
@@ -66,16 +67,18 @@ model = "sonic_linux"
 
 ##### binary_files (list&lt;object&gt;)
 
-A list of binary files to include with the node.
+Binary files to copy onto a Flatcar Linux node's data disk, at its root. The `sherpa` CLI reads
+each file on your machine and sends it to the server, which never reads paths from a manifest.
+A relative path starts at the manifest's folder.
 
 ```toml
 [[nodes.binary_files]]
-source = "/path/to/binary"
+source = "bin/tool"
 ```
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-| `source` | string | Source file path on the client |
+| `source` | string | Path of the file on the client. Its file name is kept, and cannot start with `-` |
 
 ##### boot_disk_clone_method (string)
 
@@ -280,7 +283,8 @@ platform = "bx"
 
 ##### privileged (bool)
 
-Run the container in privileged mode.
+Run the container in privileged mode. A privileged container is root on the Sherpa server,
+so only admins may set it; `up` and `redeploy` refuse a manifest from another user that does.
 
 ```toml
 privileged = true
@@ -409,7 +413,9 @@ skip_ready_check = true
 
 ##### ssh_authorized_key_files (list&lt;object&gt;)
 
-SSH public key file references.
+Public key files whose keys to authorize on a Flatcar Linux node. The `sherpa` CLI reads each
+file on your machine and sends the key; the server checks it and never reads the path. A
+relative path starts at the manifest's folder.
 
 ```toml
 [[nodes.ssh_authorized_key_files]]
@@ -418,7 +424,7 @@ source = "~/.ssh/id_ed25519.pub"
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-| `source` | string | Path to the public key file |
+| `source` | string | Path of the public key file on the client |
 
 ##### ssh_authorized_keys (list&lt;string&gt;)
 
@@ -454,7 +460,8 @@ such as `#!/bin/bash`, to choose its interpreter. A script without one runs with
 
 ##### systemd_units (list&lt;object&gt;)
 
-Systemd units to deploy to the node.
+Systemd units to deploy to a Flatcar Linux node. The `sherpa` CLI reads each unit file on your
+machine and sends its contents. A relative path starts at the manifest's folder.
 
 ```toml
 [[nodes.systemd_units]]
@@ -465,8 +472,8 @@ enabled = true
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-| `name` | string | Unit file name |
-| `source` | string | Source file path on the client |
+| `name` | string | Unit file name, such as `app.service`. It cannot contain `/` or start with `-` |
+| `source` | string | Path of the unit file on the client |
 | `enabled` | bool | Whether to enable the unit |
 
 ##### text_files (list&lt;object&gt;)
@@ -550,7 +557,9 @@ version = "22.04"
 
 ##### volumes (list&lt;object&gt;)
 
-Volume mounts for the node.
+Bind mounts of server paths into a container. A container that can mount server paths is root
+on the Sherpa server, so only admins may set `volumes`; `up` and `redeploy` refuse a manifest
+from another user that does.
 
 ```toml
 [[nodes.volumes]]
@@ -560,7 +569,7 @@ dst = "/container/path"
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-| `src` | string | Source path on the host |
+| `src` | string | Path on the Sherpa server |
 | `dst` | string | Destination path in the node |
 
 ##### watchdog (string)

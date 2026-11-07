@@ -503,8 +503,10 @@ Change a user's password.
 sherpa server user passwd [username]
 ```
 
-If no username is provided, changes the current user's password. You are asked for the new
-password twice, and it cannot be empty; `SHERPA_USER_PASSWORD` is not used.
+If no username is provided, changes the current user's password. To change your own password,
+admins included, you are first asked for the current one. An admin resetting another user's
+password is not. You are then asked for the new password twice, and it cannot be empty;
+`SHERPA_USER_PASSWORD` is not used.
 
 ### `sherpa server user info`
 
