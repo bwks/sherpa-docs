@@ -657,7 +657,7 @@ a file `sherpad` manages itself.
 ### `sherpad migrate-db`
 
 Move the data of a server older than 0.5.0 from its SurrealDB container into the embedded
-database. The update script runs it for you; see
+database. Only releases 0.5.0 to 0.5.12 have it. The update script runs it for you; see
 [Updating to 0.5.0](install-update/update/sherpa.md#updating-to-050). To run it by hand, see
 [Moving the data by hand](install-update/update/sherpa.md#moving-the-data-by-hand).
 
