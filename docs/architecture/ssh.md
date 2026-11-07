@@ -13,6 +13,11 @@ in `~/.ssh/config` will have a line added:
 The `sherpa_lab_hosts` file has `Include` references to the labs SSH
 config file added and removed during start up and tear down.
 
+A lab folder whose path has spaces is included in double quotes, as `ssh` needs. If
+`~/.ssh/config` is a symbolic link, as dotfile managers make it, the file it points to is
+updated and the link is kept. Each file is replaced whole, keeping its permissions, so an
+interrupted update never leaves it cut short.
+
 ## Jumphost
 
 When the Sherpa server is running on a remote host, lab nodes
