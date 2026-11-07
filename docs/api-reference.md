@@ -32,6 +32,13 @@ Standard HTTP endpoints served on the configured `ws_port` (default: `3030`). Su
 
 JSON-RPC 2.0 over WebSocket at `wss://<server>:3030/ws`. This is the transport used by the `sherpa` CLI.
 
+Streaming methods (`up`, `destroy`, `resume`, `redeploy`, `image.import`, `image.pull` and
+`image.download`) send status messages before their response; the specification marks them
+with `transports.rpc.streaming`. A failed call returns an error with a `code`, a `message`, and
+for operational failures a `context` holding the reasons, most specific last. Refusals (not
+allowed, not found, invalid request) have no `context`, and neither do failed logins or requests
+that carry secret files.
+
 ### CLI
 
 The `sherpa` command-line tool wraps the WebSocket RPC transport. See the [Command Reference](command-reference.md) for all available commands.
