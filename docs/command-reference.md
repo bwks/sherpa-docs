@@ -362,6 +362,15 @@ kind is listed.
 
 Manage trusted server certificates using the Trust-On-First-Use (TOFU) system.
 
+On first connecting to a server whose certificate no public certificate authority issued, such
+as the self-signed one Sherpa generates, `sherpa` shows the certificate and its SHA-256
+fingerprint and asks whether to trust it. Check the fingerprint against the server's before you
+answer: the server's administrator can read it with the command in
+[Certificate Fingerprint](install-update/install/automated.md#certificate-fingerprint), and
+`sherpad` logs it when it starts. A trusted certificate is saved, and later connections use it
+without asking. The certificate is fetched from the server's HTTP port, `http_port` in
+`[server_connection]` (`3031` by default).
+
 `cert show`, `cert trust` and `cert delete` take the server as a host (`10.100.58.10`), a
 `host:port` (`10.100.58.10:3030`) or a `ws://` or `wss://` URL (`wss://10.100.58.10:3030/ws`).
 A host without a port uses the Sherpa server's port, `3030`. Other URLs, such as `https://`
