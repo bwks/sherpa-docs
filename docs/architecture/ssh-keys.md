@@ -90,6 +90,9 @@ creating a user with `sherpa server user create --ssh-key`.
 
 ## Supported Keys
 
-Keys must be in OpenSSH format, `<type> <key data> [comment]`, with one of these types:
-`ssh-ed25519`, `ssh-rsa`, `ecdsa-sha2-nistp256`, `ecdsa-sha2-nistp384`, `ecdsa-sha2-nistp521`
-or `ssh-dss`. Adding the same key twice is refused, even with a different comment.
+Keys must be in OpenSSH format, `<type> <key data> [comment]`, on one line, with one of these
+types: `ssh-ed25519`, `ssh-rsa`, `ecdsa-sha2-nistp256`, `ecdsa-sha2-nistp384`,
+`ecdsa-sha2-nistp521`, or the security key types `sk-ssh-ed25519@openssh.com` and
+`sk-ecdsa-sha2-nistp256@openssh.com`. The key data must decode as a key of that type. DSA keys
+(`ssh-dss`), which OpenSSH no longer supports, are refused. Adding the same key twice is
+refused, even with a different comment.

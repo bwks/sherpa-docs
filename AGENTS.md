@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is the documentation site for the [Sherpa](https://docs.sherpa.com) project — a lab management platform for building virtual network topologies using VMs (libvirt/KVM/QEMU), containers (Docker), and unikernels.
+This is the documentation site for the [Sherpa](https://docs.sherpalabs.net) project — a lab management platform for building virtual network topologies using VMs (libvirt/KVM/QEMU), containers (Docker), and unikernels.
 
 The Sherpa source code lives at `../sherpa`. Refer to that codebase when you need to verify features, CLI commands, models, default parameters, or implementation details.
 

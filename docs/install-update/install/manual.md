@@ -138,6 +138,13 @@ Create the lab directory, readable only by the `sherpa` user and group
 sudo install -d -o sherpa -g sherpa -m 2750 /opt/sherpa/labs
 ```
 
+Create the database directory, readable only by the `sherpa` user and group, as the database holds
+password hashes
+
+```
+sudo install -d -o sherpa -g sherpa -m 750 /opt/sherpa/db
+```
+
 ### AppArmor
 
 Update AppArmor policy to allow `qemu` to access config files.

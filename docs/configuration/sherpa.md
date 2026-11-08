@@ -19,6 +19,7 @@ management_prefix_ipv4 = "172.31.0.0/16"
 images_dir = "/opt/sherpa/images"
 containers_dir = "/opt/sherpa/containers"
 bins_dir = "/opt/sherpa/bins"
+allow_signup = false
 
 [ztp_server]
 enable = true
@@ -63,6 +64,7 @@ stop_timeout_secs = 10
 | `images_dir` | string | | Directory for VM/unikernel images (required) |
 | `containers_dir` | string | | Directory for container images (required) |
 | `bins_dir` | string | | Directory for binary files (required) |
+| `allow_signup` | bool | `false` | Let anyone create an account on the web UI's signup page. Off, the page returns 404 and only admins create accounts, with [`sherpa server user create`](../command-reference.md#sherpa-server-user-create) |
 
 ### `[ztp_server]`
 
@@ -81,10 +83,18 @@ Internal server connection settings.
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
 | `url` | string | | WebSocket URL override |
+| `http_port` | int | `3031` | The server's HTTP port, which serves its certificate on first connect |
 | `timeout_secs` | int | `3` | Connection timeout in seconds |
-| `validate_certs` | bool | `true` | Validate server TLS certificates |
+| `validate_certs` | bool | `true` | Trust a server certificate a public CA issued without asking; see below |
 | `ca_cert_path` | string | | Path to custom CA certificate for self-signed certs |
 | `insecure` | bool | `false` | Skip certificate validation (development only) |
+
+With `validate_certs = true`, the client first trusts the public certificate authorities. A
+server with a publicly issued certificate is trusted without a prompt. For any other
+certificate, such as the self-signed one Sherpa generates, the client shows the certificate and
+its fingerprint and asks you to trust it (see [Certificate Commands](../command-reference.md#certificate-commands)).
+With `validate_certs = false`, the client trusts only certificates you have trusted, and asks
+about every new server. `ca_cert_path` and `insecure` take precedence over both.
 
 ### `[tls]`
 
@@ -106,8 +116,7 @@ OpenTelemetry observability configuration. When enabled, Sherpa exports distribu
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
 | `enabled` | bool | `false` | Enable OpenTelemetry trace export |
-| `endpoint` | string | `http://localhost:4317` | OTLP collector endpoint |
-| `protocol` | string | `grpc` | OTLP transport protocol (`grpc` or `http`) |
+| `endpoint` | string | `http://localhost:4317` | OTLP collector endpoint, over gRPC |
 | `service_name` | string | `sherpad` | Service name reported to the collector |
 | `sample_ratio` | float | `1.0` | Trace sampling ratio (`0.0` - `1.0`) |
 
@@ -168,9 +177,9 @@ The client configuration file is located at `~/.sherpa/config/sherpa.toml`. It i
 name = "my-client"
 server_ipv4 = "10.0.0.1"
 ws_port = 3030
-http_port = 3031
 
 [server_connection]
+http_port = 3031
 timeout_secs = 3
 validate_certs = true
 
@@ -186,6 +195,11 @@ enabled = true
 | `server_ipv4` | string | `127.0.0.1` | Server IPv4 address to connect to |
 | `server_ipv6` | string | | Server IPv6 address to connect to |
 | `ws_port` | int | `3030` | Server WebSocket port |
-| `http_port` | int | `3031` | Server HTTP port |
 
 The client also supports the `[server_connection]` and `[tls]` sections with the same fields as the server configuration.
+The server's HTTP port, if it is not `3031`, goes in `[server_connection]` as `http_port`.
+A field left out of a section takes its default. `timeout_secs` limits connecting to the
+server; a long operation such as `sherpa up` then runs for as long as it needs.
+
+Without the file, the client uses these defaults. A file that exists but cannot be read or
+parsed is an error naming the file, rather than being silently replaced by the defaults.

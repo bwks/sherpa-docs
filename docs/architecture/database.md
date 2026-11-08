@@ -15,6 +15,10 @@ Servers older than 0.5.0 used a SurrealDB container. Updating moves their data a
 | Write-ahead log | `/opt/sherpa/db/sherpa.sqlite-wal`, next to the database file |
 | Backups | `/opt/sherpa/db/backups/` |
 
+The database and its backups hold password hashes, so `/opt/sherpa/db` is readable only by the
+`sherpa` user and group, and `/opt/sherpa/db/backups` only by `sherpa`. The install script, the
+update script and `sherpad` keep those modes.
+
 The file is in SQLite's format and is owned by the `sherpa` user. While `sherpad` runs, it holds
 the file exclusively: other programs, including the `sqlite3` command, cannot open it. To look
 inside the database, open a [backup](#backups), or stop `sherpad` first.
@@ -79,7 +83,6 @@ The combination of `model`, `kind` and `version` is unique.
 | `interface_prefix`              | text           | Interface naming prefix                  |
 | `interface_type`                | text           | Interface driver type                    |
 | `management_interface`          | text           | Management interface name                |
-| `dedicated_management_interface`| boolean        | Dedicated management interface flag      |
 | `ztp_method`                    | text           | Zero touch provisioning method           |
 | `default`                       | boolean        | Default image flag                       |
 

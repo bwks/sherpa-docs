@@ -20,6 +20,18 @@ To upgrade a server older than 0.5.0, use the [update script](../update/sherpa.m
 instead. The install script refuses to run while the old `sherpa-db` SurrealDB container exists,
 because the update script has to move its data first.
 
+## Certificate Fingerprint
+
+`sherpad` generates a self-signed TLS certificate when it first starts. The first time a client
+connects, it shows the certificate's fingerprint and asks the user to check it. Read the
+fingerprint on the server and give it to your users:
+
+```
+sudo openssl x509 -in /opt/sherpa/.certs/server.crt -noout -fingerprint -sha256
+```
+
+`sherpad` also logs it each time it starts, as `TLS certificate fingerprint (SHA-256)`.
+
 ## Transparent Hugepages
 
 The script sets the host's transparent hugepages to `madvise`, so QEMU can back VM memory with

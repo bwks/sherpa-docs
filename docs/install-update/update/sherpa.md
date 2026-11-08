@@ -26,9 +26,19 @@ Take a [database backup](../../architecture/database.md#backups) before updating
 ## Updating to 0.5.0
 
 Releases before 0.5.0 kept Sherpa's data in a SurrealDB container named `sherpa-db`. From 0.5.0,
-`sherpad` keeps it in an embedded database file, `/opt/sherpa/db/sherpa.sqlite`. The first update
-to 0.5.0 or later moves the data across. Use the update script for this, not the install script:
-the install script refuses to run on a server that still has the `sherpa-db` container.
+`sherpad` keeps it in an embedded database file, `/opt/sherpa/db/sherpa.sqlite`. An update to a
+release from 0.5.0 to 0.5.12 moves the data across. Use the update script for this, not the install
+script: the install script refuses to run on a server that still has the `sherpa-db` container.
+
+Releases after 0.5.12 cannot move the data. To update a server older than 0.5.0 to one of them,
+update to 0.5.12 first, which moves the data, then to the release you want:
+
+```
+sudo bash sherpa_update.sh --version v0.5.12
+sudo bash sherpa_update.sh
+```
+
+The update script refuses to go straight to a later release, and changes nothing when it does.
 
 The update:
 

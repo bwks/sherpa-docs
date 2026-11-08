@@ -21,7 +21,7 @@ Every container model has default resource parameters for CPU, RAM, data interfa
 
 Additional options configurable in the manifest:
 
-- **`privileged`** — run the container in privileged mode
+- **`privileged`** — run the container in privileged mode (admins only)
 - **`shm_size`** — shared memory size in bytes
 - **`user`** — override the container user
 - **`environment_variables`** — key-value pairs passed to the container
@@ -59,8 +59,7 @@ Containers do not use traditional ZTP methods (TFTP, cloud-init). Instead, provi
 Files can be injected into containers via volume mounts defined in the manifest:
 
 - **`text_files`** — source file, destination path, owner, group, and permissions
-- **`binary_files`** — binary artifacts mounted into the container
-- **`volumes`** — arbitrary host-to-container path bindings
+- **`volumes`** — bind mounts of server paths (admins only)
 
 Every container gets the [lab CA and its node certificate](certificates.md), mounted read-only
 at `/etc/sherpa/certs/`.
