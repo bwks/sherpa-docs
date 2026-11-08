@@ -44,8 +44,8 @@ model = "hashicorp_vault"
 
 After the node starts, Sherpa initialises Vault with a single unseal key, unseals it, and keeps
 the unseal key and root token with the lab's files on the server. `sherpa up` and
-`sherpa download` write them to `vault-<node>.toml` in your working directory, readable only by
-you, next to the lab's `lab-ca.crt`:
+`sherpa download` write them to `.sherpa/vault/vault-<node>.toml` in your working directory,
+readable only by you, next to the lab's `.sherpa/ca/lab-ca.crt`:
 
 ```toml
 address = "https://172.31.1.21:8200"
@@ -56,14 +56,14 @@ unseal_key = "…"
 `sherpa up` prints how to point the `vault` CLI at the node:
 
 ```
-✅ Vault vault01 credentials: /home/user/lab/vault-vault01.toml
-   export VAULT_ADDR=https://172.31.1.21:8200 VAULT_CACERT=/home/user/lab/lab-ca.crt
+✅ Vault vault01 credentials: /home/user/lab/.sherpa/vault/vault-vault01.toml
+   export VAULT_ADDR=https://172.31.1.21:8200 VAULT_CACERT=/home/user/lab/.sherpa/ca/lab-ca.crt
 ```
 
 !!! warning
 
-    The root token has full access to Vault. Keep `vault-<node>.toml` private, and create
-    narrower tokens or auth methods for anything else.
+    The root token has full access to Vault. Keep `.sherpa/vault/vault-<node>.toml` private, and
+    create narrower tokens or auth methods for anything else.
 
 ## Node Access
 
@@ -72,13 +72,13 @@ Vault serves its web UI and API over HTTPS on port `8200`, on the node's managem
 === "Web UI"
 
     Browse to `https://<vault_mgmt_ip>:8200` and sign in with the root token. Your browser
-    trusts the page once you import `lab-ca.crt`; see
+    trusts the page once you import `.sherpa/ca/lab-ca.crt`; see
     [Lab Certificates](../../architecture/certificates.md).
 
 === "CLI"
 
     ```
-    export VAULT_ADDR=https://<vault_mgmt_ip>:8200 VAULT_CACERT=$PWD/lab-ca.crt
+    export VAULT_ADDR=https://<vault_mgmt_ip>:8200 VAULT_CACERT=$PWD/.sherpa/ca/lab-ca.crt
     export VAULT_TOKEN=<root_token>
     vault status
     ```

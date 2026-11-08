@@ -100,7 +100,7 @@ order.
 
 ## Requirements
 
-- Run the command from the lab's folder, where `sherpa up` wrote `sherpa_ssh_config`.
+- Run the command from the lab's folder, where `sherpa up` wrote `.sherpa/ssh/config`.
 - Nothing extra on your machine: the `sherpa` CLI has its own SSH client. No `ssh` or `scp`
   program is used.
 - A login to the Sherpa server as the jump host. If your key has a passphrase or the server

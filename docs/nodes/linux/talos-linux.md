@@ -108,11 +108,11 @@ model = "talos_linux"
    Kubernetes node. Workers are only checked here: a worker's Talos API starts once it can
    reach the cluster, which with three controllers is through the shared address that comes
    up after the bootstrap;
-4. writes `kubeconfig-<cluster>` and `talosconfig-<cluster>` to your working directory,
-   readable only by you.
+4. writes `.sherpa/k8s/kubeconfig-<cluster>` and `.sherpa/talos/talosconfig-<cluster>` in your
+   working directory, readable only by you.
 
 ```
-export KUBECONFIG=$PWD/kubeconfig-k8s TALOSCONFIG=$PWD/talosconfig-k8s
+export KUBECONFIG=$PWD/.sherpa/k8s/kubeconfig-k8s TALOSCONFIG=$PWD/.sherpa/talos/talosconfig-k8s
 kubectl get nodes
 talosctl -n <node-ip> version
 ```
@@ -162,8 +162,8 @@ finishes. The cluster gets:
 `sherpa up` and `sherpa download` print the Gateway and Hubble UI addresses:
 
 ```
-✅ Cluster k8s credentials: kubeconfig-k8s and talosconfig-k8s
-   export KUBECONFIG=kubeconfig-k8s TALOSCONFIG=talosconfig-k8s
+✅ Cluster k8s credentials: /home/user/k8s/.sherpa/k8s/kubeconfig-k8s and /home/user/k8s/.sherpa/talos/talosconfig-k8s
+   export KUBECONFIG=/home/user/k8s/.sherpa/k8s/kubeconfig-k8s TALOSCONFIG=/home/user/k8s/.sherpa/talos/talosconfig-k8s
    Gateway: http://172.31.1.13
    Hubble UI: http://172.31.1.14
 ```
@@ -213,7 +213,7 @@ model = "keycloak_server"
 - Members of the realm's `cluster-admins` group are cluster admins (`cluster-admin`), and
   members of `cluster-viewers` can read most resources (`view`). Bind other groups to your own
   roles in the same way, for example `oidc:developers`.
-- `kubeconfig-<cluster>` gets a second context, `oidc@<cluster>`, which logs in through
+- `.sherpa/k8s/kubeconfig-<cluster>` gets a second context, `oidc@<cluster>`, which logs in through
   Keycloak. The admin certificate context, `admin@<cluster>`, stays the default.
 
 The `oidc@<cluster>` context uses the [kubelogin](https://github.com/int128/kubelogin) plugin,
@@ -224,7 +224,7 @@ kubectl --context oidc@k8s get nodes
 ```
 
 The first command opens a browser at Keycloak's login page. Sign in with a user from
-`keycloak-<node>.toml`; kubelogin keeps the token until it expires. See the
+`.sherpa/keycloak/keycloak-<node>.toml`; kubelogin keeps the token until it expires. See the
 [Keycloak](../keycloak/keycloak-server.md#sherpa-realm) page for the realm's users.
 
 Keycloak can start after the cluster: the Kubernetes API keeps retrying the realm until it
@@ -257,7 +257,7 @@ Sherpa:
   cluster's service accounts. Workloads can read the secrets under `secret/<cluster>/` and no
   others.
 
-Write a secret with the `vault` CLI, using the root token from `vault-<node>.toml`:
+Write a secret with the `vault` CLI, using the root token from `.sherpa/vault/vault-<node>.toml`:
 
 ```
 vault kv put secret/k8s/demo password=s3cret

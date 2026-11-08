@@ -2,7 +2,7 @@
 
 ## Config File
 
-An SSH config file named `sherpa_ssh_config` is created per-lab which
+An SSH config file, `.sherpa/ssh/config` in the lab folder, is created per-lab which
 is used by the `sherpa ssh <node-name>` command to access lab nodes.
 
 ### Users SSH Config File
@@ -11,7 +11,11 @@ in `~/.ssh/config` will have a line added:
 `Include <home_dir>/.ssh/sherpa_lab_hosts` to the top of the file.
 
 The `sherpa_lab_hosts` file has `Include` references to the labs SSH
-config file added and removed during start up and tear down.
+config file (`<lab folder>/.sherpa/ssh/config`) added and removed during start up and tear down.
+The config's `IdentityFile` and `UserKnownHostsFile` are absolute paths to `.sherpa/ssh/key`
+and `.sherpa/ssh/known_hosts`, so `ssh -F .sherpa/ssh/config <node>.<lab-id>` works from the
+lab folder. A lab from a client before 0.5.15 has these files loose in the lab folder; Sherpa moves
+them into `.sherpa/` and repoints the include the next time a command uses the lab folder.
 
 A lab folder whose path has spaces is included in double quotes, as `ssh` needs. If
 `~/.ssh/config` is a symbolic link, as dotfile managers make it, the file it points to is
@@ -25,13 +29,13 @@ key pair. `sherpa up` makes a new key pair for each lab on the Sherpa server, in
 folder, readable only by the Sherpa server. Every lab has a different key, so the key of one
 lab gives no access to the nodes of another.
 
-`sherpa up` and `sherpa download` save the private key as `sherpa_ssh_key` in your lab folder
-when the lab has such nodes, and `sherpa_ssh_config` uses it for them:
+`sherpa up` and `sherpa download` save the private key as `.sherpa/ssh/key` in your lab folder
+when the lab has such nodes, and `.sherpa/ssh/config` uses it for them:
 
 ```
 Host 172.31.1.22 router1.abcd1234 router1.abcd1234.sherpa.lab.local
     User sherpa
-    IdentityFile /home/me/labs/dev/sherpa_ssh_key
+    IdentityFile /home/me/labs/dev/.sherpa/ssh/key
     IdentitiesOnly yes
 ```
 
@@ -51,11 +55,11 @@ When the Sherpa server is running on a remote host, lab nodes
 can be accessed via SSH using the Sherpa server as a jumphost.
 
 The `sherpa ssh <node-name>` command uses the generated
-`sherpa_ssh_config` file to jump to the lab nodes via the 
+`.sherpa/ssh/config` file to jump to the lab nodes via the 
 Sherpa server. 
 
 `sherpa ssh` and [SSH provisioners](provisioners/ssh.md) use Sherpa's own SSH client, which
-reads `sherpa_ssh_config` as `ssh -F sherpa_ssh_config` would. No `ssh` or `scp` program is
+reads `.sherpa/ssh/config` as `ssh -F .sherpa/ssh/config` would. No `ssh` or `scp` program is
 needed. Like `ssh`, they ask for your key's passphrase or your password on the Sherpa server
 when they need them. Provisioners ask once per run and reuse the answer for every node. A key
 loaded in your SSH agent (`ssh-add`; on Windows the OpenSSH agent service, or Pageant) needs no
@@ -68,15 +72,15 @@ key is recorded there. A server whose key has changed is refused.
 ## Node Host Keys
 
 When a lab node answers on SSH, the Sherpa server records the host key it offers with the
-node. The lab's keys are saved in a `known_hosts` file named `sherpa_known_hosts`, next to
-`sherpa_ssh_config`, which `sherpa up` and `sherpa download` write to the lab folder. For each
-node with a recorded key, `sherpa_ssh_config` points to the file and checks the key strictly:
+node. The lab's keys are saved in a `known_hosts` file, `.sherpa/ssh/known_hosts`, next to
+`.sherpa/ssh/config`, which `sherpa up` and `sherpa download` write in the lab folder. For each
+node with a recorded key, `.sherpa/ssh/config` points to the file and checks the key strictly:
 
 ```
 Host 172.31.1.21 dev01.abcd1234 dev01.abcd1234.sherpa.lab.local
     ...
     StrictHostKeyChecking yes
-    UserKnownHostsFile /home/me/labs/dev/sherpa_known_hosts
+    UserKnownHostsFile /home/me/labs/dev/.sherpa/ssh/known_hosts
 ```
 
 So you are never asked to confirm a node's key. This applies to `sherpa ssh`, provisioners,
@@ -89,7 +93,7 @@ and `ssh` itself through the `~/.ssh/config` include.
   every time they boot, and a redeployed node has a new one. The server records the new key
   when the node starts, whether from `sherpa resume`, `sherpa redeploy` or the web UI.
 - **Keys that do not match:** when `sherpa ssh` or a provisioner finds that a node's key is
-  missing from `sherpa_known_hosts`, or is not the one recorded, it asks the server to read
+  missing from `.sherpa/ssh/known_hosts`, or is not the one recorded, it asks the server to read
   the node's key again, saves the lab's current keys and connects once more. A changed key
   is reported with a warning:
 
@@ -102,13 +106,13 @@ and `ssh` itself through the `~/.ssh/config` include.
 
 ### Using the File Elsewhere
 
-`sherpa_known_hosts` is a standard OpenSSH `known_hosts` file, so other SSH tools can use it.
+`.sherpa/ssh/known_hosts` is a standard OpenSSH `known_hosts` file, so other SSH tools can use it.
 `UserKnownHostsFile` takes several files, so you can check lab nodes against it as well as
 your own file:
 
 ```
 Host 172.31.1.*
-    UserKnownHostsFile ~/.ssh/known_hosts /home/me/labs/dev/sherpa_known_hosts
+    UserKnownHostsFile ~/.ssh/known_hosts /home/me/labs/dev/.sherpa/ssh/known_hosts
 ```
 
 Keys are recorded by address, as `172.31.1.21`, or `[172.31.1.21]:2222` for a port other than
