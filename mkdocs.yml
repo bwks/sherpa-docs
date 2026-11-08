@@ -148,6 +148,8 @@ nav:
 
 theme:
   name: material
+  # Material for MkDocs look; extra.css targets its md-* markup
+  variant: classic
   logo: assets/images/sherpa-icon.svg
   favicon: assets/images/sherpa-icon.svg
   # System fonts, as in the sherpad web UI (no Google Fonts)

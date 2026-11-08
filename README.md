@@ -21,5 +21,5 @@ docker compose up
 ## Build Site
 
 ```
-docker run --name sherpa-docs --rm -it -v ${PWD}:/docs sherpa-docs mkdocs build
+docker run --name sherpa-docs --rm -it -v ${PWD}:/docs sherpa-docs zensical build --clean
 ```
