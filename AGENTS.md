@@ -8,7 +8,7 @@ The Sherpa source code lives at `../sherpa`. Refer to that codebase when you nee
 
 ## Tech Stack
 
-- **Zensical** (reads `mkdocs.yml`) with the **Material** theme, `classic` variant (Soda Pop colours, matching the sherpad web UI)
+- **Zensical**, configured in `zensical.toml`, with the **Material** theme, `classic` variant (Soda Pop colours, matching the sherpad web UI)
 - Markdown with extensions: admonition, superfences, tabbed content, TOC with permalinks
 - Custom CSS in `docs/stylesheets/`
 - Docker support for building/serving docs
@@ -27,7 +27,8 @@ docs/
 └── stylesheets/           # Custom CSS
 ```
 
-Navigation is defined in `mkdocs.yml`. Update it when adding new pages.
+Navigation is defined in the `nav` array of `zensical.toml`. Update it when adding new pages.
+Each entry is a page path (`"nodes/cisco/cisco-asav.md"`), a titled page (`{ "Manifest" = "manifest.md" }`) or a section (`{ "Cisco" = [ ... ] }`).
 
 ## Node Documentation Template
 
@@ -114,7 +115,7 @@ Container nodes differ slightly:
   inline `nodes = [{ ... }]` arrays. Arrays of strings stay inline.
 - The sherpa config file is `sherpa.toml`
 - Verify model names and CLI commands against the Rust source at `../sherpa` when uncertain
-- When adding a new node page, also add its entry to the `nav` section of `mkdocs.yml`
+- When adding a new node page, also add its entry to the `nav` section of `zensical.toml`
 
 ## Git
 

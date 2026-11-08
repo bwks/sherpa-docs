@@ -34,7 +34,7 @@ Read the `NodeModel` enum from `../sherpa/crates/shared/src/data/node.rs` and co
 
 For each model in code:
 - Does a docs page exist?
-- Is the page included in `mkdocs.yml` nav (not commented out)?
+- Is the page included in `zensical.toml` nav (not commented out)?
 - Does the model name in docs match the code enum variant exactly?
 
 Also check the reverse direction: for each node page in docs, verify the model name it references actually exists in the `NodeModel` enum. Flag any docs pages that reference non-existent models.
@@ -87,7 +87,7 @@ Look for:
 - Incorrect paths or references in CLAUDE.md
 - Node pages referencing old model names or deprecated parameters
 - Empty or stub pages (files with < 5 lines of content)
-- Pages commented out in mkdocs.yml nav
+- Pages commented out in zensical.toml nav
 - SQL node doc filenames that diverge significantly from model names (e.g. `mongo.md` vs model `mongo_db`)
 
 ## Output Format

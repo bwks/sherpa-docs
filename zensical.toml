@@ -1,0 +1,221 @@
+[project]
+site_name = "Sherpa Docs"
+site_url = "https://docs.sherpalabs.net"
+docs_dir = "docs"
+
+nav = [
+  { "Quickstart" = "quickstart.md" },
+  { "Architecture" = [
+    "architecture/overview.md",
+    "architecture/virtual-machine.md",
+    "architecture/container.md",
+    "architecture/unikernel.md",
+    { "Networking" = [
+      "architecture/networking/ip-addressing.md",
+      { "Modes" = [
+        "architecture/networking/modes/management.md",
+        "architecture/networking/modes/point-to-point.md",
+        "architecture/networking/modes/private-bridge.md",
+        "architecture/networking/modes/public-bridge.md",
+        "architecture/networking/modes/isolated-bridge.md",
+        "architecture/networking/modes/reserved-bridge.md",
+      ] },
+      { "Tailscale" = "architecture/networking/tailscale.md" },
+    ] },
+    "architecture/storage.md",
+    "architecture/database.md",
+    "architecture/zero-touch-provisioning.md",
+    "architecture/credentials.md",
+    "architecture/certificates.md",
+    "architecture/ssh.md",
+    "architecture/ssh-keys.md",
+    "architecture/personal-accounts.md",
+    { "Provisioners" = [
+      "architecture/provisioners/overview.md",
+      "architecture/provisioners/ssh.md",
+      "architecture/provisioners/container.md",
+    ] },
+    "architecture/vnc.md",
+  ] },
+  { "Install / Update" = [
+    { "Install" = [
+      "install-update/install/supported-platforms.md",
+      "install-update/install/automated.md",
+      "install-update/install/manual.md",
+    ] },
+    { "Update" = [
+      "install-update/update/sherpa.md",
+      "install-update/update/system.md",
+    ] },
+  ] },
+  { "Manifest" = "manifest.md" },
+  { "Nodes" = [
+    { "Arista" = [
+      "nodes/arista/arista-veos.md",
+      "nodes/arista/arista-ceos.md",
+    ] },
+    { "Aruba" = [
+      "nodes/aruba/aruba-aoscx.md",
+    ] },
+    { "BSD" = [
+      "nodes/bsd/free-bsd.md",
+      "nodes/bsd/open-bsd.md",
+    ] },
+    { "Cisco" = [
+      "nodes/cisco/general.md",
+      "nodes/cisco/cisco-asav.md",
+      "nodes/cisco/cisco-cat8000v.md",
+      "nodes/cisco/cisco-cat9000v.md",
+      "nodes/cisco/cisco-csr1000v.md",
+      "nodes/cisco/cisco-ftdv.md",
+      "nodes/cisco/cisco-iosv.md",
+      "nodes/cisco/cisco-iosvl2.md",
+      "nodes/cisco/cisco-iosxrv9000.md",
+      "nodes/cisco/cisco-ise.md",
+      "nodes/cisco/cisco-nexus9300v.md",
+    ] },
+    { "Cumulus" = [
+      "nodes/cumulus/cumulus-linux.md",
+    ] },
+    { "Devbox" = [
+      "nodes/devbox/devbox-linux.md",
+      "nodes/devbox/devbox-windows.md",
+    ] },
+    { "Forge" = [
+      "nodes/forge/forgejo-forge.md",
+      "nodes/forge/gitlab-ce.md",
+    ] },
+    { "FRRouting" = [
+      "nodes/frrouting/frr-linux.md",
+    ] },
+    { "Generic" = [
+      "nodes/generic/container.md",
+      "nodes/generic/unikernel.md",
+      "nodes/generic/virtual-machine.md",
+    ] },
+    { "Hashicorp" = [
+      "nodes/hashicorp/hashicorp-vault.md",
+    ] },
+    { "Keycloak" = [
+      "nodes/keycloak/keycloak-server.md",
+    ] },
+    { "Juniper" = [
+      "nodes/juniper/juniper-cevolved.md",
+      "nodes/juniper/juniper-vevolved.md",
+      "nodes/juniper/juniper-vrouter.md",
+      "nodes/juniper/juniper-vsrxv3.md",
+      "nodes/juniper/juniper-vswitch.md",
+    ] },
+    { "Linux" = [
+      "nodes/linux/alma-linux.md",
+      "nodes/linux/alpine-linux.md",
+      "nodes/linux/centos-linux.md",
+      "nodes/linux/devbox-linux.md",
+      "nodes/linux/fedora-linux.md",
+      "nodes/linux/flatcar-linux.md",
+      "nodes/linux/kali-linux.md",
+      "nodes/linux/nixos-linux.md",
+      "nodes/linux/omarchy-linux.md",
+      "nodes/linux/opensuse-linux.md",
+      "nodes/linux/redhat-linux.md",
+      "nodes/linux/rocky-linux.md",
+      "nodes/linux/suse-linux.md",
+      "nodes/linux/talos-linux.md",
+      "nodes/linux/ubuntu-linux.md",
+    ] },
+    { "Mikrotik" = [
+      "nodes/mikrotik/mikrotik-chr.md",
+    ] },
+    { "Nokia" = [
+      "nodes/nokia/nokia-srlinux.md",
+    ] },
+    { "Paloalto" = [
+      "nodes/paloalto/paloalto-panos.md",
+    ] },
+    { "Message Bus" = [
+      "nodes/message-bus/nats-bus.md",
+    ] },
+    { "Server" = [
+      "nodes/server/infrahub-server.md",
+      "nodes/server/jenkins-server.md",
+      "nodes/server/nautobot-server.md",
+      "nodes/server/netbox-server.md",
+      "nodes/server/signoz-server.md",
+      "nodes/server/virt-server.md",
+    ] },
+    { "Sonic" = [
+      "nodes/sonic/sonic-linux.md",
+    ] },
+    { "SQL" = [
+      "nodes/sql/mongo.md",
+      "nodes/sql/mysql.md",
+      "nodes/sql/postgresql.md",
+      "nodes/sql/surrealdb.md",
+    ] },
+    { "Unikernel" = [
+      "nodes/unikernel/unikraft.md",
+      "nodes/unikernel/nanos.md",
+    ] },
+    { "Windows" = [
+      "nodes/windows/windows-server.md",
+    ] },
+  ] },
+  { "Configuration" = [
+    "configuration/sherpa.md",
+  ] },
+  { "Command Reference" = "command-reference.md" },
+  { "API Reference" = "api-reference.md" },
+  { "Examples" = [
+    "examples/basic.md",
+    "examples/clos.md",
+    "examples/kubernetes.md",
+    "examples/test-servers.md",
+  ] },
+  { "Help" = [
+    "help/libvirt.md",
+    "help/docker.md",
+    "help/troubleshooting.md",
+  ] },
+]
+
+extra_css = [
+  "stylesheets/extra.css",
+  "stylesheets/table.css",
+  "stylesheets/image.css",
+]
+
+[project.theme]
+# Material for MkDocs look; extra.css targets its md-* markup
+variant = "classic"
+logo = "assets/images/sherpa-icon.svg"
+favicon = "assets/images/sherpa-icon.svg"
+# System fonts, as in the sherpad web UI (no Google Fonts)
+font = false
+icon.admonition.note = "fontawesome/solid/lightbulb"
+
+# Soda Pop colours from docs/stylesheets/extra.css; follows the OS until toggled
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "custom"
+accent = "custom"
+toggle.icon = "material/weather-night"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "custom"
+accent = "custom"
+toggle.icon = "material/weather-sunny"
+toggle.name = "Switch to light mode"
+
+[project.markdown_extensions]
+toc.permalink = true
+admonition = {}
+pymdownx.highlight = {}
+pymdownx.superfences = {}
+pymdownx.tabbed.alternate_style = true
+
+[project.plugins]
+search = {}
