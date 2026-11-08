@@ -57,11 +57,11 @@ disabled.
 The `sherpa` user is the `master` realm's bootstrap admin. Keycloak marks it as temporary in
 the admin console; create your own admin user to replace it if you keep the lab.
 
-Your browser trusts the pages once you import the lab's `lab-ca.crt`; command line clients
+Your browser trusts the pages once you import the lab's `.sherpa/ca/lab-ca.crt`; command line clients
 can use it directly:
 
 ```
-curl --cacert lab-ca.crt https://<keycloak_mgmt_ip>:8443/realms/master/.well-known/openid-configuration
+curl --cacert .sherpa/ca/lab-ca.crt https://<keycloak_mgmt_ip>:8443/realms/master/.well-known/openid-configuration
 ```
 
 ## Sherpa Realm
@@ -78,7 +78,7 @@ After the node starts, Sherpa makes a realm named `sherpa`, which
 | Account console | `https://<keycloak_mgmt_ip>:8443/realms/sherpa/account` |
 
 `sherpa up` and `sherpa download` write the realm's users and passwords to
-`keycloak-<node>.toml` in your working directory, readable only by you:
+`.sherpa/keycloak/keycloak-<node>.toml` in your working directory, readable only by you:
 
 ```toml
 address = "https://172.31.1.23:8443"

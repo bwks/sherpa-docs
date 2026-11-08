@@ -8,7 +8,7 @@ The default credentials for all nodes are:
 
 | Username | Password       | SSH Key                                  |
 | -------- | -------------- | ---------------------------------------- |
-| `sherpa` | `Everest1953!` | `sherpa_ssh_key`, in the lab's folder    |
+| `sherpa` | `Everest1953!` | `.sherpa/ssh/key`, in the lab's folder   |
 
 !!! Info
 

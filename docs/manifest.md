@@ -770,8 +770,8 @@ without failing lab creation. See [Tailscale setup and route approval](architect
 
 Kubernetes clusters built from the lab's [Talos Linux](nodes/linux/talos-linux.md) nodes. Each
 cluster lists its member nodes by name. Sherpa generates each cluster's secrets and machine
-configs, bootstraps it, and writes a `kubeconfig-<cluster>` and `talosconfig-<cluster>` to your
-working directory.
+configs, bootstraps it, and writes `.sherpa/k8s/kubeconfig-<cluster>` and
+`.sherpa/talos/talosconfig-<cluster>` in your working directory.
 
 ```toml
 [[talos_clusters]]

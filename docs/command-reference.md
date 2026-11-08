@@ -44,11 +44,20 @@ has expired, it says so and exits with an error, so a script can run
 
 ## Lab Lifecycle
 
-Lab commands act on the lab of the current folder: the one `lab-info.toml` names, written by
+Lab commands act on the lab of the current folder: the one `.sherpa/lab-info.toml` names,
+written by
 `sherpa up` and `sherpa download`, or else the one `manifest.toml` describes. When both files
 are present and name different labs, as after renaming the lab in `manifest.toml` or
 downloading another lab into the folder, the commands refuse to run and name both labs.
-Destroy the old lab, or remove `lab-info.toml`, before using the folder for the other one.
+Destroy the old lab, or remove `.sherpa/lab-info.toml`, before using the folder for the other one.
+
+Every file Sherpa generates in the lab folder goes in a `.sherpa/` folder next to `manifest.toml`.
+`.sherpa/` and the folders in it are readable only by you, and so are the secret files. A lab
+folder from a client before 0.5.15, with these files loose in the folder, keeps working: each command
+that uses the lab folder first moves the files Sherpa generated into `.sherpa/`, rewrites the
+paths in the SSH config, and points the `~/.ssh/sherpa_lab_hosts` include at
+`.sherpa/ssh/config`. It prints `Moved N lab files into .sherpa` when it does. A `.sherpa` that
+is a symlink is refused.
 
 ### `sherpa new`
 
@@ -103,15 +112,17 @@ a warning without failing creation. See the [Tailscale guide](architecture/netwo
 
 When the manifest declares [Talos clusters](manifest.md#talos_clusters-listtalos_cluster_object), `up` also
 bootstraps each Kubernetes cluster, waits for its nodes to be Ready, and writes
-`kubeconfig-<cluster>` and `talosconfig-<cluster>` to the current directory, readable only by
-you. For a [Cilium](nodes/linux/talos-linux.md#cilium) cluster it also prints the Gateway and
+`.sherpa/k8s/kubeconfig-<cluster>` and `.sherpa/talos/talosconfig-<cluster>` in the current
+directory, readable only by you. For a [Cilium](nodes/linux/talos-linux.md#cilium) cluster it
+also prints the Gateway and
 Hubble UI addresses. A cluster that is not ready in time is reported as a warning. See
 [Talos Linux](nodes/linux/talos-linux.md).
 
-`up` writes the [lab CA](architecture/certificates.md) to `lab-ca.crt`; for each
+`up` writes the [lab CA](architecture/certificates.md) to `.sherpa/ca/lab-ca.crt`; for each
 [Vault](nodes/hashicorp/hashicorp-vault.md) node Sherpa initialised, its address, root token and
-unseal key to `vault-<node>.toml`; and for each [Keycloak](nodes/keycloak/keycloak-server.md)
-node, its `sherpa` realm's users and passwords to `keycloak-<node>.toml`. The credential files
+unseal key to `.sherpa/vault/vault-<node>.toml`; and for each
+[Keycloak](nodes/keycloak/keycloak-server.md) node, its `sherpa` realm's users and passwords to
+`.sherpa/keycloak/keycloak-<node>.toml`. The credential files
 are readable only by you.
 
 #### Stopping a running command
@@ -167,7 +178,7 @@ and paused nodes do not wait, because they resume an already running guest. A pa
 container is unpaused, a stopped one is started, and a running node is left as it is.
 
 Nodes that boot may offer a new SSH host key, which the server records. Resume then
-downloads the lab files again, as `sherpa download --force` does, so `sherpa_known_hosts`
+downloads the lab files again, as `sherpa download --force` does, so `.sherpa/ssh/known_hosts`
 matches. See [Node Host Keys](architecture/ssh.md#node-host-keys).
 
 With Tailscale enabled, a full resume enrolls the gateway again before resuming
@@ -225,12 +236,17 @@ If `sherpa up`, `sherpa redeploy` or `sherpa resume` is still running on the lab
 stops it first and waits for it to finish its current step, then removes the lab. This is
 safe to use on a lab whose `up` was interrupted.
 
-Once the lab is gone, destroy deletes the files `sherpa up` and `sherpa download` saved in
-the lab folder: `sherpa_ssh_config`, `sherpa_ssh_key`, `sherpa_known_hosts`, `lab-ca.crt`,
-`lab-info.toml`, each Vault node's `vault-<node>.toml`, each Keycloak node's
-`keycloak-<node>.toml`, and each Talos cluster's `kubeconfig-<cluster>` and
-`talosconfig-<cluster>`. Cluster names come from `manifest.toml`, so run destroy in the lab
-folder. Other files, such as your own `kubeconfig-prod`, are left alone.
+Once the lab is gone, destroy removes the lab's include from `~/.ssh/sherpa_lab_hosts` and
+deletes the `.sherpa/` folder in the lab folder, with everything `sherpa up` and
+`sherpa download` saved in it. It does not need `manifest.toml`. Other files in the lab folder,
+such as your own `kubeconfig-prod` or `manifest.toml`, are left alone. A `.sherpa` that is a
+symlink is not deleted.
+
+If a lab folder from a Sherpa before 0.5.15 cannot be moved into `.sherpa` (every other command stops
+on this), destroy prints a warning with the error and carries on. It still removes the include
+of either the old `sherpa_ssh_config` or the new `.sherpa/ssh/config`, deletes `.sherpa/`, and
+deletes the loose files the older Sherpa generated, such as `sherpa_ssh_key`, `lab-info.toml`
+and `vault-<node>.toml`, by their exact names.
 
 If the server cannot remove every resource, destroy prints what failed and exits with an
 error. While the lab still exists on the server, the local files are kept, so nodes that are
@@ -259,7 +275,7 @@ Validate the `manifest.toml` in the current directory without deploying.
 ### `sherpa ssh`
 
 Open an interactive shell on a lab node over SSH, through the Sherpa server as the lab's
-`sherpa_ssh_config` describes. Sherpa has its own SSH client, so no `ssh` program needs to be
+`.sherpa/ssh/config` describes. Sherpa has its own SSH client, so no `ssh` program needs to be
 installed.
 
 ```
@@ -275,7 +291,7 @@ sherpa ssh <name>
 - The first time you connect to a Sherpa server, you are shown its host key fingerprint and
   asked to confirm it, as with OpenSSH. A confirmed key is added to `~/.ssh/known_hosts`. A
   server whose key has changed is refused.
-- A node's host key is checked against the lab's `sherpa_known_hosts` file, which the server
+- A node's host key is checked against the lab's `.sherpa/ssh/known_hosts` file, which the server
   fills in as nodes become ready, so you are not asked about it. If the node's key has
   changed, as after a restart from the web UI, the new key is fetched from the server with a
   warning. See [Node Host Keys](architecture/ssh.md#node-host-keys).
@@ -293,13 +309,14 @@ sherpa console <name>
 
 ### `sherpa download`
 
-Download lab files (SSH config, SSH key, lab-info, the nodes' host keys in
-`sherpa_known_hosts`, and each cluster's `kubeconfig-<cluster>` and `talosconfig-<cluster>`)
-for CLI use from a remote lab. Like `up`, it prints each Cilium cluster's Gateway and Hubble UI
-addresses, and writes `lab-ca.crt`, each Vault node's `vault-<node>.toml` and each Keycloak
-node's `keycloak-<node>.toml`.
+Download lab files into `.sherpa/` (SSH config, SSH key, `lab-info.toml`, the nodes' host keys
+in `ssh/known_hosts`, and each cluster's `k8s/kubeconfig-<cluster>` and
+`talos/talosconfig-<cluster>`) for CLI use from a remote lab. Like `up`, it prints each Cilium
+cluster's Gateway and Hubble UI addresses, and writes `ca/lab-ca.crt`, each Vault node's
+`vault/vault-<node>.toml` and each Keycloak node's `keycloak/keycloak-<node>.toml`, all under
+`.sherpa/`.
 
-Only the lab's owner and admins can download a lab. The SSH key, `sherpa_ssh_key`, is the lab's
+Only the lab's owner and admins can download a lab. The SSH key, `.sherpa/ssh/key`, is the lab's
 own [key pair](architecture/ssh.md#lab-ssh-key), written only when the lab has nodes that log in
 with it rather than your own keys. Labs created before Sherpa 0.5.15 use the server's shared key
 instead, until they are destroyed.

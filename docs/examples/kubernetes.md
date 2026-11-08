@@ -110,27 +110,28 @@ need.
 
 ## Access
 
-After `sherpa up`, your working directory has the cluster's `kubeconfig-k8s` and
-`talosconfig-k8s`, the lab CA in `lab-ca.crt`, Vault's root token in `vault-vault01.toml`, and
-the Keycloak realm's users in `keycloak-kc01.toml`. The output ends with:
+After `sherpa up`, the `.sherpa` folder in your working directory has the cluster's
+`k8s/kubeconfig-k8s` and `talos/talosconfig-k8s`, the lab CA in `ca/lab-ca.crt`, Vault's root
+token in `vault/vault-vault01.toml`, and the Keycloak realm's users in
+`keycloak/keycloak-kc01.toml`. The output ends with:
 
 ```
-✅ Lab CA certificate: /home/user/k8s/lab-ca.crt
-✅ Vault vault01 credentials: /home/user/k8s/vault-vault01.toml
-   export VAULT_ADDR=https://172.31.1.24:8200 VAULT_CACERT=/home/user/k8s/lab-ca.crt
-✅ Keycloak kc01 users: /home/user/k8s/keycloak-kc01.toml
+✅ Lab CA certificate: /home/user/k8s/.sherpa/ca/lab-ca.crt
+✅ Vault vault01 credentials: /home/user/k8s/.sherpa/vault/vault-vault01.toml
+   export VAULT_ADDR=https://172.31.1.24:8200 VAULT_CACERT=/home/user/k8s/.sherpa/ca/lab-ca.crt
+✅ Keycloak kc01 users: /home/user/k8s/.sherpa/keycloak/keycloak-kc01.toml
    Realm issuer: https://172.31.1.23:8443/realms/sherpa
-✅ Cluster k8s credentials: /home/user/k8s/kubeconfig-k8s and /home/user/k8s/talosconfig-k8s
-   export KUBECONFIG=/home/user/k8s/kubeconfig-k8s TALOSCONFIG=/home/user/k8s/talosconfig-k8s
+✅ Cluster k8s credentials: /home/user/k8s/.sherpa/k8s/kubeconfig-k8s and /home/user/k8s/.sherpa/talos/talosconfig-k8s
+   export KUBECONFIG=/home/user/k8s/.sherpa/k8s/kubeconfig-k8s TALOSCONFIG=/home/user/k8s/.sherpa/talos/talosconfig-k8s
    Gateway: http://172.31.1.13
    Hubble UI: http://172.31.1.14
 ```
 
 Copy the credential files to the util node and log in to it. Its SSH host name is
-`util.<lab-id>`, as in `sherpa_ssh_config`:
+`util.<lab-id>`, as in `.sherpa/ssh/config`:
 
 ```
-scp -F sherpa_ssh_config kubeconfig-k8s talosconfig-k8s vault-vault01.toml keycloak-kc01.toml util.<lab-id>:
+scp -F .sherpa/ssh/config .sherpa/k8s/kubeconfig-k8s .sherpa/talos/talosconfig-k8s .sherpa/vault/vault-vault01.toml .sherpa/keycloak/keycloak-kc01.toml util.<lab-id>:
 sherpa ssh util
 ```
 
@@ -234,7 +235,8 @@ with the [kubelogin](https://github.com/int128/kubelogin) plugin (for example
 kubectl --context oidc@k8s auth whoami
 ```
 
-A browser opens at Keycloak. Sign in as yourself, with the password from `keycloak-kc01.toml`,
+A browser opens at Keycloak. Sign in as yourself, with the password from
+`.sherpa/keycloak/keycloak-kc01.toml`,
 and `kubectl` shows you as `oidc:<username>` in the group `oidc:cluster-admins`.
 
 The util node has no browser. Add a context there that asks for the username and password
@@ -260,11 +262,11 @@ To give someone read-only access, add a user in Keycloak's admin console
 ### Read a secret from Vault
 
 Point the `vault` CLI at the node and write a secret under the cluster's path. The util node
-trusts the lab CA; on a workstation, also set `VAULT_CACERT=$PWD/lab-ca.crt`.
+trusts the lab CA; on a workstation, also set `VAULT_CACERT=$PWD/.sherpa/ca/lab-ca.crt`.
 
 ```
 export VAULT_ADDR=https://172.31.1.24:8200
-export VAULT_TOKEN=<root_token from vault-vault01.toml>
+export VAULT_TOKEN=<root_token from .sherpa/vault/vault-vault01.toml>
 vault kv put secret/k8s/demo password=s3cret
 ```
 

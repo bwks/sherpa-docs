@@ -31,16 +31,16 @@ certificate from the same lab CA.
 **On lab VMs.** Linux VMs built with cloud-init have the lab CA in their system trust store, so
 `curl`, package managers and other clients there trust lab services with no extra options.
 
-**On your workstation.** `sherpa up` and `sherpa download` write the CA to `lab-ca.crt` in your
-working directory. Pass it to command line clients:
+**On your workstation.** `sherpa up` and `sherpa download` write the CA to `.sherpa/ca/lab-ca.crt` in
+your working directory. Pass it to command line clients:
 
 ```
-curl --cacert lab-ca.crt https://172.31.1.21:8200/v1/sys/health
-export VAULT_CACERT=$PWD/lab-ca.crt
+curl --cacert .sherpa/ca/lab-ca.crt https://172.31.1.21:8200/v1/sys/health
+export VAULT_CACERT=$PWD/.sherpa/ca/lab-ca.crt
 ```
 
-To trust lab web pages in a browser, import `lab-ca.crt` as a certificate authority in the
-browser's or operating system's certificate settings. Each lab has its own CA, so import it
+To trust lab web pages in a browser, import `.sherpa/ca/lab-ca.crt` as a certificate authority in
+the browser's or operating system's certificate settings. Each lab has its own CA, so import it
 again for a new lab, and remove it when the lab is destroyed.
 
 ## On the Server
