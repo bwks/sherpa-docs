@@ -653,7 +653,11 @@ name = "bgp-practice"
 description = "Practice BGP peering and route policies between two routers."
 ```
 
-Multiline strings and Unicode are supported.
+Multiline strings and Unicode are supported, up to 1000 characters. Line breaks and tabs are
+the only control characters allowed; `sherpa validate` and `sherpa up` refuse others.
+
+The description is shown wherever the lab is: `sherpa inspect`, the web UI's labs list and lab
+page, the admin labs page, and the API's lab details and lab list.
 
 ### links (list&lt;link_object&gt;)
 
