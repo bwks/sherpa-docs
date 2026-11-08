@@ -6,14 +6,16 @@ Node credentials are configured via ZTP during the first boot.
 
 The default credentials for all nodes are:
 
-| Username | Password       | SSH Key                      |
-| -------- | -------------- | ---------------------------- |
-| `sherpa` | `Everest1953!` | `/opt/sherpa/sherpa_ssh_key` |
+| Username | Password       | SSH Key                                  |
+| -------- | -------------- | ---------------------------------------- |
+| `sherpa` | `Everest1953!` | `sherpa_ssh_key`, in the lab's folder    |
 
 !!! Info
 
-    A unique SSH key-pair is generated when the `sherpa init`
-    command is executed.
+    `sherpa up` makes a new SSH key pair for each lab, and `sherpa up` and
+    `sherpa download` save it to your lab folder. See
+    [Lab SSH Key](ssh.md#lab-ssh-key). Labs created before Sherpa 0.5.15
+    use the server's shared key, made by `sherpad init`.
 
 ## User Credentials
 
