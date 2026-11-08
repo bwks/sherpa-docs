@@ -2,13 +2,13 @@
 
 ## Project Overview
 
-This is the MkDocs documentation site for the [Sherpa](https://docs.sherpa.com) project — a lab management platform for building virtual network topologies using VMs (libvirt/KVM/QEMU), containers (Docker), and unikernels.
+This is the documentation site for the [Sherpa](https://docs.sherpa.com) project — a lab management platform for building virtual network topologies using VMs (libvirt/KVM/QEMU), containers (Docker), and unikernels.
 
 The Sherpa source code lives at `../sherpa`. Refer to that codebase when you need to verify features, CLI commands, models, default parameters, or implementation details.
 
 ## Tech Stack
 
-- **MkDocs** with **Material** theme (Soda Pop colours, matching the sherpad web UI)
+- **Zensical** (reads `mkdocs.yml`) with the **Material** theme, `classic` variant (Soda Pop colours, matching the sherpad web UI)
 - Markdown with extensions: admonition, superfences, tabbed content, TOC with permalinks
 - Custom CSS in `docs/stylesheets/`
 - Docker support for building/serving docs
@@ -127,6 +127,9 @@ Container nodes differ slightly:
 # Serve locally (from project root)
 docker compose up
 
-# Or with mkdocs directly
-mkdocs serve
+# Or with zensical directly
+zensical serve
 ```
+
+Cloudflare Pages runs `./build.sh` (output directory `site`), so the build is
+defined in the repo. Python version comes from `.python-version`.

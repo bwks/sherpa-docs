@@ -3,4 +3,4 @@
 set -euo pipefail
 
 pip install -r requirements.txt
-mkdocs build
+zensical build --clean
