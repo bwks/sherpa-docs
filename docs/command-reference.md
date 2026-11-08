@@ -243,8 +243,8 @@ still running stay reachable, and running `sherpa destroy` again removes them.
 ### `sherpa inspect`
 
 Inspect the current lab environment. Shows node states, links, and lab details.
-The lab details include **Client Host** and **Client Folder**, the machine and directory
-`sherpa up` ran in. Labs started from the web UI or the API, and labs started before Sherpa
+The lab details include the manifest's **Description**, and **Client Host** and
+**Client Folder**, the machine and directory `sherpa up` ran in. Labs started from the web UI or the API, and labs started before Sherpa
 0.5.6, have neither.
 For Tailscale-enabled labs, refreshes gateway state, Tailscale addresses, advertised
 management routes, route approval, and warnings. This is the default command when
