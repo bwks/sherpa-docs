@@ -299,6 +299,11 @@ for CLI use from a remote lab. Like `up`, it prints each Cilium cluster's Gatewa
 addresses, and writes `lab-ca.crt`, each Vault node's `vault-<node>.toml` and each Keycloak
 node's `keycloak-<node>.toml`.
 
+Only the lab's owner and admins can download a lab. The SSH key, `sherpa_ssh_key`, is the lab's
+own [key pair](architecture/ssh.md#lab-ssh-key), written only when the lab has nodes that log in
+with it rather than your own keys. Labs created before Sherpa 0.5.15 use the server's shared key
+instead, until they are destroyed.
+
 ```
 sherpa download <lab_id>
 ```

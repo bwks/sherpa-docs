@@ -18,6 +18,33 @@ A lab folder whose path has spaces is included in double quotes, as `ssh` needs.
 updated and the link is kept. Each file is replaced whole, keeping its permissions, so an
 interrupted update never leaves it cut short.
 
+## Lab SSH Key
+
+Nodes that cannot take your own SSH keys are reached through the `sherpa` account with an SSH
+key pair. `sherpa up` makes a new key pair for each lab on the Sherpa server, in the lab's
+folder, readable only by the Sherpa server. Every lab has a different key, so the key of one
+lab gives no access to the nodes of another.
+
+`sherpa up` and `sherpa download` save the private key as `sherpa_ssh_key` in your lab folder
+when the lab has such nodes, and `sherpa_ssh_config` uses it for them:
+
+```
+Host 172.31.1.22 router1.abcd1234 router1.abcd1234.sherpa.lab.local
+    User sherpa
+    IdentityFile /home/me/labs/dev/sherpa_ssh_key
+    IdentitiesOnly yes
+```
+
+- **Who gets it:** only the lab's owner and admins can download a lab's key, from the CLI or the
+  web UI's lab download.
+- **Redeploy and resume:** `sherpa redeploy` gives the node the lab's key again, and
+  `sherpa resume` keeps it.
+- **Destroy and clean:** `sherpa destroy` and `sherpa server clean` delete the key with the lab's
+  folder on the server.
+- **Labs created before Sherpa 0.5.15:** these keep the server's shared key, the same for every
+  lab, until they are destroyed. A redeployed node of such a lab gets the shared key too, as the
+  lab's other nodes still use it. Destroy the lab and bring it up again to give it its own key.
+
 ## Jumphost
 
 When the Sherpa server is running on a remote host, lab nodes
