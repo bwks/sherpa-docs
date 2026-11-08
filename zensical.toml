@@ -192,6 +192,7 @@ favicon = "assets/images/sherpa-icon.svg"
 features = [
   "content.code.copy",
   "navigation.instant",
+  "search.highlight",
 ]
 # System fonts, as in the sherpad web UI (no Google Fonts)
 font = false
