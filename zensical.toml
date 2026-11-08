@@ -189,6 +189,10 @@ extra_css = [
 variant = "classic"
 logo = "assets/images/sherpa-icon.svg"
 favicon = "assets/images/sherpa-icon.svg"
+features = [
+  "content.code.copy",
+  "navigation.instant",
+]
 # System fonts, as in the sherpad web UI (no Google Fonts)
 font = false
 icon.admonition.note = "fontawesome/solid/lightbulb"
