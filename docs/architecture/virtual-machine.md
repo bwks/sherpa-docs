@@ -48,8 +48,8 @@ A virtual machine takes the memory it is configured with as the guest touches it
 starts. The server therefore checks memory before it starts virtual machines and unikernels:
 their configured memory, plus that of every running virtual machine and unikernel and of the
 nodes other requests are starting, must fit in the server's memory less a host reserve. See
-[`[host_memory]`](../configuration/sherpa.md#host_memory) for the reserve, the overcommit ratio
-and the message a refusal gives.
+[`[host_memory]`](../configuration/sherpa.md#host_memory) for the reserve, the overcommit
+percentage (`overcommit_percent`) and the message a refusal gives.
 
 Guest memory can also be backed by 2 MiB huge pages through the host's transparent hugepages.
 QEMU already asks for them, so this needs no manifest setting; the host's

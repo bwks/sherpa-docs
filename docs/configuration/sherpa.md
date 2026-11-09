@@ -49,7 +49,7 @@ stop_timeout_secs = 10
 
 [host_memory]
 reserve_mib = 4096
-overcommit_ratio = 1.0
+overcommit_percent = 100
 ```
 
 ### Base Fields
@@ -181,20 +181,21 @@ Nothing is created or started when a request is refused.
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
 | `reserve_mib` | int | `4096` | Memory in MiB kept back for the host: its operating system, `sherpad`, QEMU's own memory and containers |
-| `overcommit_ratio` | float | `1.0` | How many times the memory left after the reserve guests may be given in total. Must be above `0` |
+| `overcommit_percent` | int | `100` | The percentage of the memory left after the reserve guests may be given in total, for example `150` for 1.5 times. Must be at least `1` |
 
 The memory promised is the configured memory of every running or paused virtual machine and
 unikernel on the server, Sherpa's and any others libvirt runs, plus the nodes other requests are
 starting. It is compared with the server's memory, less any reserved hugepages and
-`reserve_mib`, times `overcommit_ratio`. Free memory is not used: a guest takes its memory
-only as it touches it, so a server that looks free when a lab starts can run out later.
+`reserve_mib`, times `overcommit_percent` percent, rounded down to a whole MiB. Free memory is
+not used: a guest takes its memory only as it touches it, so a server that looks free when a lab
+starts can run out later.
 
 A virtual machine with [`numa_node`](../manifest.md#performance_tuning-object) is also checked
 against that NUMA node. Its memory cannot move to another node, so the node must have room for
 it beside the other virtual machines held there, after the node's share of `reserve_mib`.
 
 Containers are not counted, as Sherpa does not limit their memory; keep `reserve_mib` large
-enough for them. With `overcommit_ratio = 1.0` the guests are never given more memory than the
+enough for them. With `overcommit_percent = 100` the guests are never given more memory than the
 server has. Raise it only if the guests do not use all their memory, for example idle router
 labs; if they touch more than the server has, the host's OOM killer stops virtual machines.
 
@@ -205,8 +206,8 @@ Not enough memory on the server: node 'r3' needs 8192 MiB, but only 2048 MiB of 
 is left, 6144 MiB short. ...
 ```
 
-An `overcommit_ratio` that is not a number above `0` prevents server startup. Restart
-`sherpad` after editing the server configuration.
+An `overcommit_percent` below `1` prevents server startup, and the error names the setting.
+Restart `sherpad` after editing the server configuration.
 
 ## Client Configuration
 
