@@ -114,6 +114,12 @@ sudo install -d -o sherpa -g sherpa -m 2750 /opt/sherpa/labs
 sudo install -d -o sherpa -g kvm -m 2750 /opt/sherpa/libvirt/images
 ```
 
+The server's SSH private key, `/opt/sherpa/ssh/sherpa_ssh_key`, is mode `0600`: only the
+`sherpa` user can read it, not the `sherpa` group. Only labs created before Sherpa 0.5.15 use
+it; newer labs have their own key (see [Lab SSH Key](ssh.md#lab-ssh-key)). `sherpad init`
+creates it with this mode, and from Sherpa 0.5.16 `sherpad` sets it each time it starts, so a
+key that an older release created as `0640` is restricted once the server is updated.
+
 ## Client Storage
 
 The Sherpa client stores its configuration and credentials at `~/.sherpa/`:
