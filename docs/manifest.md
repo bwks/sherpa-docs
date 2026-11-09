@@ -216,6 +216,9 @@ Configure the amount of RAM in `MegaBytes (MB)`.
 memory = 4096
 ```
 
+The server refuses to start virtual machines and unikernels whose memory does not fit beside
+the memory already promised on the server. See [`[host_memory]`](configuration/sherpa.md#host_memory).
+
 ##### performance_tuning (object)
 
 Tune a virtual machine for performance: how its CPU is presented, which host CPUs it runs on,
@@ -247,7 +250,7 @@ interface_queues = 4
 | `cpu_topology` | object | The CPU layout the guest sees: `sockets`, `cores` and `threads`. Their product must equal `cpu_count` |
 | `cpu_pinning` | list&lt;int&gt; | The host CPU for each vCPU, in vCPU order: one per vCPU, none repeated |
 | `qemu_cpus` | list&lt;int&gt; | Host CPUs for QEMU's own threads, everything in the virtual machine's QEMU process except its vCPUs |
-| `numa_node` | int | The host NUMA node the guest's memory is held on, strictly |
+| `numa_node` | int | The host NUMA node the guest's memory is held on, strictly: it never uses another node's memory, even when that node is full |
 | `disk_cache` | string | `none`, `writeback` or `writethrough` |
 | `disk_io` | string | `native`, `io_uring` or `threads`. `native` needs `disk_cache = "none"` |
 | `disk_io_thread_cpus` | list&lt;int&gt; | Give the disks their own I/O thread, pinned to these host CPUs. Needs virtio disks |
@@ -265,6 +268,13 @@ Rules for pinned host CPUs:
   same settings on other nodes.
 - **The checks run at `sherpa up` and `sherpa redeploy`.** Every CPU and the NUMA node must
   exist on the server.
+
+The memory of a node with `numa_node` must fit on that NUMA node beside the other virtual
+machines held there, or `sherpa up`, `sherpa redeploy` and `sherpa resume` refuse it (see
+[`[host_memory]`](configuration/sherpa.md#host_memory)). Virtual machines without `numa_node`
+may still fill that node, and the guest held there cannot take memory elsewhere: when the node
+runs out, the host's OOM killer stops a virtual machine. Leave room on the node, or pin every
+large virtual machine on the server.
 
 Pinning keeps a virtual machine's threads on those CPUs. It does not reserve the CPUs: the
 host can still run other work on them.
