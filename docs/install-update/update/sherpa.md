@@ -11,12 +11,13 @@ It does not reinstall system packages or change users.
 Update to the latest release:
 
 ```
-curl https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_update.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_update.sh | sudo bash
 ```
 
 Update to a specific release, or reinstall the current one:
 
 ```
+curl -fsSLO https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_update.sh
 sudo bash sherpa_update.sh --version v0.5.0
 sudo bash sherpa_update.sh --force
 ```
