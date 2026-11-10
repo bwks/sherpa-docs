@@ -105,6 +105,10 @@ directory. `sherpa inspect` and the web UI's lab page show them as **Client Host
 A container whose process exits right after it starts is reported as a failed node, and the
 rest of the lab is kept: see `docker logs <node>-<lab_id>` on the server for why it exited.
 
+The server refuses the lab before creating anything when its virtual machines and unikernels
+do not fit in the server's memory, or on the NUMA node a node is held on. The error names the
+numbers that fell short. See [`[host_memory]`](configuration/sherpa.md#host_memory).
+
 When `[tailscale]` is enabled, resolves the auth key from the client environment
 variable named by `auth_key_env` and creates a gateway for the lab. Enrollment
 requires WSS with certificate validation enabled. Pending route approval produces
@@ -177,6 +181,9 @@ that is not ready within the timeout is reported, but resume still succeeds. Con
 and paused nodes do not wait, because they resume an already running guest. A paused
 container is unpaused, a stopped one is started, and a running node is left as it is.
 
+Before starting any node, resume checks that the stopped virtual machines and unikernels fit
+in the server's memory, as `sherpa up` does, and refuses the whole resume if they do not.
+
 Nodes that boot may offer a new SSH host key, which the server records. Resume then
 downloads the lab files again, as `sherpa download --force` does, so `.sherpa/ssh/known_hosts`
 matches. See [Node Host Keys](architecture/ssh.md#node-host-keys).
@@ -198,6 +205,9 @@ the redeploy on the server too; see [stopping a running command](#stopping-a-run
 
 A worker in a [Talos cluster](manifest.md#talos_clusters-listtalos_cluster_object) rejoins with the cluster's saved
 secrets. A cluster controller cannot be redeployed.
+
+The node's memory must still fit on the server, as for `sherpa up`; the node being replaced
+does not count against itself. A refused redeploy leaves the node as it was.
 
 | Flag | Description |
 | ---- | ----------- |

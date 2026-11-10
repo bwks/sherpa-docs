@@ -39,6 +39,17 @@ A node's [`performance_tuning`](../manifest.md#performance_tuning-object) can tu
 - add virtio-net queues to its interfaces.
 
 Sherpa refuses a node whose pinned CPUs overlap another node's, in any lab on the server.
+A node held on one NUMA node never uses another node's memory, so the server also refuses it
+when that NUMA node does not have room for it.
+
+## Memory
+
+A virtual machine takes the memory it is configured with as the guest touches it, not when it
+starts. The server therefore checks memory before it starts virtual machines and unikernels:
+their configured memory, plus that of every running virtual machine and unikernel and of the
+nodes other requests are starting, must fit in the server's memory less a host reserve. See
+[`[host_memory]`](../configuration/sherpa.md#host_memory) for the reserve, the overcommit
+percentage (`overcommit_percent`) and the message a refusal gives.
 
 Guest memory can also be backed by 2 MiB huge pages through the host's transparent hugepages.
 QEMU already asks for them, so this needs no manifest setting; the host's
