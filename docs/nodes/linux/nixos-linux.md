@@ -3,8 +3,7 @@
 ## Base Image
 
 NixOS does not publish a cloud-init enabled disk image, so you build one from the NixOS
-configuration in the Sherpa repository,
-[`images/nixos`](https://github.com/bwks/sherpa/tree/main/images/nixos). It is a flake:
+configuration in [bwks/nixos-image](https://github.com/bwks/nixos-image). It is a flake:
 `flake.nix` picks the NixOS release, `flake.lock` pins the exact packages, and
 `configuration.nix` sets the system up for Sherpa:
 
@@ -20,10 +19,11 @@ of customising an image.
 
 ## Build Image
 
-With [Nix](https://nixos.org/download/) installed, from a checkout of the Sherpa repository:
+With [Nix](https://nixos.org/download/) installed:
 
 ```
-cd images/nixos
+git clone https://github.com/bwks/nixos-image.git
+cd nixos-image
 nix --extra-experimental-features "nix-command flakes" build \
   .#nixosConfigurations.sherpa-node.config.system.build.images.qemu
 cp -L result/*.qcow2 /some/path/nixos.qcow2
@@ -33,7 +33,7 @@ Without Nix installed, build it in the official `nixos/nix` container. The build
 so the container needs `/dev/kvm`:
 
 ```
-cd images/nixos
+cd nixos-image
 docker run --rm --device /dev/kvm -v "$PWD:/src" -w /src nixos/nix sh -c '
   git config --global --add safe.directory /src
   nix --extra-experimental-features "nix-command flakes" --option sandbox false \
@@ -46,7 +46,7 @@ The image is written to `out/nixos.qcow2`, owned by `root`. A build takes about 
 To reuse downloaded packages between builds, add `-v sherpa-nix-store:/nix` to keep the Nix
 store in a Docker volume.
 
-To move to newer packages within the release, run `nix flake update` in `images/nixos` before
+To move to newer packages within the release, run `nix flake update` in the `nixos-image` checkout before
 building.
 
 ## Import Image
