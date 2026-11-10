@@ -14,13 +14,15 @@ These flags are available on all commands.
 A command exits with a non-zero status when any part of what it asked for failed, after
 printing what did not work, so scripts can rely on it:
 
-- `sherpa up`: the lab was only partly created.
+- `sherpa up`: the lab was not created, or was only partly created: a container exited, or a
+  Kubernetes cluster, Vault or Keycloak did not come up. A partly created lab is kept; use it as
+  it is, or destroy it. A node that is only slow to become ready is a warning.
 - `sherpa down` and `sherpa resume`: a node did not stop or start.
 - `sherpa redeploy`: the node was not redeployed.
 - `sherpa provision`: a node was not provisioned.
 - `sherpa link impair`: the impairment was not changed.
 - `sherpa destroy` and `sherpa server clean`: a resource of the lab was not removed. The lab is
-  kept, so run the command again once the cause is fixed.
+  kept, `destroy failed`, so run the command again once the cause is fixed.
 - `sherpa server image` commands: the import, pull, delete or default change failed.
 
 ## Authentication
@@ -108,8 +110,13 @@ The server records where the lab was started from: your machine's hostname and t
 directory. `sherpa inspect` and the web UI's lab page show them as **Client Host** and
 **Client Folder**, so you can find the folder of a lab later.
 
+The lab is reserved before anything is created: a second `sherpa up` of a lab that exists, or
+that another `up` is creating, is refused at once with "Lab already exists", and does not touch
+the existing lab. Destroy it first to start it again.
+
 A container whose process exits right after it starts is reported as a failed node, and the
 rest of the lab is kept: see `docker logs <node>-<lab_id>` on the server for why it exited.
+`sherpa up` then exits with an error, saying the lab was only partly created.
 
 The server refuses the lab before creating anything when its virtual machines and unikernels
 do not fit in the server's memory, or on the NUMA node a node is held on strictly. The error
@@ -125,7 +132,8 @@ bootstraps each Kubernetes cluster, waits for its nodes to be Ready, and writes
 `.sherpa/k8s/kubeconfig-<cluster>` and `.sherpa/talos/talosconfig-<cluster>` in the current
 directory, readable only by you. For a [Cilium](nodes/linux/talos-linux.md#cilium) cluster it
 also prints the Gateway and
-Hubble UI addresses. A cluster that is not ready in time is reported as a warning. See
+Hubble UI addresses. A cluster that is not ready in time is reported, and `sherpa up` exits with
+an error, as nothing bootstraps it again; the rest of the lab is kept. See
 [Talos Linux](nodes/linux/talos-linux.md).
 
 `up` writes the [lab CA](architecture/certificates.md) to `.sherpa/ca/lab-ca.crt`; for each
@@ -149,7 +157,8 @@ Stop the lab creation on the server too? [y/N]:
 - **No** (the default): the command exits and the operation carries on. Check on it with
   `sherpa inspect`.
 - **Yes**: the server stops the operation at its next step and the command waits until it has.
-  A stopped `up` removes what it has created, as a failed one does. A stopped `redeploy` may
+  A stopped `up` removes what it has created, as a failed one does. If that removal leaves
+  something behind, the lab is kept, `destroy failed`; run `sherpa destroy`. A stopped `redeploy` may
   leave the node half rebuilt, marked `failed`; redeploy it again. A stopped `resume` stops waiting for nodes;
   nodes already started keep running.
 
@@ -167,7 +176,8 @@ are shut down through the Talos API, workers before controllers. Unikernels and 
 nodes are powered off, and containers are paused. The result for each node says whether it
 shut down or was powered off. A node that is already stopped or paused is reported as such, so
 running `sherpa down` twice is not an error. A node that is `building` or `missing` (see
-[node states](#node-states)) is not touched, and its result says why.
+[node states](#node-states)) is not touched, and its result says why. A lab that is not
+`ready` (see [lab phases](#lab-phases)) is refused.
 
 With Tailscale enabled, a full shutdown also logs the gateway out of the tailnet and
 stops it. Using `--node` leaves the gateway alone.
@@ -192,7 +202,8 @@ stays `starting` until the server sees it answer.
 
 Resume refuses, with a reason in the node's result, a node that is `building` or `missing`, a
 virtual machine that crashed, a container that is dead, and one that is between states, such as
-shutting down or restarting. A crashed, dead or missing node needs `sherpa redeploy`.
+shutting down or restarting. A crashed, dead or missing node needs `sherpa redeploy`. A lab that
+is not `ready` (see [lab phases](#lab-phases)) is refused.
 
 Before starting any node, resume checks that the stopped virtual machines and unikernels fit
 in the server's memory, as `sherpa up` does, and refuses the whole resume if they do not.
@@ -221,7 +232,8 @@ secrets. A cluster controller cannot be redeployed.
 
 The node's memory must still fit on the server, as for `sherpa up`; the node being replaced
 does not count against itself. A refused redeploy leaves the node as it was. A node that is
-`building` cannot be redeployed until that finishes; a `missing` or `failed` node can.
+`building` cannot be redeployed until that finishes; a `missing` or `failed` node can. A lab
+that is not `ready` (see [lab phases](#lab-phases)) is refused.
 
 | Flag | Description |
 | ---- | ----------- |
@@ -274,8 +286,10 @@ of either the old `sherpa_ssh_config` or the new `.sherpa/ssh/config`, deletes `
 deletes the loose files the older Sherpa generated, such as `sherpa_ssh_key`, `lab-info.toml`
 and `vault-<node>.toml`, by their exact names.
 
+A destroy that waited behind another destroy of the same lab, and finds it gone, succeeds.
+
 If the server cannot remove every resource, destroy prints what failed and exits with an
-error. While the lab still exists on the server, the local files are kept, so nodes that are
+error, and the lab is `destroy failed` (see [lab phases](#lab-phases)). While the lab still exists on the server, the local files are kept, so nodes that are
 still running stay reachable, and running `sherpa destroy` again removes them.
 
 | Flag | Description |
@@ -307,6 +321,26 @@ no subcommand is specified.
 A lab's status follows its nodes: `running` or `stopped` when all of them are, `failed` when
 any is `failed` or `missing`, `starting` when any is `building` or `starting`, otherwise
 `partial`.
+
+#### Lab phases
+
+Besides its status, a lab has a phase: which operation, if any, owns it. While a lab is not
+`ready`, the web UI shows its phase instead of its status and offers only Destroy, and
+`sherpa inspect` and `sherpa destroy` print what to do. `sherpa down`, `sherpa resume` and
+`sherpa redeploy` refuse a lab that is not `ready`.
+
+| Phase | Meaning |
+| ----- | ------- |
+| `creating` | `sherpa up` is building the lab. Wait for it, or destroy the lab, which stops it. |
+| `ready` | `sherpa up` finished. The lab's status says how its nodes are. |
+| `destroying` | A destroy or clean is removing the lab. |
+| `destroy failed` | A destroy, a clean, or the cleanup of a failed `sherpa up` left something behind. Run `sherpa destroy` again once the cause is fixed. |
+| `interrupted` | The server stopped while `sherpa up` was building the lab. Destroy it, and run `sherpa up` again. |
+| `unknown` | A phase this version does not know, such as one written by a newer server. Only destroy is offered. |
+
+When the server starts, a lab it was creating becomes `interrupted`, a lab it was destroying
+becomes `destroy failed`, and a node `sherpa up` or `sherpa redeploy` was building becomes
+`failed`. Nothing is removed automatically.
 
 ### `sherpa validate`
 
@@ -490,7 +524,10 @@ Check if the Sherpa server is reachable.
 
 ### `sherpa server clean`
 
-Force clean all resources for a lab without requiring lab ownership. Admin only.
+Force clean all resources for a lab without requiring lab ownership. Admin only. It also
+works on a lab the server has no record of, such as a lab folder left in `/opt/sherpa/labs`,
+and removes the resources and folder named for the lab ID. The web UI's admin labs list shows
+each lab's [phase](#lab-phases), so labs left `destroy failed` or `interrupted` are easy to find.
 Tailscale gateway and identity-volume deletion still verify resource ownership
 labels. If either removal fails, lab ownership and saved configuration are retained
 for a cleanup retry.

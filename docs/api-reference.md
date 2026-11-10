@@ -156,6 +156,21 @@ server stops the operation at its next safe point and responds once it has ended
 CLI calls cancel when you answer yes after pressing Ctrl-C. Destroying a lab also stops any of
 these operations first.
 
+## Lab Phases
+
+A lab's list entry has `status`, derived from its nodes, and `phase`, which operation owns the
+lab: `creating`, `ready`, `destroying`, `destroy_failed` or `interrupted` (see
+[lab phases](command-reference.md#lab-phases)). Inspect returns them as `lab_state` and
+`lab_phase`. A server before 0.5.27 sends no phase; read its labs as `ready`.
+
+- Creating a lab whose ID is in use, by an existing lab or one being created, fails before
+  anything is created, with an error that says the lab already exists.
+- Down, resume and redeploy refuse a lab that is not `ready`, with an error that says what to do
+  (`409 Conflict` where the REST response is not a progress stream).
+- The creation response's `success` is `false` when any error has `is_critical`: a container that
+  exited, or a Kubernetes cluster, Vault or Keycloak that did not come up. The lab is created
+  either way. Errors without `is_critical` are warnings, such as a node slow to become ready.
+
 ## Link Impairment
 
 Change the impairment on a running P2P link with
