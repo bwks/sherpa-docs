@@ -10,7 +10,7 @@ Sherpa can be installed via a convenience installation script.
 `sudo` privileges are requried. Run the following command to start the installation.
 
 ```
-curl https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_install.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_install.sh | sudo bash
 ```
 
 No database server is installed: `sherpad` keeps its data in an embedded database,

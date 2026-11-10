@@ -5,7 +5,7 @@
 The quickest way to get started with Sherpa is to use the convenience installer [script](install-update/install/automated.md).
 
 ```
-curl https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_install.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_install.sh | sudo bash
 ```
 
 This will install all the dependencies as well as the Sherpa, 
