@@ -41,7 +41,7 @@ The `sherpa` command-line tool wraps the WebSocket RPC transport. See the [Comma
 All authenticated endpoints support two methods:
 
 - **Bearer Token**: `Authorization: Bearer <jwt>` header
-- **Cookie**: `sherpa_token` cookie (used by the web UI)
+- **Cookie**: `sherpa_auth` cookie (used by the web UI)
 
 Obtain a token via the login endpoint:
 
@@ -56,13 +56,35 @@ curl -X POST https://<server>:3030/api/v1/auth/login \
 ```
 
 Check a token with the validate endpoint, the REST form of `sherpa whoami`. It answers
-`"valid": false` for a token that is invalid or expired, rather than an error:
+`"valid": false` for a token that is invalid or expired, or whose session has ended, rather than
+an error:
 
 ```bash
 curl -X POST https://<server>:3030/api/v1/auth/validate \
   -H "Content-Type: application/json" \
   -d '{"token": "<jwt>"}'
 ```
+
+Each login starts a session on the server, and its token works only while the session lasts.
+End it with the logout endpoint, the REST form of `sherpa logout`. The token stops working at
+once; other sessions of the same user are not affected. `"ended": false` means the session had
+already ended:
+
+```bash
+curl -X POST https://<server>:3030/api/v1/auth/logout \
+  -H "Authorization: Bearer <jwt>"
+```
+
+A session also ends when:
+
+- the user changes their password, for every session but the one used to change it;
+- an admin resets the user's password, or deletes the user, for all of the user's sessions;
+- it expires, 7 days after login (30 days for a web login with **Remember me**).
+
+A request with a token whose session has ended gets `401 Unauthorized`.
+
+A change to a user that races another change to the same user, such as two SSH key edits at
+once, is refused with `409 Conflict` instead of overwriting the other change. Retry it.
 
 ## Tailscale Enrollment and Status
 
