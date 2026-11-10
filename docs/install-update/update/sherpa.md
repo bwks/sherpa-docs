@@ -24,6 +24,27 @@ sudo bash sherpa_update.sh --force
 
 Take a [database backup](../../architecture/database.md#backups) before updating.
 
+## Updating to 0.5.27
+
+`sherpa up` exits with an error when the lab is only partly created: a container exited right
+after it started, or a Kubernetes cluster, Vault or Keycloak did not come up. Before 0.5.27 these
+were warnings and `sherpa up` exited with status 0. Scripts that run `sherpa up` now see a
+non-zero status for such a lab; the lab is still created, so it can be used as it is or
+destroyed. A node that is only slow to become ready is still a warning.
+
+Labs have a [phase](../../command-reference.md#lab-phases) besides their status: `creating`,
+`ready`, `destroying`, `destroy failed` or `interrupted`. The update makes every existing lab
+`ready`. Only a `ready` lab can be stopped, resumed or redeployed; the others can only be
+destroyed. A second `sherpa up` of a lab that exists, or that is being created, is refused
+before it does anything, and no longer removes the other lab.
+
+When the server starts, a lab it was creating when it stopped becomes `interrupted`, a lab it
+was destroying becomes `destroy failed`, and a node it was building becomes `failed`. Nothing
+is removed; destroy or redeploy them.
+
+The CLI and the server can be updated separately: an older CLI does not show the phase, and an
+older server's labs are shown as `ready`.
+
 ## Updating to 0.5.25
 
 Node states change. A node being created is now `building` rather than `stopped`, a node whose
