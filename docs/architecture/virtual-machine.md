@@ -34,13 +34,15 @@ CPU mode defaults to `host-model`, which auto-detects the host CPU capabilities.
 A node's [`performance_tuning`](../manifest.md#performance_tuning-object) can tune it further:
 - give it the host CPU exactly (`host-passthrough`) and a CPU topology;
 - pin its vCPUs, and QEMU's own threads, to host CPUs;
-- hold its memory on one NUMA node;
+- hold its memory on one NUMA node, or prefer one NUMA node;
 - set its disk cache and I/O mode, and give its disks an I/O thread;
 - add virtio-net queues to its interfaces.
 
 Sherpa refuses a node whose pinned CPUs overlap another node's, in any lab on the server.
-A node held on one NUMA node never uses another node's memory, so the server also refuses it
-when that NUMA node does not have room for it.
+A node held strictly on one NUMA node never uses another node's memory, so the server also
+refuses it when that NUMA node does not have room for it. A node that only prefers a NUMA node
+(`numa_memory_mode = "preferred"`) uses other nodes' memory when its node is full, and is only
+checked against the whole server.
 
 ## Memory
 

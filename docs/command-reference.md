@@ -106,8 +106,8 @@ A container whose process exits right after it starts is reported as a failed no
 rest of the lab is kept: see `docker logs <node>-<lab_id>` on the server for why it exited.
 
 The server refuses the lab before creating anything when its virtual machines and unikernels
-do not fit in the server's memory, or on the NUMA node a node is held on. The error names the
-numbers that fell short. See [`[host_memory]`](configuration/sherpa.md#host_memory).
+do not fit in the server's memory, or on the NUMA node a node is held on strictly. The error
+names the numbers that fell short. See [`[host_memory]`](configuration/sherpa.md#host_memory).
 
 When `[tailscale]` is enabled, resolves the auth key from the client environment
 variable named by `auth_key_env` and creates a gateway for the lab. Enrollment
