@@ -23,6 +23,16 @@ sudo bash sherpa_update.sh --force
 
 Take a [database backup](../../architecture/database.md#backups) before updating.
 
+## Updating to 0.5.23
+
+Logins become server-side sessions, so that logging out, changing a password and deleting a user
+end them at once. Tokens issued before 0.5.23 name no session, so after the update every user
+must log in again: run `sherpa login` on each client, and log in again in the web UI.
+
+From 0.5.23, `sherpad` refuses to start when its JWT secret file is damaged, instead of replacing
+it; see
+[Troubleshooting](../../help/troubleshooting.md#sherpad-does-not-start-the-jwt-secret-is-the-wrong-length).
+
 ## Updating to 0.5.0
 
 Releases before 0.5.0 kept Sherpa's data in a SurrealDB container named `sherpa-db`. From 0.5.0,

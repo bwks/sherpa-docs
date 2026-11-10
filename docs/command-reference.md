@@ -34,7 +34,13 @@ history.
 
 ### `sherpa logout`
 
-Logout from the Sherpa server. Removes the stored authentication token.
+Logout from the Sherpa server. It ends the session on the server, so the token stops working
+everywhere, including any copy of it, then removes the stored token. Your other sessions, such as
+a web UI login or a login on another machine, are not affected.
+
+If the server cannot be reached, the stored token is still removed, and a warning says the
+session could not be ended on the server: the token stays valid until it expires or your password
+is changed.
 
 ### `sherpa whoami`
 
@@ -550,6 +556,10 @@ admins included, you are first asked for the current one. An admin resetting ano
 password is not. You are then asked for the new password twice, and it cannot be empty;
 `SHERPA_USER_PASSWORD` is not used.
 
+A password change logs the user out everywhere else. Changing your own password ends all your
+other sessions, in the web UI and on other machines, and keeps the one you ran the command from.
+An admin resetting another user's password ends all of that user's sessions.
+
 ### `sherpa server user info`
 
 Show detailed user information.
@@ -578,6 +588,10 @@ sherpa server user ssh-key remove <key, .pub file or SHA256 fingerprint> [--user
 
 `list` shows each key's type, `SHA256:` fingerprint and comment. Adding a key that is already
 registered, even with a different comment, is refused.
+
+If another change to the same user is saved at the same moment, the command fails with
+`User '<username>' was changed by another request; reload and try again` and changes nothing.
+Run it again.
 
 ## Server Image Commands
 

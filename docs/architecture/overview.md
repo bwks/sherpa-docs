@@ -51,7 +51,18 @@ Sherpa stores lab state, node configurations, user accounts, and image metadata 
 All API access (except login) requires authentication. Sherpa supports two authentication methods:
 
 - **JWT Bearer Token** — obtained via `sherpa login` or the login API endpoint. Tokens are valid for 7 days.
-- **Cookie** — `sherpa_token` cookie used by the Web UI.
+- **Cookie** — `sherpa_auth` cookie used by the Web UI. Valid for 7 days, or 30 days with **Remember me**.
+
+Every login starts a session on the server, and a token works only while its session lasts.
+Logging out (`sherpa logout`, **Logout** in the web UI, or the logout API endpoint) ends that one
+session, so a copied token stops working too. Changing your password ends your other sessions;
+an admin resetting a user's password, or deleting the user, ends all of that user's sessions.
+A web page whose session has ended sends you to the login page.
+
+`sherpad` signs tokens with a secret in `/opt/sherpa/.secret/jwt.secret`, generated on first
+start. If the file is damaged (it is not 32 bytes long), `sherpad` refuses to start rather than
+replace it, because a new secret logs every user out; see
+[Troubleshooting](../help/troubleshooting.md#sherpad-does-not-start-the-jwt-secret-is-the-wrong-length).
 
 User accounts have one of two roles: **Basic** (lab operations) or **Admin** (full access including user and image management). `sherpad init` creates the built-in `admin` account and a first user account. The built-in `admin` account cannot be deleted, renamed or lose its admin role, and cannot start, resume or redeploy labs; labs are started from personal user accounts, which can also be admins.
 
