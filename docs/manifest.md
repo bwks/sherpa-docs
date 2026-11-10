@@ -238,6 +238,7 @@ cpu_topology = { sockets = 1, cores = 7, threads = 2 }
 cpu_pinning = [9, 25, 10, 26, 11, 27, 12, 28, 13, 29, 14, 30, 15, 31]
 qemu_cpus = [8, 24]
 numa_node = 1
+numa_memory_mode = "preferred"
 disk_cache = "none"
 disk_io = "io_uring"
 disk_io_thread_cpus = [8, 24]
@@ -250,7 +251,8 @@ interface_queues = 4
 | `cpu_topology` | object | The CPU layout the guest sees: `sockets`, `cores` and `threads`. Their product must equal `cpu_count` |
 | `cpu_pinning` | list&lt;int&gt; | The host CPU for each vCPU, in vCPU order: one per vCPU, none repeated |
 | `qemu_cpus` | list&lt;int&gt; | Host CPUs for QEMU's own threads, everything in the virtual machine's QEMU process except its vCPUs |
-| `numa_node` | int | The host NUMA node the guest's memory is held on, strictly: it never uses another node's memory, even when that node is full |
+| `numa_node` | int | The host NUMA node the guest's memory is placed on. How strictly is set by `numa_memory_mode` |
+| `numa_memory_mode` | string | `strict` (the default) or `preferred`. `strict` keeps the memory on `numa_node` even when that node is full. `preferred` uses `numa_node` first and other nodes when it is full. Needs `numa_node` |
 | `disk_cache` | string | `none`, `writeback` or `writethrough` |
 | `disk_io` | string | `native`, `io_uring` or `threads`. `native` needs `disk_cache = "none"` |
 | `disk_io_thread_cpus` | list&lt;int&gt; | Give the disks their own I/O thread, pinned to these host CPUs. Needs virtio disks |
@@ -269,12 +271,17 @@ Rules for pinned host CPUs:
 - **The checks run at `sherpa up` and `sherpa redeploy`.** Every CPU and the NUMA node must
   exist on the server.
 
-The memory of a node with `numa_node` must fit on that NUMA node beside the other virtual
-machines held there, or `sherpa up`, `sherpa redeploy` and `sherpa resume` refuse it (see
+The memory of a node with `numa_node` and `numa_memory_mode = "strict"` (or left out) must fit
+on that NUMA node beside the other virtual machines held strictly there, or `sherpa up`,
+`sherpa redeploy` and `sherpa resume` refuse it (see
 [`[host_memory]`](configuration/sherpa.md#host_memory)). Virtual machines without `numa_node`
 may still fill that node, and the guest held there cannot take memory elsewhere: when the node
-runs out, the host's OOM killer stops a virtual machine. Leave room on the node, or pin every
-large virtual machine on the server.
+runs out, the host's OOM killer stops a virtual machine. Leave room on the node, pin every
+large virtual machine on the server, or use `numa_memory_mode = "preferred"`.
+
+With `numa_memory_mode = "preferred"` the memory only counts against the whole server, not
+against the NUMA node. When the node is full the guest takes memory from another node, which is
+slower to reach, instead of being stopped.
 
 Pinning keeps a virtual machine's threads on those CPUs. It does not reserve the CPUs: the
 host can still run other work on them.

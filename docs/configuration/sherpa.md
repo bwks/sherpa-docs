@@ -190,9 +190,12 @@ starting. It is compared with the server's memory, less any reserved hugepages a
 not used: a guest takes its memory only as it touches it, so a server that looks free when a lab
 starts can run out later.
 
-A virtual machine with [`numa_node`](../manifest.md#performance_tuning-object) is also checked
-against that NUMA node. Its memory cannot move to another node, so the node must have room for
-it beside the other virtual machines held there, after the node's share of `reserve_mib`.
+A virtual machine with [`numa_node`](../manifest.md#performance_tuning-object) held strictly
+(`numa_memory_mode = "strict"`, the default) is also checked against that NUMA node. Its memory
+cannot move to another node, so the node must have room for it beside the other virtual
+machines held strictly there, after the node's share of `reserve_mib`. A virtual machine with
+`numa_memory_mode = "preferred"` can take memory from other nodes, so it is checked against the
+whole server only.
 
 Containers are not counted, as Sherpa does not limit their memory; keep `reserve_mib` large
 enough for them. With `overcommit_percent = 100` the guests are never given more memory than the
