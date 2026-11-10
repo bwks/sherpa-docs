@@ -64,7 +64,7 @@ sherpa server image import \
 | CDROM Driver         | <driver>        |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | <driver>        |
-| ZTP Method           | <method>        |
+| ZTP                  | <method>        |
 | Management Interface | <interface>     |
 | Data Interfaces      | <range>         |
 | Interface Driver     | <driver>        |
@@ -91,7 +91,7 @@ Container nodes differ slightly:
 - Mention Docker CLI as an alternative import method
 - Parameters table uses `Container` for Kind, includes `macvlan` interface driver
 - No CDROM/DISK fields in the parameters table
-- ZTP Method is typically `Volume`
+- ZTP is `volume` for the containers whose config Sherpa mounts (`arista_ceos`, `nokia_srlinux`, `juniper_cevolved`, `frr_linux`) and `disabled` for every other container
 - Example manifest includes `version` field in the node definition
 
 ## Writing Style

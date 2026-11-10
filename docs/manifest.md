@@ -625,6 +625,23 @@ unikernels.
     loop when the boot takes longer than the watchdog's timeout. Cisco IOS images do this,
     especially under nested virtualization, so do not give them a `reset` watchdog.
 
+##### ztp (string)
+
+The node's [ZTP setting](architecture/zero-touch-provisioning.md#the-ztp-setting), in place of
+its image's: `disabled`, or one of `cloud-init`, `cdrom`, `disk`, `http`, `ignition`, `nocloud`,
+`tftp`, `usb` and `volume`.
+
+```toml
+ztp = "disabled"
+```
+
+The value must be `disabled` or a method the node's model takes; `sherpa validate` reports any
+other. Most models take one method, so the field is mostly used to turn ZTP off for a node.
+Without it, the node uses its image's setting.
+
+Nodes that join a [Talos cluster](#talos_clusters-listtalos_cluster_object) cannot set
+`ztp = "disabled"`.
+
 ##### ztp_config (string)
 
 Path to a custom ZTP configuration file on the client. It may start with `~`; a relative
@@ -633,6 +650,10 @@ path starts at the manifest's folder.
 ```toml
 ztp_config = "configs/dev01.txt"
 ```
+
+Only nodes whose ZTP setting is `tftp`, `nocloud`, `cdrom`, `disk`, `usb` or `volume` take a
+`ztp_config`, and a `hashicorp_vault` node, where it is Vault's own configuration file. Sherpa
+refuses it on any other node, including one whose ZTP is `disabled`.
 
 Nodes that join a [Talos cluster](#talos_clusters-listtalos_cluster_object) cannot set
 `ztp_config`: Sherpa generates their machine configs.

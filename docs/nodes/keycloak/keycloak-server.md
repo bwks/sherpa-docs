@@ -27,7 +27,7 @@ not known to Sherpa, so a lab cannot use it.
 | Tested Version       | 26.4      |
 | CPU                  | 2         |
 | RAM                  | 2GB       |
-| ZTP Method           | None      |
+| ZTP                  | `disabled`|
 | Management Interface | eth0      |
 | Interface Driver     | macvlan   |
 

@@ -30,7 +30,7 @@ sherpa server image import \
 | CDROM Driver         | virtio          |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
-| ZTP Method           | HTTP            |
+| ZTP                  | `http`          |
 | Management Interface | eth0            |
 | Data Interfaces      | eth1-52         |
 | Interface Driver     | virtio          |

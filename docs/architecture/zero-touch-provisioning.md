@@ -14,14 +14,69 @@ The following configuration parameters are applied to nodes via ZTP:
 - DNS search domains
 - Sherpa user with password and SSH key authentication.
 
+## The ZTP Setting
+
+Every node image has one ZTP setting: `disabled`, or the method Sherpa provisions its nodes by.
+`sherpa image show` prints it as `ZTP`, and an administrator changes it on the image's edit page
+in the web UI.
+
+| Setting | Method | Used by |
+| ------- | ------ | ------- |
+| `disabled` | Sherpa provisions nothing | any node |
+| `cloud-init` | [Cloud-Init](#cloud-init) | Linux, BSD and Windows virtual machines |
+| `nocloud` | [NoCloud](#nocloud) | Talos Linux |
+| `ignition` | [Ignition](#ignition) | Flatcar Linux |
+| `usb` | [USB Disk](#usb-disk) | Cumulus Linux, Juniper vEvolved |
+| `disk` | [Config Disk](#config-disk) | Cisco IOSv, IOSvL2 and ISE, MikroTik CHR |
+| `cdrom` | [CDROM](#cdrom) | Cisco IOS XE, ASAv, Nexus, IOS XR and FTDv, Juniper vRouter, vSwitch and vSRX, Palo Alto PAN-OS |
+| `tftp` | [TFTP](#tftp) | Arista vEOS, Aruba AOS-CX, Juniper vEvolved and vSRX |
+| `http` | [HTTP](#http) | SONiC |
+| `volume` | [Container Volumes](#container-volumes) | Arista cEOS, Nokia SR Linux, Juniper cEvolved, FRR |
+
+A model takes only the methods listed against it, and most take one. Juniper vSRX takes `cdrom`
+or `tftp`, and Juniper vEvolved `tftp` or `usb`. Application containers and unikernels take
+only `disabled`. Sherpa refuses any other setting when the image is saved, when a manifest is
+validated, and before `sherpa up` or `sherpa redeploy` changes anything.
+
+### Per Node
+
+A node can set its own with [`ztp`](../manifest.md#ztp-string) in the manifest. Without it the
+node uses its image's setting.
+
+```toml
+# manifest.toml
+
+[[nodes]]
+name = "dev01"
+model = "frr_linux"
+ztp = "disabled"
+
+[[nodes]]
+name = "dev02"
+model = "juniper_vsrxv3"
+ztp = "tftp"
+```
+
+### Disabled
+
+A node with ZTP `disabled` boots as its image ships: Sherpa generates no configuration and adds
+no `sherpa` login or [personal account](personal-accounts.md). The generated configuration is
+also what gives a node its management IP address, so a node with ZTP `disabled` has none unless
+its image configures one itself, and `sherpa ssh` cannot reach it. A virtual machine gets no
+configuration media. A container gets only what it needs to start, as described under
+[Container Volumes](#container-volumes).
+
 ## Custom Node Configuration
 
 User defined configuration can be applied to devices by specifying
 the location with the `ztp_config` parameter in the `manifest.toml`
 file.
 
-A custom `ztp_config` is supported for nodes that use the TFTP, NoCloud, CDROM, Config Disk and
-USB Disk methods. Nodes that use cloud-init, Ignition or HTTP reject it.
+A custom `ztp_config` is supported for nodes whose ZTP setting is `tftp`, `nocloud`, `cdrom`,
+`disk`, `usb` or `volume`. Sherpa refuses it, before the lab is created, on nodes that use
+`cloud-init`, `ignition` or `http`, and on nodes whose ZTP is `disabled`. The exception is
+[HashiCorp Vault](../nodes/hashicorp/hashicorp-vault.md#your-own-config), where `ztp_config` is
+Vault's own configuration file.
 
 ### Example
 
@@ -30,7 +85,7 @@ USB Disk methods. Nodes that use cloud-init, Ignition or HTTP reject it.
 
 [[nodes]]
 name = "dev01"
-model = "sonic_linux"
+model = "cisco_cat8000v"
 ztp_config = "/some/path/dev01.conf"
 ```
 
@@ -108,13 +163,16 @@ Configuration is served over the network via HTTP on port 8080 of the lab router
 
 ### Container Volumes
 
-Container nodes do not use a ZTP method. They are configured when the container is created,
-from the node's `environment_variables`, `commands` and `volumes` in the manifest. Each volume
-bind mounts a path on the Sherpa server into the container, and the container application reads
-its configuration from the mounted path on startup.
+Arista cEOS, Nokia SR Linux, Juniper cEvolved and FRR containers use the `volume` method. Sherpa
+writes the node's configuration files on the Sherpa server and bind mounts them into the
+container, which reads them on startup. The configuration carries the `sherpa` login.
 
 ![A path on the Sherpa server is bind mounted into the container](ztp-volume.svg)
 
-### iPXE
+With ZTP `disabled`, one of these containers starts with its image, environment and command
+only. Sherpa mounts no configuration and adds no login, so the node has no management IP address
+configured: reach it with `docker exec` on the Sherpa server. The node's `volumes` from the
+manifest are mounted instead, so you can supply a configuration of your own.
 
-iPXE network boot is planned and not yet implemented.
+Every other container has no ZTP method. It is configured when the container is created, from
+the node's `environment_variables`, `commands` and `volumes` in the manifest.

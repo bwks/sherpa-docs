@@ -24,6 +24,32 @@ sudo bash sherpa_update.sh --force
 
 Take a [database backup](../../architecture/database.md#backups) before updating.
 
+## Updating to 0.5.30
+
+A node image now has one [ZTP setting](../../architecture/zero-touch-provisioning.md#the-ztp-setting),
+`ztp`, in place of the "enable" switch and the method beside it. The update converts every image:
+
+- an image with ZTP switched off becomes `disabled`;
+- a virtual machine image keeps its method. One stored with a method its model does not take,
+  on which `sherpa up` failed, gets its model's default method;
+- Arista cEOS, Nokia SR Linux, Juniper cEvolved and FRR container images become `volume`;
+- every other container image, and every unikernel image, becomes `disabled`. These nodes start
+  as they did before.
+
+If you had switched ZTP off on a cEOS, SR Linux, cEvolved or FRR image, its nodes now start
+without Sherpa's configuration, without a management address and without the `sherpa` login the
+next time they are created or redeployed. Before, switching it off only left out the lab owner's account.
+
+A manifest that sets [`ztp_config`](../../manifest.md#ztp_config-string) on a node that cannot
+use it is now refused before the lab is created, where the file was ignored before: on an
+application container other than Vault, and on any node whose ZTP is `disabled`.
+
+In the API, an image's `ztp_enable` and `ztp_method` fields are replaced by `ztp`, one of
+`disabled`, `cloud-init`, `cdrom`, `disk`, `http`, `ignition`, `nocloud`, `tftp`, `usb` and
+`volume`. Scripts that read the old fields need changing. Update the `sherpa` CLI on every client
+together with the server: an older CLI cannot read image details from a 0.5.30 server, and a
+0.5.30 CLI cannot read them from an older server.
+
 ## Updating to 0.5.25
 
 Node states change. A node being created is now `building` rather than `stopped`, a node whose

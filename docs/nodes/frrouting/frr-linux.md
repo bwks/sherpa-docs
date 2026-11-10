@@ -25,7 +25,7 @@ not known to Sherpa, so a lab cannot use it.
 | Kind                 | Container |
 | CPU                  | 1         |
 | RAM                  | 512MB       |
-| ZTP Method           | Volume    |
+| ZTP                  | `volume`  |
 | Management Interface | eth0      |
 | Interface Driver     | macvlan    |
 
@@ -62,3 +62,4 @@ version = "10.5.2"
   so the Sherpa server needs internet access. It tries 10 times, 3 seconds apart. If every try
   fails, the node has no SSH: use `docker exec` instead, and check the node's log with
   `docker logs <node-name>-<lab-id>`.
+- With [`ztp = "disabled"`](../../manifest.md#ztp-string) the node is the image as shipped: it runs the image's own entrypoint and `daemons` file. Sherpa mounts no configuration, installs no SSH server and adds no logins. The node still answers on its management address, but `sherpa ssh` cannot connect: reach it with `docker exec -it <node-name>-<lab-id> sh`. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.

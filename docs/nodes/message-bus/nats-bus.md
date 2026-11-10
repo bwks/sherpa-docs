@@ -22,7 +22,7 @@ sherpa server image pull \
 | Kind                 | Container       |
 | CPU                  | 1               |
 | RAM                  | 512MB           |
-| ZTP Method           | None            |
+| ZTP                  | `disabled`      |
 | Management Interface | eth0            |
 | Data Interfaces      | eth1+           |
 | Interface Driver     | macvlan         |

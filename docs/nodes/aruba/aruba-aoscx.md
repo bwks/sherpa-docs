@@ -50,7 +50,7 @@ sherpa server image import \
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
-| ZTP Method           | TFTP            |
+| ZTP                  | `tftp`          |
 | Management Interface | mgmt            |
 | Data Interfaces      | 1/1/1-52        |
 | Interface Driver     | virtio          |
