@@ -654,7 +654,9 @@ kind is listed.
 
 ### `sherpa server image scan`
 
-Scan the images directory for on-disk images and import them to the database.
+Scan the images directory for on-disk images and import them to the database. A model's first
+image found becomes its default only when the model has no default yet; see
+[default versions](#default-versions).
 
 | Flag | Description |
 | ---- | ----------- |
@@ -681,6 +683,32 @@ sherpa server image import --src <path> --version <version> --model <model>
 | `--model`, `-m` | Model of the device (required) |
 | `--default` | Set this image as the default version |
 
+The image is copied to a temporary file next to its destination and moved into place only once
+the copy is complete, and only then recorded in the database. An import that fails or is
+interrupted leaves the server as it was; run it again.
+
+Importing a version that is already on the server:
+
+- If the file on the server has the same size as the source, the copy is skipped.
+- If it has a different size, it is replaced with the source.
+- If it has a different size and lab disks are built on it, the import is refused. Destroy
+  those labs first, or import the image as a new version.
+
+Settings an admin changed for the version in the web UI are kept.
+
+#### Default versions
+
+Each model with images has exactly one default version, used by nodes that do not name a
+`version` in the manifest.
+
+- The first version imported, pulled, downloaded or scanned for a model becomes its default.
+- `--default` makes the new version the default. Without it, the default does not change, even
+  when the version being imported again is the default.
+- Deleting the default makes the most recently added remaining version the default, and the
+  command prints which one.
+- The default cannot be unset, in the web UI or otherwise; make another version the default
+  instead, with `set-default`.
+
 #### Image versions
 
 An image version names the image's folder on the server and, for containers, its tag. It is
@@ -705,7 +733,8 @@ sherpa server image pull --model <model>
 
 ### `sherpa server image delete`
 
-Delete an imported image from disk and the database.
+Delete an imported image from disk and the database. If it was the model's default, the most
+recently added remaining version becomes the default; see [default versions](#default-versions).
 
 ```
 sherpa server image delete --model <model> --version <version>
