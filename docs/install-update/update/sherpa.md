@@ -24,6 +24,19 @@ sudo bash sherpa_update.sh --force
 
 Take a [database backup](../../architecture/database.md#backups) before updating.
 
+## Updating to 0.5.25
+
+Node states change. A node being created is now `building` rather than `stopped`, a node whose
+virtual machine or container no longer exists is `missing`, and the `created` state is gone:
+nodes recorded `created` become `stopped`. See [node states](../../command-reference.md#node-states).
+
+Update the `sherpa` CLI on every client together with the server. The server does not refuse an
+older client, which only warns that the versions differ, but a CLI older than 0.5.25 cannot read
+the new states: `sherpa inspect`, `sherpa destroy` and the other commands that read a lab's
+details from the server fail with a decode error for a lab that has a `building` or `missing`
+node. From 0.5.25 the CLI shows any state it does not know as `unknown`, so later new states do
+not break it. The web UI is part of the server and needs no update.
+
 ## Updating to 0.5.23
 
 Logins become server-side sessions, so that logging out, changing a password and deleting a user

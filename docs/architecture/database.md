@@ -44,8 +44,8 @@ To restore a backup:
 
 Tables use SQLite's `STRICT` mode, so every column holds only its declared type. Ranges, such as
 CPU counts and port numbers, are checked by `CHECK` constraints. Columns that hold one of a fixed
-set of values, such as a node model or a node state, are checked against the values the running
-version of Sherpa knows.
+set of values, such as a node model, are checked against the values the running version of
+Sherpa knows. A node state written by a newer version is read as `unknown`.
 
 The database records its schema version. When `sherpad` starts, it brings an older database up to
 date. It refuses to start on a database from a newer version of Sherpa, for example after a
@@ -114,7 +114,7 @@ and VNC ports across all labs.
 | `mgmt_ipv4` | text, optional        | Management IPv4 address               |
 | `mgmt_ipv6` | text, optional        | Management IPv6 address               |
 | `mgmt_mac`  | text, optional        | Management MAC address                |
-| `state`     | text                  | Node state (running, stopped, etc.)   |
+| `state`     | text                  | [Node state](../command-reference.md#node-states) |
 
 #### link
 
