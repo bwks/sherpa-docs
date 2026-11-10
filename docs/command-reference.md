@@ -166,7 +166,8 @@ after 60 seconds. Nodes in a [Talos cluster](manifest.md#talos_clusters-listtalo
 are shut down through the Talos API, workers before controllers. Unikernels and other Talos
 nodes are powered off, and containers are paused. The result for each node says whether it
 shut down or was powered off. A node that is already stopped or paused is reported as such, so
-running `sherpa down` twice is not an error.
+running `sherpa down` twice is not an error. A node that is `building` or `missing` (see
+[node states](#node-states)) is not touched, and its result says why.
 
 With Tailscale enabled, a full shutdown also logs the gateway out of the tailnet and
 stops it. Using `--node` leaves the gateway alone.
@@ -186,6 +187,12 @@ showing progress as it goes. It uses the lab's `ready_timeout`, and each node's
 that is not ready within the timeout is reported, but resume still succeeds. Containers
 and paused nodes do not wait, because they resume an already running guest. A paused
 container is unpaused, a stopped one is started, and a running node is left as it is.
+A booted node is `starting` until it is ready, then `running`; one that is not ready in time
+stays `starting` until the server sees it answer.
+
+Resume refuses, with a reason in the node's result, a node that is `building` or `missing`, a
+virtual machine that crashed, a container that is dead, and one that is between states, such as
+shutting down or restarting. A crashed, dead or missing node needs `sherpa redeploy`.
 
 Before starting any node, resume checks that the stopped virtual machines and unikernels fit
 in the server's memory, as `sherpa up` does, and refuses the whole resume if they do not.
@@ -213,7 +220,8 @@ A worker in a [Talos cluster](manifest.md#talos_clusters-listtalos_cluster_objec
 secrets. A cluster controller cannot be redeployed.
 
 The node's memory must still fit on the server, as for `sherpa up`; the node being replaced
-does not count against itself. A refused redeploy leaves the node as it was.
+does not count against itself. A refused redeploy leaves the node as it was. A node that is
+`building` cannot be redeployed until that finishes; a `missing` or `failed` node can.
 
 | Flag | Description |
 | ---- | ----------- |
@@ -225,6 +233,8 @@ secret files with the redeploy, and runs `ssh` provisioners once the node is bac
 The server checks the manifest, the node's image and the server's resources before it destroys
 the node, so a refused redeploy leaves the node running as it was. A redeploy that fails once the
 node is destroyed marks it `failed` in `sherpa inspect`; fix the cause and redeploy it again.
+While it is rebuilt the node is `building`, then `starting`, and `running` once ready. A
+container that runs Vault or Keycloak is `running` only once they are restored.
 
 ### `sherpa provision`
 
@@ -274,13 +284,29 @@ still running stay reachable, and running `sherpa destroy` again removes them.
 
 ### `sherpa inspect`
 
-Inspect the current lab environment. Shows node states, links, and lab details.
+Inspect the current lab environment. Shows [node states](#node-states), links, and lab details.
 The lab details include the manifest's **Description**, and **Client Host** and
 **Client Folder**, the machine and directory `sherpa up` ran in. Labs started from the web UI or the API, and labs started before Sherpa
 0.5.6, have neither.
 For Tailscale-enabled labs, refreshes gateway state, Tailscale addresses, advertised
 management routes, route approval, and warnings. This is the default command when
 no subcommand is specified.
+
+#### Node states
+
+| State | Meaning |
+| ----- | ------- |
+| `building` | `sherpa up` or `sherpa redeploy` is creating the node. Nothing else can stop, start or redeploy it until that finishes. |
+| `starting` | The node is started but not ready yet: its ready check has not passed. The server's [scanner](configuration/sherpa.md#scanner) keeps checking, and records it `running` once it answers. |
+| `running` | The node is ready: its ready check passed, or it has `skip_ready_check`. |
+| `stopped` | The node is shut down or paused, by `sherpa down` or outside Sherpa. |
+| `failed` | An operation on the node failed, such as a redeploy or a container that exited during `sherpa up`, or its virtual machine crashed or its container died. It stays `failed` until you stop, resume or redeploy it. |
+| `missing` | The node's virtual machine or container no longer exists, for example because it was removed outside Sherpa. Redeploy it. |
+| `unknown` | A state this version does not know, such as one written by a newer server. |
+
+A lab's status follows its nodes: `running` or `stopped` when all of them are, `failed` when
+any is `failed` or `missing`, `starting` when any is `building` or `starting`, otherwise
+`partial`.
 
 ### `sherpa validate`
 
