@@ -44,6 +44,15 @@ src = "dev01::eth1"
 dst = "dev02::eth1"
 ```
 
+#### When a Node Restarts
+
+A VM or unikernel that boots again, a container started again, and a redeployed node get new
+link ends, and Sherpa attaches their links again in both directions, impairments included.
+A container's interfaces are made again in its new network namespace first. A link whose peer
+is down waits for it, and is attached when the peer starts. `sherpa resume` and
+`sherpa redeploy` list each link that is not attached; see
+[`sherpa resume`](../../../command-reference.md#sherpa-resume).
+
 #### Link Impairments
 
 P2P eBPF links support optional link impairments via TC netem, which
