@@ -208,7 +208,37 @@ An unknown `direction`, or a number out of range for its field, returns
 `422 Unprocessable Entity` on REST and `InvalidParams` on WebSocket RPC. A delay or jitter
 over `274877` ms (the longest netem holds) or a percentage outside `0` - `100` returns
 `400 Bad Request` and `InvalidParams`. When `direction` is `both` and the second direction
-cannot be changed, the first is put back, so the link is never left half changed.
+cannot be changed, the first is put back, so the link is never left half changed. If the change
+cannot be recorded, the changed directions are put back, and the request fails with the old
+impairment in place. Clearing a direction fails if its impairment cannot be removed; only a
+direction with none counts as already clear.
+
+## Link States After Resume And Redeploy
+
+A node that resume boots, and a redeployed node, get new link ends, and the server attaches their
+links again. Each resume result (`results[]`) and the redeploy response carry `links`, the state
+of each of that node's links, when there are any; the field is absent otherwise.
+
+```json
+{
+  "name": "vm1",
+  "success": true,
+  "message": "Started and ready",
+  "links": [
+    { "link": "vm1::eth1 <-> vm2::eth1", "state": "peer_down", "peer": "vm2" },
+    { "link": "vm1::eth2 <-> ctr1::eth1", "state": "attached" },
+    { "link": "vm1::eth3 <-> uk1::eth1", "state": "failed", "reason": "..." }
+  ]
+}
+```
+
+| `state` | Meaning |
+| ------- | ------- |
+| `attached` | Both ends redirect to each other, with the link's impairments |
+| `peer_down` | The peer (`peer`) is down. The link is attached in both directions when it starts |
+| `failed` | The link could not be attached (`reason`). It carries no traffic until either end is resumed or redeployed |
+
+A link that is not attached does not make the node's `success` false.
 
 ## Lab Access
 

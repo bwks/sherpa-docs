@@ -208,6 +208,22 @@ is not `ready` (see [lab phases](#lab-phases)) is refused.
 Before starting any node, resume checks that the stopped virtual machines and unikernels fit
 in the server's memory, as `sherpa up` does, and refuses the whole resume if they do not.
 
+A node that boots gets new link ends, so resume attaches its [links](architecture/networking/modes/point-to-point.md)
+again, with their impairments. A stopped container that is started gets its data interfaces
+made again, as its old ones went with it. Each link that is not attached is listed under the
+node's line:
+
+```
+✅ vm1: Started and ready
+   ℹ️ link vm1::eth1 <-> vm2::eth1 not attached: vm2 is down; it is attached when vm2 starts
+   ⚠️ link vm1::eth2 <-> ctr1::eth1 not attached: <reason>
+```
+
+A link whose peer is down is expected: it is attached in both directions when the peer is
+resumed. A link that failed carries no traffic until either end is resumed or redeployed again.
+Neither fails the node or the command, since the node is up. Resuming one link end on its own
+is therefore safe; links to nodes that are still down wait for them.
+
 Nodes that boot may offer a new SSH host key, which the server records. Resume then
 downloads the lab files again, as `sherpa download --force` does, so `.sherpa/ssh/known_hosts`
 matches. See [Node Host Keys](architecture/ssh.md#node-host-keys).
@@ -238,6 +254,10 @@ that is not `ready` (see [lab phases](#lab-phases)) is refused.
 | Flag | Description |
 | ---- | ----------- |
 | `--node`, `-n` | Target node to redeploy (required) |
+
+The rebuilt node's links are attached again. Links that are not attached are listed after the
+result, as for [`sherpa resume`](#sherpa-resume): a link whose peer is down waits for that peer
+and is attached when it starts, and does not fail the redeploy.
 
 When the node has [provisioners](architecture/provisioners/overview.md), the CLI sends a container's
 secret files with the redeploy, and runs `ssh` provisioners once the node is back.
@@ -430,8 +450,11 @@ sherpa link impair dev01::eth1 --clear
 
 Give at least one value, or `--clear`. The values replace the impairment on the directions
 named, and a value left out is `0`; the other direction keeps its own. The change applies at
-once and is kept across `sherpa down`/`sherpa resume` and redeploying either end. See
-[Link Impairment](api-reference.md#link-impairment) for the API.
+once and is kept across `sherpa down`/`sherpa resume` and redeploying either end. The node at the
+end each changed direction leaves through must be up. A change the server cannot make in full fails and is undone, so the link
+keeps its previous impairment; `--clear` fails rather than report a direction clear whose
+impairment could not be removed. See [Link Impairment](api-reference.md#link-impairment) for the
+API.
 
 ## Image Commands
 
