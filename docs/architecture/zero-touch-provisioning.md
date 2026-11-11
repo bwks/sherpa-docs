@@ -170,9 +170,11 @@ container, which reads them on startup. The configuration carries the `sherpa` l
 ![A path on the Sherpa server is bind mounted into the container](ztp-volume.svg)
 
 With ZTP `disabled`, one of these containers starts with its image, environment and command
-only. Sherpa mounts no configuration and adds no login, so the node has no management IP address
-configured: reach it with `docker exec` on the Sherpa server. The node's `volumes` from the
-manifest are mounted instead, so you can supply a configuration of your own.
+only. Sherpa mounts no configuration and adds no login, so `sherpa ssh` cannot log in to it. What
+the node does with its management address depends on its image: cEOS and SR Linux leave it
+unconfigured, FRR answers on it with no SSH server, and cJunosEvolved configures it with SSH for
+the image's own `admin` user. Each model's page says how to reach it. The node's `volumes` from
+the manifest are mounted instead, so you can supply a configuration of your own.
 
 Every other container has no ZTP method. It is configured when the container is created, from
 the node's `environment_variables`, `commands` and `volumes` in the manifest.
