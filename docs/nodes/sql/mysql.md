@@ -8,7 +8,7 @@ Base images can be obtained from [Docker Hub](https://hub.docker.com/_/mysql).
 
 ### Import image
 
-Pull the image through Sherpa, giving the full image reference:
+Pull the image through Sherpa, giving the image reference with its tag:
 
 ```
 sherpa server image pull --model mysql_db --repo mysql:8.0

@@ -764,9 +764,16 @@ sherpa server image pull --model <model>
 | ---- | ----------- |
 | `--model`, `-m` | Model of the device image to pull (required) |
 | `--version`, `-v` | Version of the image |
-| `--repo`, `-r` | Full container image reference with a tag (e.g., `registry.io/account/image:version` or `localhost:5000/image:1`); digests (`@sha256:...`) are not supported |
+| `--repo`, `-r` | Container image reference with a tag: a Docker Hub image by its short or full name (`nats:2.11` or `docker.io/library/nats:2.11`), or an image in another registry (`registry.io/account/image:version` or `localhost:5000/image:1`); digests (`@sha256:...`) are not supported |
 | `--url`, `-u` | VM image download URL |
 | `--default` | Set this image as the default version |
+
+The tag is the version Sherpa records. Sherpa also records the repo as you wrote it, and container
+nodes of that version run that repo unless the manifest sets `image` on the node. This applies to
+models with a built-in repo too. For example, `frr_linux` pulled with
+`--repo mirror.example/frrouting/frr:10.5.2` runs the mirror's image, not
+`quay.io/frrouting/frr`. `sherpa up` and `sherpa redeploy` check that Docker has the image before
+they create anything.
 
 ### `sherpa server image delete`
 

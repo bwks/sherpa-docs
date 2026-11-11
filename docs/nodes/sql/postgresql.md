@@ -8,7 +8,7 @@ Base images can be obtained from [Docker Hub](https://hub.docker.com/_/postgres)
 
 ### Import image
 
-Pull the image through Sherpa, giving the full image reference:
+Pull the image through Sherpa, giving the image reference with its tag:
 
 ```
 sherpa server image pull --model postgresql_db --repo postgres:17

@@ -198,6 +198,11 @@ Custom image name to use instead of the default for this model.
 image = "custom-ubuntu"
 ```
 
+For a container node, `image` is the image repository without a tag: the node's version is the
+tag. It replaces the repo the version was pulled from, for every container model, including those
+with a built-in repo. `sherpa up` and `sherpa redeploy` check that Docker has `<image>:<version>`
+and fail if it does not, before they create anything.
+
 ##### kernel_cmdline (string)
 
 Kernel command line arguments for DirectKernel unikernel nodes. Passed to QEMU via the libvirt `<cmdline>` XML element. Overrides any auto-injected command line.
