@@ -47,7 +47,7 @@ manifest sets `data_interface_count`; a `bx` node takes up to 36.
 | Tested Version       | 26.2R1.7    |
 | CPU                  | 4           |
 | RAM                  | 6292MB      |
-| ZTP Method           | Volume      |
+| ZTP                  | `volume`    |
 | Management Interface | re0:mgmt-0  |
 | Data Interfaces      | et-0/0/0-11 |
 | Interface Driver     | veth        |
@@ -105,3 +105,4 @@ Sherpa writes a `juniper.conf` startup config and mounts its directory at
   `bt`, 36 on `bx`. Only the first `data_interface_count` of them are wired to the lab.
 - Approximate time for the system to be ready: `4 minutes`. `sherpa up` reports a container as
   ready when it has started, so SSH answers a few minutes after `sherpa up` finishes.
+- With [`ztp = "disabled"`](../../manifest.md#ztp-string) the node is the image as shipped: Sherpa mounts no config directory, so Junos has no management IP address and no `sherpa` login, and `sherpa ssh` cannot reach it. Reach it with `docker exec` into the container. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.

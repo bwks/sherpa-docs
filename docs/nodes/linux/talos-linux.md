@@ -64,7 +64,7 @@ sherpa server image import \
 | CDROM Driver         | SATA                       |
 | DISK                 | virtioa.qcow2              |
 | DISK Driver          | virtio                     |
-| ZTP Method           | NoCloud CD-ROM             |
+| ZTP                  | `nocloud`                  |
 | Management Interface | eth0 (static address)      |
 | Data Interfaces      | eth1                       |
 | Interface Driver     | virtio                     |

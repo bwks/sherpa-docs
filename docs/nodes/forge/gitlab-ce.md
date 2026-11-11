@@ -24,7 +24,7 @@ not known to Sherpa, so a lab cannot use it.
 | Kind                 | Container |
 | CPU                  | 2         |
 | RAM                  | 4GB       |
-| ZTP Method           | None      |
+| ZTP                  | `disabled`|
 | Management Interface | eth0      |
 | Interface Driver     | macvlan   |
 

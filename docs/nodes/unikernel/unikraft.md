@@ -50,7 +50,7 @@ sherpa server image import \
 | CPU                  | 1            |
 | RAM                  | 512 MiB      |
 | Boot Mode            | DirectKernel |
-| ZTP Method           | None         |
+| ZTP                  | `disabled`   |
 | Management Interface | eth0         |
 | Interface Driver     | virtio       |
 

@@ -48,7 +48,7 @@ Default parameters for unikernel nodes:
 | RAM | 512 MiB |
 | Data Interfaces | 0 |
 | Interface Driver | `virtio` |
-| ZTP Method | None |
+| ZTP        | `disabled`|
 
 These defaults can be overridden in the manifest.
 

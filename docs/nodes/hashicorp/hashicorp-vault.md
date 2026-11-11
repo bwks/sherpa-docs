@@ -26,7 +26,7 @@ not known to Sherpa, so a lab cannot use it.
 | Kind                 | Container |
 | CPU                  | 1         |
 | RAM                  | 1GB       |
-| ZTP Method           | None      |
+| ZTP                  | `disabled`|
 | Management Interface | eth0      |
 | Interface Driver     | macvlan   |
 
@@ -105,7 +105,9 @@ gets the Vault Secrets Operator. For each such cluster, Sherpa sets up Vault:
 
 ## Your Own Config
 
-A node with its own [`ztp_config`](../../manifest.md) runs that config instead. Sherpa then
+A node with its own [`ztp_config`](../../manifest.md) runs that config instead. Vault's ZTP
+setting is `disabled`, and it is the one node that takes a `ztp_config` with ZTP off: the file
+is Vault's own configuration. Sherpa then
 does not initialise or unseal it, and sets `VAULT_ADDR=http://127.0.0.1:8200` in the container.
 The lab certificate is still mounted at `/etc/sherpa/certs/` for your config to use.
 

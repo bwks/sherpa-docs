@@ -29,7 +29,7 @@ sherpa server image import \
 | CDROM Driver         | IDE             |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
-| ZTP Method           | CDROM           |
+| ZTP                  | `cdrom`         |
 | Management Interface | fxp0            |
 | Data Interfaces      | ge-0/0/0-7      |
 | Interface Driver     | virtio          |

@@ -32,7 +32,7 @@ is cloned during instance creation.
 | CDROM Driver         | virtio          |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
-| ZTP Method           | Disk            |
+| ZTP                  | `disk`          |
 | Management Interface | GigabitEthernet0/0 |
 | Data Interfaces      | gig0/1-3, gig1/0-3, gig2/0-3, gig3/0-3 |
 | Interface Driver     | e1000           |

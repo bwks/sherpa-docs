@@ -25,7 +25,7 @@ the `docker` CLI is not known to Sherpa, so a lab cannot use it.
 | Kind                 | Container |
 | CPU                  | 1         |
 | RAM                  | 1GB       |
-| ZTP Method           | Volume    |
+| ZTP                  | `disabled`|
 | Management Interface | eth0      |
 | Interface Driver     | macvlan    |
 
