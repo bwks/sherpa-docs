@@ -4,7 +4,7 @@ A generic container allows for the use of container models that are not natively
 
 ### Import
 
-Pull the image through Sherpa, giving the full image reference:
+Pull the image through Sherpa, giving the image reference with its tag:
 
 ```
 sherpa server image pull --model generic_container --repo nginx:1.29.4-perl
