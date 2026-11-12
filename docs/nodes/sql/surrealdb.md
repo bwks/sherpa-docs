@@ -41,7 +41,7 @@ name = "surrealdb"
 
 [[nodes]]
 name = "db01"
-model = "surrealdb"
+model = "surreal_db"
 version = "v2.2"
 ```
 

@@ -45,7 +45,42 @@ name = "postgresql"
 name = "db01"
 model = "postgresql_db"
 version = "17"
+environment_variables = [
+  "POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password",
+]
+
+[[nodes.provisioners]]
+type = "container"
+
+[[nodes.provisioners.files]]
+src = "secrets/postgres-password"
+name = "postgres_password"
 ```
+
+Put the password in `secrets/postgres-password`, next to the manifest, before `sherpa up`.
+
+## Superuser Password
+
+The `postgres` image refuses to start without a password for the `postgres` superuser, and the
+container exits at once. Sherpa sets none for `postgresql_db`, so the node needs one of these in
+`environment_variables`:
+
+| Variable                          | Effect                                                    |
+| --------------------------------- | --------------------------------------------------------- |
+| `POSTGRES_PASSWORD_FILE`          | Password read from a file, as in the example.             |
+| `POSTGRES_PASSWORD`               | Password given as the value.                              |
+| `POSTGRES_HOST_AUTH_METHOD=trust` | No password is set or asked for. Anyone who reaches the node can log in as any user, including `postgres`. |
+
+The example passes the password as a file with the
+[`container` provisioner](../../architecture/provisioners/container.md), so it is not stored
+with the lab. `POSTGRES_PASSWORD` is simpler, but the password is then saved on the Sherpa
+server and shown by `docker inspect`; see
+[`environment_variables`](../../manifest.md#environment_variables-liststring).
+
+The variables only take effect the first time the container starts, when PostgreSQL creates its
+data directory. The image also accepts `POSTGRES_USER` and `POSTGRES_DB` to name the superuser
+and the default database. See the image's [documentation](https://hub.docker.com/_/postgres)
+for the full list.
 
 
 ## Node Access
@@ -60,6 +95,12 @@ version = "17"
 
     ```
     docker exec -it <node-name>-<lab-id> sh
+    ```
+
+=== "psql"
+
+    ```
+    docker exec -it <node-name>-<lab-id> psql -U postgres
     ```
 
 ## Notes
