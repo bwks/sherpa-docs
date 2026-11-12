@@ -214,6 +214,9 @@ Not enough memory on the server: node 'r3' needs 8192 MiB, but only 2048 MiB of 
 is left, 6144 MiB short. ...
 ```
 
+The refusal has its own error code, so scripts need not read the message: `sherpa` exits with
+status `75`, and the API returns the [`INSUFFICIENT_MEMORY` error](../api-reference.md#not-enough-host-memory).
+
 An `overcommit_percent` below `1` prevents server startup, and the error names the setting.
 Restart `sherpad` after editing the server configuration.
 

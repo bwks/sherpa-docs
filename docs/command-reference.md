@@ -25,6 +25,17 @@ printing what did not work, so scripts can rely on it:
   kept, `destroy failed`, so run the command again once the cause is fixed.
 - `sherpa server image` commands: the import, pull, delete or default change failed.
 
+The exit status says why:
+
+| Status | Meaning |
+| ------ | ------- |
+| `0` | Success. |
+| `1` | The command failed. |
+| `75` | The server refused `sherpa up`, `sherpa resume` or `sherpa redeploy` because the virtual machines and unikernels it would start do not fit in its memory now ([host memory](configuration/sherpa.md#host_memory)). Nothing was started; run the command again once other nodes are stopped or destroyed. |
+
+`sherpa ssh` instead exits with the node shell's exit code, as described under
+[`sherpa ssh`](#sherpa-ssh).
+
 ## Authentication
 
 ### `sherpa login`
@@ -122,7 +133,8 @@ error, saying the lab was only partly created.
 
 The server refuses the lab before creating anything when its virtual machines and unikernels
 do not fit in the server's memory, or on the NUMA node a node is held on strictly. The error
-names the numbers that fell short. See [`[host_memory]`](configuration/sherpa.md#host_memory).
+names the numbers that fell short, and `sherpa up` exits with status `75`
+([exit status](#exit-status)). See [`[host_memory]`](configuration/sherpa.md#host_memory).
 
 When `[tailscale]` is enabled, resolves the auth key from the client environment
 variable named by `auth_key_env` and creates a gateway for the lab. Enrollment
