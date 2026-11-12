@@ -138,6 +138,49 @@ The database backup is WebSocket RPC only: the method `server.backup` takes only
 returns `path`, the backup file on the server, and `size_bytes`. See
 [`sherpa server backup`](command-reference.md#sherpa-server-backup).
 
+## Errors
+
+REST errors return a JSON body with an HTTP status:
+
+```json
+{ "error": { "code": "NOT_FOUND", "message": "...", "details": "...", "data": { } } }
+```
+
+`details` and `data` are present only when they apply. WebSocket RPC errors are JSON-RPC 2.0
+error objects, with `code`, `message`, and `data` where the code defines it.
+
+| Meaning | REST status, `code` | WebSocket RPC `code` |
+| ------- | ------------------- | -------------------- |
+| Invalid request | `400`, `BAD_REQUEST` | `-32602` |
+| Not logged in, or the token expired | `401`, `UNAUTHORIZED` | `-32002` |
+| Not allowed | `403`, `FORBIDDEN` | `-32003` |
+| Does not exist | `404`, `NOT_FOUND` | `-32004` |
+| The current state forbids it | `409`, `CONFLICT` | `-32000` |
+| Not enough host memory | `507`, `INSUFFICIENT_MEMORY` | `-32005` |
+| Any other failure | `500`, `INTERNAL_ERROR` | `-32000` |
+
+### Not enough host memory
+
+Creating a lab, redeploying a node or resuming nodes is refused when the virtual machines and
+unikernels it would start do not fit in the server's memory now (see
+[host memory](configuration/sherpa.md#host_memory)). Nothing is started, and the same request
+can succeed once other nodes are stopped or destroyed. The error's `data` says by how much:
+
+```json
+{ "requested_mib": 16384, "available_mib": 11614, "numa_node": null }
+```
+
+| Field | Description |
+| ----- | ----------- |
+| `requested_mib` | Memory the refused nodes need, in MiB |
+| `available_mib` | Guest memory left for them, in MiB |
+| `numa_node` | The NUMA node that is short, for nodes held strictly to one; `null` when the whole server is |
+
+Lab creation and redeploy stream their progress over REST, so their HTTP status is sent before
+they can fail: the stream's `error` event carries the refusal as
+`{"error": "...", "code": "INSUFFICIENT_MEMORY", "data": {...}}`. The CLI exits with status `75`
+(see [exit status](command-reference.md#exit-status)).
+
 ## Long-Running Operations
 
 Lab creation, destroy, redeploy, resume, down, admin clean and image operations run on the
