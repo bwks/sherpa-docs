@@ -11,8 +11,15 @@ sherpa server image pull --model generic_container --repo nginx:1.29.4-perl
 ```
 
 Sherpa records the version (`1.29.4-perl`) and the repo it was pulled from (`nginx`). A node with
-that version runs that repo, unless it sets `image` in the manifest. An image pulled only with
-the `docker` CLI is not known to Sherpa, so a lab cannot use it.
+that version runs that repo, unless it sets `image` in the manifest. An image already pulled
+with the `docker` CLI is not known to Sherpa until it is scanned. `generic_container` has no built-in repo,
+so give the scan the model and the repo, without a tag; it records each local tag of the repo as
+a version, with that repo:
+
+```
+docker pull nginx:1.29.4-perl
+sherpa server image scan --container --model generic_container --repo nginx
+```
 
 Sherpa tells generic images apart by version, so two images with the same tag (such as
 `nginx:latest` and `redis:latest`) share one entry, holding the repo pulled last. Set `image` on

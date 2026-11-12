@@ -15,8 +15,14 @@ Pull the image through Sherpa:
 sherpa server image pull --model frr_linux --version 10.5.2
 ```
 
-Sherpa records the version, so a lab can use it. An image pulled only with the `docker` CLI is
-not known to Sherpa, so a lab cannot use it.
+Sherpa records the version, so a lab can use it. An image already pulled with the `docker` CLI
+is not known to Sherpa until it is scanned. The scan records each local tag of `quay.io/frrouting/frr` as a
+version:
+
+```
+docker pull quay.io/frrouting/frr:10.5.2
+sherpa server image scan --container
+```
 
 ## Default Node Parameters
 

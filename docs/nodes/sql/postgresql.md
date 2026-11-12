@@ -15,8 +15,15 @@ sherpa server image pull --model postgresql_db --repo postgres:17
 ```
 
 Sherpa records the version (`17`) and the repo it was pulled from (`postgres`). A node with
-that version runs that repo, unless it sets `image` in the manifest. An image pulled only with
-the `docker` CLI is not known to Sherpa, so a lab cannot use it.
+that version runs that repo, unless it sets `image` in the manifest. An image already pulled
+with the `docker` CLI is not known to Sherpa until it is scanned. `postgresql_db` has no built-in repo,
+so give the scan the model and the repo, without a tag; it records each local tag of the repo as
+a version, with that repo:
+
+```
+docker pull postgres:17
+sherpa server image scan --container --model postgresql_db --repo postgres
+```
 
 ## Default Node Parameters
 

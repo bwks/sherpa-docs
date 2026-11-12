@@ -714,9 +714,16 @@ kind is listed.
 
 ### `sherpa server image scan`
 
-Scan the images directory for on-disk images and import them to the database. A model's first
-image found becomes its default only when the model has no default yet; see
-[default versions](#default-versions).
+Record images that are on the server but not in its database: VM and unikernel disk images in
+the images directory, and container images in local Docker, such as ones pulled with
+`docker pull`. A model's first image found becomes its default only when the model has no
+default yet; see [default versions](#default-versions). A version already recorded is reported
+as `already_exists` and left as it is.
+
+```
+sherpa server image scan [--container | --unikernel | --virtual-machine] [--dry-run]
+sherpa server image scan --container --model <model> --repo <repo> [--dry-run]
+```
 
 | Flag | Description |
 | ---- | ----------- |
@@ -724,9 +731,31 @@ image found becomes its default only when the model has no default yet; see
 | `--unikernel` | Scan unikernel images |
 | `--virtual-machine` | Scan virtual machine images |
 | `--dry-run` | Show what would be imported without making changes |
+| `--model`, `-m` | Container model to record the local tags of `--repo` for. Needs `--repo` and `--container` |
+| `--repo`, `-r` | Image repository without a tag, such as `mysql` or `ghcr.io/nokia/srlinux`. Needs `--model` |
 
 Give at most one of `--container`, `--unikernel` and `--virtual-machine`; with none, every
 kind is scanned.
+
+Container images are matched by repository, and each local tag of a matching repository is
+recorded as a version, with the repository a node of that version runs:
+
+- Without `--model` and `--repo`, each container model with a built-in repo, such as
+  `nokia_srlinux` (`ghcr.io/nokia/srlinux`) or `nats_bus` (`nats`), gets that repo's local tags.
+  The models with no built-in repo (`generic_container`, `mysql_db` and `postgresql_db`) are
+  listed as skipped, since a local image cannot be told apart as one of them.
+- With `--model` and `--repo`, only that repo's local tags are recorded, as versions of that
+  model. This records images for a model with no built-in repo, or for a built-in model from
+  another repo, such as a mirror. Nothing else is scanned.
+
+```
+docker pull mysql:8.4
+sherpa server image scan --container --model mysql_db --repo mysql
+```
+
+A Docker Hub repo can be given short (`mysql`) or in full (`docker.io/library/mysql`); both match
+the image Docker lists as `mysql`. Tags that are not valid [image versions](#image-versions) are
+left out.
 
 ### `sherpa server image import`
 

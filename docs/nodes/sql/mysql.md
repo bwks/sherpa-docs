@@ -15,8 +15,15 @@ sherpa server image pull --model mysql_db --repo mysql:8.0
 ```
 
 Sherpa records the version (`8.0`) and the repo it was pulled from (`mysql`). A node with
-that version runs that repo, unless it sets `image` in the manifest. An image pulled only with
-the `docker` CLI is not known to Sherpa, so a lab cannot use it.
+that version runs that repo, unless it sets `image` in the manifest. An image already pulled
+with the `docker` CLI is not known to Sherpa until it is scanned. `mysql_db` has no built-in repo,
+so give the scan the model and the repo, without a tag; it records each local tag of the repo as
+a version, with that repo:
+
+```
+docker pull mysql:8.0
+sherpa server image scan --container --model mysql_db --repo mysql
+```
 
 ## Default Node Parameters
 
