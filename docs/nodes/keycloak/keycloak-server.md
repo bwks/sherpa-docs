@@ -16,8 +16,14 @@ Pull the image through Sherpa:
 sherpa server image pull --model keycloak_server --version 26.4
 ```
 
-Sherpa records the version, so a lab can use it. An image pulled only with the `docker` CLI is
-not known to Sherpa, so a lab cannot use it.
+Sherpa records the version, so a lab can use it. An image already pulled with the `docker` CLI
+is not known to Sherpa until it is scanned. The scan records each local tag of `quay.io/keycloak/keycloak` as a
+version:
+
+```
+docker pull quay.io/keycloak/keycloak:26.4
+sherpa server image scan --container
+```
 
 ## Default Node Parameters
 

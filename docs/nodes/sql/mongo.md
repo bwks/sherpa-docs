@@ -14,8 +14,14 @@ Pull the image through Sherpa:
 sherpa server image pull --model mongo_db --version 8.2.7-rc0
 ```
 
-Sherpa records the version, so a lab can use it. An image pulled only with the `docker` CLI is
-not known to Sherpa, so a lab cannot use it.
+Sherpa records the version, so a lab can use it. An image already pulled with the `docker` CLI
+is not known to Sherpa until it is scanned. The scan records each local tag of `mongo` as a
+version:
+
+```
+docker pull mongo:8.2.7-rc0
+sherpa server image scan --container
+```
 
 ## Default Node Parameters
 

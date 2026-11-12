@@ -15,6 +15,14 @@ sherpa server image pull \
   --default
 ```
 
+An image already pulled with the `docker` CLI is not known to Sherpa until it is scanned. The
+scan records each local tag of `nats` as a version:
+
+```
+docker pull nats:2.11
+sherpa server image scan --container
+```
+
 ## Default Node Parameters
 
 | Property             | Value           |

@@ -15,6 +15,14 @@ sherpa server image pull \
   --default
 ```
 
+An image already pulled with the `docker` CLI is not known to Sherpa until it is scanned. The
+scan records each local tag of `codeberg.org/forgejo/forgejo` as a version:
+
+```
+docker pull codeberg.org/forgejo/forgejo:<tag>
+sherpa server image scan --container
+```
+
 ## Default Node Parameters
 
 | Property             | Value           |
