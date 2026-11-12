@@ -41,7 +41,7 @@ name = "mongo"
 
 [[nodes]]
 name = "db01"
-model = "mongo"
+model = "mongo_db"
 version = "8.2.7-rc0"
 ```
 
