@@ -753,9 +753,12 @@ docker pull mysql:8.4
 sherpa server image scan --container --model mysql_db --repo mysql
 ```
 
-A Docker Hub repo can be given short (`mysql`) or in full (`docker.io/library/mysql`); both match
-the image Docker lists as `mysql`. Tags that are not valid [image versions](#image-versions) are
-left out.
+Docker matches the repo to local images as `docker images <repo>` does, so the repo matches only
+that repository, never one it is a prefix of (`nats` does not match `natsio/nats-box`). Give a
+Docker Hub repo by its short name (`mysql`) or in full as `docker.io/library/<name>`
+(`docker.io/library/mysql`); both match the image Docker lists as `mysql`. `docker.io/mysql` and
+`index.docker.io/library/mysql` match nothing, and the scan says no local images were found.
+Tags that are not valid [image versions](#image-versions) are left out.
 
 ### `sherpa server image import`
 
