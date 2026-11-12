@@ -71,6 +71,35 @@ unseal_key = "…"
     The root token has full access to Vault. Keep `.sherpa/vault/vault-<node>.toml` private, and
     create narrower tokens or auth methods for anything else.
 
+### When Initialisation Fails
+
+Vault hands out the unseal key and root token once, in its answer to the init request. Sherpa
+waits up to 90 seconds for it, since Vault is slow to initialise while a lab is starting. If the
+request fails, Sherpa checks Vault's status again before doing anything else:
+
+- Vault is not initialised: Sherpa sends the init request once more.
+- Vault is initialised: Vault completed the init but Sherpa never got its answer, so nobody has
+  the unseal key or root token. `sherpa up` reports:
+
+    ```
+    Vault node 'vault01' is initialised, but Sherpa lost the init response carrying its unseal
+    key and root token: ...
+    ```
+
+Sherpa does not reset the node's Vault data on its own. To recover, run this in the lab
+directory:
+
+```
+sherpa redeploy --node vault01
+```
+
+The node starts again with empty Vault storage, and Sherpa initialises it, unseals it and writes
+its new credentials. Anything already written to that Vault is lost.
+
+A Vault that was already initialised before Sherpa sent any init, with no credentials saved by
+Sherpa, is reported as "initialised outside Sherpa" instead. `sherpa redeploy` resets that node
+the same way.
+
 ## Node Access
 
 Vault serves its web UI and API over HTTPS on port `8200`, on the node's management address.
