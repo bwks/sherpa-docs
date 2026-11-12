@@ -130,7 +130,8 @@ The background scanner keeps [node states](../command-reference.md#node-states) 
 virtual machines and containers, for changes made outside Sherpa: a node stopped, started,
 crashed or removed by hand. It leaves a lab alone while an operation such as `sherpa up` runs on
 it, and it is what records a node `running` once it answers after its ready check timed out.
-With the scanner disabled, nodes keep the states the operations recorded.
+With the scanner disabled, nodes keep the states the operations recorded; `sherpa inspect`
+still shows a container's state as Docker reports it.
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
