@@ -114,9 +114,11 @@ The lab is reserved before anything is created: a second `sherpa up` of a lab th
 that another `up` is creating, is refused at once with "Lab already exists", and does not touch
 the existing lab. Destroy it first to start it again.
 
-A container whose process exits right after it starts is reported as a failed node, and the
-rest of the lab is kept: see `docker logs <node>-<lab_id>` on the server for why it exited.
-`sherpa up` then exits with an error, saying the lab was only partly created.
+A container counts as ready once it has kept running for 5 seconds after it started. One whose
+process exits before then, or before `sherpa up` finishes, is reported as a failed node, and
+the rest of the lab is kept. The error gives its exit code and its last log lines; for the
+whole log, run `docker logs <node>-<lab_id>` on the server. `sherpa up` then exits with an
+error, saying the lab was only partly created.
 
 The server refuses the lab before creating anything when its virtual machines and unikernels
 do not fit in the server's memory, or on the NUMA node a node is held on strictly. The error
@@ -319,6 +321,9 @@ still running stay reachable, and running `sherpa destroy` again removes them.
 ### `sherpa inspect`
 
 Inspect the current lab environment. Shows [node states](#node-states), links, and lab details.
+A container node's state is read from Docker each time, so a container that has exited since
+it was recorded `running` shows as `stopped` at once, before the server's
+[scanner](configuration/sherpa.md#scanner) records it.
 The lab details include the manifest's **Description**, and **Client Host** and
 **Client Folder**, the machine and directory `sherpa up` ran in. Labs started from the web UI or the API, and labs started before Sherpa
 0.5.6, have neither.
@@ -332,9 +337,9 @@ no subcommand is specified.
 | ----- | ------- |
 | `building` | `sherpa up` or `sherpa redeploy` is creating the node. Nothing else can stop, start or redeploy it until that finishes. |
 | `starting` | The node is started but not ready yet: its ready check has not passed. The server's [scanner](configuration/sherpa.md#scanner) keeps checking, and records it `running` once it answers. |
-| `running` | The node is ready: its ready check passed, or it has `skip_ready_check`. |
-| `stopped` | The node is shut down or paused, by `sherpa down` or outside Sherpa. |
-| `failed` | An operation on the node failed, such as a redeploy or a container that exited during `sherpa up`, or its virtual machine crashed or its container died. It stays `failed` until you stop, resume or redeploy it. |
+| `running` | The node is ready: its ready check passed, or it has `skip_ready_check`. A container is ready once it has kept running for 5 seconds after it started. |
+| `stopped` | The node is shut down or paused, by `sherpa down` or outside Sherpa, or its container's process exited after it was ready. |
+| `failed` | An operation on the node failed, such as a redeploy or a container that exited during `sherpa up` before it was ready, or its virtual machine crashed or its container died. It stays `failed` until you stop, resume or redeploy it. |
 | `missing` | The node's virtual machine or container no longer exists, for example because it was removed outside Sherpa. Redeploy it. |
 | `unknown` | A state this version does not know, such as one written by a newer server. |
 

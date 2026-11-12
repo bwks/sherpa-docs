@@ -426,8 +426,9 @@ shm_size = 67108864
 ##### skip_ready_check (bool)
 
 Skip the node readiness check after deployment and after `sherpa resume`. The node is still
-created and started; Sherpa just doesn't wait for it to be ready. A container that is not
-running after it starts is reported as not running, and `sherpa up` carries on.
+created and started; Sherpa just doesn't wait for it to be ready. A container is not waited
+for to keep running, but one that is not running right after it starts is still reported as a
+failed node, with its exit code and last log lines, and `sherpa up` exits with an error.
 
 ```toml
 skip_ready_check = true
