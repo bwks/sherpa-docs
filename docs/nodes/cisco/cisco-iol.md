@@ -5,7 +5,7 @@ Cisco IOL (IOS on Linux) is a container based image, in two models:
 | Model | Image |
 | ----- | ----- |
 | `cisco_iol` | IOL XE, a router |
-| `cisco_iol_l2` | IOL XE L2, a switch |
+| `cisco_ioll2` | IOL XE L2, a switch |
 
 Sherpa runs IOL from your own Cisco Modeling Labs (CML) IOL images, rebuilt for Sherpa with
 [docker-cisco-iol](https://github.com/bwks/docker-cisco-iol). Neither Sherpa nor
@@ -19,7 +19,7 @@ using them outside CML.
 You need the IOL image tarballs from a CML release's reference platform files:
 
 - `iol-xe-<version>.tar.gz` for `cisco_iol`
-- `ioll2-xe-<version>.tar.gz` for `cisco_iol_l2`
+- `ioll2-xe-<version>.tar.gz` for `cisco_ioll2`
 
 The `iol-xe-serial-4eth` image definition uses the same `iol-xe` tarball; Sherpa has no serial
 interface model.
@@ -41,7 +41,7 @@ version come from the CML image's tag:
 | CML image | Sherpa image |
 | --------- | ------------ |
 | `iol-xe/iol-xe:17-18-02` | `localrepo/cisco_iol:17.18.02` |
-| `iol-xe/ioll2-xe:17-18-02` | `localrepo/cisco_iol_l2:17.18.02` |
+| `iol-xe/ioll2-xe:17-18-02` | `localrepo/cisco_ioll2:17.18.02` |
 
 The build keeps Cisco's own IOL launcher from the CML image, so no licence file is needed. It
 adds a small program that connects the container's interfaces to IOL.
@@ -63,8 +63,8 @@ sherpa server image import --src cisco_iol-17.18.02.tar --model cisco_iol --vers
 
 !!! warning
 
-    The images must have the repo `localrepo/cisco_iol` or `localrepo/cisco_iol_l2`. The scan
-    only registers images with those repos as the `cisco_iol` and `cisco_iol_l2` models. The
+    The images must have the repo `localrepo/cisco_iol` or `localrepo/cisco_ioll2`. The scan
+    only registers images with those repos as the `cisco_iol` and `cisco_ioll2` models. The
     first version registered becomes the default.
 
 ## Default Node Parameters
@@ -107,7 +107,7 @@ version = "17.18.02"
 
 [[nodes]]
 name = "sw1"
-model = "cisco_iol_l2"
+model = "cisco_ioll2"
 version = "17.18.02"
 
 [[links]]
@@ -142,7 +142,7 @@ dst = "sw1::Ethernet0/1"
   RSA key.
 - The startup configuration sets the hostname, the `sherpa` login and yours, SSH, and the
   management address on `Ethernet0/0`, with a default route through the management network. The
-  data interfaces are left as IOL starts them: shut down, with no address. On `cisco_iol_l2`,
+  data interfaces are left as IOL starts them: shut down, with no address. On `cisco_ioll2`,
   `Ethernet0/0` is a routed port (`no switchport`) and `ip routing` is on.
 - `write memory` saves to IOL's NVRAM, which Sherpa keeps in the lab folder. A saved
   configuration wins over the startup configuration and survives `sherpa down` and
