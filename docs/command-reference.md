@@ -909,15 +909,3 @@ Values come from the flags or the environment variables only. From 0.5.1, `sherp
 longer reads `/opt/sherpa/env/sherpa.env`: the install script prints the `sherpad init` command
 with the address and ports you gave it. Since 0.5.0 there are no database flags: the database is
 a file `sherpad` manages itself.
-
-### `sherpad migrate-db`
-
-Move the data of a server older than 0.5.0 from its SurrealDB container into the embedded
-database. Only releases 0.5.0 to 0.5.12 have it. The update script runs it for you; see
-[Updating to 0.5.0](install-update/update/sherpa.md#updating-to-050). To run it by hand, see
-[Moving the data by hand](install-update/update/sherpa.md#moving-the-data-by-hand).
-
-| Flag | Description |
-| ---- | ----------- |
-| `--db-pass` | SurrealDB password, required (env: `SHERPA_DB_PASSWORD`) |
-| `--db-port` | SurrealDB port, default `8000` (env: `SHERPA_DB_PORT`) |

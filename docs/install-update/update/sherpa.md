@@ -150,85 +150,16 @@ it; see
 ## Updating to 0.5.0
 
 Releases before 0.5.0 kept Sherpa's data in a SurrealDB container named `sherpa-db`. From 0.5.0,
-`sherpad` keeps it in an embedded database file, `/opt/sherpa/db/sherpa.sqlite`. An update to a
-release from 0.5.0 to 0.5.12 moves the data across. Use the update script for this, not the install
-script: the install script refuses to run on a server that still has the `sherpa-db` container.
-
-Releases after 0.5.12 cannot move the data. To update a server older than 0.5.0 to one of them,
-update to 0.5.12 first, which moves the data, then to the release you want:
+`sherpad` keeps it in an embedded database file, `/opt/sherpa/db/sherpa.sqlite`. Only releases
+0.5.0 to 0.5.12 can move the data across, so a 0.4.x server must update to 0.5.12 first, with the
+0.5.12 update script, and then to the release you want:
 
 ```
-sudo bash sherpa_update.sh --version v0.5.12
-sudo bash sherpa_update.sh
+curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/v0.5.12/scripts/sherpa_update.sh | sudo bash -s -- --version v0.5.12
+curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_update.sh | sudo bash
 ```
 
-The update script refuses to go straight to a later release, and changes nothing when it does.
-
-The update:
-
-1. stops `sherpad`, keeping a copy of the old binary as `/opt/sherpa/bin/sherpad.previous`;
-2. installs the new binaries;
-3. starts the `sherpa-db` container if it is stopped, and runs `sherpad migrate-db`, which copies
-   every user, image, lab, node, link and bridge into the new database file and checks the counts.
-   It runs through systemd with `/opt/sherpa/env/sherpa.env`, as the `sherpad` service does, so
-   it reads the SurrealDB password exactly as the old release did, quotes included, and it
-   connects on the port Docker publishes `sherpa-db` on;
-4. stops the `sherpa-db` container and turns off its automatic restart;
-5. starts `sherpad`.
-
-The move happens in one step: if it fails, nothing is written, the new database file is removed,
-the previous `sherpad` is put back and started on the old database, and the script exits with an
-error. The SurrealDB data is never changed.
-
-### Rolling back
-
-The update leaves the `sherpa-db` container and its data, `/opt/sherpa/db/sherpa.db`, in place.
-To go back to the release you had before:
-
-1. `sudo systemctl stop sherpad`
-2. `sudo cp -p /opt/sherpa/bin/sherpad.previous /opt/sherpa/bin/sherpad`
-3. `sudo docker update --restart=unless-stopped sherpa-db && sudo docker start sherpa-db`
-4. `sudo systemctl start sherpad`
-
-Changes made after the update, such as new labs or users, exist only in the new database and are
-not in the old one.
-
-To try the move again later, also remove the new database file before updating:
-`sudo rm /opt/sherpa/db/sherpa.sqlite*`.
-
-### Removing the old database
-
-Once the server works on 0.5.0, remove the old container and its data:
-
-```
-sudo docker rm sherpa-db
-sudo rm -rf /opt/sherpa/db/sherpa.db
-sudo docker image rm surrealdb/surrealdb:v3.0.0
-```
-
-`/opt/sherpa/db/sherpa.db` is the old SurrealDB data directory. Do not confuse it with the new
-database, `/opt/sherpa/db/sherpa.sqlite`.
-
-The `SHERPA_DB_PASSWORD` and `SHERPA_DB_PORT` entries in `/opt/sherpa/env/sherpa.env` are only used
-to move the data, and can be removed afterwards.
-
-### Moving the data by hand
-
-`sherpad migrate-db` can also run by hand, for example after installing a binary yourself. Run
-it with `sherpad` stopped and the `sherpa-db` container running. This runs it the way the update
-script does, as the `sherpa` user with the variables from `/opt/sherpa/env/sherpa.env`:
-
-```
-sudo systemctl stop sherpad
-sudo systemd-run --quiet --wait --pipe --collect --uid=sherpa \
-  --property=EnvironmentFile=-/opt/sherpa/env/sherpa.env \
-  /opt/sherpa/bin/sherpad migrate-db
-sudo systemctl start sherpad
-```
-
-It takes the SurrealDB password and port from `--db-pass` and `--db-port`, or the
-`SHERPA_DB_PASSWORD` and `SHERPA_DB_PORT` environment variables; it does not read the env file
-itself. With the command above, systemd sets both variables from the env file.
-It refuses to import into a database that already has users or labs. Run it before `sherpad`
-first starts on the new release: with `SHERPA_ADMIN_PASSWORD` set, starting creates the `admin`
-account in the new database, and the import then refuses it.
+The current update script refuses a server whose data is still in SurrealDB, and changes nothing.
+The install script refuses any server that still has the `sherpa-db` container. Once the server
+works on 0.5.12 or later, remove the old container and its data: `sudo docker rm sherpa-db` and
+`sudo rm -rf /opt/sherpa/db/sherpa.db`.
