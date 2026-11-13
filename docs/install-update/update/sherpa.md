@@ -26,6 +26,24 @@ Take a [database backup](../../architecture/database.md#backups) before updating
 
 ## Updating to 0.6.0
 
+0.6.0 is a breaking release. Before you update a server, do the following in this order:
+
+1. A server older than 0.5.0 must update to 0.5.12 first, as described in
+   [Updating to 0.5.0](#updating-to-050). 0.6.0 does not read the old SurrealDB database, and
+   its install and update scripts refuse such a server.
+2. [Destroy every lab created before 0.5.15](#destroy-labs-created-before-0515), with the
+   release the server runs now.
+3. [Update every manifest](#update-every-manifest) to the grouped node settings.
+4. [Recreate long-lived labs](#recreate-long-lived-labs) with their updated manifests.
+5. Update any script that reads image details: the [image API JSON](#image-api) is nested.
+6. Scripts that handle a memory refusal can use its own codes: JSON-RPC `-32005`, HTTP
+   `507 INSUFFICIENT_MEMORY` ([Not enough host memory](../../api-reference.md#not-enough-host-memory)),
+   and `sherpa` exit status `75` ([exit status](../../command-reference.md#exit-status)).
+
+Update the server and the `sherpa` CLI together.
+
+### Destroy labs created before 0.5.15
+
 0.6.0 removes the server's shared SSH key, `/opt/sherpa/ssh/sherpa_ssh_key`. Labs created before
 Sherpa 0.5.15 still log in to their nodes with it, and would lose SSH access, so **destroy every
 lab created before 0.5.15 first**, with the release the server runs now:
@@ -54,27 +72,27 @@ way refuses to start with the same message, and changes nothing; check a server 
 installing by hand with the new binary's `sherpad check-database`, run as the `sherpa` user while
 `sherpad` is stopped.
 
-## Updating from 0.5.35 and earlier
+### Update every manifest
 
-Node settings are grouped, in the manifest and in the image API. This is a breaking change:
-update every manifest, and every script that reads image details, together with the server and
-the `sherpa` CLI.
-
-**Manifests.** A node's settings move into groups such as `[nodes.cpu]` and
-`[nodes.ready_check]`, and `[nodes.performance_tuning]` is gone: its settings are now in `cpu`,
-`numa`, `boot_disk` and `interfaces`. A manifest with an old key is refused with an
-`unknown field` error that names it. The table of old and new keys is in
+A node's settings move into groups such as `[nodes.cpu]` and `[nodes.ready_check]`, and
+`[nodes.performance_tuning]` is gone: its settings are now in `cpu`, `numa`, `boot_disk` and
+`interfaces`. A manifest with an old key is refused with an `unknown field` error that names it.
+The table of old and new keys is in
 [Upgrading manifests from flat keys](../../manifest.md#upgrading-manifests-from-flat-keys).
 Sherpa also refuses a setting the node's kind does not take, such as `vm.watchdog` on a
 container; see [Which node kinds take which settings](../../manifest.md#which-node-kinds-take-which-settings).
+
+### Recreate long-lived labs
 
 Labs created before the update keep running. `sherpa resume` of such a lab uses the default
 readiness settings, because the lab's saved manifest has the old keys; destroy and recreate it
 with an updated manifest to use its own.
 
-**Image API.** An image's JSON (`sherpa server --output json image show`, `GET /api/v1/images/...`
-and the OpenAPI schema) nests its settings by group, in place of the flat fields. The table of
-old and new fields is in the [API reference](../../api-reference.md#node-images). The
+### Image API
+
+An image's JSON (`sherpa server --output json image show`, `GET /api/v1/images/...` and the
+OpenAPI schema) nests its settings by group, in place of the flat fields. The table of old and
+new fields is in the [API reference](../../api-reference.md#node-images). The
 `sherpa server image show` table names its rows by the same keys.
 
 ## Updating to 0.5.30
