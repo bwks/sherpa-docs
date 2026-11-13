@@ -14,8 +14,7 @@ The default credentials for all nodes are:
 
     `sherpa up` makes a new SSH key pair for each lab, and `sherpa up` and
     `sherpa download` save it to your lab folder. See
-    [Lab SSH Key](ssh.md#lab-ssh-key). Labs created before Sherpa 0.5.15
-    use the server's shared key, made by `sherpad init`.
+    [Lab SSH Key](ssh.md#lab-ssh-key).
 
 ## User Credentials
 

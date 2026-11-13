@@ -431,8 +431,7 @@ cluster's Gateway and Hubble UI addresses, and writes `ca/lab-ca.crt`, each Vaul
 
 Only the lab's owner and admins can download a lab. The SSH key, `.sherpa/ssh/key`, is the lab's
 own [key pair](architecture/ssh.md#lab-ssh-key), written only when the lab has nodes that log in
-with it rather than your own keys. Labs created before Sherpa 0.5.15 use the server's shared key
-instead, until they are destroyed.
+with it rather than your own keys.
 
 ```
 sherpa download <lab_id>
@@ -881,17 +880,26 @@ sherpa server image set-default --model <model> --version <version>
 ## Server Daemon
 
 `sherpad` runs on the server. Besides `start`, `stop`, `restart`, `status`, `logs` and `doctor`,
-it has two setup commands.
+it has these setup commands.
+
+### `sherpad check-database`
+
+Check, without changing it, that this release can use the server's database, as it does when
+it starts. It fails while labs created before Sherpa 0.5.15 exist, naming them, as their nodes
+log in with the server's shared SSH key, which 0.6.0 removes. The update script runs the new
+release's check before installing it; see
+[Updating to 0.6.0](install-update/update/sherpa.md#updating-to-060). Run it as the `sherpa`
+user, while `sherpad` is stopped. It takes no flags.
 
 ### `sherpad init`
 
-Initialize the server: directories, `sherpa.toml`, SSH keys, libvirt network and storage pool,
+Initialize the server: directories, `sherpa.toml`, libvirt network and storage pool,
 the database, the built-in `admin` account and a first user account. See the
 [Quickstart](quickstart.md) for the accounts and unattended use.
 
 | Flag | Description |
 | ---- | ----------- |
-| `--force` | Overwrite an existing config and SSH keys |
+| `--force` | Overwrite an existing config |
 | `--server-ipv4` | Server listen IPv4 address, default `0.0.0.0` (env: `SHERPA_SERVER_IPV4`) |
 | `--server-ipv6` | Server listen IPv6 address, if any (env: `SHERPA_SERVER_IPV6`) |
 | `--ws-port` | Server listen port, default `3030` (env: `SHERPA_SERVER_WS_PORT`) |

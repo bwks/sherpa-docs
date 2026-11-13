@@ -79,7 +79,8 @@ virsh pool-info sherpa-pool
 Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This directory contains:
 
 - The **saved manifest** used for redeploys
-- **SSH configuration** files for node access
+- **SSH configuration** files for node access, and the lab's own
+  [SSH key pair](ssh.md#lab-ssh-key), which only the `sherpa` user can read
 - **ZTP configuration** files generated for each node, including cloud-init `user-data`
 - **TLS certificates**: the [lab CA](certificates.md) and each node's certificate
 - **Vault credentials**: the unseal key and root token of each
@@ -113,12 +114,6 @@ directory, it logs a warning and starts anyway. Fix the owner with:
 sudo install -d -o sherpa -g sherpa -m 2750 /opt/sherpa/labs
 sudo install -d -o sherpa -g kvm -m 2750 /opt/sherpa/libvirt/images
 ```
-
-The server's SSH private key, `/opt/sherpa/ssh/sherpa_ssh_key`, is mode `0600`: only the
-`sherpa` user can read it, not the `sherpa` group. Only labs created before Sherpa 0.5.15 use
-it; newer labs have their own key (see [Lab SSH Key](ssh.md#lab-ssh-key)). `sherpad init`
-creates it with this mode, and from Sherpa 0.5.16 `sherpad` sets it each time it starts, so a
-key that an older release created as `0640` is restricted once the server is updated.
 
 ## Client Storage
 
