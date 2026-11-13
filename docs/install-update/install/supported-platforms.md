@@ -8,8 +8,9 @@ Sherpa server is available for Linux operating systems only.
 
 ## Sherpa Client
 
-Binaries are available for `Linux`, `Mac` and `Windows` can be downloaded
-from the Github [releases](https://github.com/bwks/sherpa/releases) page.
+The `sherpa` CLI is available for Windows (x86_64), Linux (x86_64) and macOS (Intel and Apple
+silicon). The binaries are on the GitHub [releases](https://github.com/bwks/sherpa/releases) page;
+see [Client](client.md) for how to install them.
 
 ## Host Machine
 

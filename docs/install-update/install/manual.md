@@ -168,3 +168,5 @@ bash scripts/create_iosv_disk.sh
 ```
 
 ### Sherpa Client
+
+Install the `sherpa` CLI as described in [Client](client.md).

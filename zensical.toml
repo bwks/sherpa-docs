@@ -42,9 +42,11 @@ nav = [
       "install-update/install/supported-platforms.md",
       "install-update/install/automated.md",
       "install-update/install/manual.md",
+      "install-update/install/client.md",
     ] },
     { "Update" = [
       "install-update/update/sherpa.md",
+      "install-update/update/client.md",
       "install-update/update/system.md",
     ] },
   ] },
