@@ -4,9 +4,9 @@ name = "sherpa-docs"
 [[nodes]]
 name = "dev01"
 model = "devbox_linux"
-cpu_count = 4
+cpu = { count = 4 }
 memory = 8192
-boot_disk_size = 100
+boot_disk = { size = 100 }
 environment_variables = [
   "GH_TOKEN=$GH_TOKEN",
   "CLAUDE_CODE_OAUTH_TOKEN=$CLAUDE_CODE_OAUTH_TOKEN",
