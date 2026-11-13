@@ -29,8 +29,8 @@ sherpa server image scan --container
 | Property             | Value     |
 | -------------------- | --------- |
 | Kind                 | Container |
-| CPU                  | 1         |
-| RAM                  | 512MB       |
+| CPU                  | Not limited |
+| RAM                  | Not limited |
 | ZTP                  | `volume`  |
 | Management Interface | eth0      |
 | Interface Driver     | macvlan    |

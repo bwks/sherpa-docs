@@ -255,8 +255,8 @@ error objects, with `code`, `message`, and `data` where the code defines it.
 
 ### Not enough host memory
 
-Creating a lab, redeploying a node or resuming nodes is refused when the virtual machines and
-unikernels it would start do not fit in the server's memory now (see
+Creating a lab, redeploying a node or resuming nodes is refused when the virtual machines,
+unikernels and memory-limited containers it would start do not fit in the server's memory now (see
 [host memory](configuration/sherpa.md#host_memory)). Nothing is started, and the same request
 can succeed once other nodes are stopped or destroyed. The error's `data` says by how much:
 

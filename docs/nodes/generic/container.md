@@ -30,11 +30,15 @@ each node to pick between them.
 | Property             | Value     |
 | -------------------- | --------- |
 | Kind                 | Container |
-| CPU                  | 1         |
-| RAM                  | 1GB       |
+| CPU                  | Not limited |
+| RAM                  | Not limited |
 | ZTP                  | `disabled`|
 | Management Interface | eth0      |
 | Interface Driver     | macvlan   |
+
+Containers run without CPU or memory limits unless the manifest sets them: `memory` is a hard
+memory limit and `cpu.count` a CPU quota. See
+[Container CPU and memory limits](../../manifest.md#container-cpu-and-memory-limits).
 
 ## Example Manifest
 

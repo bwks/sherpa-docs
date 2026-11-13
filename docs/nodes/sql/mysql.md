@@ -30,8 +30,8 @@ sherpa server image scan --container --model mysql_db --repo mysql
 | Property             | Value     |
 | -------------------- | --------- |
 | Kind                 | Container |
-| CPU                  | 1         |
-| RAM                  | 1GB       |
+| CPU                  | Not limited |
+| RAM                  | Not limited |
 | ZTP                  | `disabled`|
 | Management Interface | eth0      |
 | Interface Driver     | macvlan    |
