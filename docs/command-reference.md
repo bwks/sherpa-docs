@@ -343,6 +343,21 @@ For Tailscale-enabled labs, refreshes gateway state, Tailscale addresses, advert
 management routes, route approval, and warnings. This is the default command when
 no subcommand is specified.
 
+#### Link states
+
+The **Links** table has a **State** column, with what the server last found or left each
+[P2P link](architecture/networking/modes/point-to-point.md#when-a-node-restarts) in:
+
+| State | Meaning |
+| ----- | ------- |
+| `attached` | Both ends exist and redirect to each other, with the link's impairments. |
+| `peer down: <node>` | `<node>` is stopped or paused, or its virtual machine or container is gone. The link is attached again when it starts. |
+| `failed: <reason>` | The link could not be attached. It carries no traffic until it is attached again, by the next scan, a resume or a redeploy. |
+| `not checked` | The server has not checked the link since it started: the [scanner](configuration/sherpa.md#scanner) checks each lab every `scanner.interval_secs` (30 seconds by default), so this shows only for that long after the server starts, or while the scanner is disabled. |
+
+The state comes from the last scan, resume or redeploy, so a change made since then shows at
+the next scan.
+
 #### Node states
 
 | State | Meaning |

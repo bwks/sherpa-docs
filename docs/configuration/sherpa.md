@@ -130,8 +130,14 @@ The background scanner keeps [node states](../command-reference.md#node-states) 
 virtual machines and containers, for changes made outside Sherpa: a node stopped, started,
 crashed or removed by hand. It leaves a lab alone while an operation such as `sherpa up` runs on
 it, and it is what records a node `running` once it answers after its ready check timed out.
+It also checks each lab's [P2P links](../architecture/networking/modes/point-to-point.md#when-a-node-restarts),
+and attaches again the links of a running node whose link ends were made again outside Sherpa,
+such as a virtual machine started with `virsh start` or a container restarted with
+`docker restart`, so they come back within `interval_secs`.
 With the scanner disabled, nodes keep the states the operations recorded; `sherpa inspect`
-still shows a container's state as Docker reports it.
+still shows a container's state as Docker reports it. Links broken outside Sherpa stay broken
+until the node is resumed or redeployed, and `sherpa inspect` shows the links as
+`not checked` until then.
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
