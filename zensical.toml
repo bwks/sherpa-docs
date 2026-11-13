@@ -70,6 +70,7 @@ nav = [
       "nodes/cisco/cisco-cat9000v.md",
       "nodes/cisco/cisco-csr1000v.md",
       "nodes/cisco/cisco-ftdv.md",
+      "nodes/cisco/cisco-iol.md",
       "nodes/cisco/cisco-iosv.md",
       "nodes/cisco/cisco-iosvl2.md",
       "nodes/cisco/cisco-iosxrv9000.md",
