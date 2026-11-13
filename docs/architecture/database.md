@@ -4,8 +4,8 @@ Since version 0.5.0, `sherpad` keeps its data in an embedded [Turso](https://git
 database, a Rust rewrite of SQLite that runs inside the `sherpad` process. There is no separate
 database server, container, port or password.
 
-Servers older than 0.5.0 used a SurrealDB container. Updating moves their data across; see
-[Updating to 0.5.0](../install-update/update/sherpa.md#updating-to-050).
+Servers older than 0.5.0 used a SurrealDB container. They must update to 0.5.12 first, which
+moves their data across; see [Updating to 0.5.0](../install-update/update/sherpa.md#updating-to-050).
 
 ## Storage
 
