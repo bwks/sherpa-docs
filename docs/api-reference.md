@@ -138,6 +138,100 @@ The database backup is WebSocket RPC only: the method `server.backup` takes only
 returns `path`, the backup file on the server, and `size_bytes`. See
 [`sherpa server backup`](command-reference.md#sherpa-server-backup).
 
+## Node images
+
+Showing an image (`GET /api/v1/images/{model}`, the WebSocket RPC method `image.show`, or
+`sherpa server --output json image show <model>`) returns its definition, with its settings
+nested by group. For `ubuntu_linux`:
+
+```json
+{
+  "image": {
+    "model": "ubuntu_linux",
+    "version": "24.04",
+    "repo": null,
+    "os_variant": "linux",
+    "kind": "virtual_machine",
+    "default": true,
+    "memory": 1024,
+    "cpu": {
+      "count": 1,
+      "architecture": "x86_64",
+      "model": "host-model",
+      "vmx": false
+    },
+    "machine": {
+      "kind": "q35",
+      "bios": "sea_bios"
+    },
+    "boot_disk": {
+      "bus": "virtio"
+    },
+    "cdrom": {
+      "image": null,
+      "bus": "sata"
+    },
+    "interfaces": {
+      "data_count": 1,
+      "kind": "virtio",
+      "mtu": 9216,
+      "prefix": "eth",
+      "first_index": 0,
+      "management": "eth0",
+      "reserved_count": 0
+    },
+    "ztp": {
+      "method": "cloud-init",
+      "username": null,
+      "password": null,
+      "password_auth": false
+    },
+    "unikernel": null
+  }
+}
+```
+
+| Field | Description |
+| ----- | ----------- |
+| `model`, `version`, `repo`, `os_variant`, `kind`, `default` | The image |
+| `memory` | Memory in MiB |
+| `cpu` | `count`, `architecture`, `model` and `vmx`, whether the guest sees the host's hardware virtualisation |
+| `machine` | `kind`, the QEMU machine type, and `bios` |
+| `boot_disk` | `bus` |
+| `cdrom` | `image`, a CD-ROM file shipped with the image or `null`, and `bus` |
+| `interfaces` | `data_count`, `kind`, `mtu`, `prefix`, `first_index`, `management` and `reserved_count` |
+| `ztp` | `method` (the [ZTP setting](architecture/zero-touch-provisioning.md#the-ztp-setting)), `username`, `password` and `password_auth` |
+| `unikernel` | `boot_mode` for a unikernel; `null` for every other kind |
+
+Releases up to 0.5.35 returned these settings as flat fields. Each moved into its group:
+
+| Old field | New field |
+| --------- | --------- |
+| `cpu_count` | `cpu.count` |
+| `cpu_architecture` | `cpu.architecture` |
+| `cpu_model` | `cpu.model` |
+| `vmx_enabled` | `cpu.vmx` |
+| `machine_type` | `machine.kind` |
+| `bios` | `machine.bios` |
+| `hdd_bus` | `boot_disk.bus` |
+| `cdrom` | `cdrom.image` |
+| `cdrom_bus` | `cdrom.bus` |
+| `data_interface_count` | `interfaces.data_count` |
+| `interface_type` | `interfaces.kind` |
+| `interface_mtu` | `interfaces.mtu` |
+| `interface_prefix` | `interfaces.prefix` |
+| `first_interface_index` | `interfaces.first_index` |
+| `management_interface` | `interfaces.management` |
+| `reserved_interface_count` | `interfaces.reserved_count` |
+| `ztp` | `ztp.method` |
+| `ztp_username` | `ztp.username` |
+| `ztp_password` | `ztp.password` |
+| `ztp_password_auth` | `ztp.password_auth` |
+| `boot_mode` | `unikernel.boot_mode` |
+
+`memory`, `model`, `version`, `repo`, `os_variant`, `kind` and `default` are unchanged. The
+OpenAPI schema describes the same shape.
+
 ## Errors
 
 REST errors return a JSON body with an HTTP status:

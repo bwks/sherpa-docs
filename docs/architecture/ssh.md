@@ -87,7 +87,7 @@ So you are never asked to confirm a node's key. This applies to `sherpa ssh`, pr
 and `ssh` itself through the `~/.ssh/config` include.
 
 - **Which nodes:** virtual machines whose readiness check is SSH, on port 22. Containers,
-  unikernels, nodes with another `ready_port`, nodes with `skip_ready_check`, and labs created
+  unikernels, nodes with another `ready_check.port`, nodes with `ready_check.skip`, and labs created
   before this feature keep `StrictHostKeyChecking no`.
 - **When keys change:** some network operating systems, such as Cisco IOSv, make a new key
   every time they boot, and a redeployed node has a new one. The server records the new key

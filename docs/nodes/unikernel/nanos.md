@@ -36,7 +36,7 @@ You need the [ops](https://ops.city) command, which builds Nanos images.
 5. Import it as described [below](#import-image), using the path to the file.
 
 The application and its configuration are built into the disk image. Nanos does not use
-`kernel_cmdline`.
+`unikernel.cmdline`.
 
 ## Import Image
 
@@ -68,7 +68,9 @@ name = "nanos-unikernel"
 name = "dev01"
 model = "nanos_unikernel"
 version = "v1.0.0"
-ready_port = 8083
+
+[nodes.ready_check]
+port = 8083
 ```
 
 ## Node Access

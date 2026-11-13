@@ -71,7 +71,7 @@ sherpa server image import \
 | Readiness            | Talos API, TCP port 50000 (cluster workers: Ready Kubernetes node) |
 
 The image is about 4 GB; Talos needs at least 10 GB, so nodes get a 20 GB boot disk unless
-`boot_disk_size` is set.
+`boot_disk.size` is set.
 
 ## Sherpa-Built Clusters
 
@@ -282,7 +282,7 @@ spec:
 ```
 
 The operator logs in with the namespace's `default` service account. The Vault node must run
-the config Sherpa generates, without `ztp_config`. The operator's chart and images are
+the config Sherpa generates, without `ztp.config`. The operator's chart and images are
 downloaded when it is installed, so nodes need internet access.
 
 ### Cluster defaults
@@ -325,12 +325,12 @@ Generate machine configs with `talosctl`:
 talosctl gen config my-cluster https://<controlplane-ip>:6443
 ```
 
-Reference each node's config with [`ztp_config`](../../manifest.md#ztp_config-string). It is
+Reference each node's config with [`ztp.config`](../../manifest.md#ztp-object). It is
 delivered byte for byte as the node's NoCloud `user-data`, alongside Sherpa's static
 management network settings. Drop the `UnattendedInstallConfig` document: the NoCloud image is
 already installed.
 
-A node **without** a `ztp_config` boots into maintenance mode with its management address and
+A node **without** a `ztp.config` boots into maintenance mode with its management address and
 waits to be configured:
 
 ```
@@ -343,12 +343,16 @@ name = "talos-byo"
 [[nodes]]
 name = "cp01"
 model = "talos_linux"
-ztp_config = "controlplane.yaml"
+
+[nodes.ztp]
+config = "controlplane.yaml"
 
 [[nodes]]
 name = "worker01"
 model = "talos_linux"
-ztp_config = "worker.yaml"
+
+[nodes.ztp]
+config = "worker.yaml"
 
 [[nodes]]
 name = "spare01"
@@ -368,5 +372,5 @@ nodes, and they are left out of the lab's SSH config. Use `talosctl` and `kubect
   so the Sherpa server needs internet access.
 - Sherpa-built clusters do not use the Talos discovery service.
 - A node is reported ready when its Talos API answers. Maintenance mode also answers, so for
-  your own configs **ready means reachable, not configured**. Override with `ready_port`.
+  your own configs **ready means reachable, not configured**. Override with `ready_check.port`.
 - Approximate time from power-on to a Ready cluster: about 2 minutes.

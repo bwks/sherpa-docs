@@ -83,4 +83,4 @@ version = "4.35.1F"
   with `Device or resource busy`). The saved configuration is kept across `sherpa down` and
   `sherpa resume`. `sherpa redeploy` creates a new container, so it starts again from the ZTP
   configuration.
-- With [`ztp = "disabled"`](../../manifest.md#ztp-string) the node is the image as shipped: it starts without Sherpa's startup configuration, so it has no management IP address and no `sherpa` login, and `sherpa ssh` cannot reach it. Reach it with `docker exec -it <node-name>-<lab-id> Cli`. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.
+- With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as shipped: it starts without Sherpa's startup configuration, so it has no management IP address and no `sherpa` login, and `sherpa ssh` cannot reach it. Reach it with `docker exec -it <node-name>-<lab-id> Cli`. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.

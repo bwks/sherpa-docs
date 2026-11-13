@@ -8,8 +8,8 @@ Virtual machines are supported via the [KVM](https://linux-kvm.org/page/Main_Pag
 
 When a lab is created, Sherpa performs the following for each VM node:
 
-1. **Create** the boot disk in the [storage pool](storage.md): a QCOW2 overlay on the base image by default, or a full copy when `boot_disk_clone_method = "copy"`
-2. **Resize** the boot disk if `boot_disk_size` is specified in the manifest
+1. **Create** the boot disk in the [storage pool](storage.md): a QCOW2 overlay on the base image by default, or a full copy when `boot_disk.clone_method = "copy"`
+2. **Resize** the boot disk if `boot_disk.size` is specified in the manifest
 3. **Generate** a libvirt domain XML definition from the node's parameters
 4. **Apply** [zero-touch provisioning](zero-touch-provisioning.md) configuration (cloud-init ISO, ZTP scripts, etc.)
 5. **Define and start** the domain via the Libvirt API
@@ -31,7 +31,8 @@ CPU mode defaults to `host-model`, which auto-detects the host CPU capabilities.
 
 ## Performance Tuning
 
-A node's [`performance_tuning`](../manifest.md#performance_tuning-object) can tune it further:
+A node's [`cpu`, `numa`, `boot_disk` and `interfaces` settings](../manifest.md#tuning-a-virtual-machine)
+can tune it further:
 - give it the host CPU exactly (`host-passthrough`) and a CPU topology;
 - pin its vCPUs, and QEMU's own threads, to host CPUs;
 - hold its memory on one NUMA node, or prefer one NUMA node;
@@ -41,7 +42,7 @@ A node's [`performance_tuning`](../manifest.md#performance_tuning-object) can tu
 Sherpa refuses a node whose pinned CPUs overlap another node's, in any lab on the server.
 A node held strictly on one NUMA node never uses another node's memory, so the server also
 refuses it when that NUMA node does not have room for it. A node that only prefers a NUMA node
-(`numa_memory_mode = "preferred"`) uses other nodes' memory when its node is full, and is only
+(`numa.memory_mode = "preferred"`) uses other nodes' memory when its node is full, and is only
 checked against the whole server.
 
 ## Memory
@@ -61,7 +62,7 @@ is already `always`.
 
 ## Disk Management
 
-Base images are imported into `/opt/sherpa/images/`. When a lab starts, each VM's boot disk is created in the Sherpa [storage pool](storage.md) (`sherpa-pool`, at `/opt/sherpa/libvirt/images/`) as a QCOW2 overlay on the base image, or as a full copy when `boot_disk_clone_method = "copy"`. See [Boot Disk Overlays](storage.md#boot-disk-overlays). The original base image is never modified. ZTP configuration disks, such as cloud-init ISOs, are created in the same pool.
+Base images are imported into `/opt/sherpa/images/`. When a lab starts, each VM's boot disk is created in the Sherpa [storage pool](storage.md) (`sherpa-pool`, at `/opt/sherpa/libvirt/images/`) as a QCOW2 overlay on the base image, or as a full copy when `boot_disk.clone_method = "copy"`. See [Boot Disk Overlays](storage.md#boot-disk-overlays). The original base image is never modified. ZTP configuration disks, such as cloud-init ISOs, are created in the same pool.
 
 Supported disk formats: `qcow2`, `raw`, `iso`, `img`.
 
@@ -121,7 +122,7 @@ Power behaviour:
 
 ## Additional Features
 
-- **Watchdog only when asked** — Sherpa adds a hardware watchdog only when the node sets [`watchdog`](../manifest.md#watchdog-string). (`q35` VMs always have the chipset's iTCO watchdog, which libvirt adds; it does nothing unless the guest starts it.) Cisco IOS images arm one early in boot and feed it only after a long init phase, so under nested virtualization a `reset` watchdog resets them in a loop
+- **Watchdog only when asked** — Sherpa adds a hardware watchdog only when the node sets [`vm.watchdog`](../manifest.md#vm-object). (`q35` VMs always have the chipset's iTCO watchdog, which libvirt adds; it does nothing unless the guest starts it.) Cisco IOS images arm one early in boot and feed it only after a long init phase, so under nested virtualization a `reset` watchdog resets them in a loop
 - **QEMU Guest Agent** — virtio channel for host-guest communication
 - **NVRAM** — UEFI VMs store NVRAM at `/var/lib/libvirt/qemu/nvram/`
 - **Windows support** — Hyper-V enlightenments (relaxed, vapic, spinlocks, vpindex, runtime, synic, stimer, frequencies, tlbflush, ipi) and the Hyper-V clock are enabled for Windows VMs
