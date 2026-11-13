@@ -1,7 +1,9 @@
 # Sherpa
 
 The update script replaces the Sherpa binaries with a release from GitHub and restarts `sherpad`.
-It does not reinstall system packages or change users.
+It does not reinstall system packages or change users. It updates the `sherpa` CLI on the server
+only: update it on every other client too, to the same version, as described in
+[Client](client.md).
 
 !!! danger
 
@@ -39,8 +41,9 @@ Take a [database backup](../../architecture/database.md#backups) before updating
 6. Scripts that handle a memory refusal can use its own codes: JSON-RPC `-32005`, HTTP
    `507 INSUFFICIENT_MEMORY` ([Not enough host memory](../../api-reference.md#not-enough-host-memory)),
    and `sherpa` exit status `75` ([exit status](../../command-reference.md#exit-status)).
-
-Update the server and the `sherpa` CLI together.
+7. Update the server, then [update the `sherpa` CLI](client.md) on every client to 0.6.0. The
+   CLI must be updated with the server: an older CLI cannot read, for example, a 0.6.0 server's
+   [image details](#image-api).
 
 ### Destroy labs created before 0.5.15
 
@@ -117,8 +120,8 @@ application container other than Vault, and on any node whose ZTP is `disabled`.
 
 In the API, an image's `ztp_enable` and `ztp_method` fields are replaced by `ztp`, one of
 `disabled`, `cloud-init`, `cdrom`, `disk`, `http`, `ignition`, `nocloud`, `tftp`, `usb` and
-`volume`. Scripts that read the old fields need changing. Update the `sherpa` CLI on every client
-together with the server: an older CLI cannot read image details from a 0.5.30 server, and a
+`volume`. Scripts that read the old fields need changing. [Update the `sherpa` CLI](client.md) on every
+client together with the server: an older CLI cannot read image details from a 0.5.30 server, and a
 0.5.30 CLI cannot read them from an older server.
 
 ## Updating to 0.5.27
@@ -148,7 +151,7 @@ Node states change. A node being created is now `building` rather than `stopped`
 virtual machine or container no longer exists is `missing`, and the `created` state is gone:
 nodes recorded `created` become `stopped`. See [node states](../../command-reference.md#node-states).
 
-Update the `sherpa` CLI on every client together with the server. The server does not refuse an
+[Update the `sherpa` CLI](client.md) on every client together with the server. The server does not refuse an
 older client, which only warns that the versions differ, but a CLI older than 0.5.25 cannot read
 the new states: `sherpa inspect`, `sherpa destroy` and the other commands that read a lab's
 details from the server fail with a decode error for a lab that has a `building` or `missing`
