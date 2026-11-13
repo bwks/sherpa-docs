@@ -29,15 +29,15 @@ sherpa server image scan --container
 ## Platforms
 
 cJunosEvolved emulates one of two PTX routers. Choose one per node with
-[`platform`](../../manifest.md#platform-string):
+[`container.platform`](../../manifest.md#container-object):
 
 | Platform | Router         | Chipset       | Data Interfaces |
 | -------- | -------------- | ------------- | --------------- |
 | `bt`     | PTX10001-36MR  | Express 4     | et-0/0/0-11     |
 | `bx`     | PTX10002-36QDD | Express 5     | et-0/0/0-35     |
 
-Without `platform`, a node is `bt`. A node has 12 data interfaces on either platform unless the
-manifest sets `data_interface_count`; a `bx` node takes up to 36.
+Without `container.platform`, a node is `bt`. A node has 12 data interfaces on either platform unless the
+manifest sets `interfaces.data_count`; a `bx` node takes up to 36.
 
 ## Default Node Parameters
 
@@ -52,7 +52,7 @@ manifest sets `data_interface_count`; a `bx` node takes up to 36.
 | Data Interfaces      | et-0/0/0-11 |
 | Interface Driver     | veth        |
 
-`cpu_count` and `memory` size the Junos OS Evolved virtual machine inside the container. 4 vCPUs
+`cpu.count` and `memory` size the Junos OS Evolved virtual machine inside the container. 4 vCPUs
 and 6292MB are its minimums. The container needs about 2GB more memory than the virtual machine,
 so allow 8GB of host memory per node.
 
@@ -68,6 +68,8 @@ model = "juniper_cevolved"
 [[nodes]]
 name = "pe02"
 model = "juniper_cevolved"
+
+[nodes.container]
 platform = "bx"
 
 [[links]]
@@ -101,8 +103,8 @@ Sherpa writes a `juniper.conf` startup config and mounts its directory at
 
 - Junos shows every data interface up, linked or not: its simulated forwarding plane does not
   follow the link state of the container interfaces. Unlinked interfaces carry no traffic.
-- A node shows all of its platform's data interfaces whatever `data_interface_count` is: 12 on
-  `bt`, 36 on `bx`. Only the first `data_interface_count` of them are wired to the lab.
+- A node shows all of its platform's data interfaces whatever `interfaces.data_count` is: 12 on
+  `bt`, 36 on `bx`. Only the first `interfaces.data_count` of them are wired to the lab.
 - Approximate time for the system to be ready: `4 minutes`. `sherpa up` reports a container as
   ready when it has started, so SSH answers a few minutes after `sherpa up` finishes.
-- With [`ztp = "disabled"`](../../manifest.md#ztp-string) the node is the image as shipped: Sherpa mounts no config directory, so Junos boots from the image's own configuration. That configuration gives `re0:mgmt-0` the node's management IP address and turns on SSH, with only the image's own `admin` user: the node answers on its address, but it has no `sherpa` login, so `sherpa ssh` is refused. Log in as `admin` with the password Juniper's documentation for the image gives. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.
+- With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as shipped: Sherpa mounts no config directory, so Junos boots from the image's own configuration. That configuration gives `re0:mgmt-0` the node's management IP address and turns on SSH, with only the image's own `admin` user: the node answers on its address, but it has no `sherpa` login, so `sherpa ssh` is refused. Log in as `admin` with the password Juniper's documentation for the image gives. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.

@@ -68,4 +68,4 @@ version = "26.7.2"
 ## Notes
 
 - Approximate time for the system to be ready: `1 minute`
-- With [`ztp = "disabled"`](../../manifest.md#ztp-string) the node is the image as shipped: it starts with the image's own configuration, so once it has booted it has no management IP address, and it has no `sherpa` login. Nothing answers on the address the lab reserved for it, and `sherpa ssh` cannot reach it. Reach it with `docker exec -it <node-name>-<lab-id> sr_cli`. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.
+- With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as shipped: it starts with the image's own configuration, so once it has booted it has no management IP address, and it has no `sherpa` login. Nothing answers on the address the lab reserved for it, and `sherpa ssh` cannot reach it. Reach it with `docker exec -it <node-name>-<lab-id> sr_cli`. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.

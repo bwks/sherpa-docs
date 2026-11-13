@@ -17,15 +17,19 @@ When a lab is created, Sherpa performs the following for each container node:
 
 ## Resource Allocation
 
-Every container model has default resource parameters for CPU, RAM, data interface count, and privileged mode. These can be overridden in the manifest.
+Every container model has a default data interface count and privileged mode. Sherpa does not
+limit a container's CPU or memory: containers accept `cpu.count` and `memory` in the manifest,
+but only `juniper_cevolved` uses them, to size the router VM inside the container.
 
-Additional options configurable in the manifest:
+Options configurable in the manifest, in the node's [`container`](../manifest.md#container-object)
+group unless noted:
 
-- **`privileged`** — run the container in privileged mode (admins only)
-- **`shm_size`** — shared memory size in bytes
-- **`user`** — override the container user
+- **`container.privileged`** — run the container in privileged mode (admins only)
+- **`container.shm_size`** — shared memory size in bytes
+- **`container.user`** — override the container user
+- **`container.commands`** — override the default command
+- **`interfaces.data_count`** — the number of data interfaces
 - **`environment_variables`** — key-value pairs passed to the container
-- **`commands`** — override the default entrypoint/command
 
 ## Image Management
 
@@ -59,7 +63,7 @@ Containers do not use traditional ZTP methods (TFTP, cloud-init). Instead, provi
 Files can be injected into containers via volume mounts defined in the manifest:
 
 - **`text_files`** — source file, destination path, owner, group, and permissions
-- **`volumes`** — bind mounts of server paths (admins only)
+- **`container.volumes`** — bind mounts of server paths (admins only)
 
 Every container gets the [lab CA and its node certificate](certificates.md), mounted read-only
 at `/etc/sherpa/certs/`.

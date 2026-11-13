@@ -16,7 +16,7 @@ Sherpa supports three unikernel models:
 
 Unikernels support two boot modes that determine how the hypervisor loads the application:
 
-- **DirectKernel** — The kernel ELF binary is loaded directly by QEMU via the `<kernel>` libvirt XML element. An optional kernel command line can be passed via `<cmdline>` using the `kernel_cmdline` manifest parameter. The ELF is copied into the storage pool for each node, so the original image is never used directly.
+- **DirectKernel** — The kernel ELF binary is loaded directly by QEMU via the `<kernel>` libvirt XML element. An optional kernel command line can be passed via `<cmdline>` using the `unikernel.cmdline` manifest parameter. The ELF is copied into the storage pool for each node, so the original image is never used directly.
 - **DiskBoot** — The unikernel boots from a copy of its disk image in the storage pool, the same way as a traditional VM (`<boot dev='hd'/>`).
 
 ## How it Works
@@ -26,13 +26,13 @@ When a lab is created, Sherpa performs the following for each unikernel node:
 === "DirectKernel"
 
     1. **Copy** the kernel ELF from the image store into the storage pool
-    2. **Generate** a libvirt domain XML definition with the copied kernel path and optional `kernel_cmdline`
+    2. **Generate** a libvirt domain XML definition with the copied kernel path and optional `unikernel.cmdline`
     3. **Define and start** the domain via the Libvirt API
 
 === "DiskBoot"
 
     1. **Copy** the disk image from the image store into the [storage pool](storage.md)
-    2. **Resize** the boot disk if `boot_disk_size` is specified in the manifest
+    2. **Resize** the boot disk if `boot_disk.size` is specified in the manifest
     3. **Generate** a libvirt domain XML definition from the node's parameters
     4. **Define and start** the domain via the Libvirt API
 
@@ -90,16 +90,20 @@ Each unikernel provides a serial console for access:
 
 Unikernel nodes support the following unikernel-specific manifest parameters:
 
-- **`kernel_cmdline`** — Kernel command line arguments passed to QEMU for DirectKernel unikernels. This overrides any auto-injected command line. Use this to specify the application entry point or pass runtime configuration to the unikernel.
-- **`ready_port`** — TCP port to probe on the node's management IP to verify readiness. By default, a unikernel is considered ready when its libvirt domain reaches the running state. When `ready_port` is set, Sherpa additionally waits for a successful TCP connection to the specified port.
+- **`unikernel.cmdline`** — Kernel command line arguments passed to QEMU for DirectKernel unikernels. This overrides any auto-injected command line. Use this to specify the application entry point or pass runtime configuration to the unikernel.
+- **`ready_check.port`** — TCP port to probe on the node's management IP to verify readiness. By default, a unikernel is considered ready when its libvirt domain reaches the running state. When `ready_check.port` is set, Sherpa additionally waits for a successful TCP connection to the specified port.
 
 ```toml
 [[nodes]]
 name = "web01"
 model = "unikraft_unikernel"
 version = "v1.0.0"
-kernel_cmdline = "/usr/bin/nginx"
-ready_port = 80
+
+[nodes.ready_check]
+port = 80
+
+[nodes.unikernel]
+cmdline = "/usr/bin/nginx"
 ```
 
 See the [manifest](../manifest.md#optional-node-parameters) documentation for all available node parameters.

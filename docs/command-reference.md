@@ -207,7 +207,7 @@ the server too; see [stopping a running command](#stopping-a-running-command).
 
 Like `sherpa up`, resume waits for each VM or unikernel it boots to become ready,
 showing progress as it goes. It uses the lab's `ready_timeout`, and each node's
-`skip_ready_check` and `ready_port`, from the manifest the lab was created with. A node
+`ready_check.skip` and `ready_check.port`, from the manifest the lab was created with. A node
 that is not ready within the timeout is reported, but resume still succeeds. Containers
 and paused nodes do not wait, because they resume an already running guest. A paused
 container is unpaused, a stopped one is started, and a running node is left as it is.
@@ -349,7 +349,7 @@ no subcommand is specified.
 | ----- | ------- |
 | `building` | `sherpa up` or `sherpa redeploy` is creating the node. Nothing else can stop, start or redeploy it until that finishes. |
 | `starting` | The node is started but not ready yet: its ready check has not passed. The server's [scanner](configuration/sherpa.md#scanner) keeps checking, and records it `running` once it answers. |
-| `running` | The node is ready: its ready check passed, or it has `skip_ready_check`. A container is ready once it has kept running for 5 seconds after it started. |
+| `running` | The node is ready: its ready check passed, or it has `ready_check.skip`. A container is ready once it has kept running for 5 seconds after it started. |
 | `stopped` | The node is shut down or paused, by `sherpa down` or outside Sherpa, or its container's process exited after it was ready. |
 | `failed` | An operation on the node failed, such as a redeploy or a container that exited during `sherpa up` before it was ready, or its virtual machine crashed or its container died. It stays `failed` until you stop, resume or redeploy it. |
 | `missing` | The node's virtual machine or container no longer exists, for example because it was removed outside Sherpa. Redeploy it. |
@@ -711,6 +711,10 @@ sherpa server image show <model>
 | Flag | Description |
 | ---- | ----------- |
 | `--version` | Show a specific version (defaults to the default version) |
+
+The table names each row by its key in the image's JSON, such as `cpu.count` and
+`interfaces.data_count`. `sherpa server --output json image show <model>` prints the JSON
+itself, with the settings nested by group; see [Node images](api-reference.md#node-images).
 
 ### `sherpa server image list`
 

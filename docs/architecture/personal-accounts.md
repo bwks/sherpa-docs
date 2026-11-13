@@ -98,7 +98,7 @@ Cisco FTDv, Talos, application containers such as databases and Git servers, and
 have no way to add an account at boot. They keep their usual login.
 
 !!! note
-    A node with a custom `ztp_config` gets no personal account, because your config replaces
+    A node with a custom `ztp.config` gets no personal account, because your config replaces
     the one the account would be written into. `sherpa up` says which nodes this applies to.
 
 ### Username Rules

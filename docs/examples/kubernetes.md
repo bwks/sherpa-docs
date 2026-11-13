@@ -89,8 +89,10 @@ model = "hashicorp_vault"
 name = "util"
 model = "ubuntu_linux"
 memory = 2048
-boot_disk_size = 10
 startup_scripts = ["kubernetes-install-tools.sh"]
+
+[nodes.boot_disk]
+size = 10
 ```
 
 Save [`kubernetes-install-tools.sh`](kubernetes-install-tools.sh) next to the manifest. On the

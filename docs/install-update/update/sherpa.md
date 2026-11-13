@@ -24,6 +24,29 @@ sudo bash sherpa_update.sh --force
 
 Take a [database backup](../../architecture/database.md#backups) before updating.
 
+## Updating from 0.5.35 and earlier
+
+Node settings are grouped, in the manifest and in the image API. This is a breaking change:
+update every manifest, and every script that reads image details, together with the server and
+the `sherpa` CLI.
+
+**Manifests.** A node's settings move into groups such as `[nodes.cpu]` and
+`[nodes.ready_check]`, and `[nodes.performance_tuning]` is gone: its settings are now in `cpu`,
+`numa`, `boot_disk` and `interfaces`. A manifest with an old key is refused with an
+`unknown field` error that names it. The table of old and new keys is in
+[Upgrading manifests from flat keys](../../manifest.md#upgrading-manifests-from-flat-keys).
+Sherpa also refuses a setting the node's kind does not take, such as `vm.watchdog` on a
+container; see [Which node kinds take which settings](../../manifest.md#which-node-kinds-take-which-settings).
+
+Labs created before the update keep running. `sherpa resume` of such a lab uses the default
+readiness settings, because the lab's saved manifest has the old keys; destroy and recreate it
+with an updated manifest to use its own.
+
+**Image API.** An image's JSON (`sherpa server --output json image show`, `GET /api/v1/images/...`
+and the OpenAPI schema) nests its settings by group, in place of the flat fields. The table of
+old and new fields is in the [API reference](../../api-reference.md#node-images). The
+`sherpa server image show` table names its rows by the same keys.
+
 ## Updating to 0.5.30
 
 A node image now has one [ZTP setting](../../architecture/zero-touch-provisioning.md#the-ztp-setting),
@@ -40,7 +63,7 @@ If you had switched ZTP off on a cEOS, SR Linux, cEvolved or FRR image, its node
 without Sherpa's configuration, without a management address and without the `sherpa` login the
 next time they are created or redeployed. Before, switching it off only left out the lab owner's account.
 
-A manifest that sets [`ztp_config`](../../manifest.md#ztp_config-string) on a node that cannot
+A manifest that sets `ztp_config` (now [`ztp.config`](../../manifest.md#ztp-object)) on a node that cannot
 use it is now refused before the lab is created, where the file was ignored before: on an
 application container other than Vault, and on any node whose ZTP is `disabled`.
 

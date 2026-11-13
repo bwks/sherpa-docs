@@ -38,7 +38,7 @@ Supported disk formats: `qcow2`, `iso`, `raw`, `json`, `ign`, `img`.
 
 By default, a virtual machine's boot disk is a QCOW2 overlay on top of the base image. The
 overlay stores only the changes the VM makes, so creating a disk is fast and uses little space.
-Set `boot_disk_clone_method = "copy"` in the [manifest](../manifest.md#boot_disk_clone_method-string)
+Set `boot_disk.clone_method = "copy"` in the [manifest](../manifest.md#boot_disk-object)
 to create a full independent copy instead.
 
 - Writes are kept when a lab is stopped and resumed. Redeploy replaces the disk using the
@@ -64,7 +64,7 @@ Sherpa creates a libvirt storage pool named `sherpa-pool` that manages VM disk v
 The storage pool is used for:
 
 - Cloning base images to lab-specific disks
-- Resizing boot disks (via `boot_disk_size` in the manifest)
+- Resizing boot disks (via `boot_disk.size` in the manifest)
 - Deleting disk volumes during lab destroy
 
 You can inspect the pool with:

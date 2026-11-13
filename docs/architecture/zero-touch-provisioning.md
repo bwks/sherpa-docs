@@ -40,7 +40,7 @@ validated, and before `sherpa up` or `sherpa redeploy` changes anything.
 
 ### Per Node
 
-A node can set its own with [`ztp`](../manifest.md#ztp-string) in the manifest. Without it the
+A node can set its own with [`ztp.method`](../manifest.md#ztp-object) in the manifest. Without it the
 node uses its image's setting.
 
 ```toml
@@ -49,12 +49,16 @@ node uses its image's setting.
 [[nodes]]
 name = "dev01"
 model = "frr_linux"
-ztp = "disabled"
+
+[nodes.ztp]
+method = "disabled"
 
 [[nodes]]
 name = "dev02"
 model = "juniper_vsrxv3"
-ztp = "tftp"
+
+[nodes.ztp]
+method = "tftp"
 ```
 
 ### Disabled
@@ -69,13 +73,13 @@ configuration media. A container gets only what it needs to start, as described 
 ## Custom Node Configuration
 
 User defined configuration can be applied to devices by specifying
-the location with the `ztp_config` parameter in the `manifest.toml`
+the location with the `ztp.config` parameter in the `manifest.toml`
 file.
 
-A custom `ztp_config` is supported for nodes whose ZTP setting is `tftp`, `nocloud`, `cdrom`,
+A custom `ztp.config` is supported for nodes whose ZTP setting is `tftp`, `nocloud`, `cdrom`,
 `disk`, `usb` or `volume`. Sherpa refuses it, before the lab is created, on nodes that use
 `cloud-init`, `ignition` or `http`, and on nodes whose ZTP is `disabled`. The exception is
-[HashiCorp Vault](../nodes/hashicorp/hashicorp-vault.md#your-own-config), where `ztp_config` is
+[HashiCorp Vault](../nodes/hashicorp/hashicorp-vault.md#your-own-config), where `ztp.config` is
 Vault's own configuration file.
 
 ### Example
@@ -86,7 +90,9 @@ Vault's own configuration file.
 [[nodes]]
 name = "dev01"
 model = "cisco_cat8000v"
-ztp_config = "/some/path/dev01.conf"
+
+[nodes.ztp]
+config = "/some/path/dev01.conf"
 ```
 
 ## ZTP Methods
@@ -113,7 +119,7 @@ On boot, the cloud-init service detects the `cidata` volume and applies the conf
 
 Like cloud-init, NoCloud configuration is delivered on a `cidata` CD-ROM. The difference is
 `user-data`: instead of a cloud-init config, it holds the node's native configuration, either
-your `ztp_config` or one Sherpa generates. Sherpa adds `meta-data` and a `network-config` with
+your `ztp.config` or one Sherpa generates. Sherpa adds `meta-data` and a `network-config` with
 the static management address.
 
 ![sherpad writes user-data, meta-data and network-config to a cidata ISO attached to the VM as a CD-ROM](ztp-nocloud.svg)
@@ -173,8 +179,9 @@ With ZTP `disabled`, one of these containers starts with its image, environment 
 only. Sherpa mounts no configuration and adds no login, so `sherpa ssh` cannot log in to it. What
 the node does with its management address depends on its image: cEOS and SR Linux leave it
 unconfigured, FRR answers on it with no SSH server, and cJunosEvolved configures it with SSH for
-the image's own `admin` user. Each model's page says how to reach it. The node's `volumes` from
-the manifest are mounted instead, so you can supply a configuration of your own.
+the image's own `admin` user. Each model's page says how to reach it. The node's `container.volumes`
+from the manifest are mounted instead, so you can supply a configuration of your own.
 
 Every other container has no ZTP method. It is configured when the container is created, from
-the node's `environment_variables`, `commands` and `volumes` in the manifest.
+the node's `environment_variables`, `container.commands` and `container.volumes` in the
+manifest.
