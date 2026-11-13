@@ -203,6 +203,13 @@ nested by group. For `ubuntu_linux`:
 | `ztp` | `method` (the [ZTP setting](architecture/zero-touch-provisioning.md#the-ztp-setting)), `username`, `password` and `password_auth` |
 | `unikernel` | `boot_mode` for a unikernel; `null` for every other kind |
 
+Every image carries every group, but not every kind uses them. A container does not use
+`machine`, `boot_disk` or `cdrom`. A unikernel uses `machine.kind` and not `machine.bios`,
+`boot_disk` or `cdrom`. Their images carry the defaults there: `pc`, `sea_bios`, `virtio`, a
+`null` CD-ROM image and `virtio`. Images stored by releases up to 0.6.0 could hold other values,
+such as a `q35` machine on `arista_ceos`; the update resets them. The `image show` tables and
+the web UI's image and node pages leave these settings out; the JSON keeps them.
+
 Releases up to 0.5.35 returned these settings as flat fields. Each moved into its group:
 
 | Old field | New field |
