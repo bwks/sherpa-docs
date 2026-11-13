@@ -45,9 +45,9 @@ Host 172.31.1.22 router1.abcd1234 router1.abcd1234.sherpa.lab.local
   `sherpa resume` keeps it.
 - **Destroy and clean:** `sherpa destroy` and `sherpa server clean` delete the key with the lab's
   folder on the server.
-- **Labs created before Sherpa 0.5.15:** these keep the server's shared key, the same for every
-  lab, until they are destroyed. A redeployed node of such a lab gets the shared key too, as the
-  lab's other nodes still use it. Destroy the lab and bring it up again to give it its own key.
+- **Labs created before Sherpa 0.5.15** used the server's shared key, which 0.6.0 removes.
+  Destroy them before updating to 0.6.0; see
+  [Updating to 0.6.0](../install-update/update/sherpa.md#updating-to-060).
 
 ## Jumphost
 

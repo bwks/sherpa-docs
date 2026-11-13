@@ -24,6 +24,36 @@ sudo bash sherpa_update.sh --force
 
 Take a [database backup](../../architecture/database.md#backups) before updating.
 
+## Updating to 0.6.0
+
+0.6.0 removes the server's shared SSH key, `/opt/sherpa/ssh/sherpa_ssh_key`. Labs created before
+Sherpa 0.5.15 still log in to their nodes with it, and would lose SSH access, so **destroy every
+lab created before 0.5.15 first**, with the release the server runs now:
+
+```
+sherpa destroy
+```
+
+in the lab's folder, or from the web UI. Labs created from 0.5.15 have their own
+[lab SSH key](../../architecture/ssh.md#lab-ssh-key) and keep running.
+
+The update script checks before it installs anything. While such labs exist it stops, names
+them, and starts the running release again:
+
+```
+[INFO] Checking that v0.6.0 can use the database...
+Error: 1 lab(s) still log in to their nodes with the server's shared SSH key, which this release removes; their nodes would lose SSH access:
+  abcd1234 (core, owned by alice)
+Destroy them with the Sherpa release this server ran before ('sherpa destroy' in the lab's folder, or the web UI), then start this release again. The database is unchanged.
+[ERROR] v0.6.0 cannot use this server's database; nothing was installed.
+```
+
+Destroy the labs it names and run the update again. Once 0.6.0 has started, the script deletes
+the server's key pair and its `/opt/sherpa/ssh` folder. A 0.6.0 `sherpad` installed some other
+way refuses to start with the same message, and changes nothing; check a server before
+installing by hand with the new binary's `sherpad check-database`, run as the `sherpa` user while
+`sherpad` is stopped.
+
 ## Updating from 0.5.35 and earlier
 
 Node settings are grouped, in the manifest and in the image API. This is a breaking change:
