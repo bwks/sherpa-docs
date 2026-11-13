@@ -111,7 +111,7 @@ group on a node of another kind. The message names the node, the key and the kin
 
 | Setting | Virtual machine | Container | Unikernel |
 |---|---|---|---|
-| `memory`, `cpu.count` | yes | yes (see note) | yes |
+| `memory`, `cpu.count` | yes | yes (see [limits](#container-cpu-and-memory-limits)) | yes |
 | `cpu.mode`, `cpu.topology`, `cpu.pinning`, `cpu.emulator_pinning` | yes | | |
 | `numa` | yes | | |
 | `boot_disk.size` | yes | | yes |
@@ -126,9 +126,23 @@ group on a node of another kind. The message names the node, the key and the kin
 | `container` | | yes | |
 | `unikernel` | | | yes |
 
-!!! note "CPU and memory on containers"
-    Containers accept `cpu.count` and `memory`, but only `juniper_cevolved` uses them, to size
-    the router VM inside the container. Other containers run without CPU or memory limits.
+##### Container CPU and memory limits
+
+On a container node, `memory` and `cpu.count` are Docker limits:
+
+- `memory` is a hard memory limit in MB, with no swap beyond it. A container that uses more is
+  stopped by the kernel's OOM killer, so leave it room.
+- `cpu.count` is a CPU quota: the container may use that many CPUs' worth of time, on any of the
+  server's CPUs. It does not pin the container to CPUs, and it cannot be more than the server
+  has.
+
+A container that sets neither runs without limits. The image's
+CPU and memory values do not apply to containers.
+
+`juniper_cevolved` is the exception: `memory` and `cpu.count` size the router virtual machine
+inside the container, defaulting to the image's. Its container always gets a memory limit of
+that memory plus 2048 MB, for the container's own processes, and no CPU quota. See
+[Juniper cJunosEvolved](nodes/juniper/juniper-cevolved.md).
 
 Within a kind, a setting may still apply only to some models or ZTP methods; each section below
 says so.
@@ -215,8 +229,12 @@ Configure the amount of RAM in `MegaBytes (MB)`.
 memory = 4096
 ```
 
-The server refuses to start virtual machines and unikernels whose memory does not fit beside
-the memory already promised on the server. See [`[host_memory]`](configuration/sherpa.md#host_memory).
+The server refuses to start virtual machines, unikernels and containers with a memory limit
+whose memory does not fit beside the memory already promised on the server. See
+[`[host_memory]`](configuration/sherpa.md#host_memory).
+
+On a container, `memory` is a hard Docker limit; a container without it is not limited. See
+[Container CPU and memory limits](#container-cpu-and-memory-limits).
 
 ##### provisioners (list&lt;object&gt;)
 
@@ -431,7 +449,7 @@ emulator_pinning = [8, 24]
 
 | Key | Type | Description |
 |---|---|---|
-| `count` | int | The number of vCPUs, in place of the image's |
+| `count` | int | The number of vCPUs, in place of the image's. On a container, a CPU quota (see [limits](#container-cpu-and-memory-limits)) |
 | `mode` | string | `host-model` (the default) or `host-passthrough`, which gives the guest the host CPU exactly. `host-passthrough` gives the best performance for nested virtual machines |
 | `topology` | object | The CPU layout the guest sees: `sockets`, `cores` and `threads`. Their product must equal `count` |
 | `pinning` | list&lt;int&gt; | The host CPU for each vCPU, in vCPU order: one per vCPU, none repeated |

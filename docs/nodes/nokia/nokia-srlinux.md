@@ -32,8 +32,8 @@ releases do not load the startup config.
 | Property             | Value     |
 | -------------------- | --------- |
 | Kind                 | Container |
-| CPU                  | 2         |
-| RAM                  | 4GB       |
+| CPU                  | Not limited |
+| RAM                  | Not limited |
 | ZTP                  | `volume`  |
 | Management Interface | mgmt0     |
 | Data Interfaces      | eth-1/1-34         |

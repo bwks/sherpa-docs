@@ -37,8 +37,8 @@ filesystem archives.
 | Property             | Value     |
 | -------------------- | --------- |
 | Kind                 | Container |
-| CPU                  | 2         |
-| RAM                  | 4GB       |
+| CPU                  | Not limited |
+| RAM                  | Not limited |
 | ZTP                  | `volume`  |
 | Management Interface | eth0      |
 | Data Interfaces      | eth1-52         |

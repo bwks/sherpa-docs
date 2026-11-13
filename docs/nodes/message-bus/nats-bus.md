@@ -28,8 +28,8 @@ sherpa server image scan --container
 | Property             | Value           |
 | -------------------- | --------------- |
 | Kind                 | Container       |
-| CPU                  | 1               |
-| RAM                  | 512MB           |
+| CPU                  | Not limited |
+| RAM                  | Not limited |
 | ZTP                  | `disabled`      |
 | Management Interface | eth0            |
 | Data Interfaces      | eth1+           |

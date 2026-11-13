@@ -54,7 +54,9 @@ manifest sets `interfaces.data_count`; a `bx` node takes up to 36.
 
 `cpu.count` and `memory` size the Junos OS Evolved virtual machine inside the container. 4 vCPUs
 and 6292MB are its minimums. The container needs about 2GB more memory than the virtual machine,
-so allow 8GB of host memory per node.
+so Sherpa gives it a Docker memory limit of `memory` plus 2048MB (8340MB by default), and
+counts that against the server's memory. It has no CPU quota, so the virtual machine is not
+throttled. `memory` can be at most 63487MB.
 
 ## Example Manifest
 

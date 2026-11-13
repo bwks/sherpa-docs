@@ -178,19 +178,20 @@ which enables Tailscale and names the client auth-key environment variable.
 
 ### `[host_memory]`
 
-How much memory the server may give its virtual machines and unikernels. Before `sherpa up`,
+How much memory the server may give its virtual machines, unikernels and containers. Before `sherpa up`,
 `sherpa redeploy`, `sherpa resume` or a node start in the web UI starts any node, the server
 adds up the memory already promised and refuses the request if the new nodes do not fit.
 Nothing is created or started when a request is refused.
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `reserve_mib` | int | `4096` | Memory in MiB kept back for the host: its operating system, `sherpad`, QEMU's own memory and containers |
+| `reserve_mib` | int | `4096` | Memory in MiB kept back for the host: its operating system, `sherpad`, QEMU's own memory and containers without a memory limit |
 | `overcommit_percent` | int | `100` | The percentage of the memory left after the reserve guests may be given in total, for example `150` for 1.5 times. Must be at least `1` |
 
 The memory promised is the configured memory of every running or paused virtual machine and
-unikernel on the server, Sherpa's and any others libvirt runs, plus the nodes other requests are
-starting. It is compared with the server's memory, less any reserved hugepages and
+unikernel on the server, Sherpa's and any others libvirt runs, the memory limit of every running
+or paused container that has one, Sherpa's and any others Docker runs, plus the nodes other
+requests are starting. It is compared with the server's memory, less any reserved hugepages and
 `reserve_mib`, times `overcommit_percent` percent, rounded down to a whole MiB. Free memory is
 not used: a guest takes its memory only as it touches it, so a server that looks free when a lab
 starts can run out later.
@@ -202,8 +203,10 @@ machines held strictly there, after the node's share of `reserve_mib`. A virtual
 `numa.memory_mode = "preferred"` can take memory from other nodes, so it is checked against the
 whole server only.
 
-Containers are not counted, as Sherpa does not limit their memory; keep `reserve_mib` large
-enough for them. With `overcommit_percent = 100` the guests are never given more memory than the
+A container node counts its [`memory`](../manifest.md#container-cpu-and-memory-limits) limit.
+Containers without a memory limit are not counted; keep `reserve_mib` large enough for them. When
+the server cannot reach Docker, it counts no containers and logs a warning; labs of virtual
+machines are checked as before, and a lab with containers fails at its first Docker step. With `overcommit_percent = 100` the guests are never given more memory than the
 server has. Raise it only if the guests do not use all their memory, for example idle router
 labs; if they touch more than the server has, the host's OOM killer stops virtual machines.
 
