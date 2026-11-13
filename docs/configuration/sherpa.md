@@ -204,7 +204,9 @@ machines held strictly there, after the node's share of `reserve_mib`. A virtual
 whole server only.
 
 A container node counts its [`memory`](../manifest.md#container-cpu-and-memory-limits) limit.
-Containers without a memory limit are not counted; keep `reserve_mib` large enough for them. With `overcommit_percent = 100` the guests are never given more memory than the
+Containers without a memory limit are not counted; keep `reserve_mib` large enough for them. When
+the server cannot reach Docker, it counts no containers and logs a warning; labs of virtual
+machines are checked as before, and a lab with containers fails at its first Docker step. With `overcommit_percent = 100` the guests are never given more memory than the
 server has. Raise it only if the guests do not use all their memory, for example idle router
 labs; if they touch more than the server has, the host's OOM killer stops virtual machines.
 
