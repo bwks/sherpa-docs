@@ -380,9 +380,27 @@ of each of that node's links, when there are any; the field is absent otherwise.
 | ------- | ------- |
 | `attached` | Both ends redirect to each other, with the link's impairments |
 | `peer_down` | The peer (`peer`) is down. The link is attached in both directions when it starts |
-| `failed` | The link could not be attached (`reason`). It carries no traffic until either end is resumed or redeployed |
+| `failed` | The link could not be attached (`reason`). It carries no traffic until it is attached again: by the next scan, or by resuming or redeploying either end |
 
 A link that is not attached does not make the node's `success` false.
+
+### Link state in inspect
+
+The inspect response's `links[]` carry `state`, the link's last state as the server found or
+left it, in the same form: from the server's scan of the lab every `scanner.interval_secs`, or
+from the last resume or redeploy. The field is absent while the server has not checked the
+link since it started, and from servers that do not report link states.
+
+```json
+{
+  "node_a_name": "vm1",
+  "int_a": "eth1",
+  "node_b_name": "ctr1",
+  "int_b": "eth1",
+  "kind": "p2p",
+  "state": { "state": "peer_down", "peer": "ctr1" }
+}
+```
 
 ## Lab Access
 

@@ -53,6 +53,21 @@ is down waits for it, and is attached when the peer starts. `sherpa resume` and
 `sherpa redeploy` list each link that is not attached; see
 [`sherpa resume`](../../../command-reference.md#sherpa-resume).
 
+A node started outside Sherpa gets new link ends too: a virtual machine started with
+`virsh start` after `virsh destroy` or a shutdown, and a container started with `docker start`
+or restarted with `docker restart` or a restart policy, which also takes all of the
+container's data interfaces with it. The server's [scanner](../../../configuration/sherpa.md#scanner)
+finds these links and attaches them again, making the container's interfaces again first, so
+they come back within `scanner.interval_secs` (30 seconds by default). It checks only nodes
+that are running: a node you stopped or paused is left alone, and its links wait for it. A
+reboot from inside the guest, `virsh reboot`, and a pause and unpause keep the same link ends,
+so nothing needs attaching. [`sherpa inspect`](../../../command-reference.md#link-states)
+shows each link's state.
+
+A restarted container's interfaces have new MAC addresses, so its peer reaches it once the
+peer's neighbour entry is refreshed, which Linux does within seconds; other network operating
+systems may take longer.
+
 #### Link Impairments
 
 P2P eBPF links support optional link impairments via TC netem, which
