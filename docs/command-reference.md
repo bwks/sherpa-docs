@@ -488,6 +488,8 @@ sherpa image show <model>
 | ---- | ----------- |
 | `--version` | Show a specific version (defaults to the default version) |
 
+It prints the same table as [`sherpa server image show`](#sherpa-server-image-show).
+
 ### `sherpa image list`
 
 List available images.
@@ -712,8 +714,10 @@ sherpa server image show <model>
 | `--version` | Show a specific version (defaults to the default version) |
 
 The table names each row by its key in the image's JSON, such as `cpu.count` and
-`interfaces.data_count`. `sherpa server --output json image show <model>` prints the JSON
-itself, with the settings nested by group; see [Node images](api-reference.md#node-images).
+`interfaces.data_count`. It leaves out the settings the image's kind does not use: a
+container's `machine`, `boot_disk` and `cdrom`, and a unikernel's `machine.bios`, `boot_disk`
+and `cdrom`. `sherpa server --output json image show <model>` prints the JSON itself, with every
+setting nested by group; see [Node images](api-reference.md#node-images).
 
 ### `sherpa server image list`
 
