@@ -209,7 +209,10 @@ back from a cold boot with its VLANs but with its ports in `dynamic auto` and no
 
 - Approximate time for the system to be ready: `1 minute`. Sherpa reports the node ready once the
   container is running; SSH answers about a minute later, once IOL has booted.
+- Link state works as on `cisco_iol`: an interface goes down about 12 seconds after its link
+  loses carrier, and an interface with no link shows `notconnect`. See
+  [Cisco IOL: Link State](cisco-iol.md#link-state).
 - The other IOL notes, on saving the configuration with `write memory`, MTU 1500, checksum
-  offload, link state, IOL application IDs and ZTP off, apply to `cisco_ioll2` as well. See
+  offload, IOL application IDs and ZTP off, apply to `cisco_ioll2` as well. See
   [Cisco IOL: Notes](cisco-iol.md#notes). VLANs are saved apart from the configuration; see
   [Saving VLANs](#saving-vlans).

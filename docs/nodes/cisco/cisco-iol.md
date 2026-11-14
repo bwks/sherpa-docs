@@ -197,6 +197,31 @@ Ping and SSH work across it. A tagged frame carries a full 1500-byte IP packet, 
 `ping <address> size 1500 df-bit` succeeds across the subinterface as it does on an untagged
 interface.
 
+## Link State
+
+!!! warning
+
+    Link state needs an image built with docker-cisco-iol that includes
+    [the link state change](https://github.com/bwks/docker-cisco-iol/pull/3), from 14 November 2026. In an image built before it,
+    interfaces stay up when their link goes down. Rebuild the image to fix it.
+
+IOL follows link state through keepalives, not at once: an interface goes down about
+12 seconds after its link loses carrier, and comes back about 2 seconds after the link
+returns. Interfaces with no link show down, `notconnect` on [`cisco_ioll2`](cisco-ioll2.md).
+Use BFD where faster detection matters.
+
+When the node at the other end stops, the time Sherpa takes to drop the link's carrier comes
+first; see [When a Neighbour Stops](../../architecture/networking/modes/point-to-point.md#when-a-neighbour-stops).
+A carrier loss of any length, such as a link made again, can still take the interface down and
+up again, 11 to 14 seconds later.
+
+```
+*Nov 14 08:15:25.319: %LINK-3-UPDOWN: Interface Ethernet0/1, changed state to down
+*Nov 14 08:15:26.319: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet0/1, changed state to down
+*Nov 14 08:15:35.216: %LINK-3-UPDOWN: Interface Ethernet0/1, changed state to up
+*Nov 14 08:15:36.216: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet0/1, changed state to up
+```
+
 ## Node Access
 
 === "SSH"
@@ -244,7 +269,7 @@ Except for the startup configuration, these notes apply to [`cisco_ioll2`](cisco
   address comes back without anything done by hand. An IOL node in a private bridge with no link takes its bridge interfaces as Docker
   macvlan interfaces, which have no server side to change; give it a link as well if TCP to IOL
   through the bridge fails.
-- IOL does not see link state: an interface stays up when its link goes down.
+- IOL follows link state about 12 seconds behind; see [Link State](#link-state).
 - Each IOL node in a lab gets its own IOL application ID, from which IOL derives its MAC
   addresses. A lab can hold at most 999 nodes before an IOL node; a later IOL node is refused.
 - With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as
