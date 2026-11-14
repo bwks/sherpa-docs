@@ -70,7 +70,7 @@ is never shown.
 
 | Models | Admin rights | Key types | Keys used |
 |---|---|---|---|
-| `cisco_iosv`, `cisco_iosvl2`, `cisco_csr1000v`, `cisco_cat8000v`, `cisco_cat9000v` | privilege 15 | RSA | first 2 |
+| `cisco_iosv`, `cisco_iosvl2`, `cisco_iol`, `cisco_ioll2`, `cisco_csr1000v`, `cisco_cat8000v`, `cisco_cat9000v` | privilege 15 | RSA | first 2 |
 | `cisco_iosxrv9000` | `root-lr` and `netadmin` groups | RSA | first 4 |
 | `cisco_asav` | privilege 15 | Ed25519, ECDSA, RSA | first 1 |
 | `cisco_nexus9300v` | `network-admin` | ECDSA, RSA | first 1 |

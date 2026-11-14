@@ -21,6 +21,9 @@ mixed VM-to-container links.
 Every link end is MTU 9600 on the host. A VM is told this MTU, so a virtio interface in the
 guest comes up at 9600 unless the guest's own configuration sets another.
 
+Cisco IOL's interfaces are fixed at MTU 1500. A Linux node linked to an IOL node must set MTU
+1500 on that interface, or TCP across the link stalls; see [Cisco IOL](../../../nodes/cisco/cisco-iol.md).
+
 ![Point-to-point eBPF link: a VM and a container connected through tap-a and tap-b, with an eBPF redirect forwarding packets between them in the kernel](network-p2p-ebpf.svg)
 
 Every L2 protocol passes end to end, including LLDP, STP, LACP, CDP, pause frames, and VLAN

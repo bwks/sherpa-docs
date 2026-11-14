@@ -31,7 +31,7 @@ in the web UI.
 | `cdrom` | [CDROM](#cdrom) | Cisco IOS XE, ASAv, Nexus, IOS XR and FTDv, Juniper vRouter, vSwitch and vSRX, Palo Alto PAN-OS |
 | `tftp` | [TFTP](#tftp) | Arista vEOS, Aruba AOS-CX, Juniper vEvolved and vSRX |
 | `http` | [HTTP](#http) | SONiC |
-| `volume` | [Container Volumes](#container-volumes) | Arista cEOS, Nokia SR Linux, Juniper cEvolved, FRR |
+| `volume` | [Container Volumes](#container-volumes) | Arista cEOS, Nokia SR Linux, Juniper cEvolved, Cisco IOL, FRR |
 
 A model takes only the methods listed against it, and most take one. Juniper vSRX takes `cdrom`
 or `tftp`, and Juniper vEvolved `tftp` or `usb`. Application containers and unikernels take
@@ -169,7 +169,8 @@ Configuration is served over the network via HTTP on port 8080 of the lab router
 
 ### Container Volumes
 
-Arista cEOS, Nokia SR Linux, Juniper cEvolved and FRR containers use the `volume` method. Sherpa
+Arista cEOS, Nokia SR Linux, Juniper cEvolved, Cisco IOL and FRR containers use the `volume`
+method. Sherpa
 writes the node's configuration files on the Sherpa server and bind mounts them into the
 container, which reads them on startup. The configuration carries the `sherpa` login.
 
@@ -178,8 +179,8 @@ container, which reads them on startup. The configuration carries the `sherpa` l
 With ZTP `disabled`, one of these containers starts with its image, environment and command
 only. Sherpa mounts no configuration and adds no login, so `sherpa ssh` cannot log in to it. What
 the node does with its management address depends on its image: cEOS and SR Linux leave it
-unconfigured, FRR answers on it with no SSH server, and cJunosEvolved configures it with SSH for
-the image's own `admin` user. Each model's page says how to reach it. The node's `container.volumes`
+unconfigured, FRR answers on it with no SSH server, cJunosEvolved configures it with SSH for
+the image's own `admin` user, and IOL boots with no configuration and runs its own autoinstall. Each model's page says how to reach it. The node's `container.volumes`
 from the manifest are mounted instead, so you can supply a configuration of your own.
 
 Every other container has no ZTP method. It is configured when the container is created, from
