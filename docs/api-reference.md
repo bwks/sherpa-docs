@@ -379,8 +379,8 @@ of each of that node's links, when there are any; the field is absent otherwise.
 | `state` | Meaning |
 | ------- | ------- |
 | `attached` | Both ends redirect to each other, with the link's impairments |
-| `peer_down` | The peer (`peer`) is down. The link is attached in both directions when it starts |
-| `failed` | The link could not be attached (`reason`). It carries no traffic until it is attached again: by the next scan, or by resuming or redeploying either end |
+| `peer_down` | The peer (`peer`) is down, and the other end has no carrier. The link is attached in both directions, with carrier, when it starts |
+| `failed` | The link could not be attached (`reason`). It carries no traffic, and neither end has carrier, until it is attached again: by the next scan, or by resuming or redeploying either end |
 
 A link that is not attached does not make the node's `success` false.
 

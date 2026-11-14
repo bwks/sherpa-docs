@@ -67,6 +67,39 @@ reboot from inside the guest, `virsh reboot`, and a pause and unpause keep the s
 so nothing needs attaching. [`sherpa inspect`](../../../command-reference.md#link-states)
 shows each link's state.
 
+#### When a Neighbour Stops
+
+A link behaves like a cable: when the node at one end stops, the interface at the other end
+loses its link, and the network operating system there sees the interface go down, as it
+would if the cable were pulled, so routing protocols react to the interface going down rather
+than waiting for their hold timers. When the node starts again and its link is attached, the interface comes back up.
+
+| What happens to the peer | What the surviving node sees |
+| ------------------------ | ---------------------------- |
+| stopped, shut down, crashed or removed (`docker stop`, `virsh destroy`, a guest power-off) | its interface loses carrier (`NO-CARRIER` on Linux) |
+| paused (`docker pause`, `virsh suspend`, or `sherpa down`, which pauses containers) | its interface loses carrier, until the peer is unpaused |
+| started or unpaused again | its interface has carrier again, once the link is attached |
+| the link cannot be attached (`failed` in `sherpa inspect`) | both ends lose carrier |
+
+On a container, the interface inside the container shows no carrier. On a virtual machine or
+unikernel, the guest's virtual network card reports its link down, as `virsh domif-setlink`
+would set it; a guest that ignores the link state of its network card does not see it. The
+change is made to the running virtual machine only: one that is started again starts with its
+links up, and Sherpa takes a link down again if its peer is still down.
+
+Sherpa changes a link's state when it sees the peer stop or start: at once for
+`sherpa resume` and `sherpa redeploy`, and within `scanner.interval_secs` (30 seconds by
+default) for changes made outside Sherpa, a pause, and `sherpa down`. With the
+[scanner](../../../configuration/sherpa.md#scanner) disabled, only `sherpa resume` and
+`sherpa redeploy` change it.
+
+Sherpa changes a link only when its state changes. To simulate a link failure, take the host
+end down yourself, for example `ip link set tpb3-ab12cd34 down` on the Sherpa server, or the
+interface of a virtual machine with `virsh domif-setlink`; it stays down while both nodes keep
+running. Sherpa brings it back up when the link's state next changes, for example when one of
+the nodes stops and starts, and once when the Sherpa server restarts, as it then checks every
+link afresh.
+
 A restarted container's interfaces have new MAC addresses, so its peer reaches it once the
 peer's neighbour entry is refreshed, which Linux does within seconds; other network operating
 systems may take longer.
