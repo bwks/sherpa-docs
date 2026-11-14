@@ -1,11 +1,8 @@
 # Cisco IOL
 
-Cisco IOL (IOS on Linux) is a container based image, in two models:
-
-| Model | Image |
-| ----- | ----- |
-| `cisco_iol` | IOL XE, a router |
-| `cisco_ioll2` | IOL XE L2, a switch |
+Cisco IOL (IOS on Linux) is a container based image. The `cisco_iol` model is IOL XE, a router.
+The IOL XE L2 switch is the `cisco_ioll2` model, on its own page:
+[Cisco IOL L2](cisco-ioll2.md).
 
 Sherpa runs IOL from your own Cisco Modeling Labs (CML) IOL images, rebuilt for Sherpa with
 [docker-cisco-iol](https://github.com/bwks/docker-cisco-iol). Neither Sherpa nor
@@ -16,6 +13,7 @@ docker-cisco-iol includes any Cisco files.
 See the [general notes](general.md) for how to obtain the CML images, and Cisco's warning about
 using them outside CML.
 
+The image is built the same way for both IOL models, so this section covers `cisco_ioll2` as well.
 You need the IOL image tarballs from a CML release's reference platform files:
 
 - `iol-xe-<version>.tar.gz` for `cisco_iol`
@@ -69,8 +67,6 @@ sherpa server image import --src cisco_iol-17.18.02.tar --model cisco_iol --vers
 
 ## Default Node Parameters
 
-Both models have the same defaults.
-
 | Property             | Value     |
 | -------------------- | --------- |
 | Kind                 | Container |
@@ -105,18 +101,9 @@ name = "r2"
 model = "cisco_iol"
 version = "17.18.02"
 
-[[nodes]]
-name = "sw1"
-model = "cisco_ioll2"
-version = "17.18.02"
-
 [[links]]
 src = "r1::Ethernet0/1"
 dst = "r2::Ethernet0/1"
-
-[[links]]
-src = "r1::Ethernet0/2"
-dst = "sw1::Ethernet0/1"
 ```
 
 ## Node Access
@@ -137,13 +124,14 @@ dst = "sw1::Ethernet0/1"
 
 ## Notes
 
+Except for the startup configuration, these notes apply to [`cisco_ioll2`](cisco-ioll2.md) as well.
+
 - Approximate time for the system to be ready: `1 minute`. Sherpa reports the node ready once the
   container is running; SSH answers about a minute later, once IOL has booted and generated its
   RSA key.
 - The startup configuration sets the hostname, the `sherpa` login and yours, SSH, and the
   management address on `Ethernet0/0`, with a default route through the management network. The
-  data interfaces are left as IOL starts them: shut down, with no address. On `cisco_ioll2`,
-  `Ethernet0/0` is a routed port (`no switchport`) and `ip routing` is on.
+  data interfaces are left as IOL starts them: shut down, with no address.
 - `write memory` saves to IOL's NVRAM, which Sherpa keeps in the lab folder. A saved
   configuration wins over the startup configuration and survives `sherpa down` and
   `sherpa resume`, and a restart of the container, such as after the server restarts.
