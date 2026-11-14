@@ -136,6 +136,8 @@ Except for the startup configuration, these notes apply to [`cisco_ioll2`](cisco
   configuration wins over the startup configuration and survives `sherpa down` and
   `sherpa resume`, and a restart of the container, such as after the server restarts.
   `sherpa redeploy` clears it and starts the node again from the startup configuration.
+  `cisco_ioll2` keeps its VLANs apart from the configuration; see
+  [Cisco IOL L2: Saving VLANs](cisco-ioll2.md#saving-vlans).
 - IOS closes an SSH session that runs a single command before a long command such as `ping`
   ends. Run those in an interactive session (`sherpa ssh r1`).
 - **MTU 1500.** IOL's interfaces are fixed at MTU 1500 and cannot be changed. Sherpa's link ends
