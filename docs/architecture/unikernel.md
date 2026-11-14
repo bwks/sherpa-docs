@@ -80,7 +80,7 @@ Unikernels use the same networking as virtual machines — virtio interfaces att
 
 Each unikernel provides a serial console for access:
 
-- **Serial Console** — TCP-based telnet console bound to the node's unique loopback IP on port `2323`. Connect via `sherpa console <node>` or directly with `telnet <node-loopback-ip> 2323`.
+- **Serial Console** — TCP-based telnet console bound to the node's unique loopback IP on port `2323`. Connect with `sherpa console <node>` from any machine with the CLI, through the Sherpa server, with no `telnet` program needed. On the server host, any telnet client can also connect directly with `telnet <node-loopback-ip> 2323`.
 
 !!! info
 

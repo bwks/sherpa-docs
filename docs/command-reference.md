@@ -413,6 +413,8 @@ sherpa ssh <name>
 
 - The terminal type (`TERM`) and window size are passed to the node, and resizing the window
   resizes the remote terminal.
+- Once connected, it prints `Connected to <node>.<lab-id>. Escape: ~. at the start of a line.`,
+  and `Connection to <node>.<lab-id> closed.` when the session ends.
 - Type `~.` at the start of a line to disconnect, for example from a node that stopped
   answering. Type `~~` to send a single `~`.
 - `sherpa ssh` exits with the exit code of the node's shell, or 255 if the node did not
@@ -430,11 +432,29 @@ sherpa ssh <name>
 
 ### `sherpa console`
 
-Connect to a device via serial console over Telnet.
+Open the serial console of a virtual machine or unikernel node in your terminal. The console is
+served by the Sherpa server, and `sherpa console` reaches it through an SSH connection to the
+server, the same one `sherpa ssh` uses, so it works from any machine with the CLI, remote and
+Windows clients included. Sherpa has its own telnet client, so no `telnet` program needs to be
+installed.
 
 ```
 sherpa console <name>
 ```
+
+- Once connected, it prints `Connected to the console of <node> in lab <lab>. Escape: Ctrl+] or
+  ~. at the start of a line.`, and `Connection to the console of <node> closed.` when the
+  session ends. Press Enter to see the node's prompt.
+- Press `Ctrl+]` anywhere, or type `~.` at the start of a line, to disconnect. Type `~~` to send
+  a single `~`. `sherpa console` exits with code 0 when you disconnect or the console closes.
+- The connection to the Sherpa server asks about its host key, your key's passphrase or your
+  password as [`sherpa ssh`](#sherpa-ssh) does.
+- A console serves one client at a time. If another session holds it, `sherpa console` waits
+  3 seconds and then says the console is in use; close the other session and try again.
+- If the console refuses the connection, does not answer within 10 seconds or closes, the
+  message says so; check the node is running with `sherpa inspect`.
+- Container nodes have no serial console, and `sherpa console` refuses them before connecting.
+  Use `sherpa ssh`, or `docker exec` on the server.
 
 ### `sherpa download`
 

@@ -14,6 +14,10 @@ Install the same version as the server. The [server install script](automated.md
 CLI on the server itself; other machines need it installed as shown below. To update an existing
 install, see [Updating the client](../update/client.md).
 
+The CLI has its own SSH and telnet clients, so [`sherpa ssh`](../../command-reference.md#sherpa-ssh)
+and [`sherpa console`](../../command-reference.md#sherpa-console) need no `ssh` or `telnet`
+program, on Windows too. Both reach lab nodes through the Sherpa server.
+
 ## Windows
 
 The install script, `sherpa_client_install.ps1`, downloads the release's Windows build and
