@@ -238,7 +238,10 @@ Except for the startup configuration, these notes apply to [`cisco_ioll2`](cisco
 - Sherpa turns transmit checksum offload off on the server's side of every IOL interface, as IOL
   cannot finish a checksum that the server left for "hardware" to fill in. Without it, TCP to
   IOL fails while ping works. This is done for links, disabled interfaces and the management
-  interface. An IOL node in a private bridge with no link takes its bridge interfaces as Docker
+  interface. A container started outside Sherpa, with `docker start` or `docker restart`, comes
+  back with offload on; the server's [scanner](../../configuration/sherpa.md#scanner) turns it
+  off again within `scanner.interval_secs` (30 seconds by default), so SSH to the management
+  address comes back without anything done by hand. An IOL node in a private bridge with no link takes its bridge interfaces as Docker
   macvlan interfaces, which have no server side to change; give it a link as well if TCP to IOL
   through the bridge fails.
 - IOL does not see link state: an interface stays up when its link goes down.
