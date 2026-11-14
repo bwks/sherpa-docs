@@ -87,11 +87,21 @@ would set it; a guest that ignores the link state of its network card does not s
 change is made to the running virtual machine only: one that is started again starts with its
 links up, and Sherpa takes a link down again if its peer is still down.
 
-Sherpa changes a link's state when it sees the peer stop or start: at once for
-`sherpa resume` and `sherpa redeploy`, and within `scanner.interval_secs` (30 seconds by
-default) for changes made outside Sherpa, a pause, and `sherpa down`. With the
-[scanner](../../../configuration/sherpa.md#scanner) disabled, only `sherpa resume` and
-`sherpa redeploy` change it.
+When Sherpa changes a link's state depends on what stopped or started the peer:
+
+- `sherpa resume`, of one node or the whole lab, changes it before the command returns, for
+  every node it starts or unpauses. A node started while its peer is still paused has its link
+  taken down at once.
+- `sherpa redeploy` replaces the node within the command, and its peers keep their carrier
+  throughout: frames sent to it while it is replaced are dropped.
+- `sherpa down`, a pause, and changes made outside Sherpa are seen by the
+  [scanner](../../../configuration/sherpa.md#scanner), within `scanner.interval_secs` (30
+  seconds by default) of the change. With the scanner disabled, they do not change the link,
+  and only `sherpa resume` and `sherpa redeploy` do.
+
+The network operating system may take longer to act on the change: Cisco IOL, for example,
+takes an interface down about 12 seconds after its link loses carrier; see
+[Cisco IOL](../../../nodes/cisco/cisco-iol.md#link-state).
 
 Sherpa changes a link only when its state changes. To simulate a link failure, take the host
 end down yourself, for example `ip link set tpb3-ab12cd34 down` on the Sherpa server, or the
