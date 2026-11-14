@@ -351,7 +351,7 @@ The **Links** table has a **State** column, with what the server last found or l
 | State | Meaning |
 | ----- | ------- |
 | `attached` | Both ends exist and redirect to each other, with the link's impairments. |
-| `peer down: <node>` | `<node>` is stopped or paused, or its virtual machine or container is gone. The other end's interface has no carrier. The link is attached again, with carrier, when `<node>` starts. |
+| `peer down: <node>` | `<node>` is stopped or paused, or its virtual machine or container is gone. The other end's interface has no carrier. The link is attached again, with carrier, when `<node>` starts or is unpaused. |
 | `failed: <reason>` | The link could not be attached. It carries no traffic, and neither end's interface has carrier, until it is attached again, by the next scan, a resume or a redeploy. |
 | `not checked` | The server has not checked the link since it started: the [scanner](configuration/sherpa.md#scanner) checks each lab every `scanner.interval_secs` (30 seconds by default), so this shows only for that long after the server starts, or while the scanner is disabled. |
 
