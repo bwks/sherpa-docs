@@ -133,7 +133,10 @@ it, and it is what records a node `running` once it answers after its ready chec
 It also checks each lab's [P2P links](../architecture/networking/modes/point-to-point.md#when-a-node-restarts),
 and attaches again the links of a running node whose link ends were made again outside Sherpa,
 such as a virtual machine started with `virsh start` or a container restarted with
-`docker restart`, so they come back within `interval_secs`.
+`docker restart`, so they come back within `interval_secs`. For a
+[Cisco IOL](../nodes/cisco/cisco-iol.md#notes) container started outside Sherpa, it also turns
+transmit checksum offload off again on its management interface, so TCP to its management
+address works.
 With the scanner disabled, nodes keep the states the operations recorded; `sherpa inspect`
 still shows a container's state as Docker reports it. Links broken outside Sherpa stay broken
 until the node is resumed or redeployed, and `sherpa inspect` shows the links as
