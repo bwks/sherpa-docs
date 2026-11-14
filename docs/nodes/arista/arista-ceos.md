@@ -63,12 +63,6 @@ version = "4.35.1F"
     sherpa ssh dev01
     ```
 
-=== "Console"
-
-    ```
-    sherpa console dev01
-    ```
-
 === "Docker"
 
     ```

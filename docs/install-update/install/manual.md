@@ -9,7 +9,6 @@
 ```
 sudo apt install \
   cpu-checker \
-  telnet \
   ssh \
   mtools \
   e2tools \
