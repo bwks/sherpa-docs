@@ -106,6 +106,97 @@ src = "r1::Ethernet0/1"
 dst = "r2::Ethernet0/1"
 ```
 
+## VLAN Subinterfaces
+
+!!! warning
+
+    802.1Q tagged frames need an image built with docker-cisco-iol that includes
+    [the VLAN tag fix](https://github.com/bwks/docker-cisco-iol/pull/2). An image built before it
+    hands IOL every received frame untagged, so subinterfaces receive nothing. Rebuild the image
+    to fix it.
+
+IOL routes between VLANs on `encapsulation dot1Q` subinterfaces. The parent interface starts
+shut down, so bring it up with no address, and put the addresses on the subinterfaces.
+
+### Router on a stick
+
+`r1` trunked to a [`cisco_ioll2`](cisco-ioll2.md) switch, with a host in VLAN 10 on `sw1`'s
+`Ethernet0/2` and a host in VLAN 20 on `Ethernet0/3`:
+
+```toml
+[[links]]
+src = "r1::Ethernet0/1"
+dst = "sw1::Ethernet0/1"
+```
+
+On `sw1`:
+
+```
+vlan 10
+vlan 20
+!
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20
+ no shutdown
+!
+interface Ethernet0/2
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+!
+interface Ethernet0/3
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+```
+
+On `r1`:
+
+```
+interface Ethernet0/1
+ no ip address
+ no shutdown
+!
+interface Ethernet0/1.10
+ encapsulation dot1Q 10
+ ip address 10.60.10.1 255.255.255.0
+!
+interface Ethernet0/1.20
+ encapsulation dot1Q 20
+ ip address 10.60.20.1 255.255.255.0
+```
+
+```
+r1#show ip interface brief | include Ethernet0/1
+Ethernet0/1            unassigned      YES unset  up                    up
+Ethernet0/1.10         10.60.10.1      YES manual up                    up
+Ethernet0/1.20         10.60.20.1      YES manual up                    up
+```
+
+The hosts, with `r1` as their gateway, then reach each other through `r1`, one hop away
+(`ttl=63`). On `r1`'s side of the trunk, a ping from the VLAN 10 host to the VLAN 20 host arrives
+tagged 10 and leaves tagged 20, and the reply comes back the other way.
+
+### Between routers
+
+Subinterfaces also work on a link between two routers, with no switch. Give both ends a
+subinterface with the same VLAN:
+
+```
+interface Ethernet0/1
+ no shutdown
+!
+interface Ethernet0/1.30
+ encapsulation dot1Q 30
+ ip address 10.60.30.2 255.255.255.0
+```
+
+Ping and SSH work across it. A tagged frame carries a full 1500-byte IP packet, so
+`ping <address> size 1500 df-bit` succeeds across the subinterface as it does on an untagged
+interface.
+
 ## Node Access
 
 === "SSH"
