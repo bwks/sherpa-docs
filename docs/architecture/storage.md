@@ -13,7 +13,7 @@ Sherpa organises files across several directories under `/opt/sherpa/`.
 ├── bins/                    # Unikernel binaries
 ├── labs/                    # Per-lab runtime files
 │   └── <lab-id>/
-│       ├── manifest.toml    # Saved manifest
+│       ├── lab-info.toml    # The lab's networks and accounts
 │       ├── sherpa_ssh_config
 │       ├── sherpa_known_hosts  # Recorded node host keys
 │       ├── ztp/             # Generated node configs
@@ -78,7 +78,7 @@ virsh pool-info sherpa-pool
 
 Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This directory contains:
 
-- The **saved manifest** used for redeploys
+- The **lab info** file, `lab-info.toml`: the lab's networks and node accounts
 - **SSH configuration** files for node access, and the lab's own
   [SSH key pair](ssh.md#lab-ssh-key), which only the `sherpa` user can read
 - **ZTP configuration** files generated for each node, including cloud-init `user-data`
@@ -87,6 +87,11 @@ Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This direct
   [Vault](../nodes/hashicorp/hashicorp-vault.md) node Sherpa initialised
 - **Keycloak users**: the users and passwords of each
   [Keycloak](../nodes/keycloak/keycloak-server.md) node's `sherpa` realm
+
+The lab's manifest is not kept here: the server records it in its
+[database](database.md#lab-definitions) as the lab's definition. Older releases saved a copy as
+`manifest.toml` (or `manifest.json`); `sherpad` deletes it the first time it starts after the
+update.
 
 VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
 `/opt/sherpa/libvirt/images/`.

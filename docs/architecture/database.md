@@ -37,7 +37,11 @@ Labs started before this was recorded get theirs from their saved manifest the f
 `sherpad` starts after the update. That saved manifest was resolved, so the import keeps only
 what it holds as written: `ztp.config` and `environment_variables` are left out, and stored again
 the next time you redeploy the node from your manifest. A lab whose saved manifest cannot be read
-is logged and keeps none. A CLI older than the server sends only resolved values, so a lab it
+is logged and keeps none. The saved manifests are then deleted, `manifest.toml` and
+`manifest.json` in each lab's directory and nothing else; the server no longer writes them, and
+reads the lab's manifest only from its definition. A lab with no definition is used with the
+defaults: `sherpa resume` waits the default readiness timeout, containers get their image's
+number of data interfaces, and it cannot be redeployed from the web UI. A CLI older than the server sends only resolved values, so a lab it
 starts has no `ztp.config`, environment variables or provisioners recorded.
 
 ### Database key
