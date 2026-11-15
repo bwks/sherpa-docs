@@ -1022,6 +1022,13 @@ the database, the built-in `admin` account and a first user account. See the
 | `--server-ipv6` | Server listen IPv6 address, if any (env: `SHERPA_SERVER_IPV6`) |
 | `--ws-port` | Server listen port, default `3030` (env: `SHERPA_SERVER_WS_PORT`) |
 | `--http-port` | HTTP certificate endpoint port, default `3031` (env: `SHERPA_SERVER_HTTP_PORT`) |
+| `--management-prefix-ipv4` | IPv4 prefix lab management `/24` subnets are taken from, default `172.31.0.0/16` (env: `SHERPA_MANAGEMENT_PREFIX_IPV4`) |
+
+The address, port and prefix values are written only when `init` writes `sherpa.toml`: an
+existing config is kept, and `--force` rewrites it. The management prefix must be an IPv4 network
+of `/24` or shorter, with room for a lab's `/24`; `sherpad init` refuses any other value before
+changing anything. To change the prefix of a server that already has a config, see
+[Changing the Ranges](architecture/networking/ip-addressing.md#changing-the-ranges).
 
 Values come from the flags or the environment variables only. From 0.5.1, `sherpad init` no
 longer reads `/opt/sherpa/env/sherpa.env`: the install script prints the `sherpad init` command
