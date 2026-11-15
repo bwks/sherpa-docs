@@ -12,6 +12,10 @@ Each node lists its provisioners in the manifest, and each provisioner has a `ty
 | [`ssh`](ssh.md) | Linux and BSD virtual machines | The `sherpa` CLI connects to the node over SSH, through the Sherpa server as a jump host, and copies your files and runs your scripts. The server only forwards the encrypted connection, so it never sees the contents. |
 | [`container`](container.md) | Containers | The CLI sends your secret files to the server, which keeps them in memory only and mounts them in the container at `/run/secrets` before it starts. |
 
+The server records each provisioner's definition with the lab: its type, the paths of its files
+and scripts, their destinations and modes, and the lab's `provision_concurrency`. It never
+records the contents of those files.
+
 A node's provisioners run in the order they are listed. See
 [`provisioners`](../../manifest.md#provisioners-listobject) in the manifest reference for every
 field.

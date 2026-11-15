@@ -627,8 +627,10 @@ sherpa server clean <lab_id>
 
 Back up the server's database while the server keeps running. Admin only. The server writes a
 consistent copy to `/opt/sherpa/db/backups/sherpa-<time>.sqlite`, named after the UTC time, and
-prints its path and size. The backup stays on the server. See
-[Database backups](architecture/database.md#backups) for restoring one.
+prints its path and size. The backup stays on the server. It does not hold the
+[database key](architecture/database.md#database-key), `/opt/sherpa/.secret/db.key`, so keep a
+copy of the key alongside your backups, stored separately from them. See [Database backups](architecture/database.md#backups) for
+restoring one.
 
 ```
 sherpa server backup
@@ -762,7 +764,8 @@ sherpa server image show <model>
 The table names each row by its key in the image's JSON, such as `cpu.count` and
 `interfaces.data_count`. It leaves out the settings the image's kind does not use: a
 container's `machine`, `boot_disk` and `cdrom`, and a unikernel's `machine.bios`, `boot_disk`
-and `cdrom`. `sherpa server --output json image show <model>` prints the JSON itself, with every
+and `cdrom`. The `ztp.password` row says only whether the image has a password: `set` or
+`not set`. `sherpa server --output json image show <model>` prints the JSON itself, with every
 setting nested by group; see [Node images](api-reference.md#node-images).
 
 ### `sherpa server image list`
