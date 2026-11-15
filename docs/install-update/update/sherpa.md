@@ -53,6 +53,16 @@ other two after a warning in the `sherpad` log; that lab's nodes keep the accoun
 already has, or the `sherpa` account. The lab folders on
 your clients are not touched. See [lab files](../../architecture/storage.md#lab-files).
 
+Updating from 0.6.4 or earlier, `sherpad` also stops keeping each Talos cluster's plan, the
+`cluster.toml` in `/opt/sherpa/labs/<lab-id>/clusters/<cluster>/`. The first time it starts
+after the update it records each cluster's endpoint, shared address and load balancer addresses
+in the database, then **deletes that file**. The cluster's `secrets.toml`, `talosconfig` and
+`kubeconfig` stay, and `sherpa down`, `sherpa redeploy` and `sherpa download` work as before. A
+`cluster.toml` that cannot be read, or that names a cluster the lab no longer has, is deleted
+after a warning in the `sherpad` log naming the lab; `sherpa down` then powers that cluster's
+nodes off instead of shutting them down through Talos, `sherpa redeploy` refuses its workers,
+and `sherpa download` leaves the cluster out.
+
 ## Updating to 0.6.0
 
 0.6.0 is a breaking release. Before you update a server, do the following in this order:

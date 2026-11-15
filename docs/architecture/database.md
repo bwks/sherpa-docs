@@ -184,6 +184,18 @@ The lists of a lab's definition, one table each: its links, bridges and Talos cl
 node's CPU lists, SSH keys, commands, volumes, environment variables, files, scripts, systemd
 units and provisioners. Each row belongs to a lab or a node, and is deleted with it.
 
+#### talos_cluster_plan
+
+What Sherpa works out for each Talos cluster when the lab is brought up, beside the cluster in
+the lab's definition. Its members' addresses are their nodes' `mgmt_ipv4`.
+
+| Field                 | Type           | Description                                        |
+| --------------------- | -------------- | -------------------------------------------------- |
+| `lab`, `cluster`      | lab, number    | The cluster in the lab's definition (cascade delete) |
+| `endpoint`            | text           | Address of the cluster's Kubernetes API            |
+| `vip`                 | text, optional | Shared address of a cluster with three controllers |
+| `load_balancer_first`, `load_balancer_last` | text, optional | Load balancer addresses of a Cilium cluster |
+
 #### link
 
 Stores point-to-point connections between nodes.
