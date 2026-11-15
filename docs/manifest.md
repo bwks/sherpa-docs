@@ -794,11 +794,12 @@ node of another lab" instead. `sherpa up` and `sherpa redeploy` exit with status
 free, or pin other CPUs.
 
 Labs created by earlier releases may already share a CPU, since two labs started at the same
-moment could both pass the check. They are not refused: `sherpa resume` and `sherpa redeploy`
-start such a node and show a warning that names the CPUs, such as `Warning:
-Host CPU 3 of node 'n1' is also pinned by a node of another lab, against the CPU pinning
-rules. Starting the node anyway; redeploy one of the two on other host CPUs to fix it`. A
-redeploy may keep the CPU it already shares, but cannot take more.
+moment could both pass the check. Upgrading keeps their pins as they are, and they are not
+refused: `sherpa resume` and `sherpa redeploy` start such a node and show a warning that names
+the CPUs, such as `Warning: Host CPU 3 of node 'n1' is also pinned by a node of another lab,
+against the CPU pinning rules. Starting the node anyway; redeploy one of the two on other host
+CPUs to fix it`. `sherpad` also logs each pair of nodes that share a CPU every time it starts.
+A redeploy may keep the CPU it already shares, but cannot take more.
 
 The memory of a node with `numa.node` and `numa.memory_mode = "strict"` (or left out) must fit
 on that NUMA node beside the other virtual machines held strictly there, or `sherpa up`,
