@@ -63,7 +63,13 @@ is `.1`. The loopback ranges cannot be changed.
 
 ## Changing the Ranges
 
-Set the ranges in the server configuration file and restart `sherpad`:
+On a new server, `sherpad init --management-prefix-ipv4 <prefix>` and
+`--management-prefix-ipv6 <prefix>` (or `SHERPA_MANAGEMENT_PREFIX_IPV4` and
+`SHERPA_MANAGEMENT_PREFIX_IPV6`) write the ranges into the config it creates. Without the IPv6
+option, `management_prefix_ipv6` is left unset and labs use `fd00:b00b::/48`. See
+[`sherpad init`](../../command-reference.md#sherpad-init). An existing config is kept by `init`.
+
+On a server that already has a config, set the ranges in the server configuration file and restart `sherpad`:
 
 ```toml
 management_prefix_ipv4 = "172.31.0.0/16"

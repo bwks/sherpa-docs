@@ -63,8 +63,8 @@ overcommit_percent = 100
 | `http_port` | int | `3031` | HTTP port |
 | `vm_provider` | string | | VM provider — `"libvirt"` (required) |
 | `qemu_bin` | string | | Path to QEMU binary (required) |
-| `management_prefix_ipv4` | string | `172.31.0.0/16` | Management network IPv4 CIDR |
-| `management_prefix_ipv6` | string | `fd00:b00b::/48` when unset | Management network IPv6 CIDR. See [IP Addressing](../architecture/networking/ip-addressing.md) |
+| `management_prefix_ipv4` | string | `172.31.0.0/16` | Management network IPv4 CIDR, `/24` or shorter, not a `x.x.0.0/24`. `sherpad init --management-prefix-ipv4` sets it when it writes the config |
+| `management_prefix_ipv6` | string | `fd00:b00b::/48` when unset | Management network IPv6 CIDR, `/63` or shorter. `sherpad init --management-prefix-ipv6` sets it when it writes the config. See [IP Addressing](../architecture/networking/ip-addressing.md) |
 | `images_dir` | string | | Directory for VM/unikernel images (required) |
 | `containers_dir` | string | | Directory for container images (required) |
 | `bins_dir` | string | | Directory for binary files (required) |
