@@ -314,6 +314,18 @@ Run `sherpa redeploy -n <node>` from the lab's folder instead: the CLI reads the
 variables there. A lab started before the server recorded definitions, whose definition could
 not be imported, cannot be redeployed from the web UI at all.
 
+A lab started before the server recorded definitions, whose definition was imported from the
+manifest the server saved, is refused too, node by node. That saved manifest did not keep a
+node's own ZTP config or environment variables as you wrote them, so the server cannot tell
+whether the node had them. Redeploy each node once with `sherpa redeploy -n <node>` from the
+lab's folder; the web UI can redeploy that node after that:
+
+```
+Node 'dev01' was imported from a saved manifest that did not keep its own ZTP config or environment variables, so it cannot be redeployed from the web UI. Run `sherpa redeploy -n dev01` from the lab folder once; the web UI can redeploy it after that
+```
+
+A lab started by `sherpa up` after the update is not affected.
+
 ### `sherpa provision`
 
 Run node [provisioners](architecture/provisioners/overview.md) again from the lab's folder: send
