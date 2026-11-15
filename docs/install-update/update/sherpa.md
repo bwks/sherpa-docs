@@ -38,8 +38,9 @@ manifest that cannot be imported, such as one in the shape before 0.6.0, is dele
 lab runs with the defaults; the database backup does not hold these files, so copy them first if
 you want to keep them. See
 [lab definitions](../../architecture/database.md#lab-definitions). A node that needs files or
-`$VAR` values can no longer be redeployed from the web UI; see
-[redeploying from the web UI](../../command-reference.md#redeploying-from-the-web-ui).
+`$VAR` values can no longer be redeployed from the web UI, and neither can any node of a lab
+started before the update until it has been redeployed once with `sherpa redeploy -n <node>`;
+see [redeploying from the web UI](../../command-reference.md#redeploying-from-the-web-ui).
 
 ## Updating to 0.6.0
 
