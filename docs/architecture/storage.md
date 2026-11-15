@@ -78,8 +78,11 @@ virsh pool-info sherpa-pool
 Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This directory contains:
 
 - The lab's own [SSH key pair](ssh.md#lab-ssh-key), which only the `sherpa` user can read
-- **ZTP configuration** files generated for each node, including cloud-init `user-data`
-- **TLS certificates**: the [lab CA](certificates.md) and each node's certificate
+- **ZTP configuration** the boot server serves while the lab exists: its DHCP and DNS config,
+  and the TFTP and HTTP files of nodes that boot by them
+- **Container configuration**: the files each container node mounts
+- **TLS certificates**: the [lab CA](certificates.md) and the certificate of each container and
+  VM node
 - **Vault credentials**: the unseal key and root token of each
   [Vault](../nodes/hashicorp/hashicorp-vault.md) node Sherpa initialised
 - **Keycloak users**: the users and passwords of each
@@ -99,7 +102,11 @@ as before. Releases up to 0.6.4 kept them here as `lab-info.toml`, `sherpa_ssh_c
 first time it starts after the update.
 
 VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
-`/opt/sherpa/libvirt/images/`.
+`/opt/sherpa/libvirt/images/`. A VM's boot files, such as its cloud-init `user-data` and the ISO
+built from them, are removed from the lab directory once they are in the pool; if the copy
+fails they are kept until the lab is destroyed, so the failure can be looked at. Releases up to
+0.6.4 kept them, wrote an empty `dnsmasq.leases` and issued unikernel nodes certificates they
+never used; `sherpad` removes those files the first time it starts after the update.
 
 When a lab is destroyed, its entire lab directory is cleaned up.
 
