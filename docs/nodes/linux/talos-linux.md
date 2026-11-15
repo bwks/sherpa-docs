@@ -189,7 +189,11 @@ spec:
 The Cilium settings are fixed. Cilium's images are pulled from `quay.io` when the cluster
 starts, so nodes need internet access, as they do for the Kubernetes images.
 
-See the [Kubernetes example](../../examples/kubernetes.md) for a cluster to try it on.
+See the [Kubernetes example](../../examples/kubernetes.md) for a cluster to try it on. Its
+[repository](https://github.com/bwks/sherpa-k8s-lab) adds an HTTPS listener to the Gateway, with
+a certificate from Vault through cert-manager, and puts a Keycloak login in front of Hubble UI
+with the Gateway's external auth. Hubble UI's own address is open to the management network
+until you close it, as the repository does with a Cilium network policy.
 
 ### Keycloak login
 
@@ -229,6 +233,10 @@ The first command opens a browser at Keycloak's login page. Sign in with a user 
 
 Keycloak can start after the cluster: the Kubernetes API keeps retrying the realm until it
 answers.
+
+The realm can log users in to your apps too. The
+[Kubernetes example's repository](https://github.com/bwks/sherpa-k8s-lab#a-keycloak-login-in-front-of-hubble-ui)
+adds a Keycloak client for Hubble UI through the admin API and puts the login in front of it.
 
 ### Vault secrets
 
@@ -284,6 +292,11 @@ spec:
 The operator logs in with the namespace's `default` service account. The Vault node must run
 the config Sherpa generates, without `ztp.config`. The operator's chart and images are
 downloaded when it is installed, so nodes need internet access.
+
+Vault can issue the cluster's certificates as well. The
+[Kubernetes example's repository](https://github.com/bwks/sherpa-k8s-lab#https-on-the-gateway)
+makes Vault's PKI engine an intermediate CA under the lab CA, and gives the Gateway an HTTPS
+certificate from it through cert-manager, which logs in to Vault with the cluster's auth method.
 
 ### Cluster defaults
 
