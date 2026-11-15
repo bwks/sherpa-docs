@@ -767,6 +767,38 @@ Rules for pinned host CPUs:
   with the same settings on other nodes.
 - **The checks run at `sherpa up` and `sherpa redeploy`.** Every CPU and the NUMA node must
   exist on the server.
+- **A node holds its pinned CPUs from the moment its `up` or `redeploy` is accepted** until
+  its lab is destroyed, also while the lab is stopped. During a `redeploy` that changes the
+  pins, the node holds both the old and the new CPUs; a redeploy that fails before the new
+  pins are in place keeps the old ones.
+- **CPUs another node holds are refused with their own error**, and the command exits with
+  status `75`, like a memory refusal ([CPU pins held](#cpu-pins-held)).
+
+###### CPU pins held
+
+When a node pins a host CPU that a node of another lab holds, or a node another `up` or
+`redeploy` is starting right now, the server refuses the command before it creates or tears
+down anything. Of two `up`s started at once that ask for the same CPUs, the first to arrive
+builds its lab and the other is refused. The error names the CPUs and what each node pins to
+them, for example:
+
+```text
+Lab creation failed: Host CPU 3, which node 'n1' would pin to its vCPUs, is pinned to the
+vCPUs of node 'n1' of lab 'pins-a' (5c725af9). Try again once that node is destroyed or
+redeployed without them (code: -32006)
+```
+
+The holding node and lab are named to admins and to that lab's owner. Everyone else reads "a
+node of another lab" instead. `sherpa up` and `sherpa redeploy` exit with status `75`
+([exit status](../command-reference.md#exit-status)); run the command again once the CPUs are
+free, or pin other CPUs.
+
+Labs created by earlier releases may already share a CPU, since two labs started at the same
+moment could both pass the check. They are not refused: `sherpa resume` and `sherpa redeploy`
+start such a node and show a warning that names the CPUs, such as `Warning:
+Host CPU 3 of node 'n1' is also pinned by a node of another lab, against the CPU pinning
+rules. Starting the node anyway; redeploy one of the two on other host CPUs to fix it`. A
+redeploy may keep the CPU it already shares, but cannot take more.
 
 The memory of a node with `numa.node` and `numa.memory_mode = "strict"` (or left out) must fit
 on that NUMA node beside the other virtual machines held strictly there, or `sherpa up`,
