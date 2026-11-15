@@ -7,6 +7,11 @@ kube-proxy, gives the cluster a Gateway on the lab's management network, and sho
 between pods in Hubble. Users log in to the cluster through Keycloak, and workloads read their
 secrets from Vault. A util node has the tools to work with all of it.
 
+The lab is also a repository, [bwks/sherpa-k8s-lab](https://github.com/bwks/sherpa-k8s-lab),
+with this manifest and tools script, its Kubernetes manifests, and a walkthrough to follow end to
+end. The walkthrough goes further than this page: it gives the Gateway an HTTPS listener with a
+certificate from Vault, and puts a Keycloak login in front of Hubble UI.
+
 ![A Talos Linux Kubernetes cluster with three controllers and two workers, Keycloak and Vault containers, and a util VM, on the management network](kubernetes.svg)
 
 | Role       | Nodes                    | Model                                                   |
@@ -89,13 +94,13 @@ model = "hashicorp_vault"
 name = "util"
 model = "ubuntu_linux"
 memory = 2048
-startup_scripts = ["kubernetes-install-tools.sh"]
+startup_scripts = ["install-tools.sh"]
 
 [nodes.boot_disk]
 size = 10
 ```
 
-Save [`kubernetes-install-tools.sh`](kubernetes-install-tools.sh) next to the manifest. On the
+Save [`install-tools.sh`](kubernetes/install-tools.sh) next to the manifest. On the
 util node's first boot it installs:
 
 | Tool | Version |
@@ -120,9 +125,9 @@ token in `vault/vault-vault01.toml`, and the Keycloak realm's users in
 ```
 ✅ Lab CA certificate: /home/user/k8s/.sherpa/ca/lab-ca.crt
 ✅ Vault vault01 credentials: /home/user/k8s/.sherpa/vault/vault-vault01.toml
-   export VAULT_ADDR=https://172.31.1.24:8200 VAULT_CACERT=/home/user/k8s/.sherpa/ca/lab-ca.crt
+   export VAULT_ADDR=https://172.31.1.27:8200 VAULT_CACERT=/home/user/k8s/.sherpa/ca/lab-ca.crt
 ✅ Keycloak kc01 users: /home/user/k8s/.sherpa/keycloak/keycloak-kc01.toml
-   Realm issuer: https://172.31.1.23:8443/realms/sherpa
+   Realm issuer: https://172.31.1.26:8443/realms/sherpa
 ✅ Cluster k8s credentials: /home/user/k8s/.sherpa/k8s/kubeconfig-k8s and /home/user/k8s/.sherpa/talos/talosconfig-k8s
    export KUBECONFIG=/home/user/k8s/.sherpa/k8s/kubeconfig-k8s TALOSCONFIG=/home/user/k8s/.sherpa/talos/talosconfig-k8s
    Gateway: http://172.31.1.13
@@ -153,7 +158,16 @@ or shell, so `sherpa ssh` does not apply to them. If you lose the config files,
 ## Try It
 
 Run the steps below on the util node. They use the addresses of a lab on `172.31.1.0/24`; use
-the ones `sherpa up` printed.
+the ones `sherpa up` printed. The [repository's walkthrough](https://github.com/bwks/sherpa-k8s-lab#readme)
+has the same steps, with the Kubernetes manifests as files, and two more:
+
+- [HTTPS on the Gateway](https://github.com/bwks/sherpa-k8s-lab#https-on-the-gateway):
+  cert-manager, with an issuer backed by Vault's PKI engine on `vault01`, gives the `sherpa`
+  Gateway an HTTPS listener. The certificate chains to the lab CA, which the util node trusts.
+- [A Keycloak login in front of Hubble UI](https://github.com/bwks/sherpa-k8s-lab#a-keycloak-login-in-front-of-hubble-ui):
+  Hubble UI moves behind the Gateway, which sends every request to oauth2-proxy through the
+  Gateway API `ExternalAuth` filter, and oauth2-proxy logs the user in with `kc01`'s `sherpa`
+  realm.
 
 ### Publish an app through the Gateway
 
@@ -249,7 +263,7 @@ kubectl config set-credentials oidc-password@k8s \
   --exec-api-version=client.authentication.k8s.io/v1 \
   --exec-command=kubectl \
   --exec-arg=oidc-login --exec-arg=get-token \
-  --exec-arg=--oidc-issuer-url=https://172.31.1.23:8443/realms/sherpa \
+  --exec-arg=--oidc-issuer-url=https://172.31.1.26:8443/realms/sherpa \
   --exec-arg=--oidc-client-id=kubernetes \
   --exec-arg=--grant-type=password \
   --exec-interactive-mode=IfAvailable
@@ -258,7 +272,7 @@ kubectl --context oidc-password@k8s auth whoami
 ```
 
 To give someone read-only access, add a user in Keycloak's admin console
-(`https://172.31.1.23:8443/admin/`, as `sherpa`) to the `sherpa` realm and the
+(`https://172.31.1.26:8443/admin/`, as `sherpa`) to the `sherpa` realm and the
 `cluster-viewers` group. They can read most resources, but not change them or read Secrets.
 
 ### Read a secret from Vault
@@ -267,7 +281,7 @@ Point the `vault` CLI at the node and write a secret under the cluster's path. T
 trusts the lab CA; on a workstation, also set `VAULT_CACERT=$PWD/.sherpa/ca/lab-ca.crt`.
 
 ```
-export VAULT_ADDR=https://172.31.1.24:8200
+export VAULT_ADDR=https://172.31.1.27:8200
 export VAULT_TOKEN=<root_token from .sherpa/vault/vault-vault01.toml>
 vault kv put secret/k8s/demo password=s3cret
 ```
