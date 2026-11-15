@@ -87,6 +87,8 @@ Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This direct
   [Vault](../nodes/hashicorp/hashicorp-vault.md) node Sherpa initialised
 - **Keycloak users**: the users and passwords of each
   [Keycloak](../nodes/keycloak/keycloak-server.md) node's `sherpa` realm
+- **Talos cluster secrets**: the secrets, talosconfig and kubeconfig of each Kubernetes cluster
+  Sherpa built from Talos Linux nodes, in `clusters/<cluster>/`
 
 The lab's manifest is not kept here: the server records it in its
 [database](database.md#lab-definitions) as the lab's definition. Older releases saved a copy as
@@ -100,6 +102,11 @@ builds `lab-info.toml`, the SSH config and `known_hosts` from it whenever `sherp
 as before. Releases up to 0.6.4 kept them here as `lab-info.toml`, `sherpa_ssh_config` and
 `sherpa_known_hosts`; `sherpad` stores what only `lab-info.toml` held and deletes the three the
 first time it starts after the update.
+
+Nor is a Talos cluster's plan: its members are in the lab's definition, and the addresses Sherpa
+chose for it (its endpoint, shared address and load balancer addresses) in the database.
+Releases up to 0.6.4 kept it here as `clusters/<cluster>/cluster.toml`; `sherpad` stores it and
+deletes the file the first time it starts after the update.
 
 VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
 `/opt/sherpa/libvirt/images/`. A VM's boot files, such as its cloud-init `user-data` and the ISO
