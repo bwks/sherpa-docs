@@ -613,9 +613,19 @@ skip = false
   only needs to accept a TCP connection. Until then the node is `starting`, and `sherpa up`
   shows `Node <name> - Waiting for port <port>`. A container that exits while Sherpa waits is
   a failed node; one whose port does not answer in time is reported not ready, as a virtual
-  machine is. The server's [scanner](configuration/sherpa.md#scanner) does not check the port,
-  so it then records the running container `running`. Without a `port`, a container is ready
-  once it keeps running.
+  machine is, and stays `starting`. Without a `port`, a container is ready once it keeps
+  running.
+
+The server records each node's ready check (the port, or a virtual machine's model port, and
+`skip`) when `sherpa up` creates the node, and again when [`sherpa
+redeploy`](command-reference.md#sherpa-redeploy) rebuilds it from the changed manifest.
+`sherpa resume` and the server's [scanner](configuration/sherpa.md#scanner) use that record:
+the scanner probes a node left `starting` on its port, a virtual machine's too, and records it
+`running` only once the port answers. A node with no port, or with `skip = true`, is `running`
+once it runs. The nodes of a lab created before Sherpa recorded ready checks are recorded with
+no `port` and no `skip`, whatever their manifest set: a virtual machine is checked on its
+model's port, and a container or unikernel is ready once it runs. Redeploy a node to have its
+`ready_check` recorded.
 
 With `skip = true` the node is still created and started; Sherpa just doesn't wait for it to be
 ready, and ignores `port`. A container is not waited for to keep running, but one that is not running right after
