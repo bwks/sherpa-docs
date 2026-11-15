@@ -72,7 +72,8 @@ key is recorded there. A server whose key has changed is refused.
 ## Node Host Keys
 
 When a lab node answers on SSH, the Sherpa server records the host key it offers with the
-node. The lab's keys are saved in a `known_hosts` file, `.sherpa/ssh/known_hosts`, next to
+node in its database, and builds the lab's `known_hosts` file from the recorded keys when it
+sends it. The lab's keys are saved in a `known_hosts` file, `.sherpa/ssh/known_hosts`, next to
 `.sherpa/ssh/config`, which `sherpa up` and `sherpa download` write in the lab folder. For each
 node with a recorded key, `.sherpa/ssh/config` points to the file and checks the key strictly:
 

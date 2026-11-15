@@ -42,6 +42,16 @@ you want to keep them. See
 started before the update until it has been redeployed once with `sherpa redeploy -n <node>`;
 see [redeploying from the web UI](../../command-reference.md#redeploying-from-the-web-ui).
 
+Updating from 0.6.4 or earlier, `sherpad` also stops keeping each lab's `lab-info.toml`,
+`sherpa_ssh_config` and `sherpa_known_hosts` in `/opt/sherpa/labs/<lab-id>/`. The first time it
+starts after the update it records the node accounts from each lab's `lab-info.toml` in the
+database, then **deletes those three files**, and nothing else in the lab's directory. From then
+on it builds them from the database whenever `sherpa up`, `sherpa download` or the web UI gives
+them to you, and they are the same as before, so `sherpa ssh`, `sherpa console` and older
+clients work unchanged. A `lab-info.toml` that cannot be read is kept, with a warning in the
+`sherpad` log, unless the database already holds that lab's node accounts. The lab folders on
+your clients are not touched. See [lab files](../../architecture/storage.md#lab-files).
+
 ## Updating to 0.6.0
 
 0.6.0 is a breaking release. Before you update a server, do the following in this order:

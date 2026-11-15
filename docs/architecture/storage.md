@@ -13,9 +13,8 @@ Sherpa organises files across several directories under `/opt/sherpa/`.
 ├── bins/                    # Unikernel binaries
 ├── labs/                    # Per-lab runtime files
 │   └── <lab-id>/
-│       ├── lab-info.toml    # The lab's networks and accounts
-│       ├── sherpa_ssh_config
-│       ├── sherpa_known_hosts  # Recorded node host keys
+│       ├── sherpa_ssh_key   # The lab's SSH key pair
+│       ├── certs/           # Lab CA and node certificates
 │       ├── ztp/             # Generated node configs
 │       └── ...
 ├── libvirt/
@@ -78,9 +77,7 @@ virsh pool-info sherpa-pool
 
 Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This directory contains:
 
-- The **lab info** file, `lab-info.toml`: the lab's networks and node accounts
-- **SSH configuration** files for node access, and the lab's own
-  [SSH key pair](ssh.md#lab-ssh-key), which only the `sherpa` user can read
+- The lab's own [SSH key pair](ssh.md#lab-ssh-key), which only the `sherpa` user can read
 - **ZTP configuration** files generated for each node, including cloud-init `user-data`
 - **TLS certificates**: the [lab CA](certificates.md) and each node's certificate
 - **Vault credentials**: the unseal key and root token of each
@@ -92,6 +89,14 @@ The lab's manifest is not kept here: the server records it in its
 [database](database.md#lab-definitions) as the lab's definition. Older releases saved a copy as
 `manifest.toml` (or `manifest.json`); `sherpad` deletes it the first time it starts after the
 update.
+
+Nor are the lab info and SSH files. The lab's networks, its owner, each node's address and host
+key, and the account each node's SSH config logs in with are in the database, and the server
+builds `lab-info.toml`, the SSH config and `known_hosts` from it whenever `sherpa up`,
+`sherpa download` or the web UI's lab download gives them to you. The files you get are the same
+as before. Releases up to 0.6.4 kept them here as `lab-info.toml`, `sherpa_ssh_config` and
+`sherpa_known_hosts`; `sherpad` stores what only `lab-info.toml` held and deletes the three the
+first time it starts after the update.
 
 VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
 `/opt/sherpa/libvirt/images/`.
