@@ -451,8 +451,11 @@ sherpa console <name>
   password as [`sherpa ssh`](#sherpa-ssh) does.
 - A console serves one client at a time. If another session holds it, `sherpa console` waits
   3 seconds and then says the console is in use; close the other session and try again.
-- If the console refuses the connection, does not answer within 10 seconds or closes, the
-  message says so; check the node is running with `sherpa inspect`.
+  While it is held, the console takes only two more connections; after that a new one is not
+  answered, and `sherpa console` says after 10 seconds that the console did not answer and
+  that another client may hold it.
+- If the console refuses the connection or closes, the message says so; check the node is
+  running with `sherpa inspect`.
 - Container nodes have no serial console, and `sherpa console` refuses them before connecting.
   Use `sherpa ssh`, or `docker exec` on the server.
 
