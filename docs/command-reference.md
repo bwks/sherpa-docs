@@ -125,7 +125,8 @@ The lab is reserved before anything is created: a second `sherpa up` of a lab th
 that another `up` is creating, is refused at once with "Lab already exists", and does not touch
 the existing lab. Destroy it first to start it again.
 
-A container counts as ready once it has kept running for 5 seconds after it started. One whose
+A container counts as ready once it has kept running for 5 seconds after it started and, if it
+sets [`ready_check.port`](manifest.md#ready_check-object), that port answers. One whose
 process exits before then, or before `sherpa up` finishes, is reported as a failed node, and
 the rest of the lab is kept. The error gives its exit code and its last log lines; for the
 whole log, run `docker logs <node>-<lab_id>` on the server. `sherpa up` then exits with an
@@ -205,11 +206,12 @@ stops it. Using `--node` leaves the gateway alone.
 Resume all or a specific stopped node in the lab. Ctrl-C asks whether to stop the resume on
 the server too; see [stopping a running command](#stopping-a-running-command).
 
-Like `sherpa up`, resume waits for each VM or unikernel it boots to become ready,
-showing progress as it goes. It uses the lab's `ready_timeout`, and each node's
-`ready_check.skip` and `ready_check.port`, from the manifest the lab was created with. A node
-that is not ready within the timeout is reported, but resume still succeeds. Containers
-and paused nodes do not wait, because they resume an already running guest. A paused
+Like `sherpa up`, resume waits for each VM or unikernel it boots, and each container it starts
+that sets `ready_check.port`, to become ready, showing progress as it goes. It uses the lab's
+`ready_timeout`, and each node's `ready_check.skip` and `ready_check.port`, from the manifest
+the lab was created with. A node that is not ready within the timeout is reported, but resume
+still succeeds. Other containers, and paused nodes, do not wait: a paused node resumes an
+already running guest. A paused
 container is unpaused, a stopped one is started, and a running node is left as it is.
 A booted node is `starting` until it is ready, then `running`; one that is not ready in time
 stays `starting` until the server sees it answer.
@@ -280,7 +282,9 @@ The server checks the manifest, the node's image and the server's resources befo
 the node, so a refused redeploy leaves the node running as it was. A redeploy that fails once the
 node is destroyed marks it `failed` in `sherpa inspect`; fix the cause and redeploy it again.
 While it is rebuilt the node is `building`, then `starting`, and `running` once ready. A
-container that runs Vault or Keycloak is `running` only once they are restored.
+container that runs Vault or Keycloak is `running` only once they are restored, and one that
+sets `ready_check.port` only once that port answers; one whose port does not answer in time is
+reported not ready, and the redeploy still succeeds.
 
 ### `sherpa provision`
 
@@ -365,7 +369,7 @@ the next scan. A link's interfaces lose and get back their carrier with its stat
 | ----- | ------- |
 | `building` | `sherpa up` or `sherpa redeploy` is creating the node. Nothing else can stop, start or redeploy it until that finishes. |
 | `starting` | The node is started but not ready yet: its ready check has not passed. The server's [scanner](configuration/sherpa.md#scanner) keeps checking, and records it `running` once it answers. |
-| `running` | The node is ready: its ready check passed, or it has `ready_check.skip`. A container is ready once it has kept running for 5 seconds after it started. |
+| `running` | The node is ready: its ready check passed, or it has `ready_check.skip`. A container is ready once it has kept running for 5 seconds after it started and its `ready_check.port`, if it sets one, answers. |
 | `stopped` | The node is shut down or paused, by `sherpa down` or outside Sherpa, or its container's process exited after it was ready. |
 | `failed` | An operation on the node failed, such as a redeploy or a container that exited during `sherpa up` before it was ready, or its virtual machine crashed or its container died. It stays `failed` until you stop, resume or redeploy it. |
 | `missing` | The node's virtual machine or container no longer exists, for example because it was removed outside Sherpa. Redeploy it. |

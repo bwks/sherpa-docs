@@ -119,7 +119,7 @@ group on a node of another kind. The message names the node, the key and the kin
 | `interfaces.data_count` | yes | yes | yes |
 | `interfaces.queues` | yes | | |
 | `ztp`, `ssh` | yes | yes | |
-| `ready_check.port` | yes | | yes |
+| `ready_check.port` | yes | yes | yes |
 | `ready_check.skip` | yes | yes | yes |
 | `environment_variables`, `text_files`, `binary_files`, `systemd_units`, `startup_scripts`, `user_scripts` | yes | yes | |
 | `vm` | yes | | |
@@ -596,7 +596,7 @@ skip = false
 
 | Key | Type | Description |
 |---|---|---|
-| `port` | int | Port to probe on the node's management IP. Virtual machines and unikernels only |
+| `port` | int | Port to probe on the node's management IP |
 | `skip` | bool | Skip the readiness check |
 
 `port`:
@@ -607,11 +607,18 @@ skip = false
   attempted). Any other port only needs to accept a TCP connection.
 - **Unikernels:** Sherpa waits for a TCP connection to this port in addition to the libvirt
   domain reaching the running state.
-- **Containers** have no port check: a container is ready once it keeps running. Sherpa
-  refuses `port` on a container.
+- **Containers:** a container must first keep running for 5 seconds after it starts, as one
+  without a `port` does. Sherpa then waits for this port to answer on its management IP,
+  checked as for a virtual machine: on port `22` an SSH server must answer, any other port
+  only needs to accept a TCP connection. Until then the node is `starting`, and `sherpa up`
+  shows `Node <name> - Waiting for port <port>`. A container that exits while Sherpa waits is
+  a failed node; one whose port does not answer in time is reported not ready, as a virtual
+  machine is. The server's [scanner](configuration/sherpa.md#scanner) does not check the port,
+  so it then records the running container `running`. Without a `port`, a container is ready
+  once it keeps running.
 
 With `skip = true` the node is still created and started; Sherpa just doesn't wait for it to be
-ready. A container is not waited for to keep running, but one that is not running right after
+ready, and ignores `port`. A container is not waited for to keep running, but one that is not running right after
 it starts is still reported as a failed node, with its exit code and last log lines, and
 `sherpa up` exits with an error.
 
