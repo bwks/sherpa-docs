@@ -40,7 +40,7 @@ sudo systemctl restart sherpad
 One of:
 
 ```
-The database key /opt/sherpa/config/db.key is missing, and the database's secret values are
+The database key /opt/sherpa/.secret/db.key is missing, and the database's secret values are
 sealed with it. Restore the key file that was backed up with this database; a new key cannot
 open them
 ```
@@ -51,18 +51,18 @@ the key file that was backed up with this database
 ```
 
 ```
-The database key /opt/sherpa/config/db.key is damaged
+The database key /opt/sherpa/.secret/db.key is damaged
 ```
 
 ### Fix
 
 `sherpad` encrypts secret values in its database, such as a lab's `ztp_server.password`, with
-the key in `/opt/sherpa/config/db.key`; see [Database key](../architecture/database.md#database-key).
+the key in `/opt/sherpa/.secret/db.key`; see [Database key](../architecture/database.md#database-key).
 The key is not in the database or its backups, so a restored database needs the key it was
 backed up with. Copy that key back, owned by `sherpa` with mode `600`, then start `sherpad`:
 
 ```
-sudo install -o sherpa -g sherpa -m 600 /path/to/backed-up/db.key /opt/sherpa/config/db.key
+sudo install -o sherpa -g sherpa -m 600 /path/to/backed-up/db.key /opt/sherpa/.secret/db.key
 sudo systemctl restart sherpad
 ```
 

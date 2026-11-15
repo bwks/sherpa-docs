@@ -144,6 +144,13 @@ password hashes
 sudo install -d -o sherpa -g sherpa -m 750 /opt/sherpa/db
 ```
 
+Create the secrets directory, which only the `sherpa` user can open. `sherpad` keeps its login
+token secret and its [database key](../../architecture/database.md#database-key) there
+
+```
+sudo install -d -o sherpa -g sherpa -m 700 /opt/sherpa/.secret
+```
+
 ### AppArmor
 
 Update AppArmor policy to allow `qemu` to access config files.

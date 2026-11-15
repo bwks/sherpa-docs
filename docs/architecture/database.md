@@ -14,7 +14,7 @@ moves their data across; see [Updating to 0.5.0](../install-update/update/sherpa
 | Database file | `/opt/sherpa/db/sherpa.sqlite` |
 | Write-ahead log | `/opt/sherpa/db/sherpa.sqlite-wal`, next to the database file |
 | Backups | `/opt/sherpa/db/backups/` |
-| Database key | `/opt/sherpa/config/db.key` |
+| Database key | `/opt/sherpa/.secret/db.key` |
 
 The database and its backups hold password hashes and every lab's definition, so `/opt/sherpa/db`
 is readable only by the `sherpa` user and group, and `/opt/sherpa/db/backups` only by `sherpa`.
@@ -36,7 +36,8 @@ keeps none.
 
 Passwords are stored encrypted (AES-256-GCM): an image's ZTP password, and `ztp_server.password`
 from a lab's manifest. The key is in
-`/opt/sherpa/config/db.key`: 32 random bytes, readable only by `sherpa`, which `sherpad` creates
+`/opt/sherpa/.secret/db.key`, beside the JWT secret in a folder only `sherpa` can open (mode
+`700`): 32 random bytes, readable only by `sherpa`, which `sherpad` creates
 the first time it starts. The key is never in the database or its backups, so a database or a
 backup copied off the server shows no password. Image passwords stored as plain text by
 earlier releases are encrypted the first time `sherpad` starts after the update. The web UI and
@@ -45,7 +46,9 @@ a new one, keeps the current one when the field is left blank, or removes it.
 
 Keep the key with the database:
 
-- **Back it up with the database.** A backup restored without its key, or with another one,
+- **Back it up alongside the database, separately.** Keep a copy of the key wherever you keep
+  database backups, but not in the same file or folder. A backup restored without its key, or
+  with another one,
   does not start: see
   [Troubleshooting](../help/troubleshooting.md#sherpad-does-not-start-the-database-key-is-missing-or-does-not-match).
 - **Do not delete or replace it.** `sherpad` never replaces a missing or damaged key for a
@@ -62,9 +65,11 @@ The server writes a consistent copy of the database to
 `/opt/sherpa/db/backups/sherpa-<time>.sqlite`, named after the UTC time, and prints its path and
 size. The server stays up while it runs; changes wait until the copy is finished.
 
-Backups stay on the server. Copy them elsewhere to keep them safe from a disk failure, together
-with the [database key](#database-key), `/opt/sherpa/config/db.key`: the backup holds no copy of
-it, and `sherpad` does not start on a backup without its key. Everything else in a backup is as
+Backups stay on the server. Copy them elsewhere to keep them safe from a disk failure, and back
+up the [database key](#database-key), `/opt/sherpa/.secret/db.key`, alongside them but
+separately: not in `/opt/sherpa/db/backups`, and not in the same copy or archive, so that one
+stolen copy is not both. A backup holds no copy of the key, and `sherpad` does not start on a
+backup without its key. Everything else in a backup is as
 readable as the database itself, including the [lab definitions](#lab-definitions).
 
 To restore a backup:
@@ -74,7 +79,7 @@ To restore a backup:
    any `sherpa.sqlite-wal` and `sherpa.sqlite-shm` next to it.
 3. Copy the backup to `/opt/sherpa/db/sherpa.sqlite`, owned by `sherpa`.
 4. If the backup comes from another server, or from before the key was last replaced, copy the
-   key backed up with it to `/opt/sherpa/config/db.key`, owned by `sherpa`, mode `600`.
+   key backed up with it to `/opt/sherpa/.secret/db.key`, owned by `sherpa`, mode `600`.
 5. Start the server: `sudo systemctl start sherpad`.
 
 ## Schema

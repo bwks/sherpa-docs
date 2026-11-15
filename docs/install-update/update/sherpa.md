@@ -24,7 +24,11 @@ sudo bash sherpa_update.sh --version v0.5.0
 sudo bash sherpa_update.sh --force
 ```
 
-Take a [database backup](../../architecture/database.md#backups) before updating.
+Take a [database backup](../../architecture/database.md#backups) before updating, and keep a
+copy of the [database key](../../architecture/database.md#database-key),
+`/opt/sherpa/.secret/db.key`, alongside it but separately. From this release `sherpad` encrypts
+passwords in the database with that key, and does not start on a database without it. The update
+script creates `/opt/sherpa/.secret` (mode `700`, owned by `sherpa`) if it is missing.
 
 ## Updating to 0.6.0
 
