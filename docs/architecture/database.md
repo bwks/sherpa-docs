@@ -14,10 +14,38 @@ moves their data across; see [Updating to 0.5.0](../install-update/update/sherpa
 | Database file | `/opt/sherpa/db/sherpa.sqlite` |
 | Write-ahead log | `/opt/sherpa/db/sherpa.sqlite-wal`, next to the database file |
 | Backups | `/opt/sherpa/db/backups/` |
+| Database key | `/opt/sherpa/config/db.key` |
 
-The database and its backups hold password hashes, so `/opt/sherpa/db` is readable only by the
-`sherpa` user and group, and `/opt/sherpa/db/backups` only by `sherpa`. The install script, the
-update script and `sherpad` keep those modes.
+The database and its backups hold password hashes and every lab's definition, so `/opt/sherpa/db`
+is readable only by the `sherpa` user and group, and `/opt/sherpa/db/backups` only by `sherpa`.
+The install script, the update script and `sherpad` keep those modes.
+
+### Lab definitions
+
+The database records every lab's definition: each parameter of the manifest it was started
+from, as the `sherpa` CLI sent it. That includes the contents of the files and scripts the CLI
+read (`ztp.config`, `text_files`, `binary_files`, `systemd_units`, `startup_scripts`,
+`user_scripts`), `environment_variables` with their `$VAR` values filled in, and each node's
+`provisioners` and the lab's `provision_concurrency`: their paths and settings, never the
+contents of the files a provisioner names. `sherpa redeploy` replaces the redeployed node's.
+Labs started before this was recorded get theirs from their saved manifest the first time
+`sherpad` starts after the update; a lab whose saved manifest cannot be read is logged and
+keeps none.
+
+### Database key
+
+`ztp_server.password` from a lab's manifest is stored encrypted (AES-256-GCM), with the key in
+`/opt/sherpa/config/db.key`: 32 random bytes, readable only by `sherpa`, which `sherpad` creates
+the first time it starts. The key is never in the database or its backups, so a database or a
+backup copied off the server shows no password.
+
+Keep the key with the database:
+
+- **Back it up with the database.** A backup restored without its key, or with another one,
+  does not start: see
+  [Troubleshooting](../help/troubleshooting.md#sherpad-does-not-start-the-database-key-is-missing-or-does-not-match).
+- **Do not delete or replace it.** `sherpad` never replaces a missing or damaged key for a
+  database that has encrypted values; it refuses to start and names the file.
 
 The file is in SQLite's format and is owned by the `sherpa` user. While `sherpad` runs, it holds
 the file exclusively: other programs, including the `sqlite3` command, cannot open it. To look
@@ -30,7 +58,10 @@ The server writes a consistent copy of the database to
 `/opt/sherpa/db/backups/sherpa-<time>.sqlite`, named after the UTC time, and prints its path and
 size. The server stays up while it runs; changes wait until the copy is finished.
 
-Backups stay on the server. Copy them elsewhere to keep them safe from a disk failure.
+Backups stay on the server. Copy them elsewhere to keep them safe from a disk failure, together
+with the [database key](#database-key), `/opt/sherpa/config/db.key`: the backup holds no copy of
+it, and `sherpad` does not start on a backup without its key. Everything else in a backup is as
+readable as the database itself, including the [lab definitions](#lab-definitions).
 
 To restore a backup:
 
@@ -38,7 +69,9 @@ To restore a backup:
 2. Keep the current database aside, for example by renaming `/opt/sherpa/db/sherpa.sqlite` and
    any `sherpa.sqlite-wal` and `sherpa.sqlite-shm` next to it.
 3. Copy the backup to `/opt/sherpa/db/sherpa.sqlite`, owned by `sherpa`.
-4. Start the server: `sudo systemctl start sherpad`.
+4. If the backup comes from another server, or from before the key was last replaced, copy the
+   key backed up with it to `/opt/sherpa/config/db.key`, owned by `sherpa`, mode `600`.
+5. Start the server: `sudo systemctl start sherpad`.
 
 ## Schema
 
@@ -99,6 +132,8 @@ are unique, and no two labs share a network.
 | `management_network`   | text            | IPv4 management network         |
 | `gateway_ipv4`         | text            | IPv4 gateway address            |
 | `loopback_network`     | text            | IPv4 loopback network           |
+| `description`          | text, optional  | The manifest's `description`    |
+| `ready_timeout`, `provision_current_user`, `provision_concurrency`, `tailscale_*`, `ztp_server_*` | | The manifest's lab-level settings; `ztp_server_password` is encrypted |
 
 #### node
 
@@ -115,6 +150,13 @@ and VNC ports across all labs.
 | `mgmt_ipv6` | text, optional        | Management IPv6 address               |
 | `mgmt_mac`  | text, optional        | Management MAC address                |
 | `state`     | text                  | [Node state](../command-reference.md#node-states) |
+| `version`, `manifest_memory`, `cpu_*`, `numa_*`, `boot_disk_*`, `interfaces_*`, `ztp_*`, `vm_*`, `container_*`, `unikernel_*`, ... | | The node's settings from the manifest |
+
+#### manifest_*
+
+The lists of a lab's definition, one table each: its links, bridges and Talos clusters, and each
+node's CPU lists, SSH keys, commands, volumes, environment variables, files, scripts, systemd
+units and provisioners. Each row belongs to a lab or a node, and is deleted with it.
 
 #### link
 
@@ -158,7 +200,8 @@ to each, in order.
 The database enforces these rules itself:
 
 - A **user** who owns **labs** cannot be deleted. Destroy their labs first; deleting only the records would leave the labs' VMs, containers and networks running.
-- Deleting a **lab** deletes all its **nodes**, **links**, **bridges** and bridge memberships.
+- Deleting a **lab** deletes all its **nodes**, **links**, **bridges** and bridge memberships,
+  and its definition.
 - Deleting a **node** deletes its **links** and its bridge memberships.
 - Deleting a **node_image** is refused while any **node** uses it.
 - Changes that touch several records, such as creating a bridge with its members, either happen

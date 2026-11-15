@@ -627,8 +627,10 @@ sherpa server clean <lab_id>
 
 Back up the server's database while the server keeps running. Admin only. The server writes a
 consistent copy to `/opt/sherpa/db/backups/sherpa-<time>.sqlite`, named after the UTC time, and
-prints its path and size. The backup stays on the server. See
-[Database backups](architecture/database.md#backups) for restoring one.
+prints its path and size. The backup stays on the server. It does not hold the
+[database key](architecture/database.md#database-key), `/opt/sherpa/config/db.key`, so keep a
+copy of the key with your backups. See [Database backups](architecture/database.md#backups) for
+restoring one.
 
 ```
 sherpa server backup

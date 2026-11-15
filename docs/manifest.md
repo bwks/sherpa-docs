@@ -178,7 +178,8 @@ environment_variables = [
 !!! warning "Not for secrets"
     Do not put passwords, API keys or tokens in `environment_variables`, `text_files`,
     `startup_scripts` or `user_scripts`. Their contents are sent to the Sherpa server, which
-    stores them with the lab: in the saved manifest, the node's generated configuration and its
+    stores them with the lab: in its [database](architecture/database.md#lab-definitions) and
+    the database's backups, the saved manifest, the node's generated configuration and its
     first-boot media. Sherpa server administrators can read them there. Values loaded from your
     client environment with `$` are stored the same way. For containers, environment variables
     also appear in `docker inspect` on the server.
