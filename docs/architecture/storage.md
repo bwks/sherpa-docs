@@ -104,7 +104,7 @@ first time it starts after the update.
 VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
 `/opt/sherpa/libvirt/images/`. A VM's boot files, such as its cloud-init `user-data` and the ISO
 built from them, are removed from the lab directory once they are in the pool; if the copy
-fails they are kept until the lab is destroyed, so the failure can be looked at. Releases up to
+fails they are kept, in `vm-boot.d/<node>/`, until the lab is destroyed or the node redeployed, so the failure can be looked at. Releases up to
 0.6.4 kept them, wrote an empty `dnsmasq.leases` and issued unikernel nodes certificates they
 never used; `sherpad` removes those files the first time it starts after the update.
 
