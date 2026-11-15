@@ -61,6 +61,13 @@ model = "juniper_vsrxv3"
 method = "tftp"
 ```
 
+To change a node's method in a running lab, change `ztp.method` and run
+`sherpa redeploy -n <node>`. When the node moves onto or off `tftp` or `http`, the lab router's
+DHCP options for it change too, and Sherpa restarts the lab's DHCP, DNS and TFTP service
+(dnsmasq) for that. Lab nodes keep their addresses, but DHCP and DNS pause for a few seconds while
+it restarts. A redeploy that keeps the node's method does not restart it. The files of the node's
+old method are removed.
+
 ### Disabled
 
 A node with ZTP `disabled` boots as its image ships: Sherpa generates no configuration and adds
