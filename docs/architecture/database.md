@@ -41,7 +41,9 @@ is logged and keeps none. The saved manifests are then deleted, `manifest.toml` 
 `manifest.json` in each lab's directory and nothing else; the server no longer writes them, and
 reads the lab's manifest only from its definition. A lab with no definition is used with the
 defaults: `sherpa resume` waits the default readiness timeout, containers get their image's
-number of data interfaces, and it cannot be redeployed from the web UI. A CLI older than the server sends only resolved values, so a lab it
+number of data interfaces, and it cannot be redeployed from the web UI. The nodes of an imported
+lab cannot be redeployed from the web UI either, until each has been redeployed once with
+`sherpa redeploy`, which records its ZTP config and environment variables as written. A CLI older than the server sends only resolved values, so a lab it
 starts has no `ztp.config`, environment variables or provisioners recorded.
 
 ### Database key
