@@ -18,8 +18,9 @@ ports you gave it:
 sherpad init --server-ipv4 <address> --ws-port 3030 --http-port 3031
 ```
 Leave a flag out to use its default: `0.0.0.0`, `3030` and `3031`. Add `--server-ipv6 <address>`
-to also listen on IPv6. Labs' management subnets are taken from `172.31.0.0/16`; if that range is
-in use on your network, add `--management-prefix-ipv4 <prefix>`. These values are written only
+to also listen on IPv6. Labs' management subnets are taken from `172.31.0.0/16` and `fd00:b00b::/48`;
+if either range is in use on your network, add `--management-prefix-ipv4 <prefix>` or
+`--management-prefix-ipv6 <prefix>`. These values are written only
 with a new `sherpa.toml`. See [`sherpad init`](command-reference.md#sherpad-init).
 
 `sherpad init` creates two accounts:
@@ -47,6 +48,7 @@ run from a script. A variable that is not set is prompted for.
 | `SHERPA_SERVER_WS_PORT` | Listen port, as `--ws-port` |
 | `SHERPA_SERVER_HTTP_PORT` | Certificate endpoint port, as `--http-port` |
 | `SHERPA_MANAGEMENT_PREFIX_IPV4` | Lab management IPv4 prefix, as `--management-prefix-ipv4` |
+| `SHERPA_MANAGEMENT_PREFIX_IPV6` | Lab management IPv6 prefix, as `--management-prefix-ipv6` |
 | `SHERPA_ADMIN_PASSWORD` | Password for `admin` |
 | `SHERPA_USER_NAME` | Your username |
 | `SHERPA_USER_PASSWORD` | Your password |
@@ -60,7 +62,7 @@ install and `sherpad init`. Passwords must meet the server's rules: at least 8 c
 upper and lower case letters and one of `!@#$%^&*_+-=`.
 
 ```
-sudo -u sherpa -H --preserve-env=SHERPA_SERVER_IPV4,SHERPA_SERVER_IPV6,SHERPA_SERVER_WS_PORT,SHERPA_SERVER_HTTP_PORT,SHERPA_MANAGEMENT_PREFIX_IPV4,SHERPA_ADMIN_PASSWORD,SHERPA_USER_NAME,SHERPA_USER_PASSWORD,SHERPA_USER_IS_ADMIN,SHERPA_USER_SSH_KEY \
+sudo -u sherpa -H --preserve-env=SHERPA_SERVER_IPV4,SHERPA_SERVER_IPV6,SHERPA_SERVER_WS_PORT,SHERPA_SERVER_HTTP_PORT,SHERPA_MANAGEMENT_PREFIX_IPV4,SHERPA_MANAGEMENT_PREFIX_IPV6,SHERPA_ADMIN_PASSWORD,SHERPA_USER_NAME,SHERPA_USER_PASSWORD,SHERPA_USER_IS_ADMIN,SHERPA_USER_SSH_KEY \
   sherpad init
 ```
 
