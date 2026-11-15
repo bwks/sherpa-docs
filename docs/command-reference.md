@@ -64,11 +64,26 @@ has expired, it says so and exits with an error, so a script can run
 ## Lab Lifecycle
 
 Lab commands act on the lab of the current folder: the one `.sherpa/lab-info.toml` names,
-written by
-`sherpa up` and `sherpa download`, or else the one `manifest.toml` describes. When both files
-are present and name different labs, as after renaming the lab in `manifest.toml` or
-downloading another lab into the folder, the commands refuse to run and name both labs.
-Destroy the old lab, or remove `.sherpa/lab-info.toml`, before using the folder for the other one.
+written by `sherpa up` and `sherpa download`, or else the one `manifest.toml` describes. When
+both files are present and the lab's name in `manifest.toml` is not the one in
+`.sherpa/lab-info.toml`, as after renaming the lab in `manifest.toml` or downloading another lab
+into the folder, the commands refuse to run and name both labs. Destroy the old lab, or remove
+`.sherpa/lab-info.toml`, before using the folder for the other one.
+
+A lab's ID is in `.sherpa/lab-info.toml`, so the commands find the lab whatever your computer
+account is called: on another machine, as another user, or in a folder made by
+`sherpa download`. A new lab's ID comes from your Sherpa username and the lab's name, so it is
+the same on every machine you log in from, and two Sherpa users never share one. Labs created by
+older clients got their ID from the computer account's name instead, and keep it.
+
+A folder made by `sherpa download` has no `manifest.toml`. `inspect`, `ssh`, `console`, `down`,
+`resume`, `destroy` and `link impair` work there. `up`, `redeploy` and `provision` build nodes
+from the lab's manifest, so they need the folder the lab was started from, or a copy of its
+`manifest.toml`, and say so:
+
+```
+This folder has no manifest.toml, and 'sherpa redeploy' needs the lab's source manifest. A folder made by 'sherpa download' has none: run 'sherpa redeploy' in the folder the lab was started from, or copy its manifest.toml here.
+```
 
 Every file Sherpa generates in the lab folder goes in a `.sherpa/` folder next to `manifest.toml`.
 `.sherpa/` and the folders in it are readable only by you, and so are the secret files. A lab
@@ -502,6 +517,10 @@ sherpa console <name>
   running with `sherpa inspect`.
 - Container nodes have no serial console, and `sherpa console` refuses them before connecting.
   Use `sherpa ssh`, or `docker exec` on the server.
+- It asks the Sherpa server where the node's console is, so it needs you to be logged in, and
+  works in a folder made by `sherpa download`. With a server older than the CLI, which does
+  not say, it finds the node by its place in the folder's `manifest.toml`, and without one says
+  to upgrade the server or run it in the folder the lab was started from.
 
 ### `sherpa download`
 
@@ -511,6 +530,11 @@ in `ssh/known_hosts`, and each cluster's `k8s/kubeconfig-<cluster>` and
 cluster's Gateway and Hubble UI addresses, and writes `ca/lab-ca.crt`, each Vault node's
 `vault/vault-<node>.toml` and each Keycloak node's `keycloak/keycloak-<node>.toml`, all under
 `.sherpa/`.
+
+It writes no `manifest.toml`: the server keeps the lab's definition, but not your manifest's
+files or secrets. Every command that reaches the lab's nodes works in the folder (`inspect`,
+`ssh`, `console`, `down`, `resume`, `destroy` and `link impair`); `up`, `redeploy` and
+`provision` need the lab's own manifest. See [Lab Lifecycle](#lab-lifecycle).
 
 Only the lab's owner and admins can download a lab. The SSH key, `.sherpa/ssh/key`, is the lab's
 own [key pair](architecture/ssh.md#lab-ssh-key), written only when the lab has nodes that log in
@@ -528,8 +552,10 @@ sherpa download <lab_id>
 
 ### `sherpa link impair`
 
-Change the impairment on a running P2P link. Run it in the lab's directory: the link is found in
-`manifest.toml` by either of its ends.
+Change the impairment on a running P2P link. Run it in the lab's folder, which can be one
+made by `sherpa download`: the link is found by either of its ends among the lab's links, as
+`sherpa inspect` lists them. With a server older than the CLI, the link is found in the folder's
+`manifest.toml` instead.
 
 ```
 sherpa link impair dev01::eth1 --delay 20 --loss 1.5
