@@ -322,7 +322,7 @@ lab: `creating`, `ready`, `destroying`, `destroy_failed` or `interrupted` (see
 Change the impairment on a running P2P link with
 `POST /api/v1/labs/{lab_id}/links/{link_index}/impairment`, or the WebSocket RPC method
 `link.update_impairment`. `link_index` is the link's position in the manifest's `[[links]]`,
-starting at `0`.
+starting at `0`, and is the `index` of the link in the inspect response's `links[]`.
 
 ```json
 {
@@ -391,7 +391,8 @@ A link that is not attached does not make the node's `success` false.
 The inspect response's `links[]` carry `state`, the link's last state as the server found or
 left it, in the same form: from the server's scan of the lab every `scanner.interval_secs`, or
 from the last resume or redeploy. The field is absent while the server has not checked the
-link since it started, and from servers that do not report link states.
+link since it started, and from servers that do not report link states. `index` is the link's
+`link_index` for [Link Impairment](#link-impairment); servers before it do not send it.
 
 ```json
 {
@@ -400,7 +401,23 @@ link since it started, and from servers that do not report link states.
   "node_b_name": "ctr1",
   "int_b": "eth1",
   "kind": "p2p",
-  "state": { "state": "peer_down", "peer": "ctr1" }
+  "state": { "state": "peer_down", "peer": "ctr1" },
+  "index": 0
+}
+```
+
+### Console address in inspect
+
+The inspect response's `devices[]` carry `console_address` for virtual machines and unikernels:
+the address on the Sherpa server where the node's serial console listens, as telnet on port
+`2323`. It is reachable only from the server. Containers have no serial console and no
+`console_address`, and servers before it do not send it. Part of a device:
+
+```json
+{
+  "name": "vm1",
+  "kind": "virtual_machine",
+  "console_address": "127.127.3.1"
 }
 ```
 
