@@ -30,6 +30,17 @@ copy of the [database key](../../architecture/database.md#database-key),
 passwords in the database with that key, and does not start on a database without it. The update
 script creates `/opt/sherpa/.secret` (mode `700`, owned by `sherpa`) if it is missing.
 
+The first time `sherpad` starts after the update it records each existing lab's definition from
+the manifest it saved in `/opt/sherpa/labs/<lab-id>/`, then **deletes those saved manifests**
+(`manifest.toml`, and `manifest.json` from older releases). Nothing else in the lab's directory
+is touched, and your own `manifest.toml` in the lab folder is never read by the server. A saved
+manifest that cannot be imported, such as one in the shape before 0.6.0, is deleted too, and its
+lab runs with the defaults; the database backup does not hold these files, so copy them first if
+you want to keep them. See
+[lab definitions](../../architecture/database.md#lab-definitions). A node that needs files or
+`$VAR` values can no longer be redeployed from the web UI; see
+[redeploying from the web UI](../../command-reference.md#redeploying-from-the-web-ui).
+
 ## Updating to 0.6.0
 
 0.6.0 is a breaking release. Before you update a server, do the following in this order:

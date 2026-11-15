@@ -289,6 +289,31 @@ reported not ready, and the redeploy still succeeds. The node's `ready_check` is
 the manifest you redeploy with, so a changed port is the one `sherpa resume` and the server's
 scanner check from then on.
 
+#### Redeploying from the web UI
+
+The web UI's **Redeploy** button rebuilds the node from the lab's
+[definition](architecture/database.md#lab-definitions), the manifest as you wrote it, which holds
+no file contents and no values of `$VAR` variables. It redeploys a node that needs none of them,
+with its other settings as last deployed. A node that needs any of these is refused, and left as
+it was:
+
+- `ztp.config`
+- `text_files`, `binary_files` or `systemd_units`
+- `startup_scripts` or `user_scripts`
+- `ssh.authorized_key_files`
+- `environment_variables` with a `$VAR` value
+- `provisioners`, which only the CLI runs
+
+The message names the node and what it needs, for example:
+
+```
+Node 'dev01' cannot be redeployed from the web UI: it needs ztp.config, text_files, which the server does not keep. Run `sherpa redeploy -n dev01` from the lab folder
+```
+
+Run `sherpa redeploy -n <node>` from the lab's folder instead: the CLI reads the files and
+variables there. A lab started before the server recorded definitions, whose definition could
+not be imported, cannot be redeployed from the web UI at all.
+
 ### `sherpa provision`
 
 Run node [provisioners](architecture/provisioners/overview.md) again from the lab's folder: send

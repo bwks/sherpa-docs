@@ -178,8 +178,7 @@ environment_variables = [
 !!! warning "Not for secrets"
     Do not put passwords, API keys or tokens in `environment_variables`, `text_files`,
     `startup_scripts` or `user_scripts`. Their contents are sent to the Sherpa server, which
-    keeps them with the lab: in the saved manifest, the node's generated configuration and its
-    first-boot media. Sherpa server administrators can read them there. Values loaded from your
+    keeps them with the lab: in the node's generated configuration and its first-boot media. Sherpa server administrators can read them there. Values loaded from your
     client environment with `$` are kept the same way. The server's
     [database](architecture/database.md#lab-definitions) records only their paths, and
     `KEY=$VAR` as written, not their contents or values. For containers, environment variables
@@ -850,7 +849,8 @@ skip = true
 ```
 
 `sherpa resume` of a lab created before the change uses the default readiness settings, because
-the lab's saved manifest has the old keys.
+the manifest it saved has the old keys, so the server could not record the lab's definition from
+it.
 
 ## Optional Parameters
 
