@@ -174,6 +174,8 @@ and VNC ports across all labs.
 | `mgmt_ipv6` | text, optional        | Management IPv6 address               |
 | `mgmt_mac`  | text, optional        | Management MAC address                |
 | `state`     | text                  | [Node state](../command-reference.md#node-states) |
+| `ssh_host_key` | text, optional     | The SSH host key the node offered when it last became ready |
+| `ssh_username` | text, optional     | The account the lab's SSH config logs in to the node with: the lab owner's on a node that provisions it, else empty for the `sherpa` account |
 | `version`, `manifest_memory`, `cpu_*`, `numa_*`, `boot_disk_*`, `interfaces_*`, `ztp_*`, `vm_*`, `container_*`, `unikernel_*`, ... | | The node's settings from the manifest |
 
 #### manifest_*
