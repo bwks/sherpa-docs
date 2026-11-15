@@ -48,8 +48,9 @@ starts after the update it records the node accounts from each lab's `lab-info.t
 database, then **deletes those three files**, and nothing else in the lab's directory. From then
 on it builds them from the database whenever `sherpa up`, `sherpa download` or the web UI gives
 them to you, and they are the same as before, so `sherpa ssh`, `sherpa console` and older
-clients work unchanged. A `lab-info.toml` that cannot be read is kept, with a warning in the
-`sherpad` log, unless the database already holds that lab's node accounts. The lab folders on
+clients work unchanged. A server-side `lab-info.toml` that cannot be read is deleted with the
+other two after a warning in the `sherpad` log; that lab's nodes keep the accounts the database
+already has, or the `sherpa` account. The lab folders on
 your clients are not touched. See [lab files](../../architecture/storage.md#lab-files).
 
 ## Updating to 0.6.0
