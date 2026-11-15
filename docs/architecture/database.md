@@ -23,14 +23,22 @@ The install script, the update script and `sherpad` keep those modes.
 ### Lab definitions
 
 The database records every lab's definition: each parameter of the manifest it was started
-from, as the `sherpa` CLI sent it. That includes the contents of the files and scripts the CLI
-read (`ztp.config`, `text_files`, `binary_files`, `systemd_units`, `startup_scripts`,
-`user_scripts`), `environment_variables` with their `$VAR` values filled in, and each node's
-`provisioners` and the lab's `provision_concurrency`: their paths and settings, never the
-contents of the files a provisioner names. `sherpa redeploy` replaces the redeployed node's.
+from, **as you wrote it**. `sherpa redeploy` replaces the redeployed node's.
+
+**File contents and variable values are not stored.** Files and scripts are recorded by the path
+and settings the manifest gives: `ztp.config`, `text_files` (`src`, `dst`, `user`, `group`,
+`permissions`), `binary_files`, `systemd_units`, `startup_scripts`, `user_scripts`,
+`ssh.authorized_key_files` and each provisioner's files. Environment variables are recorded as
+written: `KEY=$VAR` keeps the name `$VAR`, never its value. The `sherpa` CLI still reads the
+files and resolves the variables, and sends them with each `sherpa up` and `sherpa redeploy` to
+build the node, but the server does not write them to its database.
+
 Labs started before this was recorded get theirs from their saved manifest the first time
-`sherpad` starts after the update; a lab whose saved manifest cannot be read is logged and
-keeps none.
+`sherpad` starts after the update. That saved manifest was resolved, so the import keeps only
+what it holds as written: `ztp.config` and `environment_variables` are left out, and stored again
+the next time you redeploy the node from your manifest. A lab whose saved manifest cannot be read
+is logged and keeps none. A CLI older than the server sends only resolved values, so a lab it
+starts has no `ztp.config`, environment variables or provisioners recorded.
 
 ### Database key
 
