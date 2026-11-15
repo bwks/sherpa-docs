@@ -187,7 +187,8 @@ nested by group. For `ubuntu_linux`:
       "password_auth": false
     },
     "unikernel": null
-  }
+  },
+  "ztp_password_set": true
 }
 ```
 
@@ -200,8 +201,9 @@ nested by group. For `ubuntu_linux`:
 | `boot_disk` | `bus` |
 | `cdrom` | `image`, a CD-ROM file shipped with the image or `null`, and `bus` |
 | `interfaces` | `data_count`, `kind`, `mtu`, `prefix`, `first_index`, `management` and `reserved_count` |
-| `ztp` | `method` (the [ZTP setting](architecture/zero-touch-provisioning.md#the-ztp-setting)), `username`, `password` and `password_auth` |
+| `ztp` | `method` (the [ZTP setting](architecture/zero-touch-provisioning.md#the-ztp-setting)), `username`, `password` and `password_auth`. `password` is always `null`: the server never sends an image's password |
 | `unikernel` | `boot_mode` for a unikernel; `null` for every other kind |
+| `ztp_password_set` | Beside `image`: whether the image has a ZTP password. Servers before this field sent the password itself in `ztp.password` |
 
 Every image carries every group, but not every kind uses them. A container does not use
 `machine`, `boot_disk` or `cdrom`. A unikernel uses `machine.kind` and not `machine.bios`,

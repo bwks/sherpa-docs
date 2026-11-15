@@ -34,10 +34,14 @@ keeps none.
 
 ### Database key
 
-`ztp_server.password` from a lab's manifest is stored encrypted (AES-256-GCM), with the key in
+Passwords are stored encrypted (AES-256-GCM): an image's ZTP password, and `ztp_server.password`
+from a lab's manifest. The key is in
 `/opt/sherpa/config/db.key`: 32 random bytes, readable only by `sherpa`, which `sherpad` creates
 the first time it starts. The key is never in the database or its backups, so a database or a
-backup copied off the server shows no password.
+backup copied off the server shows no password. Image passwords stored as plain text by
+earlier releases are encrypted the first time `sherpad` starts after the update. The web UI and
+the API never show an image's password: they say whether it is set, and the image editor takes
+a new one, keeps the current one when the field is left blank, or removes it.
 
 Keep the key with the database:
 
@@ -117,6 +121,7 @@ The combination of `model`, `kind` and `version` is unique.
 | `interface_type`                | text           | Interface driver type                    |
 | `management_interface`          | text           | Management interface name                |
 | `ztp`                           | text           | ZTP setting: `disabled` or a method      |
+| `ztp_password`                  | text, optional | ZTP password, encrypted                  |
 | `default`                       | boolean        | Default image flag                       |
 
 #### lab
