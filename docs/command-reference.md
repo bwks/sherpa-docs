@@ -207,9 +207,10 @@ Resume all or a specific stopped node in the lab. Ctrl-C asks whether to stop th
 the server too; see [stopping a running command](#stopping-a-running-command).
 
 Like `sherpa up`, resume waits for each VM or unikernel it boots, and each container it starts
-that sets `ready_check.port`, to become ready, showing progress as it goes. It uses the lab's
-`ready_timeout`, and each node's `ready_check.skip` and `ready_check.port`, from the manifest
-the lab was created with. A node that is not ready within the timeout is reported, but resume
+that sets `ready_check.port`, to become ready, showing progress as it goes. It uses each node's
+[ready check](manifest.md#ready_check-object) as the server recorded it when the lab was
+created or the node last redeployed, and the lab's `ready_timeout` from the manifest the lab was
+created with. A node that is not ready within the timeout is reported, but resume
 still succeeds. Other containers, and paused nodes, do not wait: a paused node resumes an
 already running guest. A paused
 container is unpaused, a stopped one is started, and a running node is left as it is.
@@ -284,7 +285,9 @@ node is destroyed marks it `failed` in `sherpa inspect`; fix the cause and redep
 While it is rebuilt the node is `building`, then `starting`, and `running` once ready. A
 container that runs Vault or Keycloak is `running` only once they are restored, and one that
 sets `ready_check.port` only once that port answers; one whose port does not answer in time is
-reported not ready, and the redeploy still succeeds.
+reported not ready, and the redeploy still succeeds. The node's `ready_check` is recorded from
+the manifest you redeploy with, so a changed port is the one `sherpa resume` and the server's
+scanner check from then on.
 
 ### `sherpa provision`
 
@@ -368,7 +371,7 @@ the next scan. A link's interfaces lose and get back their carrier with its stat
 | State | Meaning |
 | ----- | ------- |
 | `building` | `sherpa up` or `sherpa redeploy` is creating the node. Nothing else can stop, start or redeploy it until that finishes. |
-| `starting` | The node is started but not ready yet: its ready check has not passed. The server's [scanner](configuration/sherpa.md#scanner) keeps checking, and records it `running` once it answers. |
+| `starting` | The node is started but not ready yet: its ready check has not passed. The server's [scanner](configuration/sherpa.md#scanner) keeps checking its ready port, and records it `running` once it answers. |
 | `running` | The node is ready: its ready check passed, or it has `ready_check.skip`. A container is ready once it has kept running for 5 seconds after it started and its `ready_check.port`, if it sets one, answers. |
 | `stopped` | The node is shut down or paused, by `sherpa down` or outside Sherpa, or its container's process exited after it was ready. |
 | `failed` | An operation on the node failed, such as a redeploy or a container that exited during `sherpa up` before it was ready, or its virtual machine crashed or its container died. It stays `failed` until you stop, resume or redeploy it. |

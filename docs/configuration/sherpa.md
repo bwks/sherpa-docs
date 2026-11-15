@@ -129,7 +129,9 @@ OpenTelemetry observability configuration. When enabled, Sherpa exports distribu
 The background scanner keeps [node states](../command-reference.md#node-states) in line with the
 virtual machines and containers, for changes made outside Sherpa: a node stopped, started,
 crashed or removed by hand. It leaves a lab alone while an operation such as `sherpa up` runs on
-it, and it is what records a node `running` once it answers after its ready check timed out.
+it, and it is what records a node `running` once it answers on its
+[ready port](../manifest.md#ready_check-object) after its ready check timed out; until then
+the node stays `starting`.
 It also checks each lab's [P2P links](../architecture/networking/modes/point-to-point.md#when-a-node-restarts),
 and attaches again the links of a running node whose link ends were made again outside Sherpa,
 such as a virtual machine started with `virsh start` or a container restarted with
