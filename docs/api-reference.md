@@ -258,6 +258,7 @@ error objects, with `code`, `message`, and `data` where the code defines it.
 | Does not exist | `404`, `NOT_FOUND` | `-32004` |
 | The current state forbids it | `409`, `CONFLICT` | `-32000` |
 | Not enough host memory | `507`, `INSUFFICIENT_MEMORY` | `-32005` |
+| Host CPUs pinned by another node | `409`, `CPU_PINS_HELD` | `-32006` |
 | Any other failure | `500`, `INTERNAL_ERROR` | `-32000` |
 
 ### Not enough host memory
@@ -281,6 +282,30 @@ Lab creation and redeploy stream their progress over REST, so their HTTP status 
 they can fail: the stream's `error` event carries the refusal as
 `{"error": "...", "code": "INSUFFICIENT_MEMORY", "data": {...}}`. The CLI exits with status `75`
 (see [exit status](command-reference.md#exit-status)).
+
+### CPU pins held
+
+Creating a lab or redeploying a node is refused when a host CPU one of its virtual machines
+pins is held by another node: stored in another lab, or being started by another operation
+(see [CPU pins held](manifest.md#cpu-pins-held)). Nothing is started, and the same request can
+succeed once that node is destroyed or redeployed on other CPUs. The error's `data` says which
+CPUs, and what each side pins to them:
+
+```json
+{ "host_cpus": [2, 3], "requested_role": "vcpu", "held_role": "vcpu" }
+```
+
+| Field | Description |
+| ----- | ----------- |
+| `host_cpus` | The host CPUs in conflict, in ascending order |
+| `requested_role` | What the refused node would pin to them: `vcpu`, or `thread` for QEMU emulator and disk I/O threads |
+| `held_role` | What the holding node pins to them: `vcpu` or `thread` |
+
+The `message` names the holding node and its lab to admins and to that lab's owner, and says
+"a node of another lab" to everyone else; `data` never names them. The REST status is `409`
+with its own `code`, `CPU_PINS_HELD`, so it can be told from other conflicts. As with the
+memory refusal, the stream's `error` event of lab creation and redeploy carries
+`"code": "CPU_PINS_HELD"` and the `data`, and the CLI exits with status `75`.
 
 ## Long-Running Operations
 

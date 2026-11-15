@@ -31,7 +31,7 @@ The exit status says why:
 | ------ | ------- |
 | `0` | Success. |
 | `1` | The command failed. |
-| `75` | The server refused `sherpa up`, `sherpa resume` or `sherpa redeploy` because the virtual machines and unikernels it would start do not fit in its memory now ([host memory](configuration/sherpa.md#host_memory)). Nothing was started; run the command again once other nodes are stopped or destroyed. |
+| `75` | The server refused the command for now. `sherpa up`, `sherpa resume` or `sherpa redeploy`: the virtual machines and unikernels it would start do not fit in its memory ([host memory](configuration/sherpa.md#host_memory)). `sherpa up` or `sherpa redeploy`: host CPUs they pin are held by another node ([CPU pins held](manifest.md#cpu-pins-held)). Nothing was started; run the command again once other nodes are stopped or destroyed. |
 
 `sherpa ssh` instead exits with the node shell's exit code, as described under
 [`sherpa ssh`](#sherpa-ssh).
@@ -135,6 +135,8 @@ The server refuses the lab before creating anything when its virtual machines an
 do not fit in the server's memory, or on the NUMA node a node is held on strictly. The error
 names the numbers that fell short, and `sherpa up` exits with status `75`
 ([exit status](#exit-status)). See [`[host_memory]`](configuration/sherpa.md#host_memory).
+It is refused the same way, with status `75`, when a host CPU a node pins is held by another
+node ([CPU pins held](manifest.md#cpu-pins-held)).
 
 When `[tailscale]` is enabled, resolves the auth key from the client environment
 variable named by `auth_key_env` and creates a gateway for the lab. Enrollment
