@@ -67,3 +67,30 @@ model = "open_bsd"
 - OpenBSD's password hashing takes only bcrypt, so Sherpa gives cloud-init your
   [device password](../../architecture/device-password.md) as plain text and cloud-init hashes it
   on the node. Login names are at most 31 characters.
+
+!!! Warning
+
+    On a heavily loaded server, or with the default 1 CPU and 1 GB, an OpenBSD node can boot
+    with no login. The images from [BSD Cloud Images](https://bsd-cloud-image.org/) start
+    cloud-init's four stages (`cloudinitlocal`, `cloudinit`, `cloudconfig` and `cloudfinal`) from
+    `/etc/rc.d` as rc daemons. rc waits at most `daemon_timeout` (30 seconds) for each one, then
+    starts the next even if the previous one is still running. On a slow boot the stages overlap,
+    and the `init` stage fails (`PermissionError` on `/var/lib/cloud/instance`) before it creates
+    your user.
+
+    To recover, redeploy the node, or give it more CPU and memory in the manifest:
+
+    ```toml
+    [[nodes]]
+    name = "dev01"
+    model = "open_bsd"
+    memory = 2048
+
+    [nodes.cpu]
+    count = 2
+    ```
+
+    The fix belongs in the image. rc honours a per-daemon timeout, so setting
+    `cloudinitlocal_timeout`, `cloudinit_timeout`, `cloudconfig_timeout` and `cloudfinal_timeout`
+    (for example to `600`) in the image's `/etc/rc.conf.local` lets each stage finish before the
+    next starts. If you build or customise your own image, add these there.
