@@ -14,6 +14,29 @@ The following configuration parameters are applied to nodes via ZTP:
 - DNS search domains
 - Sherpa user with password and SSH key authentication.
 
+## Who Can Read a Node's Configuration
+
+A node's configuration holds its logins, and a custom `ztp.config` holds whatever you put in it.
+
+**On the Sherpa server**, Sherpa writes every configuration it renders for a node as the
+`sherpa` account, readable by that account only, in folders only it can open, whatever the
+server's umask. People in the `sherpa` group cannot read them; use `sudo` to look at one. A VM's
+boot files are removed once its boot media are in the storage pool, container configurations
+when the node is destroyed, and TFTP and HTTP configurations when the lab is destroyed.
+
+TFTP configurations are the one exception: the lab router's TFTP service serves only files
+every account can read, so they are readable by accounts outside the `sherpa` group too, but not
+by the group. Those accounts cannot reach the lab's folder on the server, so on the server the
+effect is the same.
+
+**On the lab's management network**, the [TFTP](#tftp) and [HTTP](#http) configurations are
+served without credentials. Any node in the lab, or anything else that reaches the lab router,
+can fetch any node's TFTP or HTTP configuration while the lab exists, not only its own. The
+HTTP service on port 8080 serves the TFTP configurations too. Keep this in mind before you
+give a TFTP or HTTP node a custom `ztp.config` with a secret in it. Configurations delivered on
+a CD-ROM, disk or USB disk, by cloud-init, NoCloud or Ignition, or as container volumes are not
+served on the network.
+
 ## The ZTP Setting
 
 Every node image has one ZTP setting: `disabled`, or the method Sherpa provisions its nodes by.
