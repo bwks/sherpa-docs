@@ -732,7 +732,8 @@ devices, such as `ubuntu`, `core`, `ec2-user`, `cisco` and `cumulus`.
 
 ### `sherpa server user list`
 
-List all user accounts. Admin only.
+List all user accounts. Admin only. Each user's entry shows whether they have set a
+[device password](architecture/device-password.md): `Device password: set` or `not set`.
 
 ### `sherpa server user delete`
 
@@ -779,7 +780,23 @@ Show detailed user information.
 sherpa server user info [username]
 ```
 
-If no username is provided, shows the current user's information.
+If no username is provided, shows the current user's information, including
+`Device password: set` or `not set`. The device password itself is never shown.
+
+### `sherpa server user device-password`
+
+Set your own [device password](architecture/device-password.md), your password on lab nodes.
+
+```
+sherpa server user device-password
+```
+
+It asks for your Sherpa login password, then the new device password twice. It takes no
+arguments or flags: passwords are always typed at the prompt and `SHERPA_USER_PASSWORD` is not
+used. It sets only your own: administrators cannot set another user's, and the built-in `admin`
+account has none. The device password must meet the
+[rules](architecture/device-password.md#rules) and differ from your login password. Setting it
+again replaces it.
 
 ### `sherpa server user ssh-key`
 
