@@ -181,14 +181,10 @@ nested by group. For `ubuntu_linux`:
       "reserved_count": 0
     },
     "ztp": {
-      "method": "cloud-init",
-      "username": null,
-      "password": null,
-      "password_auth": false
+      "method": "cloud-init"
     },
     "unikernel": null
-  },
-  "ztp_password_set": true
+  }
 }
 ```
 
@@ -201,9 +197,8 @@ nested by group. For `ubuntu_linux`:
 | `boot_disk` | `bus` |
 | `cdrom` | `image`, a CD-ROM file shipped with the image or `null`, and `bus` |
 | `interfaces` | `data_count`, `kind`, `mtu`, `prefix`, `first_index`, `management` and `reserved_count` |
-| `ztp` | `method` (the [ZTP setting](architecture/zero-touch-provisioning.md#the-ztp-setting)), `username`, `password` and `password_auth`. `password` is always `null`: the server never sends an image's password |
+| `ztp` | `method`, the [ZTP setting](architecture/zero-touch-provisioning.md#the-ztp-setting) |
 | `unikernel` | `boot_mode` for a unikernel; `null` for every other kind |
-| `ztp_password_set` | Beside `image`: whether the image has a ZTP password. Servers before this field sent the password itself in `ztp.password` |
 
 Every image carries every group, but not every kind uses them. A container does not use
 `machine`, `boot_disk` or `cdrom`. A unikernel uses `machine.kind` and not `machine.bios`,
@@ -233,13 +228,17 @@ Releases up to 0.5.35 returned these settings as flat fields. Each moved into it
 | `management_interface` | `interfaces.management` |
 | `reserved_interface_count` | `interfaces.reserved_count` |
 | `ztp` | `ztp.method` |
-| `ztp_username` | `ztp.username` |
-| `ztp_password` | `ztp.password` |
-| `ztp_password_auth` | `ztp.password_auth` |
 | `boot_mode` | `unikernel.boot_mode` |
 
 `memory`, `model`, `version`, `repo`, `os_variant`, `kind` and `default` are unchanged. The
 OpenAPI schema describes the same shape.
+
+Releases up to 0.6.5 also had `ztp.username`, `ztp.password` and `ztp.password_auth` (flat
+`ztp_username`, `ztp_password` and `ztp_password_auth` up to 0.5.35), and `ztp_password_set`
+beside `image`. Sherpa's node configurations never used them, and 0.7.0 removes them: the
+server drops any stored values, `image.show` no longer returns them, and an `image.import` that
+sends one of them, or any other field it does not take, is refused with an error naming the
+field.
 
 ## Errors
 

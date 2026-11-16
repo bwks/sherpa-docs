@@ -77,6 +77,15 @@ config logs in with the `sherpa` account instead of yours; and its Talos cluster
 so `sherpa down` powers their nodes off, `sherpa redeploy` refuses their workers and
 `sherpa download` leaves them out. Destroy and recreate such a lab.
 
+### Image ZTP login settings removed
+
+A node image no longer has a ZTP username, password or password-auth setting. Sherpa's node
+configurations never used them. The update drops any values stored, the encrypted password
+included; the images and their ZTP method are kept. `sherpa server image show`, the web UI's
+image pages and editor, and the [image API](../../api-reference.md#node-images) no longer show
+them. Update the CLI and the server to 0.7.0 together: a CLI and a server on different sides of
+this change cannot read each other's image details.
+
 ## Updating to 0.6.4 and 0.6.5
 
 Updating from 0.6.3 or earlier, the first time `sherpad` starts after the update it records each existing lab's definition from

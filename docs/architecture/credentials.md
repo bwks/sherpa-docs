@@ -35,12 +35,6 @@ A node with a [`ztp.config`](../manifest.md#ztp-object) boots with that file ins
 configuration Sherpa generates, so it has the accounts and passwords the file sets. A node with
 `ztp.method = "disabled"` boots as its image ships, with the vendor's own login.
 
-## Image ZTP Credentials
-
-A node image can record a ZTP username and password, kept encrypted in the database; the web UI
-and `sherpa server image show` say only whether the password is set. Sherpa's generated node
-configurations do not use them: they set up the `sherpa` account above.
-
 ## Server Configuration
 
 No setting in `sherpa.toml` changes node credentials. Releases up to 0.6.5 wrote a

@@ -823,9 +823,8 @@ sherpa server image show <model>
 The table names each row by its key in the image's JSON, such as `cpu.count` and
 `interfaces.data_count`. It leaves out the settings the image's kind does not use: a
 container's `machine`, `boot_disk` and `cdrom`, and a unikernel's `machine.bios`, `boot_disk`
-and `cdrom`. The `ztp.password` row says only whether the image has a password: `set` or
-`not set`. `sherpa server --output json image show <model>` prints the JSON itself, with every
-setting nested by group; see [Node images](api-reference.md#node-images).
+and `cdrom`. `sherpa server --output json image show <model>` prints the JSON itself, with
+every setting nested by group; see [Node images](api-reference.md#node-images).
 
 ### `sherpa server image list`
 
