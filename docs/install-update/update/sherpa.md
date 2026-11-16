@@ -30,6 +30,17 @@ copy of the [database key](../../architecture/database.md#database-key),
 passwords in the database with that key, and does not start on a database without it. The update
 script creates `/opt/sherpa/.secret` (mode `700`, owned by `sherpa`) if it is missing.
 
+Updating from 0.6.5 or earlier, the update script tightens the modes of Sherpa's configuration
+and log files, on every run, even when there is nothing to install. It sets `/opt/sherpa/config`,
+`/opt/sherpa/env` and `/opt/sherpa/logs` to `750`, `sherpa.toml`, `sherpa.env` and
+`sherpa.env.example` to `600`, and `sherpad.log` and its rotated copies to `640`, and makes
+`sherpa` their owner. It changes no file's contents and leaves a symlink alone. Members of the
+`sherpa` group can then no longer read `sherpa.toml` or `sherpa.env`: edit them with `sudoedit`
+or `sudo -u sherpa`. Before, `sherpa.toml` got the umask of whoever ran `sherpad init`, often
+`664`, so any account on the server could read it; treat any password you set in it as exposed.
+Run `sherpad init` as `sherpa` from now on, `sudo -u sherpa -H sherpad init`. See
+[file permissions](../install/automated.md#file-permissions).
+
 The first time `sherpad` starts after the update it records each existing lab's definition from
 the manifest it saved in `/opt/sherpa/labs/<lab-id>/`, then **deletes those saved manifests**
 (`manifest.toml`, and `manifest.json` from older releases). Nothing else in the lab's directory
