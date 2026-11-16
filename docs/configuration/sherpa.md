@@ -6,6 +6,18 @@ Sherpa uses TOML configuration files for both the server and client.
 
 The server configuration file is located at `/opt/sherpa/config/sherpa.toml`.
 
+It can hold secrets, so only the `sherpa` user can read it: the file is mode `600` and its folder
+`750`, both owned by `sherpa`. Members of the `sherpa` group cannot read it. Edit it as `sherpa`,
+which keeps the owner and mode:
+
+```
+sudo -u sherpa -H nano /opt/sherpa/config/sherpa.toml
+```
+
+or with `sudoedit /opt/sherpa/config/sherpa.toml`. `sherpad init` writes it as `600`; the update
+script sets the owner and mode of an existing file and leaves its contents alone. See
+[file permissions](../install-update/install/automated.md#file-permissions).
+
 ### Example
 
 ```toml

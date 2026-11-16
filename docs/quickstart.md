@@ -12,11 +12,13 @@ This will install all the dependencies as well as the Sherpa,
 server and client binaries.
 
 ## Sherpa Server
-Initialize the Sherpa server. The install script prints this command with the listen address and
-ports you gave it:
+Initialize the Sherpa server as the `sherpa` user, so the files it writes are `sherpa`'s. The
+install script prints this command with the listen address and ports you gave it:
 ```
-sherpad init --server-ipv4 <address> --ws-port 3030 --http-port 3031
+sudo -u sherpa -H sherpad init --server-ipv4 <address> --ws-port 3030 --http-port 3031
 ```
+`sherpad init` writes `/opt/sherpa/config/sherpa.toml` readable by `sherpa` only (mode `600`);
+see [file permissions](install-update/install/automated.md#file-permissions).
 Leave a flag out to use its default: `0.0.0.0`, `3030` and `3031`. Add `--server-ipv6 <address>`
 to also listen on IPv6. Labs' management subnets are taken from `172.31.0.0/16` and `fd00:b00b::/48`;
 if either range is in use on your network, add `--management-prefix-ipv4 <prefix>` or
@@ -30,7 +32,8 @@ with a new `sherpa.toml`. See [`sherpad init`](command-reference.md#sherpad-init
   `SHERPA_ADMIN_PASSWORD` if that is set, otherwise you are asked for one.
 - **Your user account**, which you start labs from. You choose the username and password,
   whether it is an administrator, and an SSH public key, as a file path or the key itself.
-  Labs need a key: if you skip it, add one later as described in
+  `sherpa` cannot read your home folder, so paste the key itself, or give a file `sherpa` can
+  read. Labs need a key: if you skip it, add one later as described in
   [SSH Keys](architecture/ssh-keys.md).
 
 Running `sherpad init` again keeps existing accounts: it only creates `admin` if it is missing,

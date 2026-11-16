@@ -151,6 +151,22 @@ token secret and its [database key](../../architecture/database.md#database-key)
 sudo install -d -o sherpa -g sherpa -m 700 /opt/sherpa/.secret
 ```
 
+Create the config, environment and log directories, open to the `sherpa` user and group only
+
+```
+sudo install -d -o sherpa -g sherpa -m 750 /opt/sherpa/config /opt/sherpa/env /opt/sherpa/logs
+```
+
+`sherpad init`, run as `sherpa`, writes `/opt/sherpa/config/sherpa.toml` with mode `600`. If you
+write an environment file, `/opt/sherpa/env/sherpa.env`, make it readable by `sherpa` only, as it
+can hold secrets
+
+```
+sudo install -o sherpa -g sherpa -m 600 /dev/null /opt/sherpa/env/sherpa.env
+```
+
+See [file permissions](automated.md#file-permissions) for every mode.
+
 ### AppArmor
 
 Update AppArmor policy to allow `qemu` to access config files.

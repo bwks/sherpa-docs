@@ -20,6 +20,33 @@ To upgrade a server older than 0.5.0, update it to 0.5.12 first; see
 [Updating to 0.5.0](../update/sherpa.md#updating-to-050). The install script refuses to run while
 the old `sherpa-db` SurrealDB container exists.
 
+## File Permissions
+
+The install script, `sherpad init` and the update script give Sherpa's configuration and log
+files these modes, all owned by `sherpa:sherpa`. The files that can hold secrets are readable
+by the `sherpa` user only, not by members of the `sherpa` group: `sherpa.toml` can hold
+passwords, and `sherpa.env` whatever you add to it, such as `OTEL_EXPORTER_OTLP_HEADERS` for an
+OpenTelemetry collector that needs a token.
+
+| Path | Mode | Set by |
+|---|---|---|
+| `/opt/sherpa/config` | `750` | install, update |
+| `/opt/sherpa/config/sherpa.toml` | `600` | `sherpad init`, update |
+| `/opt/sherpa/env` | `750` | install, update |
+| `/opt/sherpa/env/sherpa.env` | `600` | install, update |
+| `/opt/sherpa/env/sherpa.env.example` | `600` | install, update |
+| `/opt/sherpa/logs` | `750` | install, update, `sherpad` |
+| `/opt/sherpa/logs/sherpad.log` | `640` | `sherpad`, update |
+| `/opt/sherpa/.secret` | `700` | install, update, `sherpad` |
+| `/opt/sherpa/.certs` | `700` | `sherpad` |
+| `/opt/sherpa/db` | `750` | install, update, `sherpad` |
+
+Run `sherpad init` as `sherpa` (`sudo -u sherpa -H sherpad init`): `sherpad` runs as `sherpa`
+and cannot read a `sherpa.toml` another account owns. systemd reads `sherpa.env` as root. To
+edit either file, use `sudoedit` or `sudo -u sherpa`. Members of the `sherpa` group can read the
+log, `/opt/sherpa/logs/sherpad.log`, which `sherpad` writes when it is not run by systemd; under
+systemd it logs to the journal.
+
 ## Certificate Fingerprint
 
 `sherpad` generates a self-signed TLS certificate when it first starts. The first time a client

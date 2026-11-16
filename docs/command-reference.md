@@ -1015,6 +1015,10 @@ Initialize the server: directories, `sherpa.toml`, libvirt network and storage p
 the database, the built-in `admin` account and a first user account. See the
 [Quickstart](quickstart.md) for the accounts and unattended use.
 
+Run it as the `sherpa` user, `sudo -u sherpa -H sherpad init`, so that `sherpad`, which runs as
+`sherpa`, can read what it writes. It writes `sherpa.toml` with mode `600` whatever your umask,
+and `--force` gives a rewritten file that mode too.
+
 | Flag | Description |
 | ---- | ----------- |
 | `--force` | Overwrite an existing config |
