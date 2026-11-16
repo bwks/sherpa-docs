@@ -131,8 +131,7 @@ Lab files hold node configuration and the data from your manifest, so only Sherp
 | `/opt/sherpa/libvirt/images/` | `sherpa:kvm` | `2750` | The `sherpa` user, and QEMU, which runs in the `kvm` group |
 
 Volumes in the storage pool are created with mode `0600`. While a VM runs, libvirt hands its
-disks and ISO to the QEMU user. Flatcar's Ignition file is `0644`, because QEMU reads it
-directly.
+disks, ISO and Flatcar's Ignition file to the QEMU user.
 
 `sherpad` applies these directory modes each time it starts, and the install and update
 scripts set them too. If `sherpad` cannot apply them, for example because another user owns a
