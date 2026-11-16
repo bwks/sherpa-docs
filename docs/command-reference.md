@@ -328,20 +328,14 @@ Node 'dev01' cannot be redeployed from the web UI: it needs ztp.config, text_fil
 ```
 
 Run `sherpa redeploy -n <node>` from the lab's folder instead: the CLI reads the files and
-variables there. A lab started before the server recorded definitions, whose definition could
-not be imported, cannot be redeployed from the web UI at all.
+variables there. A lab started before the server recorded definitions, which has none, cannot
+be redeployed from the web UI at all.
 
-A lab started before the server recorded definitions, whose definition was imported from the
-manifest the server saved, is refused too, node by node. That saved manifest did not keep a
-node's own ZTP config or environment variables as you wrote them, so the server cannot tell
-whether the node had them. Redeploy each node once with `sherpa redeploy -n <node>` from the
-lab's folder; the web UI can redeploy that node after that:
-
-```
-Node 'dev01' was imported from a saved manifest that did not keep its own ZTP config or environment variables, so it cannot be redeployed from the web UI. Run `sherpa redeploy -n dev01` from the lab folder once; the web UI can redeploy it after that
-```
-
-A lab started by `sherpa up` after the update is not affected.
+The nodes of a lab started before 0.6.4, whose definition `sherpad` imported from the manifest
+it saved, are not refused from 0.7.0 on, but their definition may lack the node's `ztp.config`,
+environment variables and provisioners: a web UI redeploy rebuilds the node without them. Redeploy
+such a node once with `sherpa redeploy -n <node>` from the lab's folder first; see
+[Updating to 0.7.0](install-update/update/sherpa.md#updating-to-070).
 
 ### `sherpa provision`
 

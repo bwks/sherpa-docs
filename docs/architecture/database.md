@@ -33,18 +33,19 @@ written: `KEY=$VAR` keeps the name `$VAR`, never its value. The `sherpa` CLI sti
 files and resolves the variables, and sends them with each `sherpa up` and `sherpa redeploy` to
 build the node, but the server does not write them to its database.
 
-Labs started before this was recorded get theirs from their saved manifest the first time
-`sherpad` starts after the update. That saved manifest was resolved, so the import keeps only
-what it holds as written: `ztp.config` and `environment_variables` are left out, and stored again
-the next time you redeploy the node from your manifest. A lab whose saved manifest cannot be read
-is logged and keeps none. The saved manifests are then deleted, `manifest.toml` and
-`manifest.json` in each lab's directory and nothing else; the server no longer writes them, and
-reads the lab's manifest only from its definition. A lab with no definition is used with the
-defaults: `sherpa resume` waits the default readiness timeout, containers get their image's
-number of data interfaces, and it cannot be redeployed from the web UI. The nodes of an imported
-lab cannot be redeployed from the web UI either, until each has been redeployed once with
-`sherpa redeploy`, which records its ZTP config and environment variables as written. A CLI older than the server sends only resolved values, so a lab it
-starts has no `ztp.config`, environment variables or provisioners recorded.
+Labs started before 0.6.4 got theirs from the manifest the server saved, the first time
+`sherpad` 0.6.4 or 0.6.5 started, which then deleted it. That saved manifest was resolved, so the
+import kept only what it held as written: `ztp.config`, `environment_variables` and
+`provisioners` were left out, and are stored again the next time you redeploy the node with
+`sherpa redeploy`. 0.7.0 no longer imports, and no longer refuses a web UI redeploy of an
+imported node that has not been redeployed from the CLI since: it would rebuild the node without
+them. See [Updating to 0.7.0](../install-update/update/sherpa.md#updating-to-070).
+
+A lab with no definition is used with the defaults: `sherpa resume` waits the default readiness
+timeout, containers get their image's number of data interfaces, and it cannot be redeployed
+from the web UI until `sherpa redeploy` records one. A CLI older than the server sends only
+resolved values, so a lab it starts has no `ztp.config`, environment variables or provisioners
+recorded.
 
 ### Database key
 

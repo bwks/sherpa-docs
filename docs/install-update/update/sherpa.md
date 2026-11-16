@@ -49,7 +49,37 @@ the table and logs a warning at each start until you delete it, with
 a password there that you use elsewhere, treat it as exposed. `sherpad init` now refuses to run as
 any account but `sherpa`, root included.
 
-The first time `sherpad` starts after the update it records each existing lab's definition from
+## Updating to 0.7.0
+
+0.7.0 no longer converts what releases before 0.6.5 kept in each lab's directory on the server,
+`/opt/sherpa/labs/<lab-id>/`. 0.6.4 and 0.6.5 did that every time `sherpad` started (see
+[Updating to 0.6.4 and 0.6.5](#updating-to-064-and-065)). Before you update a server to 0.7.0:
+
+1. **A server on 0.6.3 or earlier must update to 0.6.5 first, and start `sherpad` once.** The
+   update script starts it:
+
+    ```
+    curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/v0.6.5/scripts/sherpa_update.sh | sudo bash -s -- --version v0.6.5
+    ```
+
+2. **Redeploy from the CLI, or destroy, every lab created before 0.6.4** whose nodes have not been
+   redeployed from the CLI since: run `sherpa redeploy -n <node>` from the lab's folder for each
+   node, or `sherpa destroy`. On 0.6.4 and 0.6.5 the web UI refuses to redeploy those nodes,
+   with a message that the node "was imported from a saved manifest". 0.7.0 no longer tells
+   them apart: a web UI redeploy of such a node rebuilds it **without its `ztp.config`,
+   environment variables and provisioners**.
+
+The update script does not check either step, and `sherpad` 0.7.0 starts all the same. On a
+server that skipped 0.6.5 it ignores the files older releases left in the lab directories, which
+stay there until the lab is destroyed, and their labs run without what they held: a lab has no
+definition, so it runs with the defaults and the web UI refuses to redeploy it; its nodes' SSH
+config logs in with the `sherpa` account instead of yours; and its Talos clusters have no plan,
+so `sherpa down` powers their nodes off, `sherpa redeploy` refuses their workers and
+`sherpa download` leaves them out. Destroy and recreate such a lab.
+
+## Updating to 0.6.4 and 0.6.5
+
+Updating from 0.6.3 or earlier, the first time `sherpad` starts after the update it records each existing lab's definition from
 the manifest it saved in `/opt/sherpa/labs/<lab-id>/`, then **deletes those saved manifests**
 (`manifest.toml`, and `manifest.json` from older releases). Nothing else in the lab's directory
 is touched, and your own `manifest.toml` in the lab folder is never read by the server. A saved
