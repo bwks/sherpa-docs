@@ -245,7 +245,7 @@ Except for the startup configuration, these notes apply to [`cisco_ioll2`](cisco
 - Approximate time for the system to be ready: `1 minute`. Sherpa reports the node ready once the
   container is running; SSH answers about a minute later, once IOL has booted and generated its
   RSA key.
-- The startup configuration sets the hostname, the `sherpa` login and yours, SSH, and the
+- The startup configuration sets the hostname, your login, SSH, and the
   management address on `Ethernet0/0`, with a default route through the management network. The
   data interfaces are left as IOL starts them: shut down, with no address.
 - `write memory` saves to IOL's NVRAM, which Sherpa keeps in the lab folder. A saved
@@ -274,6 +274,6 @@ Except for the startup configuration, these notes apply to [`cisco_ioll2`](cisco
   addresses. A lab can hold at most 999 nodes before an IOL node; a later IOL node is refused.
 - With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as
   shipped: IOL boots with no configuration, runs its own autoinstall, and has no management
-  address and no `sherpa` login, so `sherpa ssh` cannot reach it. Reach it on its console with
+  address and no login, so `sherpa ssh` cannot reach it. Reach it on its console with
   `docker attach <node-name>-<lab-id>`. Its NVRAM is still kept, and the node's `volumes` from the
   manifest are mounted.

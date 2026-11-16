@@ -77,6 +77,37 @@ config logs in with the `sherpa` account instead of yours; and its Talos cluster
 so `sherpa down` powers their nodes off, `sherpa redeploy` refuses their workers and
 `sherpa download` leaves them out. Destroy and recreate such a lab.
 
+### Your login on nodes
+
+0.7.0 gives every node Sherpa builds one login, yours. The shared `sherpa` account and its
+published password, `Everest1953!`, are gone from new nodes. See
+[Your Login on Nodes](../../architecture/personal-accounts.md).
+
+- **Set a device password before the next `sherpa up` or `sherpa redeploy`.** Both refuse to
+  start, before they create anything, for every user who has none, in the CLI and the web UI.
+  Use `sherpa server user device-password` or the **Profile** page. See
+  [Device Password](../../architecture/device-password.md). `resume`, `down`, `destroy` and
+  `inspect` do not need it.
+- **You log in as yourself.** A new node has no `sherpa` account. You log in with your Sherpa
+  username and your keys, and the vendor accounts that have a fixed name, such as `admin` and
+  `root`, take your device password. Cisco FTDv has only `admin`, with your device password.
+- **Delete `provision_current_user` from your manifests.** The setting is removed, and a manifest
+  that still sets it, to `true` or `false`, is refused by `sherpa validate`, `sherpa up` and
+  `sherpa redeploy` with ``unknown field `provision_current_user` ``.
+- **Labs built before 0.7.0 keep `sherpa`.** Their nodes keep the `sherpa` account, its published
+  password and the lab's key, and their SSH config keeps `User sherpa`, until each node is
+  redeployed with `sherpa redeploy -n <node>` or the lab is recreated. `sherpad` logs one warning
+  at every start while any such node remains. `sherpa download --force` writes an SSH config
+  without the `IdentityFile` line, after which `sherpa ssh` asks for the old password.
+- **Some models refuse some names.** A node that cannot take your username as a login stops
+  `sherpa up` and `sherpa redeploy` before anything is created. Windows takes at most 20
+  characters; Cisco NX-OS at most 28, starting with a letter or digit; Arista vEOS and cEOS must
+  start with a letter or digit; PAN-OS and OpenBSD take at most 31. An account named `root`,
+  `sherpa` or `admin` from an old release cannot start labs. See
+  [Login Names](../../architecture/personal-accounts.md#login-names).
+- **Update the CLI and the server together.** A 0.7.0 CLI and an older server, or the other way
+  round, disagree on the manifest and on what a response carries.
+
 ### Image ZTP login settings removed
 
 A node image no longer has a ZTP username, password or password-auth setting. Sherpa's node
@@ -206,7 +237,7 @@ A node image now has one [ZTP setting](../../architecture/zero-touch-provisionin
   as they did before.
 
 If you had switched ZTP off on a cEOS, SR Linux, cEvolved or FRR image, its nodes now start
-without Sherpa's configuration, without a management address and without the `sherpa` login the
+without Sherpa's configuration, without a management address and without your login the
 next time they are created or redeployed. Before, switching it off only left out the lab owner's account.
 
 A manifest that sets `ztp_config` (now [`ztp.config`](../../manifest.md#ztp-object)) on a node that cannot

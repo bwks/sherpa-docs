@@ -2,7 +2,7 @@
 
 You need at least one SSH public key registered with your Sherpa user account to start labs.
 `sherpa up` and node redeploys stop with an error until you add one. Lab nodes use your keys
-for your [personal account](personal-accounts.md).
+for [your login](personal-accounts.md).
 
 Only the public key is sent to the server. Keep the private key on your workstation or in your
 SSH agent.
@@ -37,7 +37,7 @@ If you already have a key pair, use its existing `.pub` file.
 ## Which Key Type
 
 Linux, BSD and Windows nodes take every key you register. Many network devices take only some
-types, so a lab with [personal accounts](personal-accounts.md) needs a key each device takes:
+types, so a lab needs a key each device takes:
 
 - Cisco IOS, IOS XE, IOS XR and ISE take RSA only.
 - Cisco NX-OS takes ECDSA or RSA, not Ed25519.
@@ -52,7 +52,7 @@ sherpa server user ssh-key add ~/.ssh/id_rsa.pub
 ```
 
 Your SSH client offers each of your keys in turn, so both work without extra settings.
-[Personal Accounts](personal-accounts.md#network-devices) lists the key types and number of keys
+[Your Login on Nodes](personal-accounts.md#network-devices) lists the key types and number of keys
 each device takes.
 
 ## Register a Key

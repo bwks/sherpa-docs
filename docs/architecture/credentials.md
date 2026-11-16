@@ -3,37 +3,34 @@
 Node credentials are configured via ZTP during the first boot. Where a node's login comes from
 depends on the lab and the node, not on any server setting.
 
-## Default Credentials
+## Your Login
 
-Nodes that Sherpa provisions get the `sherpa` account. Its credentials are built into Sherpa and
-are the same on every server:
+Nodes that Sherpa provisions have one login: yours. It is your Sherpa username, with the SSH
+public keys registered to your account and your [device password](device-password.md) as its
+password. Nothing is shared between users or labs, and no password is published.
 
-| Username | Password       | SSH Key                                  |
-| -------- | -------------- | ---------------------------------------- |
-| `sherpa` | `Everest1953!` | `.sherpa/ssh/key`, in the lab's folder   |
+| Username              | Password        | SSH Key                           |
+| --------------------- | --------------- | --------------------------------- |
+| your Sherpa username  | device password | your registered public keys       |
+
+Devices that have fixed vendor accounts, such as `admin` on NX-OS and `root` on Junos, take your
+device password for those too. Cisco FTDv has only `admin`, with your device password and no key.
+See [Your Login on Nodes](personal-accounts.md) for each model.
+
+Before 0.7.0 every node also had a `sherpa` account with a published password. New nodes do not.
+See [Updating Sherpa](../install-update/update/sherpa.md) for labs built before then.
 
 !!! Info
 
-    `sherpa up` makes a new SSH key pair for each lab, and `sherpa up` and
-    `sherpa download` save it to your lab folder. See
-    [Lab SSH Key](ssh.md#lab-ssh-key).
-
-The password is published here, so treat it as known to anyone, and log in with the lab key
-where the node takes one.
-
-## Your Own Account
-
-With [`provision_current_user = true`](../manifest.md#provision_current_user-bool) in the
-manifest, nodes also get an account named after the lab owner's Sherpa username, with the SSH
-public keys registered to that account. Where a device needs a password, the account gets a
-random one that is never shown; you log in with your key. See
-[Personal Accounts](personal-accounts.md) for the nodes it applies to.
+    `sherpa up` and `sherpa redeploy` stop, before they create anything, if you have not set a
+    device password. See [Device Password](device-password.md).
 
 ## Custom ZTP Configuration
 
 A node with a [`ztp.config`](../manifest.md#ztp-object) boots with that file instead of the
-configuration Sherpa generates, so it has the accounts and passwords the file sets. A node with
-`ztp.method = "disabled"` boots as its image ships, with the vendor's own login.
+configuration Sherpa generates, so it has the accounts and passwords the file sets, and no login
+for you. A node with `ztp.method = "disabled"` boots as its image ships, with the vendor's own
+login.
 
 ## Server Configuration
 

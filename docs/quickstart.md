@@ -37,6 +37,9 @@ with a new `sherpa.toml`. See [`sherpad init`](command-reference.md#sherpad-init
   read. Labs need a key: if you skip it, add one later as described in
   [SSH Keys](architecture/ssh-keys.md).
 
+Labs also need a device password, the password of your login on lab nodes. Set it after you
+log in and before the first `sherpa up`; see [Device Password](#device-password).
+
 Running `sherpad init` again keeps existing accounts: it only creates `admin` if it is missing,
 and only asks for a user account if there is none.
 
@@ -99,6 +102,15 @@ src = "dev01::eth2"
 dst = "dev02::eth2"
 ```
 
+## Device Password
+Set your device password before the first `sherpa up`. It is the password of your login on
+every lab node, and `sherpa up` refuses to start a lab without one. The command asks for your
+Sherpa login password, then the new device password twice. You can also set it on the **Profile**
+page of the web UI. See [Device Password](architecture/device-password.md) for the rules.
+```
+sherpa server user device-password
+```
+
 ## Build
 Run the following command to start a lab.
 ```
@@ -106,7 +118,7 @@ sherpa up
 ```
 
 ## Access
-Devices are available via SSH.
+Devices are available via SSH, as your Sherpa username, with your keys or your device password.
 ```
 sherpa ssh dev01
 ```

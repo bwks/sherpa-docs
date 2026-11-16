@@ -82,7 +82,6 @@ on the node.
 
 ```toml
 name = "nixos-lab"
-provision_current_user = true
 
 [[nodes]]
 name = "nix01"
@@ -108,6 +107,6 @@ model = "nixos_linux"
 - Approximate time for the system to be ready: `30 seconds`
 - Accounts use Bash from the system profile, `/run/current-system/sw/bin/bash`: NixOS has no
   `/bin/bash`. Scripts with a `#!/bin/bash` shebang need `#!/usr/bin/env bash` instead.
-- Admin rights come from the `wheel` group. See [Personal Accounts](../../architecture/personal-accounts.md).
+- Admin rights come from the `wheel` group. See [Your Login on Nodes](../../architecture/personal-accounts.md).
 - Changes made with `nixos-rebuild switch` on the node keep Sherpa's accounts, because the image
   keeps `users.mutableUsers` on.

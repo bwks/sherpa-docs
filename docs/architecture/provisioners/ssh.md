@@ -9,7 +9,6 @@ stores the contents.
 
 ```toml
 name = "dev"
-provision_current_user = true
 
 [[nodes]]
 name = "dev01"
@@ -45,8 +44,7 @@ every field.
 
 ## What It Does
 
-Everything runs as the node's login user: your [personal account](../personal-accounts.md) when
-`provision_current_user` is enabled, otherwise the `sherpa` user. In order:
+Everything runs as the node's login user: [your login](../personal-accounts.md). In order:
 
 1. **Waits for the node.** It retries the login until the account exists, then waits for
    cloud-init to finish first-boot work, so your files are not overwritten by it. Every step

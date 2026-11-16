@@ -61,7 +61,9 @@ model = "open_bsd"
   node. cloud-init's OpenBSD network renderer does not configure IPv6 addresses, and it fails
   on an IPv6 default route, which would leave the node with no network. Sherpa therefore sends
   OpenBSD nodes IPv4 settings only.
-- Admin rights use `doas`, part of OpenBSD's base system. The `sherpa` user and your
-  [personal account](../../architecture/personal-accounts.md) are in `wheel`, and
+- Admin rights use `doas`, part of OpenBSD's base system. [Your account](../../architecture/personal-accounts.md) is in `wheel`, and
   `/etc/doas.conf` lets `wheel` run commands as root without a password
   (`permit nopass keepenv :wheel`). No `sudo` rule is set up.
+- OpenBSD's password hashing takes only bcrypt, so Sherpa gives cloud-init your
+  [device password](../../architecture/device-password.md) as plain text and cloud-init hashes it
+  on the node. Login names are at most 31 characters.

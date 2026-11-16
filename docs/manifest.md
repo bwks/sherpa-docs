@@ -191,9 +191,8 @@ environment_variables = [
 Where the variables are set depends on the node:
 
 - **Linux and BSD VMs using `cloud-init`, and Flatcar**: the variables are written to
-  `~/.sherpa_env` in the home directory of the login user, which is your personal account
-  when [`provision_current_user`](#provision_current_user-bool) is enabled, otherwise the
-  `sherpa` user. The file is readable only by that user, and nothing is written system-wide.
+  `~/.sherpa_env` in the home directory of the login user, which is
+  [your account on the node](architecture/personal-accounts.md). The file is readable only by that user, and nothing is written system-wide.
   A line that sources it is added to `~/.bash_profile`, or to `~/.profile` when there is no
   `~/.bash_profile`, so the variables are set in login shells, including
   [`user_scripts`](#user_scripts-liststring).
@@ -388,7 +387,7 @@ that support the `cloud-init` based ZTP method._
 
 !!! note
     Text files are written late in the first boot, after cloud-init has created
-    users, so `user` and `group` can name the `sherpa` user. They must name a user
+    users, so `user` and `group` can name your account. They must name a user
     and group that exist on the node, otherwise cloud-init does not write the file.
 
 !!! note "Windows nodes"
@@ -420,9 +419,8 @@ user_scripts = [
 User scripts are stored on the Sherpa server and are not for secrets. See
 [`environment_variables`](#environment_variables-liststring).
 
-User scripts run at the end of the first boot, as your personal account when
-[`provision_current_user`](#provision_current_user-bool) is enabled, otherwise as the
-`sherpa` user. They run in a login shell, so `environment_variables` are set. Like
+User scripts run at the end of the first boot, as
+[your account on the node](architecture/personal-accounts.md). They run in a login shell, so `environment_variables` are set. Like
 [`startup_scripts`](#startup_scripts-liststring), each script is run directly, so its shebang
 line chooses the interpreter.
 
@@ -974,17 +972,11 @@ loss_percent = 1.0
 Every link is a P2P eBPF link. The `p2p` setting has been removed, and a manifest that still
 sets it fails validation; see [the removed `p2p` setting](architecture/networking/modes/point-to-point.md#the-removed-p2p-setting).
 
-### provision_current_user (bool)
-
-Create an account for the lab owner on lab nodes, using the owner's Sherpa username and
-registered SSH public keys: Linux, BSD and Windows VMs, and network devices. Defaults to `false`.
-
-```toml
-provision_current_user = true
-```
-
-See [Personal Accounts](architecture/personal-accounts.md) for the nodes it applies to and the
-key types each network device takes. A node with a custom `ztp.config` gets no account.
+The `provision_current_user` setting has been removed. Every node with a generated login gets
+the lab owner's account, and nothing else; see
+[Your Login on Nodes](architecture/personal-accounts.md). A manifest that still sets
+`provision_current_user`, to `true` or `false`, is refused by `sherpa validate`, `sherpa up` and
+`sherpa redeploy` with ``unknown field `provision_current_user` ``. Delete the line.
 
 ### ready_timeout (int)
 
