@@ -24,6 +24,9 @@ not it uses personal accounts. See [SSH Keys](ssh-keys.md) to generate and regis
 Keep the matching private keys on your workstation or in your SSH agent. They are never
 sent to the server.
 
+Set your [device password](device-password.md) too: from Sherpa 0.7.0 it is the password of your
+account on lab nodes, and labs need one.
+
 ## What You Get
 
 ### Linux and BSD

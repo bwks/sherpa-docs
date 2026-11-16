@@ -85,6 +85,9 @@ each device takes.
 Administrators can manage another user's keys with `--user <username>`, and can add keys when
 creating a user with `sherpa server user create --ssh-key`.
 
+Your password on lab nodes is your [device password](device-password.md), set on the same
+**Profile** page or with `sherpa server user device-password`.
+
 `sherpad init` also asks for a key when it creates the first user account, or takes it from
 `SHERPA_USER_SSH_KEY`.
 

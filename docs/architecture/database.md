@@ -49,8 +49,9 @@ recorded.
 
 ### Database key
 
-Passwords are stored encrypted (AES-256-GCM): `ztp_server.password` from a lab's manifest. The
-key is in
+Passwords are stored encrypted (AES-256-GCM): `ztp_server.password` from a lab's manifest, and
+each user's [device password](device-password.md). The database refuses a device password that is
+not encrypted. The key is in
 `/opt/sherpa/.secret/db.key`, beside the JWT secret in a folder only `sherpa` can open (mode
 `700`): 32 random bytes, readable only by `sherpa`, which `sherpad` creates
 the first time it starts. The key is never in the database or its backups, so a database or a
@@ -121,6 +122,7 @@ Stores user accounts and credentials.
 | `ssh_keys`      | list of text    | Public SSH keys                 |
 | `created_at`    | time            | Account creation time           |
 | `updated_at`    | time            | Last update time                |
+| `device_password` | text, optional | The user's [device password](device-password.md), encrypted; none until set |
 
 #### node_image
 

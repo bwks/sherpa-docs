@@ -124,6 +124,7 @@ their existing tokens stop working.
 | Image | List, show | Authenticated |
 | Image | Import, pull, delete, set-default, scan, download, upload | Admin |
 | User | Change password, info | Self, or admin for any user |
+| User | Set device password | Self only, admins included |
 | User | Create, list, delete | Admin |
 | Admin | Force clean lab | Admin |
 | Admin | Back up database | Admin |
@@ -131,6 +132,15 @@ their existing tokens stop working.
 To change your own password, admins included, send `current_password` with `new_password`
 (`POST /api/v1/admin/users/{username}/password`, or the RPC method `user.passwd`). An admin
 resetting another user's password leaves it out.
+
+To set your own [device password](architecture/device-password.md), send `username` (your own),
+`login_password` and `device_password` (`POST /api/v1/admin/users/{username}/device-password`,
+or the RPC method `user.device_password.set`). The answer is `username` and
+`device_password_set`. Another user's, an admin's call included, is refused (403, or
+`AccessDenied`), and so is a wrong login password; a password that breaks the
+[rules](architecture/device-password.md#rules) or equals the login password is invalid (400, or
+`InvalidParams`). User details (`user.info`, `user.list` and their REST routes) carry
+`device_password_set`, never the password.
 
 The server sends no CORS headers, so a web page on another origin cannot call the API.
 
