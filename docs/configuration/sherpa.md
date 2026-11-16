@@ -33,11 +33,6 @@ containers_dir = "/opt/sherpa/containers"
 bins_dir = "/opt/sherpa/bins"
 allow_signup = false
 
-[ztp_server]
-enable = true
-username = "sherpa"
-password = "sherpa"
-
 [tls]
 enabled = true
 auto_generate_cert = true
@@ -82,15 +77,13 @@ overcommit_percent = 100
 | `bins_dir` | string | | Directory for binary files (required) |
 | `allow_signup` | bool | `false` | Let anyone create an account on the web UI's signup page. Off, the page returns 404 and only admins create accounts, with [`sherpa server user create`](../command-reference.md#sherpa-server-user-create) |
 
-### `[ztp_server]`
+### Removed: `[ztp_server]`
 
-Zero-Touch Provisioning server settings.
-
-| Property | Type | Default | Description |
-| -------- | ---- | ------- | ----------- |
-| `enable` | bool | `true` | Enable or disable the ZTP server |
-| `username` | string | `"sherpa"` | ZTP authentication username |
-| `password` | string | `"Everest1953!"` | ZTP authentication password |
+Releases up to 0.6.5 wrote a `[ztp_server]` table with `enable`, `username` and `password`.
+Nothing read it, and it does not set node credentials (see
+[Node Credentials](../architecture/credentials.md)). `sherpad` ignores the table and logs a
+warning at startup until you delete it from `/opt/sherpa/config/sherpa.toml`. A lab's
+[`ztp_server`](../manifest.md#ztp_server-object) in its manifest is a different setting.
 
 ### `[server_connection]`
 
