@@ -129,3 +129,6 @@ sherpa --version
    the certificate's SHA-256 fingerprint and asks whether to trust it. Compare it with the
    server's [certificate fingerprint](automated.md#certificate-fingerprint) before you answer;
    see [Certificate Commands](../../command-reference.md#certificate-commands).
+4. Set your [device password](../../architecture/device-password.md) with
+   `sherpa server user device-password`, or on the web UI **Profile** page, before the first
+   `sherpa up`. It is the password of your login on lab nodes, and labs need one.

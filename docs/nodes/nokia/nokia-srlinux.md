@@ -11,7 +11,7 @@ Base images can be obtained from the [Nokia SR Linux](https://github.com/nokia/s
 Pull the image through Sherpa:
 
 ```
-sherpa server image pull --model nokia_srlinux --version 26.7.2
+sherpa server image pull --model nokia_srlinux --version 26.3.1
 ```
 
 Sherpa records the version, so a lab can use it. An image already pulled with the `docker` CLI
@@ -19,13 +19,13 @@ is not known to Sherpa until it is scanned. The scan records each local tag of `
 version:
 
 ```
-docker pull ghcr.io/nokia/srlinux:26.7.2
+docker pull ghcr.io/nokia/srlinux:26.3.1
 sherpa server image scan --container
 ```
 
-The minimum supported release is 26.7.2. Sherpa 0.5.8 and later configure DNS as a
-`dns-instance` named `mgmt`, which release 26 introduced in place of the `dns` client, so earlier
-releases do not load the startup config.
+Sherpa's startup config is tested on release 26.3.1. Sherpa 0.5.8 and later configure DNS as a
+`dns-instance` named `mgmt`, which release 26 introduced in place of the `dns` client, so releases
+before 26 reject the startup config.
 
 ## Default Node Parameters
 
@@ -47,7 +47,7 @@ name = "nokia-srlinux"
 [[nodes]]
 name = "dev01"
 model = "nokia_srlinux"
-version = "26.7.2"
+version = "26.3.1"
 ```
 
 

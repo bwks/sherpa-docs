@@ -12,7 +12,15 @@ The following configuration parameters are applied to nodes via ZTP:
 - DNS domain
 - DNS name servers
 - DNS search domains
-- Sherpa user with password and SSH key authentication.
+- Your login: your Sherpa username, your registered SSH keys and your
+  [device password](device-password.md), written in the form the device takes. Where a device
+  stores a hash, the configuration carries a salted hash, not the password. Fixed vendor accounts
+  such as `admin` take the device password too. See
+  [Your Login on Nodes](personal-accounts.md#passwords-on-nodes).
+
+There is no `sherpa` account and no shared password in a configuration Sherpa generates. The
+configurations served over TFTP or HTTP carry only hashes, except Aruba AOS-CX, whose TFTP
+configuration still holds the device password as plain text.
 
 ## Who Can Read a Node's Configuration
 
@@ -94,7 +102,7 @@ old method are removed.
 ### Disabled
 
 A node with ZTP `disabled` boots as its image ships: Sherpa generates no configuration and adds
-no `sherpa` login or [personal account](personal-accounts.md). The generated configuration is
+no [login](personal-accounts.md). The generated configuration is
 also what gives a node its management IP address, so a node with ZTP `disabled` has none unless
 its image configures one itself, and `sherpa ssh` cannot reach it. A virtual machine gets no
 configuration media. A container gets only what it needs to start, as described under
@@ -202,7 +210,7 @@ Configuration is served over the network via HTTP on port 8080 of the lab router
 Arista cEOS, Nokia SR Linux, Juniper cEvolved, Cisco IOL and FRR containers use the `volume`
 method. Sherpa
 writes the node's configuration files on the Sherpa server and bind mounts them into the
-container, which reads them on startup. The configuration carries the `sherpa` login.
+container, which reads them on startup. The configuration carries your login.
 
 ![A path on the Sherpa server is bind mounted into the container](ztp-volume.svg)
 

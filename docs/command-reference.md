@@ -105,7 +105,6 @@ The generated manifest has a random lab name and two linked Linux nodes:
 
 ```toml
 name = "absolute-grubworm"
-provision_current_user = false
 
 [[nodes]]
 name = "dev01"

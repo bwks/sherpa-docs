@@ -33,7 +33,7 @@ The interfaces are the same as on `cisco_iol`: Ethernet ports in slots of four, 
 
 ## Startup Configuration
 
-The startup configuration is the one `cisco_iol` gets (hostname, the `sherpa` login and yours,
+The startup configuration is the one `cisco_iol` gets (hostname, your login,
 SSH, and the management address with a default route through the management network), with two
 differences for a switch:
 

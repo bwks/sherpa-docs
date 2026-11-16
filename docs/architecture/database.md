@@ -158,7 +158,7 @@ are unique, and no two labs share a network.
 | `gateway_ipv4`         | text            | IPv4 gateway address            |
 | `loopback_network`     | text            | IPv4 loopback network           |
 | `description`          | text, optional  | The manifest's `description`    |
-| `ready_timeout`, `provision_current_user`, `provision_concurrency`, `tailscale_*`, `ztp_server_*` | | The manifest's lab-level settings; `ztp_server_password` is encrypted |
+| `ready_timeout`, `provision_concurrency`, `tailscale_*`, `ztp_server_*` | | The manifest's lab-level settings; `ztp_server_password` is encrypted |
 
 #### node
 
@@ -176,7 +176,7 @@ and VNC ports across all labs.
 | `mgmt_mac`  | text, optional        | Management MAC address                |
 | `state`     | text                  | [Node state](../command-reference.md#node-states) |
 | `ssh_host_key` | text, optional     | The SSH host key the node offered when it last became ready |
-| `ssh_username` | text, optional     | The account the lab's SSH config logs in to the node with: the lab owner's on a node that provisions it, else empty for the `sherpa` account |
+| `ssh_username` | text, optional     | The account the lab's SSH config logs in to the node with: the lab owner's on a node with a generated login, `admin` on Cisco FTDv, `sherpa` on a node built before 0.7.0, else empty and the owner's name is used |
 | `version`, `manifest_memory`, `cpu_*`, `numa_*`, `boot_disk_*`, `interfaces_*`, `ztp_*`, `vm_*`, `container_*`, `unikernel_*`, ... | | The node's settings from the manifest |
 
 #### manifest_*

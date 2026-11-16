@@ -43,13 +43,15 @@ model = "cisco_ftdv"
 ## Credentials
 
 Creating a user and enabling SSH key based authentication is not supported via ZTP for this
-platform.
+platform. The only login is `admin`, and its password is your
+[device password](../../architecture/device-password.md):
 
-The login credentials are:
+| Username | Password        |
+| -------- | --------------- |
+| `admin`  | device password |
 
-| Username | Password       |
-| -------- | -------------- |
-| `admin`  | `Everest1953!` |
+Set a device password before `sherpa up`; a lab cannot start without one. The device password is
+set in the node's day-0 configuration, so a change applies after `sherpa redeploy`.
 
 
 ## Node Access

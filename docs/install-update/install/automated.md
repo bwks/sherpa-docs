@@ -48,6 +48,13 @@ edit either file, use `sudoedit` or `sudo -u sherpa`. Members of the `sherpa` gr
 log, `/opt/sherpa/logs/sherpad.log`, which `sherpad` writes when it is not run by systemd; under
 systemd it logs to the journal.
 
+## Before the First Lab
+
+Each user sets a [device password](../../architecture/device-password.md), with
+`sherpa server user device-password` or on the web UI **Profile** page, and registers an SSH
+key, before the first `sherpa up`. `sherpad init` sets neither password for you, and `sherpa up`
+refuses to start a lab without a device password.
+
 ## Certificate Fingerprint
 
 `sherpad` generates a self-signed TLS certificate when it first starts. The first time a client

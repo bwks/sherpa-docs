@@ -65,4 +65,4 @@ version = "<version>"
 ## Notes
 
 - The administrator group is `wheel`, as on Arch Linux.
-- Management networking, the Sherpa user, file injection and startup scripts work the same way as other cloud-init Linux nodes.
+- Management networking, your login, file injection and startup scripts work the same way as other cloud-init Linux nodes.

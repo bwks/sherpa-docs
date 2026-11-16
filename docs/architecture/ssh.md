@@ -12,8 +12,7 @@ in `~/.ssh/config` will have a line added:
 
 The `sherpa_lab_hosts` file has `Include` references to the labs SSH
 config file (`<lab folder>/.sherpa/ssh/config`) added and removed during start up and tear down.
-The config's `IdentityFile` and `UserKnownHostsFile` are absolute paths to `.sherpa/ssh/key`
-and `.sherpa/ssh/known_hosts`, so `ssh -F .sherpa/ssh/config <node>.<lab-id>` works from the
+The config's `UserKnownHostsFile` is an absolute path to `.sherpa/ssh/known_hosts`, so `ssh -F .sherpa/ssh/config <node>.<lab-id>` works from the
 lab folder. A lab from a client before 0.5.15 has these files loose in the lab folder; Sherpa moves
 them into `.sherpa/` and repoints the include the next time a command uses the lab folder.
 
@@ -24,25 +23,24 @@ interrupted update never leaves it cut short.
 
 ## Lab SSH Key
 
-Nodes that cannot take your own SSH keys are reached through the `sherpa` account with an SSH
-key pair. `sherpa up` makes a new key pair for each lab on the Sherpa server, in the lab's
-folder, readable only by the Sherpa server. Every lab has a different key, so the key of one
-lab gives no access to the nodes of another.
-
-`sherpa up` and `sherpa download` save the private key as `.sherpa/ssh/key` in your lab folder
-when the lab has such nodes, and `.sherpa/ssh/config` uses it for them:
+Every node logs in as you, with your own keys or your
+[device password](device-password.md), so `.sherpa/ssh/config` names your username and no
+identity file:
 
 ```
 Host 172.31.1.22 router1.abcd1234 router1.abcd1234.sherpa.lab.local
-    User sherpa
-    IdentityFile /home/me/labs/dev/.sherpa/ssh/key
-    IdentitiesOnly yes
+    User alice
 ```
 
-- **Who gets it:** only the lab's owner and admins can download a lab's key, from the CLI or the
-  web UI's lab download.
-- **Redeploy and resume:** `sherpa redeploy` gives the node the lab's key again, and
-  `sherpa resume` keeps it.
+`sherpa up` still makes a key pair for each lab on the Sherpa server, in the lab's folder,
+readable only by the Sherpa server. No node's SSH config uses it, and `sherpa up` and
+`sherpa download` no longer save a private key to your lab folder.
+
+- **Labs built before 0.7.0** keep their `sherpa` account, its published password and their lab
+  key until their nodes are redeployed. Their SSH config says `User sherpa`. After
+  `sherpa download --force` rewrites it without an `IdentityFile`, `sherpa ssh` asks for the old
+  password. See [Updating to 0.7.0](../install-update/update/sherpa.md#updating-to-070).
+- **Redeploy and resume:** `sherpa redeploy` rebuilds the node with your login.
 - **Destroy and clean:** `sherpa destroy` and `sherpa server clean` delete the key with the lab's
   folder on the server.
 - **Labs created before Sherpa 0.5.15** used the server's shared key, which 0.6.0 removes.

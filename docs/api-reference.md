@@ -469,7 +469,7 @@ Every lab operation applies the same rule on REST, WebSocket RPC and the web UI:
 
 The built-in `admin` account cannot create, resume or redeploy labs, on any transport: these
 return `403 Forbidden` on REST and `AccessDenied` on WebSocket RPC. It can still inspect, stop,
-destroy and clean up any lab. Start labs from a personal account, which may also be an admin.
+destroy and clean up any lab. Start labs from your own account, which may also be an admin. Labs also need the account to have a [device password](architecture/device-password.md).
 
 A request for another user's lab returns `403 Forbidden` on REST and an `AccessDenied`
 error on WebSocket RPC. A lab that does not exist returns `404 Not Found` or `NotFound`.
