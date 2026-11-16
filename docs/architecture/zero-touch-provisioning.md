@@ -156,7 +156,7 @@ the static management address.
 
 ### Ignition
 
-Ignition is a declarative provisioning system. Configuration is delivered as a JSON file passed to the VM via QEMU command-line parameters.
+Ignition is a declarative provisioning system. Configuration is delivered as a JSON file in the storage pool, which libvirt passes to the VM through QEMU's firmware configuration device (fw_cfg).
 
 ![sherpad passes an Ignition config to the VM through QEMU's fw_cfg device and attaches a container disk](ztp-ignition.svg)
 
