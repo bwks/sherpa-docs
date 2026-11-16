@@ -12,7 +12,8 @@ This will install all the dependencies as well as the Sherpa,
 server and client binaries.
 
 ## Sherpa Server
-Initialize the Sherpa server as the `sherpa` user, so the files it writes are `sherpa`'s. The
+Initialize the Sherpa server as the `sherpa` user, so the files it writes are `sherpa`'s;
+`sherpad init` refuses any other account, root included. The
 install script prints this command with the listen address and ports you gave it:
 ```
 sudo -u sherpa -H sherpad init --server-ipv4 <address> --ws-port 3030 --http-port 3031

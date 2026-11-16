@@ -42,7 +42,8 @@ OpenTelemetry collector that needs a token.
 | `/opt/sherpa/db` | `750` | install, update, `sherpad` |
 
 Run `sherpad init` as `sherpa` (`sudo -u sherpa -H sherpad init`): `sherpad` runs as `sherpa`
-and cannot read a `sherpa.toml` another account owns. systemd reads `sherpa.env` as root. To
+and cannot read a `sherpa.toml` another account owns. `sherpad init` refuses any other account,
+root included. systemd reads `sherpa.env` as root. To
 edit either file, use `sudoedit` or `sudo -u sherpa`. Members of the `sherpa` group can read the
 log, `/opt/sherpa/logs/sherpad.log`, which `sherpad` writes when it is not run by systemd; under
 systemd it logs to the journal.

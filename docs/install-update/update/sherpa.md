@@ -41,6 +41,14 @@ or `sudo -u sherpa`. Before, `sherpa.toml` got the umask of whoever ran `sherpad
 Run `sherpad init` as `sherpa` from now on, `sudo -u sherpa -H sherpad init`. See
 [file permissions](../install/automated.md#file-permissions).
 
+Updating from 0.6.5 or earlier, `sherpa.toml` has a `[ztp_server]` table that `sherpad` no longer
+has. Nothing ever read it; it does not set node credentials (see
+[Node Credentials](../../architecture/credentials.md)). The file still loads: `sherpad` ignores
+the table and logs a warning at each start until you delete it, with
+`sudoedit /opt/sherpa/config/sherpa.toml`. The update script does not edit the file. If you set
+a password there that you use elsewhere, treat it as exposed. `sherpad init` now refuses to run as
+any account but `sherpa`, root included.
+
 The first time `sherpad` starts after the update it records each existing lab's definition from
 the manifest it saved in `/opt/sherpa/labs/<lab-id>/`, then **deletes those saved manifests**
 (`manifest.toml`, and `manifest.json` from older releases). Nothing else in the lab's directory
