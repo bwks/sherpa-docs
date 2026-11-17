@@ -119,6 +119,13 @@ key.
 Talos, application containers such as databases and Git servers, and unikernels have no way to
 add an account at boot, so Sherpa creates no login on them.
 
+Two application containers have an administrator of their own, which Sherpa sets: Keycloak's
+`admin` and SurrealDB's `root`. Each node gets its own, with a random password generated when the
+node is created and kept when it is redeployed; it is not your device password, and no two nodes
+share one. `sherpa up` and `sherpa download` write them to your lab folder, for you only. See
+[Keycloak](../nodes/keycloak/keycloak-server.md#node-access) and
+[SurrealDB](../nodes/sql/surrealdb.md#root-user).
+
 !!! note
     A node with a custom `ztp.config` gets no login, because your config replaces the one the
     account would be written into. `sherpa up` says which nodes this applies to.

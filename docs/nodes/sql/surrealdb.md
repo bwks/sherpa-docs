@@ -46,6 +46,35 @@ version = "v2.2"
 ```
 
 
+## Root User
+
+SurrealDB serves its API on port `8000`, on the node's management address, in memory. It starts
+with one root user, `root`, with a random password Sherpa generates for the node when it is
+created; no two nodes share one, and no password is published.
+
+`sherpa up` and `sherpa download` write the address, user and password to
+`.sherpa/surrealdb/surrealdb-<node>.toml` in the lab folder, readable only by you:
+
+```toml
+address = "http://172.31.1.24:8000"
+username = "root"
+password = "…"
+```
+
+Only you, the lab's owner, can download it; an admin of the Sherpa server cannot. If you are in
+another folder, or lost the file, run `sherpa download` from the lab folder. Connect with the
+SurrealDB CLI:
+
+```
+surreal sql --endpoint http://<surrealdb_mgmt_ip>:8000 --username root --password '<password>'
+```
+
+Sherpa passes the root user in the `SURREAL_USER` and `SURREAL_PASS` environment variables, not
+on the command line. Values you set in the node's [`environment_variables`](../../manifest.md)
+override them, and then the file holds Sherpa's, not yours. Anyone in the Sherpa host's `docker`
+group can read the password with `docker inspect`; membership of `docker` is root on the host, so
+that gives nothing away that root does not already have.
+
 ## Node Access
 
 === "SSH"
@@ -63,3 +92,8 @@ version = "v2.2"
 ## Notes
 
 - Approximate time for the system to be ready: `1 minute`
+- The database is in memory. `sherpa redeploy` starts an empty SurrealDB with the same root user
+  and password, so your `.sherpa/surrealdb/surrealdb-<node>.toml` stays right.
+- A SurrealDB node created before Sherpa 0.7.0 keeps the `sherpa` root user, with the password
+  every node had then, until you run `sherpa redeploy -n <node>`, which gives it its own `root`
+  user. Run `sherpa download --force` afterwards for the file.

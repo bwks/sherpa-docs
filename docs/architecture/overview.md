@@ -68,7 +68,7 @@ User accounts have one of two roles: **Basic** (lab operations) or **Admin** (fu
 
 Admins can list, inspect, stop, resume and destroy other users' labs, but cannot log in to their
 nodes or get what is needed to. For another user's lab an admin cannot download the lab files
-(SSH config, `known_hosts`, Talos, Vault and Keycloak credentials, the lab CA), cannot see its
+(SSH config, `known_hosts`, Talos, Vault, Keycloak and SurrealDB credentials, the lab CA), cannot see its
 nodes' serial console addresses or VNC ports, and cannot add SSH keys to the user's account;
 `sherpa ssh`, `sherpa console` and `sherpa provision` refuse a folder that holds another user's
 lab. The server logs each admin action on another user's lab and each refusal. Some access
