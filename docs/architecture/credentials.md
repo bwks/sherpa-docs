@@ -15,6 +15,7 @@ password. Nothing is shared between users or labs, and no password is published.
 
 Devices that have fixed vendor accounts, such as `admin` on NX-OS and `root` on Junos, take your
 device password for those too. Cisco FTDv has only `admin`, with your device password and no key.
+Aruba AOS-CX takes no password: you log in by key only, and its `admin` is locked.
 See [Your Login on Nodes](personal-accounts.md) for each model.
 
 Before 0.7.0 every node also had a `sherpa` account with a published password. New nodes do not.

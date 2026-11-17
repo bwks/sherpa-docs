@@ -63,8 +63,9 @@ creates. See [Windows Server](../nodes/windows/windows-server.md#accounts).
 
 Network devices get an administrator account with your username, your keys and your device
 password. Fixed vendor accounts take your device password too: `admin` on NX-OS, IOS XR,
-AOS-CX, PAN-OS, SR Linux (`admin-user`) and RouterOS, `root` on Junos, and the ASA enable
-password.
+PAN-OS, SR Linux (`admin-user`) and RouterOS, `root` on Junos, and the ASA enable password.
+Aruba AOS-CX is the exception: you log in by key only, and `admin` is locked (see
+[Aruba AOS-CX](#aruba-aos-cx)).
 
 | Models | Admin rights | Key types | Keys used |
 |---|---|---|---|
@@ -89,6 +90,25 @@ see [SSH Keys](ssh-keys.md#which-key-type).
 Cisco ISE has a single administrator, which is you: your username, your device password and
 your first RSA key.
 
+### Aruba AOS-CX
+
+AOS-CX gets no password, because its configuration is served over TFTP and AOS-CX has no hashed
+password form Sherpa can write. Your account has your keys and no usable password, and SSH
+password login is turned off:
+
+- **You log in by SSH key only.** `sherpa ssh` works as on any node. A password, empty or not,
+  is refused over SSH, on the console and on the HTTPS REST API.
+- **`admin` is locked.** AOS-CX ships `admin` with an empty password and does not let it be
+  deleted, so Sherpa sets it, and your account, to the encrypted form of a random password that
+  nobody knows. Neither account can log in with a password, on the console either.
+- **`sherpa console` gives you the login prompt, but no account to log in with.** If you need
+  console access, log in by SSH first and set a password yourself
+  (`user <username> password`).
+
+Your device password is still required to start a lab, as for every lab, but it is not used on
+AOS-CX nodes. USB ZTP, which would keep the configuration off the network, is tracked in
+[#690](https://github.com/bwks/sherpa/issues/690).
+
 ### Cisco FTDv
 
 FTDv takes no account at boot. Its only login is `admin`, with your device password and no SSH
@@ -108,9 +128,8 @@ add an account at boot, so Sherpa creates no login on them.
 Sherpa writes your device password into each node's configuration in the form the device takes.
 Linux, NixOS, Alpine, FreeBSD, Flatcar, Arista, Junos, FRR, SONiC and PAN-OS get a salted hash.
 The others take plain text, because the device needs it or hashes it itself. Where the
-configuration is served over the lab network (TFTP and HTTP), it carries only a hash, except on
-Aruba AOS-CX, which is plain text on TFTP until Sherpa hashes it
-([#676](https://github.com/bwks/sherpa/issues/676)).
+configuration is served over the lab network (TFTP and HTTP), it carries only a hash. Aruba
+AOS-CX, which has no hash form, gets no password at all.
 
 | Models | Login | Password in the configuration | Delivered by |
 |---|---|---|---|
@@ -123,7 +142,7 @@ Aruba AOS-CX, which is plain text on TFTP until Sherpa hashes it
 | Flatcar | you, `wheel` and `docker` | SHA-512 hash | Ignition |
 | Arista vEOS | you | SHA-512 hash | TFTP |
 | Arista cEOS | you | SHA-512 hash | container volume |
-| Aruba AOS-CX | you, `admin` | plain text | TFTP |
+| Aruba AOS-CX | you, by key only; `admin` locked | none: no password login | TFTP |
 | Cisco IOSv, IOSvL2 | you | plain text | config disk |
 | Cisco IOL, IOL-L2 | you | plain text | container volume |
 | Cisco CSR1000v, Cat8000v, Cat9000v | you | plain text | CD-ROM |

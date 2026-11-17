@@ -127,6 +127,24 @@ published password, `Everest1953!`, are gone from new nodes. See
 - **Update the CLI and the server together.** A 0.7.0 CLI and an older server, or the other way
   round, disagree on the manifest and on what a response carries.
 
+### Aruba AOS-CX: key login only
+
+New and redeployed AOS-CX nodes take no password. Their configuration, served over TFTP, has
+your SSH keys and no password: SSH password login is off, and your account and `admin` are
+locked with the encrypted form of a random password nobody knows. Log in with `sherpa ssh`.
+Neither account logs in with a password, on the console either; for console access, log in by
+SSH and set a password yourself. AOS-CX nodes built before 0.7.0 keep their old accounts until
+redeployed. See [Aruba AOS-CX](../../nodes/aruba/aruba-aoscx.md#logins).
+
+### The lab router's HTTP service
+
+The lab router's HTTP service, on port 8080, serves only the files of the nodes that boot by
+HTTP (SONiC), from its root: `http://<router>:8080/<file>`, no longer `/configs/<file>`. It no
+longer serves the TFTP configurations or the DHCP leases. Labs created on 0.7.0 get this at
+`sherpa up`. A lab created before 0.7.0 keeps its old router, which still serves both, until its
+first VM redeploy recreates the router (DHCP, DNS, TFTP, HTTP and the lab's outside access pause
+for a few seconds; addresses are kept), or until the lab is recreated.
+
 ### Image ZTP login settings removed
 
 A node image no longer has a ZTP username, password or password-auth setting. Sherpa's node
