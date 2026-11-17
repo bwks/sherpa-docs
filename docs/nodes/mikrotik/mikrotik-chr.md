@@ -59,3 +59,7 @@ model = "mikrotik_chr"
 ## Notes
 
 - Approximate time for the system to be ready: `1 minute`
+- The config disk carries the node's `config.rsc` and one file per SSH key of yours. The image's
+  `sherpa-ztp` scheduler imports `config.rsc` once a minute until an import completes. Its
+  `sherpa-ssh-key` scheduler imported the lab SSH key that Sherpa before 0.7.0 put on the disk;
+  with no such file it does nothing, and an image build can leave it out.

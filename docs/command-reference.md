@@ -371,7 +371,7 @@ symlink is not deleted.
 If a lab folder from a Sherpa before 0.5.15 cannot be moved into `.sherpa` (every other command stops
 on this), destroy prints a warning with the error and carries on. It still removes the include
 of either the old `sherpa_ssh_config` or the new `.sherpa/ssh/config`, deletes `.sherpa/`, and
-deletes the loose files the older Sherpa generated, such as `sherpa_ssh_key`, `lab-info.toml`
+deletes the loose files the older Sherpa generated, such as `sherpa_ssh_config`, `lab-info.toml`
 and `vault-<node>.toml`, by their exact names.
 
 A destroy that waited behind another destroy of the same lab, and finds it gone, succeeds.
@@ -519,7 +519,7 @@ sherpa console <name>
 
 ### `sherpa download`
 
-Download lab files into `.sherpa/` (SSH config, SSH key, `lab-info.toml`, the nodes' host keys
+Download lab files into `.sherpa/` (SSH config, `lab-info.toml`, the nodes' host keys
 in `ssh/known_hosts`, and each cluster's `k8s/kubeconfig-<cluster>` and
 `talos/talosconfig-<cluster>`) for CLI use from a remote lab. Like `up`, it prints each Cilium
 cluster's Gateway and Hubble UI addresses, and writes `ca/lab-ca.crt`, each Vault node's
@@ -531,9 +531,9 @@ files or secrets. Every command that reaches the lab's nodes works in the folder
 `ssh`, `console`, `down`, `resume`, `destroy` and `link impair`); `up`, `redeploy` and
 `provision` need the lab's own manifest. See [Lab Lifecycle](#lab-lifecycle).
 
-Only the lab's owner and admins can download a lab. The SSH key, `.sherpa/ssh/key`, is the lab's
-own [key pair](architecture/ssh.md#lab-ssh-key), written only when the lab has nodes that log in
-with it rather than your own keys.
+Only the lab's owner and admins can download a lab. No SSH key is downloaded: nodes take your own
+keys (see [SSH](architecture/ssh.md#logging-in-to-nodes)). A `.sherpa/ssh/key` that a Sherpa
+before 0.7.0 saved is left in place.
 
 ```
 sherpa download <lab_id>

@@ -49,6 +49,11 @@ name = "dev01"
 model = "devbox_windows"
 ```
 
+## Accounts
+
+Your account is the node's only enabled login, as on [Windows Server](../windows/windows-server.md#accounts):
+the image's built-in `Administrator` and cloudbase-init's `Admin` are disabled at first boot.
+
 ## Node Access
 
 === "SSH"
