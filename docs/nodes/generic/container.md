@@ -18,7 +18,7 @@ a version, with that repo:
 
 ```
 docker pull nginx:1.29.4-perl
-sherpa server image scan --container --model generic_container --repo nginx
+sherpa server image scan --kind container --model generic_container --repo nginx
 ```
 
 Sherpa tells generic images apart by version, so two images with the same tag (such as

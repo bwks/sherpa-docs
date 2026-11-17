@@ -20,7 +20,7 @@ version:
 
 ```
 docker pull mongo:8.2.7-rc0
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 ## Default Node Parameters

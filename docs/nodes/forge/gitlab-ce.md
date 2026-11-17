@@ -20,7 +20,7 @@ version:
 
 ```
 docker pull gitlab/gitlab-ce:18.7.6-ce.0
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 ## Default Node Parameters

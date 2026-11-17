@@ -105,8 +105,9 @@ node.
 
 ##### Which node kinds take which settings
 
-Sherpa refuses a setting the node's kind does not take, and a `vm`, `container` or `unikernel`
-group on a node of another kind. The message names the node, the key and the kind, for example
+A node's kind is its [`kind`](#kind-string), or else its model's default kind. Sherpa refuses
+a setting the node's kind does not take, and a `vm`, `container` or `unikernel` group on a node
+of another kind. The message names the node, the key and the kind, for example
 ``Manifest - node: 'web01' sets `container`, which does not apply to virtual_machine nodes``.
 
 | Setting | Virtual machine | Container | Unikernel |
@@ -220,6 +221,25 @@ For a container node, `image` is the image repository without a tag: the node's 
 tag. It replaces the repo the version was pulled from, for every container model, including those
 with a built-in repo. `sherpa up` and `sherpa redeploy` check that Docker has `<image>:<version>`
 and fail if it does not, before they create anything.
+
+##### kind (string)
+
+The node's kind: `virtual_machine`, `container` or `unikernel`. It must be a kind the node's
+model takes. Without it, the node takes its model's default kind.
+
+```toml
+[[nodes]]
+name = "r1"
+model = "frr_linux"
+kind = "container"
+```
+
+Every model takes one kind today, which is its default, so `kind` is never needed; setting it
+says which kind the node is. A kind the model does not take is refused, naming the kinds it
+takes:
+``Manifest - node: 'fw1' sets `kind = "container"`, but 'cisco_asav' comes only as: virtual_machine``.
+The node's version and image are the model's images of that kind, and the
+[kind settings groups](#which-node-kinds-take-which-settings) it may set are its kind's.
 
 ##### memory (int)
 

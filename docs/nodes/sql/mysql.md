@@ -22,7 +22,7 @@ a version, with that repo:
 
 ```
 docker pull mysql:8.0
-sherpa server image scan --container --model mysql_db --repo mysql
+sherpa server image scan --kind container --model mysql_db --repo mysql
 ```
 
 ## Default Node Parameters

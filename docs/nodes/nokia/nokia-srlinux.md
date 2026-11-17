@@ -20,7 +20,7 @@ version:
 
 ```
 docker pull ghcr.io/nokia/srlinux:26.3.1
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 Sherpa's startup config is tested on release 26.3.1. Sherpa 0.5.8 and later configure DNS as a

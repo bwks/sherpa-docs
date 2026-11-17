@@ -250,6 +250,19 @@ server drops any stored values, `image.show` no longer returns them, and an `ima
 sends one of them, or any other field it does not take, is refused with an error naming the
 field.
 
+### The image's kind
+
+An image is a model, a kind and a version. The RPC requests that name one image, `image.show`,
+`image.import`, `image.delete`, `image.set_default`, `image.pull` and `image.download`, and the
+JSON bodies of `POST /api/v1/images/import`, `pull` and `download`, take an optional `kind`:
+`virtual_machine`, `container` or `unikernel`. Without it, the request is for the model's
+default kind. A kind the model does not take is refused as invalid (400, or `InvalidParams`),
+naming the kinds it takes. `image.pull` also refuses a kind other than `container`. Every
+model takes one kind today, so a request without `kind` works as before. The REST paths
+`GET /api/v1/images/{model}`, `DELETE /api/v1/images/{model}/{version}` and
+`POST /api/v1/images/{model}/{version}/default`, and the upload form, name no kind and use the
+model's default kind.
+
 ## Errors
 
 REST errors return a JSON body with an HTTP status:

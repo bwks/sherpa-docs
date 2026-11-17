@@ -22,7 +22,7 @@ version:
 
 ```
 docker pull quay.io/keycloak/keycloak:26.4
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 ## Default Node Parameters

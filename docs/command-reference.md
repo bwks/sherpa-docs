@@ -591,6 +591,7 @@ sherpa image show <model>
 | Flag | Description |
 | ---- | ----------- |
 | `--version` | Show a specific version (defaults to the default version) |
+| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
 
 It prints the same table as [`sherpa server image show`](#sherpa-server-image-show).
 
@@ -604,12 +605,7 @@ sherpa image list [model]
 
 | Flag | Description |
 | ---- | ----------- |
-| `--container` | List container images only |
-| `--unikernel` | List unikernel images only |
-| `--virtual-machine` | List virtual machine images only |
-
-Give at most one of `--container`, `--unikernel` and `--virtual-machine`; with none, every
-kind is listed.
+| `--kind` | List images of one kind only: `virtual_machine`, `container` or `unikernel`. Without it, every kind is listed |
 
 ## Certificate Commands
 
@@ -824,6 +820,11 @@ Run it again.
 
 Image management commands. All require admin privileges.
 
+An image is a model, a kind and a version. Every command that names one image takes `--kind`,
+and without it uses the model's default kind; `kind` in the manifest works the same way, see
+[`kind`](manifest.md#kind-string). A kind the model does not take is refused, naming the kinds it
+takes. `list` and `scan` take `--kind` to work on one kind only.
+
 ### `sherpa server image show`
 
 Show detailed information about an image.
@@ -835,6 +836,7 @@ sherpa server image show <model>
 | Flag | Description |
 | ---- | ----------- |
 | `--version` | Show a specific version (defaults to the default version) |
+| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
 
 The table names each row by its key in the image's JSON, such as `cpu.count` and
 `interfaces.data_count`. It leaves out the settings the image's kind does not use: a
@@ -852,12 +854,7 @@ sherpa server image list [model]
 
 | Flag | Description |
 | ---- | ----------- |
-| `--container` | List container images only |
-| `--unikernel` | List unikernel images only |
-| `--virtual-machine` | List virtual machine images only |
-
-Give at most one of `--container`, `--unikernel` and `--virtual-machine`; with none, every
-kind is listed.
+| `--kind` | List images of one kind only: `virtual_machine`, `container` or `unikernel`. Without it, every kind is listed |
 
 ### `sherpa server image scan`
 
@@ -868,21 +865,16 @@ default yet; see [default versions](#default-versions). A version already record
 as `already_exists` and left as it is.
 
 ```
-sherpa server image scan [--container | --unikernel | --virtual-machine] [--dry-run]
-sherpa server image scan --container --model <model> --repo <repo> [--dry-run]
+sherpa server image scan [--kind <kind>] [--dry-run]
+sherpa server image scan --kind container --model <model> --repo <repo> [--dry-run]
 ```
 
 | Flag | Description |
 | ---- | ----------- |
-| `--container` | Scan container images |
-| `--unikernel` | Scan unikernel images |
-| `--virtual-machine` | Scan virtual machine images |
+| `--kind` | Scan images of one kind only: `virtual_machine`, `container` or `unikernel`. Without it, every kind is scanned |
 | `--dry-run` | Show what would be imported without making changes |
-| `--model`, `-m` | Container model to record the local tags of `--repo` for. Needs `--repo` and `--container` |
+| `--model`, `-m` | Container model to record the local tags of `--repo` for. Needs `--repo` and `--kind container` |
 | `--repo`, `-r` | Image repository without a tag, such as `mysql` or `ghcr.io/nokia/srlinux`. Needs `--model` |
-
-Give at most one of `--container`, `--unikernel` and `--virtual-machine`; with none, every
-kind is scanned.
 
 Container images are matched by repository, and each local tag of a matching repository is
 recorded as a version, with the repository a node of that version runs:
@@ -897,7 +889,7 @@ recorded as a version, with the repository a node of that version runs:
 
 ```
 docker pull mysql:8.4
-sherpa server image scan --container --model mysql_db --repo mysql
+sherpa server image scan --kind container --model mysql_db --repo mysql
 ```
 
 Docker matches the repo to local images as `docker images <repo>` does, so the repo matches only
@@ -920,6 +912,7 @@ sherpa server image import --src <path> --version <version> --model <model>
 | `--src`, `-s` | Source path of the disk image (required) |
 | `--version`, `-v` | Version of the device model (required). See [image versions](#image-versions) |
 | `--model`, `-m` | Model of the device (required) |
+| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
 | `--default` | Set this image as the default version |
 
 The image is copied to a temporary file next to its destination and moved into place only once
@@ -965,6 +958,7 @@ sherpa server image pull --model <model>
 | Flag | Description |
 | ---- | ----------- |
 | `--model`, `-m` | Model of the device image to pull (required) |
+| `--kind` | Kind of the image, which decides between a registry pull (`container`) and a download (`virtual_machine`): `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
 | `--version`, `-v` | Version of the image |
 | `--repo`, `-r` | Container image reference with a tag: a Docker Hub image by its short or full name (`nats:2.11` or `docker.io/library/nats:2.11`), or an image in another registry (`registry.io/account/image:version` or `localhost:5000/image:1`); digests (`@sha256:...`) are not supported |
 | `--url`, `-u` | VM image download URL |
@@ -989,6 +983,7 @@ sherpa server image delete --model <model> --version <version>
 | Flag | Description |
 | ---- | ----------- |
 | `--model`, `-m` | Model of the device image to delete (required) |
+| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
 | `--version`, `-v` | Version of the device image to delete (required) |
 
 ### `sherpa server image set-default`
@@ -1002,6 +997,7 @@ sherpa server image set-default --model <model> --version <version>
 | Flag | Description |
 | ---- | ----------- |
 | `--model`, `-m` | Model of the device image (required) |
+| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
 | `--version`, `-v` | Version to set as default (required) |
 
 ## Server Daemon

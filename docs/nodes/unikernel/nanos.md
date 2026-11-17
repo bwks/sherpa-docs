@@ -91,8 +91,8 @@ port = 8083
 **Image not found.** Scan the images directory, then list unikernel images:
 
 ```bash
-sherpa server image scan --unikernel
-sherpa server image list --unikernel
+sherpa server image scan --kind unikernel
+sherpa server image list --kind unikernel
 ```
 
 **Unikernel does not boot.**
