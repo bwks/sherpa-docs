@@ -15,12 +15,12 @@ The following configuration parameters are applied to nodes via ZTP:
 - Your login: your Sherpa username, your registered SSH keys and your
   [device password](device-password.md), written in the form the device takes. Where a device
   stores a hash, the configuration carries a salted hash, not the password. Fixed vendor accounts
-  such as `admin` take the device password too. See
-  [Your Login on Nodes](personal-accounts.md#passwords-on-nodes).
+  such as `admin` take the device password too. Aruba AOS-CX gets your keys only, with `admin`
+  locked. See [Your Login on Nodes](personal-accounts.md#passwords-on-nodes).
 
 There is no `sherpa` account and no shared password in a configuration Sherpa generates. The
-configurations served over TFTP or HTTP carry only hashes, except Aruba AOS-CX, whose TFTP
-configuration still holds the device password as plain text.
+configurations served over TFTP or HTTP carry only hashes of the device password, and Aruba
+AOS-CX's carries none.
 
 ## Who Can Read a Node's Configuration
 
@@ -39,8 +39,10 @@ effect is the same.
 
 **On the lab's management network**, the [TFTP](#tftp) and [HTTP](#http) configurations are
 served without credentials. Any node in the lab, or anything else that reaches the lab router,
-can fetch any node's TFTP or HTTP configuration while the lab exists, not only its own. The
-HTTP service on port 8080 serves the TFTP configurations too. Keep this in mind before you
+can fetch any node's TFTP or HTTP configuration while the lab exists, not only its own. Each
+service serves only its own files: HTTP on port 8080 serves the files of the nodes that boot by
+HTTP and nothing else, not the TFTP configurations and not the lab router's DHCP leases (see
+[HTTP](#http)). Keep this in mind before you
 give a TFTP or HTTP node a custom `ztp.config` with a secret in it. Configurations delivered on
 a CD-ROM, disk or USB disk, by cloud-init, NoCloud or Ignition, or as container volumes are not
 served on the network.
@@ -94,9 +96,11 @@ method = "tftp"
 
 To change a node's method in a running lab, change `ztp.method` and run
 `sherpa redeploy -n <node>`. When the node moves onto or off `tftp` or `http`, the lab router's
-DHCP options for it change too, and Sherpa restarts the lab's DHCP, DNS and TFTP service
-(dnsmasq) for that. Lab nodes keep their addresses, but DHCP and DNS pause for a few seconds while
-it restarts. A redeploy that keeps the node's method does not restart it. The files of the node's
+DHCP options for it change too, and Sherpa recreates the lab router, which runs the lab's DHCP,
+DNS, TFTP and HTTP services, for that. Lab nodes keep their addresses, but those services and
+the lab's outside access pause for a few seconds while it is recreated. In a lab made before
+0.7.0, the first redeploy of a VM recreates it too, to stop it serving the TFTP configurations
+over HTTP. A redeploy that keeps the node's method does not restart it. The files of the node's
 old method are removed.
 
 ### Disabled
@@ -202,6 +206,12 @@ Configuration is served over the network via TFTP from the lab router. A dnsmasq
 ### HTTP
 
 Configuration is served over the network via HTTP on port 8080 of the lab router. A dnsmasq instance provides DHCP services that direct the device to the config URL using DHCP options 67 and 239.
+
+Only the files of the nodes that boot by HTTP are served, from the root of the server: today
+SONiC's, `<node>.conf` (the ZTP file that DHCP names), `<node>_config_db.json` and
+`<node>_ztp_user.sh` (your account). The TFTP configurations are served over TFTP only, and the
+lab router's DHCP leases are not served. Up to 0.6.5 the files were under `/configs/`, and
+`/tftp/` and `/dnsmasq/dnsmasq.leases` were served too.
 
 ![The VM gets its address and config URL from DHCP on the lab router, then downloads the files over HTTP](ztp-http.svg)
 

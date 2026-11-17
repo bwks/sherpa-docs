@@ -66,6 +66,22 @@ model = "aruba_aoscx"
 ```
 
 
+## Logins
+
+You log in by SSH key only. The configuration Sherpa serves over TFTP carries no password:
+
+- your account has your SSH keys, and its password is locked;
+- `admin`, which AOS-CX ships with an empty password and does not let you delete, is locked
+  too;
+- SSH password authentication is off (`no ssh password-authentication`).
+
+Neither account can log in with a password, over SSH, on the console or on the HTTPS REST API.
+Your device password is not used on AOS-CX. For console access, log in by SSH and set a password
+on your account first. See [Your Login on Nodes](../../architecture/personal-accounts.md#aruba-aos-cx).
+
+USB ZTP, which would keep the configuration off the lab network, needs a patched image and is
+tracked in [#690](https://github.com/bwks/sherpa/issues/690).
+
 ## Node Access
 
 === "SSH"

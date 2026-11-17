@@ -181,6 +181,77 @@ sudo sh -c 'echo "  /opt/sherpa/libvirt/images/** r," >> /etc/apparmor.d/abstrac
 sudo systemctl restart libvirtd.service
 ```
 
+### Install the Binaries
+
+Download `sherpad` and the `sherpa` CLI for the release you want from the
+[releases page](https://github.com/bwks/sherpa/releases), and install them in `/opt/sherpa/bin`,
+owned by `sherpa`, with links in `/usr/local/bin`. Set `VERSION` to the release's tag, such as
+`v0.7.0`.
+
+```
+VERSION=<release tag>
+TARGET=x86_64-unknown-linux-gnu
+cd "$(mktemp -d)"
+for binary in sherpad sherpa; do
+  curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/${binary}-${TARGET}.tar.gz"
+  tar xzf "${binary}-${TARGET}.tar.gz"
+  sudo install -D -o sherpa -g sherpa -m 755 "${binary}" "/opt/sherpa/bin/${binary}"
+  sudo ln -sf "/opt/sherpa/bin/${binary}" "/usr/local/bin/${binary}"
+done
+sherpad --version
+```
+
+### Pull the Sherpa Router Image
+
+Each lab's router, which serves DHCP, DNS and the nodes' boot files, runs from this image.
+
+```
+sudo docker image pull ghcr.io/bwks/sherpa-router:latest
+```
+
+### Install the Service
+
+`sherpad` runs under systemd as `sherpa`, with the network capabilities it needs.
+
+```
+sudo tee /etc/systemd/system/sherpad.service > /dev/null << 'UNIT'
+[Unit]
+Description=Sherpa Daemon - VM, Container, and Unikernel Management Server
+Documentation=https://github.com/bwks/sherpa
+After=network-online.target docker.service libvirtd.service
+Wants=network-online.target
+Requires=docker.service libvirtd.service
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+[Service]
+Type=simple
+User=sherpa
+Group=sherpa
+WorkingDirectory=/opt/sherpa
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW CAP_BPF CAP_PERFMON
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_RAW CAP_BPF CAP_PERFMON
+ExecStart=/opt/sherpa/bin/sherpad start --foreground
+Restart=on-failure
+RestartSec=5
+EnvironmentFile=-/opt/sherpa/env/sherpa.env
+RuntimeDirectory=sherpa
+RuntimeDirectoryMode=0700
+RuntimeDirectoryPreserve=yes
+NoNewPrivileges=no
+PrivateTmp=no
+LimitNOFILE=65536
+TasksMax=4096
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+sudo systemctl daemon-reload
+sudo systemctl enable sherpad.service
+```
+
+`PrivateTmp` stays off so `sherpad` can read image files you import from `/tmp`.
+
 ### Create Blank Disks
 
 Some nodes boot from a copy of a [blank disk](automated.md#blank-disks) in
@@ -194,6 +265,31 @@ curl -fsSLO https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/script
 sudo bash sherpa_update.sh --version <installed version>
 ```
 
+### Initialize and Start
+
+Initialize the server as `sherpa`, with the address clients reach it on. It writes
+`/opt/sherpa/config/sherpa.toml`, creates the database, and asks for the `admin` password and
+for your own user: its name, password and SSH public key. `sherpa` cannot read your home folder,
+so paste the key itself when asked. See
+[file permissions](automated.md#file-permissions).
+
+```
+sudo -u sherpa -H sherpad init --server-ipv4 <server address>
+sudo systemctl start sherpad
+```
+
+Lab management subnets come from `172.31.0.0/16` and `fd00:b00b::/48`. If either is in use on
+your network, add `--management-prefix-ipv4 <prefix>` or `--management-prefix-ipv6 <prefix>`.
+
+Give your users the server certificate's fingerprint, which clients ask them to check on their
+first connection:
+
+```
+sudo openssl x509 -in /opt/sherpa/.certs/server.crt -noout -fingerprint -sha256
+```
+
 ### Sherpa Client
 
-Install the `sherpa` CLI as described in [Client](client.md).
+Install the `sherpa` CLI as described in [Client](client.md). The step above already installed
+it on the server. Before the first lab, each user sets a
+[device password](automated.md#before-the-first-lab) and registers an SSH key.
