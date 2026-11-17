@@ -16,10 +16,11 @@ sherpa server image import \
 
 ## ZTP Disk
 
-IOSvl2 requires a disk formatted in a particular way. If not completed during the system install,
-run the `scripts/create_iosv_disk.sh` script to create the base disk. This base disk will be created
-in the `/opt/sherpa/images/blank_disk` directory. This only needs to occur once as the base disk
-is cloned during instance creation.
+IOSvL2 reads its config from a disk formatted in a particular way. Each node gets a copy of
+`/opt/sherpa/images/blank_disk/iosv.img`, which the install and update scripts create (see
+[Blank Disks](../../install-update/install/automated.md#blank-disks)). If it is missing, run the
+[update script](../../install-update/update/sherpa.md) again: it creates the missing blank disks
+and changes none that are there.
 
 ## Default Node Parameters
 
