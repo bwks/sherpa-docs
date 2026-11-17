@@ -195,7 +195,11 @@ Keys and the device password are applied when the node is created. Changing your
 or your device password does not update a running node. Use `sherpa redeploy` to apply them,
 which rebuilds the node with your current keys and password.
 
-Only the lab owner can redeploy, even if an administrator asks. After a redeploy the CLI
+Only the lab owner can redeploy, even if an administrator asks. Likewise only the owner can
+download the lab's files or connect to its nodes: an administrator can manage another user's lab
+but is not given the SSH config, host keys, credentials, console or VNC port. An administrator
+can still reset a user's Sherpa password and sign in as them; that is logged and ends the user's
+sessions. See [Overview](overview.md). After a redeploy the CLI
 downloads the refreshed SSH configuration for you. If you redeploy from another client or the
 web UI, run this from your local lab directory:
 

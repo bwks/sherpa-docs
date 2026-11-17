@@ -18,6 +18,11 @@ device password for those too. Cisco FTDv has only `admin`, with your device pas
 Aruba AOS-CX takes no password: you log in by key only, and its `admin` is locked.
 See [Your Login on Nodes](personal-accounts.md) for each model.
 
+A lab's credentials belong to its owner. `sherpa download` hands the lab's SSH config, host keys,
+Talos cluster credentials, Vault and Keycloak credentials and lab CA to the owner only, not to
+admins. An admin who resets a user's Sherpa password can still sign in as them; that is logged.
+See [Overview](overview.md).
+
 Before 0.7.0 every node also had a `sherpa` account with a published password. New nodes do not.
 See [Updating Sherpa](../install-update/update/sherpa.md) for labs built before then.
 

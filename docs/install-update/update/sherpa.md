@@ -101,6 +101,7 @@ published password, `Everest1953!`, are gone from new nodes. See
 - **You log in as yourself.** A new node has no `sherpa` account. You log in with your Sherpa
   username and your keys, and the vendor accounts that have a fixed name, such as `admin` and
   `root`, take your device password. Cisco FTDv has only `admin`, with your device password.
+  Aruba AOS-CX takes no password: you log in by key only, and its `admin` is locked (see below).
 - **Delete `provision_current_user` from your manifests.** The setting is removed, and a manifest
   that still sets it, to `true` or `false`, is refused by `sherpa validate`, `sherpa up` and
   `sherpa redeploy` with ``unknown field `provision_current_user` ``.
@@ -144,6 +145,49 @@ longer serves the TFTP configurations or the DHCP leases. Labs created on 0.7.0 
 `sherpa up`. A lab created before 0.7.0 keeps its old router, which still serves both, until its
 first VM redeploy recreates the router (DHCP, DNS, TFTP, HTTP and the lab's outside access pause
 for a few seconds; addresses are kept), or until the lab is recreated.
+
+### Admins and other users' labs
+
+0.7.0 keeps admins out of other users' nodes. Admins can still list, inspect, stop, resume,
+cancel, impair links on and destroy any lab, and clean up. They can no longer:
+
+- **Download another user's lab.** `sherpa download`, the RPC `download`, the web UI's download
+  and the RPC `node.host_keys` are refused with `Only the owner of lab '<id>' can perform this
+  operation`. The files hold the SSH config, `known_hosts`, the Talos, Vault and Keycloak
+  credentials and the lab CA. The web lab page shows the download link to the owner only.
+- **Connect to its nodes.** `sherpa ssh`, `sherpa console` and `sherpa provision` stop with
+  `Only the owner of lab '<id>' can connect to its nodes` in a folder whose
+  `.sherpa/lab-info.toml` names another user's lab.
+- **See its console or VNC.** `sherpa inspect`, the inspect API and the web UI leave each node's
+  console address empty and show `-` for the VNC port, for anyone but the owner.
+- **Add SSH keys to another account.** `sherpa server user ssh-key add` has no `--user`, the
+  server refuses a key for any other account, and the admin page for a user has no form to add
+  one. Admins can still remove keys.
+
+`sherpa server user create` and the `user.create` and `POST /api/v1/admin/users` operations take
+no SSH keys: `--ssh-key` is gone, and a request with `ssh_keys` is refused instead of creating a
+user without keys. Scripts that pass either must drop it, and each user then adds
+their own key with `sherpa server user ssh-key add` or on the **Profile** page. `sherpad init`
+still asks for the first user's key.
+
+Update the CLI and the server together: an older CLI offers `--user` and `--ssh-key`, which a
+0.7.0 server refuses.
+
+Some access remains. An admin who resets a user's Sherpa password can sign in as that user; the
+reset is logged and ends the user's sessions. Root on the Sherpa host, and admins, who can start
+privileged containers and host mounts, can still reach consoles, VNC, disks and the database key.
+Host-level console and VNC isolation is tracked in issues #674 and #683. The boundary is for the
+admin role through Sherpa's interfaces, not a defence against root on the host. The server logs
+each admin action on another user's lab as a warning (`auth.admin_lab_access`) and each refusal
+(`auth.access_denied`).
+
+### Windows nodes are ready later
+
+A Windows node (`windows_server`, `devbox_windows`) with cloud-init ZTP is now reported ready only
+once its SSH server runs with the config Sherpa gave it, after cloudbase-init has created your
+account and written your keys. Before, it was reported ready minutes before key login worked.
+`sherpa up` and `sherpa redeploy` may therefore take longer on these nodes. A Windows node with
+ZTP disabled is not affected. See [Windows Server](../../nodes/windows/windows-server.md).
 
 ### Image ZTP login settings removed
 

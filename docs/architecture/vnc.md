@@ -23,6 +23,10 @@ sherpa inspect
 
 The web UI's node page shows it too. Container and unikernel nodes do not have VNC ports.
 
+Only the lab's owner is told the port. For anyone else, an admin included, `sherpa inspect` and
+the web UI show `-`. Root on the Sherpa host can still reach every VNC port; see
+[Overview](overview.md).
+
 ## Connecting
 
 ### From the Sherpa Server

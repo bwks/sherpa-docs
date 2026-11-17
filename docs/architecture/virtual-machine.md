@@ -94,7 +94,7 @@ Each VM provides two console access methods:
 
 ### Serial Console
 
-A TCP-based telnet serial console is configured on each VM. Each node binds to its own unique loopback IP address on the Sherpa server, on port `2323`. Connect with `sherpa console <node>` from any machine with the CLI: it reaches the console through an SSH connection to the server and needs no `telnet` program. See [`sherpa console`](../command-reference.md#sherpa-console).
+A TCP-based telnet serial console is configured on each VM. Each node binds to its own unique loopback IP address on the Sherpa server, on port `2323`. Connect with `sherpa console <node>` from any machine with the CLI: it reaches the console through an SSH connection to the server and needs no `telnet` program. See [`sherpa console`](../command-reference.md#sherpa-console). Only the lab's owner is told the console address and can connect with `sherpa console`; an admin inspecting another user's lab gets none.
 
 On the server host itself, any telnet client can also connect directly, one client at a time:
 

@@ -125,6 +125,7 @@ their existing tokens stop working.
 | Image | Import, pull, delete, set-default, scan, download, upload | Admin |
 | User | Change password, info | Self, or admin for any user |
 | User | Set device password | Self only, admins included |
+| User | Add own SSH key | Self only, admins included |
 | User | Create, list, delete | Admin |
 | Admin | Force clean lab | Admin |
 | Admin | Back up database | Admin |
@@ -458,7 +459,9 @@ link since it started, and from servers that do not report link states. `index` 
 The inspect response's `devices[]` carry `console_address` for virtual machines and unikernels:
 the address on the Sherpa server where the node's serial console listens, as telnet on port
 `2323`. It is reachable only from the server. Containers have no serial console and no
-`console_address`, and servers before it do not send it. Part of a device:
+`console_address`, and servers before it do not send it. Only the lab's owner gets it: for
+anyone else, an admin included, it is empty. The same holds for `vnc_port`, which is `None`
+for anyone but the owner. Part of a device:
 
 ```json
 {
@@ -476,7 +479,10 @@ Every lab operation applies the same rule on REST, WebSocket RPC and the web UI:
 | --------- | ------------------ |
 | Create | Any authenticated user; the lab is owned by the caller |
 | List | The caller's own labs. Admins may list another user's labs with `GET /api/v1/labs?username=<user>` |
-| Inspect, destroy, down, resume, cancel, download, update link impairment | The lab owner or an admin |
+| Inspect, destroy, down, resume, cancel, update link impairment | The lab owner or an admin |
+| Inspect: each node's `console_address` and `vnc_port` | The lab owner only. For an admin they are empty (`None`) |
+| Download (RPC `download`; the web UI's lab download) | The lab owner only, including for admins |
+| Refresh a node's host key (RPC `node.host_keys`) | The lab owner only, including for admins |
 | Redeploy a node | The lab owner only, including for admins, because the node is rebuilt with the owner's SSH keys and account |
 | Force clean | Admins only |
 
@@ -484,12 +490,21 @@ The built-in `admin` account cannot create, resume or redeploy labs, on any tran
 return `403 Forbidden` on REST and `AccessDenied` on WebSocket RPC. It can still inspect, stop,
 destroy and clean up any lab. Start labs from your own account, which may also be an admin. Labs also need the account to have a [device password](architecture/device-password.md).
 
+Downloads hold the SSH config, `known_hosts`, the Talos cluster credentials, the Vault and
+Keycloak credentials and the lab CA, which a lab's owner needs to log in to its nodes, so an
+admin is refused them with `Only the owner of lab '<id>' can perform this operation`. Likewise
+the console address and VNC port are what reaches a node without its login. Admins keep
+everything else: listing, inspect, down, resume, cancel, link impairment, destroy and clean.
+The server logs a warning (`auth.admin_lab_access`) each time an admin acts on another user's
+lab, and each refusal (`auth.access_denied`). There is no REST download endpoint.
+
 A request for another user's lab returns `403 Forbidden` on REST and an `AccessDenied`
 error on WebSocket RPC. A lab that does not exist returns `404 Not Found` or `NotFound`.
 
 ## SSH Keys
 
-Users manage their own SSH public keys, and admins may manage anyone's:
+Users add their own SSH public keys. Admins can list and remove anyone's, but cannot add one to
+another account:
 
 | Operation | REST | WebSocket RPC |
 | --------- | ---- | ------------- |
@@ -497,12 +512,22 @@ Users manage their own SSH public keys, and admins may manage anyone's:
 | Remove a key | `DELETE /api/v1/admin/users/{username}/ssh-keys` | `user.ssh_key.remove` |
 | List keys | `GET /api/v1/admin/users/{username}` (`ssh_keys`) | `user.info` |
 
-The request body carries `username`, `ssh_key` and `token`. For removal, `ssh_key` may be the
+Adding a key is for the caller's own account only, admins included: a `username` other than the
+caller's is refused with `only user '<name>' can do this for their own account`, `403 Forbidden`
+on REST. Removing a key is allowed for the user or an admin. The request body carries
+`username`, `ssh_key` and `token`. For removal, `ssh_key` may be the
 key or its `SHA256:` fingerprint. Both return the user's keys after the change. A duplicate key
 returns `409 Conflict`, an invalid key `400 Bad Request`, another user's keys `403 Forbidden`,
 and a key that is not registered `404 Not Found`.
 
 Creating a lab or redeploying a node fails until the caller has at least one registered key.
+
+## User Creation
+
+`user.create` (RPC) and `POST /api/v1/admin/users` (REST) take a username, a password and the
+admin flag, and no `ssh_keys`. Both refuse unknown fields, so a client that still sends
+`ssh_keys` gets an error instead of a user without keys. Each user adds their own keys
+afterwards; see [SSH Keys](#ssh-keys).
 
 ## Usernames
 
