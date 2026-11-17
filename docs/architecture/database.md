@@ -127,22 +127,32 @@ Stores user accounts and credentials.
 #### node_image
 
 Stores imported VM, container, and unikernel image definitions with their default parameters.
-The combination of `model`, `kind` and `version` is unique.
+The combination of `model`, `kind` and `version` is unique. An image holds the settings every
+kind takes and only its own kind's: the database refuses a setting on an image of a kind that
+does not take it, and an image without one its kind needs.
 
-| Field                           | Type           | Description                              |
-| ------------------------------- | -------------- | ---------------------------------------- |
-| `model`                         | text           | Node model identifier                    |
-| `version`                       | text           | Image version                            |
-| `kind`                          | text           | virtual_machine, container, or unikernel |
-| `os_variant`                    | text           | Operating system variant                 |
-| `cpu_count`                     | number         | Default CPU count (1-255)                |
-| `memory`                        | number         | Default RAM in MB (64-65535)             |
-| `data_interface_count`          | number         | Number of data interfaces                |
-| `interface_prefix`              | text           | Interface naming prefix                  |
-| `interface_type`                | text           | Interface driver type                    |
-| `management_interface`          | text           | Management interface name                |
-| `ztp`                           | text           | ZTP setting: `disabled` or a method      |
-| `default`                       | boolean        | Default image flag                       |
+| Field                           | Kinds                     | Type    | Description                              |
+| ------------------------------- | ------------------------- | ------- | ---------------------------------------- |
+| `model`                         | all                       | text    | Node model identifier                    |
+| `version`                       | all                       | text    | Image version                            |
+| `kind`                          | all                       | text    | virtual_machine, container, or unikernel |
+| `cpu_count`                     | all                       | number  | Default CPU count (1-255)                |
+| `memory`                        | all                       | number  | Default RAM in MB (64-65535)             |
+| `data_interface_count`          | all                       | number  | Number of data interfaces                |
+| `management_interface`          | all                       | text    | Management interface name                |
+| `reserved_interface_count`      | all                       | number  | Interfaces held back from links          |
+| `default`                       | all                       | boolean | Default image flag                       |
+| `os_variant`                    | VM                        | text    | Operating system variant                 |
+| `cpu_architecture`, `cpu_model` | VM, unikernel             | text    | The CPU the guest sees                   |
+| `vmx_enabled`                   | VM                        | boolean | Nested virtualisation                    |
+| `machine_type`                  | VM, unikernel             | text    | QEMU machine type                        |
+| `bios`, `hdd_bus`, `cdrom_bus`  | VM                        | text    | Firmware and disk buses                  |
+| `cdrom`                         | VM, optional              | text    | CD-ROM shipped with the image            |
+| `interface_type`                | VM, unikernel             | text    | Interface device                         |
+| `interface_mtu`                 | VM, unikernel             | number  | Interface MTU (576-9600)                 |
+| `ztp`                           | VM, container             | text    | ZTP setting: `disabled` or a method      |
+| `repo`                          | container, optional       | text    | Docker repo the image runs from          |
+| `boot_mode`                     | unikernel                 | text    | `direct_kernel` or `disk_boot`           |
 
 #### lab
 

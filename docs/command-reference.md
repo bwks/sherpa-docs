@@ -167,6 +167,11 @@ Hubble UI addresses. A cluster that is not ready in time is reported, and `sherp
 an error, as nothing bootstraps it again; the rest of the lab is kept. See
 [Talos Linux](nodes/linux/talos-linux.md).
 
+Once the lab is up, `sherpa up` prints a **Nodes** table: each node as `<name>.<lab_id>`, its
+management IP, how to connect (`<ip>:<port>` for SSH), its model and its **Kind**
+(`virtual_machine`, `container` or `unikernel`), so the two kinds of `arista_eos` or
+`juniper_evolved` are told apart.
+
 `up` writes the [lab CA](architecture/certificates.md) to `.sherpa/ca/lab-ca.crt`; for each
 [Vault](nodes/hashicorp/hashicorp-vault.md) node Sherpa initialised, its address, root token and
 unseal key to `.sherpa/vault/vault-<node>.toml`; and for each
@@ -295,6 +300,12 @@ and is attached when it starts, and does not fail the redeploy.
 
 When the node has [provisioners](architecture/provisioners/overview.md), the CLI sends a container's
 secret files with the redeploy, and runs `ssh` provisioners once the node is back.
+
+The node is rebuilt from the image `sherpa up` would give it: the manifest's `version` of its
+model and kind, or else their default version. So to move a node to another version, such as a
+container node to a new tag, change its `version` and redeploy it. Its model and kind cannot
+change. Once the node is rebuilt from another version, the version it ran before is no longer in
+use by it and can be deleted.
 
 The server checks the manifest, the node's image and the server's resources before it destroys
 the node, so a refused redeploy leaves the node running as it was. A redeploy that fails once the
@@ -872,11 +883,18 @@ sherpa server image show <model>
 | `--version` | Show a specific version (defaults to the default version) |
 | `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind. `generic` has no default, so it needs `--kind`; the containers of `arista_eos` and `juniper_evolved` need `--kind container` |
 
-The table names each row by its key in the image's JSON, such as `cpu.count` and
-`interfaces.data_count`. It leaves out the settings the image's kind does not use: a
-container's `machine`, `boot_disk` and `cdrom`, and a unikernel's `machine.bios`, `boot_disk`
-and `cdrom`. `sherpa server --output json image show <model>` prints the JSON itself, with
-every setting nested by group; see [Node images](api-reference.md#node-images).
+The table names each row by its key in the image's JSON. It shows the settings every kind takes
+(`model`, `kind`, `version`, `default`, `memory`, `cpu.count`, `interfaces.data_count`,
+`interfaces.management`, `interfaces.reserved_count`), then the image's own kind's group:
+
+| Kind | Rows |
+| ---- | ---- |
+| Virtual machine | `vm.os_variant`, `vm.cpu.architecture`, `vm.cpu.model`, `vm.cpu.vmx`, `vm.machine.kind`, `vm.machine.bios`, `vm.boot_disk.bus`, `vm.cdrom.image`, `vm.cdrom.bus`, `vm.interfaces.kind`, `vm.interfaces.mtu`, `vm.ztp.method` |
+| Container | `container.repo`, `container.ztp.method` |
+| Unikernel | `unikernel.boot_mode`, `unikernel.cpu.architecture`, `unikernel.cpu.model`, `unikernel.machine.kind`, `unikernel.interfaces.kind`, `unikernel.interfaces.mtu` |
+
+`sherpa server --output json image show <model>` prints the JSON itself; see
+[Node images](api-reference.md#node-images).
 
 ### `sherpa server image list`
 
@@ -1007,8 +1025,20 @@ they create anything.
 
 ### `sherpa server image delete`
 
-Delete an imported image from disk and the database. If it was the model's default, the most
-recently added remaining version becomes the default; see [default versions](#default-versions).
+Delete an imported image: its record, then a VM's or unikernel's file, or a container's
+Docker image (its repo at its version, through the Docker API; another tag of the same image,
+such as the one it was pulled as, is kept). If it was the model's default, the most recently
+added remaining version becomes the default; see [default versions](#default-versions).
+A VM and a unikernel of the same model and version share a folder under
+`/opt/sherpa/images/<model>/<version>/`: deleting one removes only its own file, and the folder
+goes with the last file in it.
+
+The delete is refused while the image is in use:
+
+- a VM or unikernel image while a lab disk is built on it, whether its VM is running or stopped,
+  naming the disk; disks built on other images do not stop it;
+- a container image while a running container runs it, naming the containers;
+- any image a lab node records: destroy the lab, or redeploy the node onto another version.
 
 ```
 sherpa server image delete --model <model> --version <version>

@@ -350,6 +350,50 @@ What you need to do:
   `GET /api/v1/images/{model}/{kind}`; see [Node images](../../api-reference.md#node-images).
 - **Update the CLI and the server together.** The model names and the API paths changed.
 
+### Images hold only their kind's settings
+
+A node image now holds the settings every kind of node takes and one group for its own kind,
+`vm`, `container` or `unikernel`, as a manifest node's kind groups are named. A container image
+no longer has CPU, machine, disk, CD-ROM or interface device settings, which no container used:
+Docker makes a container's interfaces. A unikernel image has no firmware, disk, CD-ROM, `vmx`,
+OS or ZTP setting. `interfaces.prefix` and `interfaces.first_index` are removed from every image:
+nothing read them, and interface names come from each model's interface list.
+
+What the update does:
+
+- **Images.** The database update keeps each image's settings for its kind and drops the
+  others. A unikernel image stored without a boot mode gets `direct_kernel`, which it booted by
+  anyway. Nothing is re-imported, and no node changes.
+- **`sherpa server image show`** shows the shared rows, then the image's own group's, named by
+  their JSON keys, such as `vm.machine.bios` or `container.repo`.
+- **The web UI's** image page, node page and image editor show and take only the image's own
+  settings.
+
+What you need to do:
+
+- **Update scripts that read the image API.** Each setting a kind alone takes moved into that
+  kind's group: `os_variant` is `vm.os_variant`, `repo` is `container.repo`, `machine.kind` is
+  `vm.machine.kind` or `unikernel.machine.kind`, `ztp` is `vm.ztp` or `container.ztp`, and so on.
+  The `unikernel` group is present only on a unikernel image. See
+  [Node images](../../api-reference.md#node-images) for every field. Update the CLI and the
+  server together: they cannot read each other's image details across this change.
+- **Image deletes** answer with `image_deleted` in place of `disk_deleted`.
+
+### Image delete and redeploy
+
+- **An image is deletable while VMs run on other images.** Deleting a VM or unikernel image no
+  longer fails when a lab disk on another image is running: `sherpad` asks libvirt for each lab
+  disk's base image, as it could not read the disks of running VMs itself. A disk built on the
+  image itself, running or stopped, still refuses the delete, and names the disk.
+- **Deleting a container image removes it from Docker.** `sherpa server image delete` of a
+  container image removes its Docker image, its repo at its version, as well as its record.
+  Another tag of the same image is kept. A container image a running container runs is refused,
+  naming the container.
+- **`sherpa redeploy` follows the manifest's `version`.** A node is rebuilt from the manifest's
+  version of its model and kind, or their default, as `sherpa up` picks it. Before, a container
+  node kept the image it was built from after its `version` changed.
+- **`sherpa up`'s Nodes table has a Kind column.**
+
 ## Updating to 0.6.4 and 0.6.5
 
 Updating from 0.6.3 or earlier, the first time `sherpad` starts after the update it records each existing lab's definition from

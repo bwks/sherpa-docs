@@ -152,97 +152,157 @@ returns `path`, the backup file on the server, and `size_bytes`. See
 ## Node images
 
 Showing an image (`GET /api/v1/images/{model}/{kind}`, the WebSocket RPC method `image.show`, or
-`sherpa server --output json image show <model>`) returns its definition, with its settings
-nested by group. For `ubuntu_linux`:
+`sherpa server --output json image show <model>`) returns its definition: the settings every kind
+of image takes, `kind`, and one group of settings for that kind alone, named as the manifest
+names the kind groups: `vm`, `container` or `unikernel`. For `ubuntu_linux`:
 
 ```json
 {
   "image": {
     "model": "ubuntu_linux",
     "version": "24.04",
-    "repo": null,
-    "os_variant": "linux",
     "kind": "virtual_machine",
     "default": true,
     "memory": 1024,
     "cpu": {
-      "count": 1,
-      "architecture": "x86_64",
-      "model": "host-model",
-      "vmx": false
-    },
-    "machine": {
-      "kind": "q35",
-      "bios": "sea_bios"
-    },
-    "boot_disk": {
-      "bus": "virtio"
-    },
-    "cdrom": {
-      "image": null,
-      "bus": "sata"
+      "count": 1
     },
     "interfaces": {
       "data_count": 1,
-      "kind": "virtio",
-      "mtu": 9216,
-      "prefix": "eth",
-      "first_index": 0,
       "management": "eth0",
       "reserved_count": 0
     },
-    "ztp": {
-      "method": "cloud-init"
-    },
-    "unikernel": null
+    "vm": {
+      "os_variant": "linux",
+      "cpu": {
+        "architecture": "x86_64",
+        "model": "host-model",
+        "vmx": false
+      },
+      "machine": {
+        "kind": "q35",
+        "bios": "sea_bios"
+      },
+      "boot_disk": {
+        "bus": "virtio"
+      },
+      "cdrom": {
+        "image": null,
+        "bus": "sata"
+      },
+      "interfaces": {
+        "kind": "virtio",
+        "mtu": 9216
+      },
+      "ztp": {
+        "method": "cloud-init"
+      }
+    }
   }
 }
 ```
 
-| Field | Description |
-| ----- | ----------- |
-| `model`, `version`, `repo`, `os_variant`, `kind`, `default` | The image |
-| `memory` | Memory in MiB |
-| `cpu` | `count`, `architecture`, `model` and `vmx`, whether the guest sees the host's hardware virtualisation |
-| `machine` | `kind`, the QEMU machine type, and `bios` |
-| `boot_disk` | `bus` |
-| `cdrom` | `image`, a CD-ROM file shipped with the image or `null`, and `bus` |
-| `interfaces` | `data_count`, `kind`, `mtu`, `prefix`, `first_index`, `management` and `reserved_count` |
-| `ztp` | `method`, the [ZTP setting](architecture/zero-touch-provisioning.md#the-ztp-setting) |
-| `unikernel` | `boot_mode` for a unikernel; `null` for every other kind |
+A container image, `nokia_srlinux`:
 
-Every image carries every group, but not every kind uses them. A container does not use
-`machine`, `boot_disk` or `cdrom`. A unikernel uses `machine.kind` and not `machine.bios`,
-`boot_disk` or `cdrom`. Their images carry the defaults there: `pc`, `sea_bios`, `virtio`, a
-`null` CD-ROM image and `virtio`. Images stored by releases up to 0.6.0 could hold other values,
-such as a `q35` machine on an Arista cEOS image; the update resets them. The `image show` tables and
-the web UI's image and node pages leave these settings out; the JSON keeps them.
+```json
+{
+  "image": {
+    "model": "nokia_srlinux",
+    "version": "25.3.2",
+    "kind": "container",
+    "default": true,
+    "memory": 4096,
+    "cpu": {
+      "count": 2
+    },
+    "interfaces": {
+      "data_count": 34,
+      "management": "mgmt0",
+      "reserved_count": 0
+    },
+    "container": {
+      "repo": "ghcr.io/nokia/srlinux",
+      "ztp": {
+        "method": "volume"
+      }
+    }
+  }
+}
+```
 
-Releases up to 0.5.35 returned these settings as flat fields. Each moved into its group:
+A unikernel image, `nanos_unikernel`:
 
-| Old field | New field |
-| --------- | --------- |
-| `cpu_count` | `cpu.count` |
-| `cpu_architecture` | `cpu.architecture` |
-| `cpu_model` | `cpu.model` |
-| `vmx_enabled` | `cpu.vmx` |
-| `machine_type` | `machine.kind` |
-| `bios` | `machine.bios` |
-| `hdd_bus` | `boot_disk.bus` |
-| `cdrom` | `cdrom.image` |
-| `cdrom_bus` | `cdrom.bus` |
-| `data_interface_count` | `interfaces.data_count` |
-| `interface_type` | `interfaces.kind` |
-| `interface_mtu` | `interfaces.mtu` |
-| `interface_prefix` | `interfaces.prefix` |
-| `first_interface_index` | `interfaces.first_index` |
-| `management_interface` | `interfaces.management` |
-| `reserved_interface_count` | `interfaces.reserved_count` |
-| `ztp` | `ztp.method` |
-| `boot_mode` | `unikernel.boot_mode` |
+```json
+{
+  "image": {
+    "model": "nanos_unikernel",
+    "version": "0.1.52",
+    "kind": "unikernel",
+    "default": true,
+    "memory": 512,
+    "cpu": {
+      "count": 1
+    },
+    "interfaces": {
+      "data_count": 0,
+      "management": "eth0",
+      "reserved_count": 0
+    },
+    "unikernel": {
+      "boot_mode": "disk_boot",
+      "cpu": {
+        "architecture": "x86_64",
+        "model": "host-model"
+      },
+      "machine": {
+        "kind": "pc"
+      },
+      "interfaces": {
+        "kind": "virtio",
+        "mtu": 1500
+      }
+    }
+  }
+}
+```
 
-`memory`, `model`, `version`, `repo`, `os_variant`, `kind` and `default` are unchanged. The
-OpenAPI schema describes the same shape.
+| Field | Kinds | Description |
+| ----- | ----- | ----------- |
+| `model`, `version`, `kind`, `default` | all | The image |
+| `memory` | all | Memory in MiB |
+| `cpu` | all | `count` |
+| `interfaces` | all | `data_count`, `management` and `reserved_count` |
+| `vm` | virtual machine | `os_variant`; `cpu`: `architecture`, `model` and `vmx`, whether the guest sees the host's hardware virtualisation; `machine`: `kind`, the QEMU machine type, and `bios`; `boot_disk`: `bus`; `cdrom`: `image`, a CD-ROM file shipped with the image or `null`, and `bus`; `interfaces`: `kind`, the interface device, and `mtu`; `ztp`: `method`, the [ZTP setting](architecture/zero-touch-provisioning.md#the-ztp-setting) |
+| `container` | container | `repo`, the Docker repo the image runs from, its tag being `version`, or `null`; `ztp`: `method` |
+| `unikernel` | unikernel | `boot_mode`; `cpu`: `architecture` and `model`; `machine`: `kind`; `interfaces`: `kind` and `mtu` |
+
+An image holds only its own kind's group. Reading one, the server refuses a group that is not
+its kind's and an image without its kind's group, naming the group. A container has no CPU,
+machine, disk, CD-ROM or interface device settings: Docker makes its interfaces. A unikernel has
+no firmware, disks, CD-ROM, `vmx`, `os_variant` or ZTP setting.
+
+Releases up to 0.6.5 returned every group for every kind of image. 0.7.0 moves each setting a
+kind alone takes into that kind's group, and removes `interfaces.prefix` and
+`interfaces.first_index`, which nothing read:
+
+| 0.6 field | 0.7.0 field |
+| --------- | ----------- |
+| `repo` | `container.repo` |
+| `os_variant` | `vm.os_variant` |
+| `cpu.architecture`, `cpu.model` | `vm.cpu.*` or `unikernel.cpu.*` |
+| `cpu.vmx` | `vm.cpu.vmx` |
+| `machine.kind` | `vm.machine.kind` or `unikernel.machine.kind` |
+| `machine.bios` | `vm.machine.bios` |
+| `boot_disk`, `cdrom` | `vm.boot_disk`, `vm.cdrom` |
+| `interfaces.kind`, `interfaces.mtu` | `vm.interfaces.*` or `unikernel.interfaces.*` |
+| `interfaces.prefix`, `interfaces.first_index` | removed |
+| `ztp` | `vm.ztp` or `container.ztp` |
+| `unikernel` (`boot_mode`, or `null`) | `unikernel.boot_mode`, present only on a unikernel image |
+
+`model`, `version`, `kind`, `default`, `memory`, `cpu.count`, `interfaces.data_count`,
+`interfaces.management` and `interfaces.reserved_count` are unchanged. The flat fields of
+releases up to 0.5.35 (`cpu_count`, `hdd_bus` and the rest) are refused. The OpenAPI schema
+describes the same shape.
 
 Releases up to 0.6.5 also had `ztp.username`, `ztp.password` and `ztp.password_auth` (flat
 `ztp_username`, `ztp_password` and `ztp_password_auth` up to 0.5.35), and `ztp_password_set`
@@ -281,6 +341,33 @@ kind.
 The web UI's image pages are under `/admin/images/{model}/{kind}/`, and its image list has one
 row per model and kind. The upload form and the lab-create page offer a kind for a model that
 takes several.
+
+An image's page, and the node page's image settings, show the settings every kind takes and the
+image's own kind's. Its editor takes the same: CPU count, memory and interface counts for every
+kind; the OS, CPU, machine, firmware, disk, CD-ROM, interface device and ZTP settings for a
+virtual machine; the repo and ZTP setting for a container; the CPU, machine and interface device
+settings for a unikernel, whose boot mode is kept. A form that sends a setting the image's kind
+does not take is refused, naming it, and so is one that sends `interface_prefix` or
+`first_interface_index`, removed in 0.7.0.
+
+### Deleting an image
+
+`image.delete` and `DELETE /api/v1/images/{model}/{kind}/{version}` delete the image's record,
+then the image itself, and answer with `model`, `kind`, `version`, `db_deleted`,
+`image_deleted` and `new_default`. `image_deleted` says whether the image itself was deleted: a
+virtual machine's or unikernel's file, with its version folder once no other kind's file is
+left in it, or a container's Docker image, its `repo` at its
+`version`. Another tag of the same Docker image, such as the one it was pulled as, is kept. Until
+0.6.5 the field was `disk_deleted`, and a container image's Docker image was left behind.
+
+The delete is refused as a conflict (409, or `Conflict`), naming what holds the image:
+
+- a virtual machine or unikernel image while a disk of the storage pool is built on it, whether
+  its VM is running or stopped;
+- a container image while a running container runs it.
+
+A disk built on another image does not block the delete. An image a node of a lab records is not
+deleted either: destroy the lab, or redeploy the node onto another version, first.
 
 ## Errors
 
