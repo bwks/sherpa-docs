@@ -1025,10 +1025,13 @@ they create anything.
 
 ### `sherpa server image delete`
 
-Delete an imported image: its record, then a VM's or unikernel's disk folder, or a container's
+Delete an imported image: its record, then a VM's or unikernel's file, or a container's
 Docker image (its repo at its version, through the Docker API; another tag of the same image,
 such as the one it was pulled as, is kept). If it was the model's default, the most recently
 added remaining version becomes the default; see [default versions](#default-versions).
+A VM and a unikernel of the same model and version share a folder under
+`/opt/sherpa/images/<model>/<version>/`: deleting one removes only its own file, and the folder
+goes with the last file in it.
 
 The delete is refused while the image is in use:
 

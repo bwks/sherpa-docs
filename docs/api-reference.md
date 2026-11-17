@@ -355,7 +355,8 @@ does not take is refused, naming it, and so is one that sends `interface_prefix`
 `image.delete` and `DELETE /api/v1/images/{model}/{kind}/{version}` delete the image's record,
 then the image itself, and answer with `model`, `kind`, `version`, `db_deleted`,
 `image_deleted` and `new_default`. `image_deleted` says whether the image itself was deleted: a
-virtual machine's or unikernel's version folder, or a container's Docker image, its `repo` at its
+virtual machine's or unikernel's file, with its version folder once no other kind's file is
+left in it, or a container's Docker image, its `repo` at its
 `version`. Another tag of the same Docker image, such as the one it was pulled as, is kept. Until
 0.6.5 the field was `disk_deleted`, and a container image's Docker image was left behind.
 
