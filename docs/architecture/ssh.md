@@ -21,9 +21,9 @@ A lab folder whose path has spaces is included in double quotes, as `ssh` needs.
 updated and the link is kept. Each file is replaced whole, keeping its permissions, so an
 interrupted update never leaves it cut short.
 
-## Lab SSH Key
+## Logging In to Nodes
 
-Every node logs in as you, with your own keys or your
+Every node logs in as you, with your own [SSH keys](ssh-keys.md) or your
 [device password](device-password.md), so `.sherpa/ssh/config` names your username and no
 identity file:
 
@@ -32,17 +32,18 @@ Host 172.31.1.22 router1.abcd1234 router1.abcd1234.sherpa.lab.local
     User alice
 ```
 
-`sherpa up` still makes a key pair for each lab on the Sherpa server, in the lab's folder,
-readable only by the Sherpa server. No node's SSH config uses it, and `sherpa up` and
-`sherpa download` no longer save a private key to your lab folder.
+`ssh`, `sherpa ssh` and provisioners use the keys in your SSH agent or your default key files.
+Sherpa has no key of its own: it never logs in to a node, puts no key of its own on one, and
+writes no key to your lab folder.
 
-- **Labs built before 0.7.0** keep their `sherpa` account, its published password and their lab
-  key until their nodes are redeployed. Their SSH config says `User sherpa`. After
-  `sherpa download --force` rewrites it without an `IdentityFile`, `sherpa ssh` asks for the old
-  password. See [Updating to 0.7.0](../install-update/update/sherpa.md#updating-to-070).
-- **Redeploy and resume:** `sherpa redeploy` rebuilds the node with your login.
-- **Destroy and clean:** `sherpa destroy` and `sherpa server clean` delete the key with the lab's
-  folder on the server.
+- **Labs built before 0.7.0** keep their `sherpa` account, its published password and their own
+  lab key until their nodes are redeployed. Their SSH config says `User sherpa`. A lab folder from
+  before 0.7.0 keeps its `.sherpa/ssh/key`: `sherpa download --force` writes an SSH config without
+  the `IdentityFile` line and leaves the key, so `sherpa ssh` asks for the old password, and
+  `ssh -F .sherpa/ssh/config -i .sherpa/ssh/key <node>.<lab-id>` still logs in with the key.
+  `sherpa destroy` deletes it with `.sherpa/`. See
+  [Updating to 0.7.0](../install-update/update/sherpa.md#updating-to-070).
+- **Redeploy:** `sherpa redeploy` rebuilds the node with your login.
 - **Labs created before Sherpa 0.5.15** used the server's shared key, which 0.6.0 removes.
   Destroy them before updating to 0.6.0; see
   [Updating to 0.6.0](../install-update/update/sherpa.md#updating-to-060).

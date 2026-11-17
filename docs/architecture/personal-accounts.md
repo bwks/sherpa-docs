@@ -55,7 +55,9 @@ your account's login shells.
 
 Windows VMs get a local administrator account with your username, your device password and your
 keys. Each account has its own keys file, `C:\ProgramData\ssh\authorized_keys\<username>`, so
-your keys log in only as you.
+your keys log in only as you. Yours is the only enabled account: at first boot Sherpa disables
+every other, such as the image's built-in `Administrator` and the `Admin` account cloudbase-init
+creates. See [Windows Server](../nodes/windows/windows-server.md#accounts).
 
 ### Network Devices
 

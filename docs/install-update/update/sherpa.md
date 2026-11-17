@@ -95,10 +95,19 @@ published password, `Everest1953!`, are gone from new nodes. See
   that still sets it, to `true` or `false`, is refused by `sherpa validate`, `sherpa up` and
   `sherpa redeploy` with ``unknown field `provision_current_user` ``.
 - **Labs built before 0.7.0 keep `sherpa`.** Their nodes keep the `sherpa` account, its published
-  password and the lab's key, and their SSH config keeps `User sherpa`, until each node is
-  redeployed with `sherpa redeploy -n <node>` or the lab is recreated. `sherpad` logs one warning
-  at every start while any such node remains. `sherpa download --force` writes an SSH config
-  without the `IdentityFile` line, after which `sherpa ssh` asks for the old password.
+  password and trust in the lab's old SSH key, and their SSH config keeps `User sherpa`, until
+  each node is redeployed with `sherpa redeploy -n <node>` or the lab is recreated. `sherpad` logs
+  one warning at every start while any such node remains. `sherpa download --force` writes an SSH
+  config without the `IdentityFile` line, after which `sherpa ssh` asks for the old password; the
+  old key stays in `.sherpa/ssh/key` for `ssh -i`.
+- **The lab SSH key is gone.** `sherpa up` makes no key for a new lab, and `sherpa up` and
+  `sherpa download` no longer write `.sherpa/ssh/key`: nodes take only your own keys. A key file
+  from before 0.7.0 is left in the lab folder until `sherpa destroy` deletes `.sherpa/`, and the
+  server deletes a lab's old key with the lab. MikroTik nodes no longer get `sherpa_ssh_key.pub`
+  on their config disk.
+- **Windows nodes have one enabled login, yours.** The image's built-in `Administrator` and the
+  `Admin` account cloudbase-init creates are disabled at first boot. See
+  [Windows Server](../../nodes/windows/windows-server.md#accounts).
 - **Some models refuse some names.** A node that cannot take your username as a login stops
   `sherpa up` and `sherpa redeploy` before anything is created. Windows takes at most 20
   characters; Cisco NX-OS at most 28, starting with a letter or digit; Arista vEOS and cEOS must
@@ -193,8 +202,8 @@ lab created before 0.5.15 first**, with the release the server runs now:
 sherpa destroy
 ```
 
-in the lab's folder, or from the web UI. Labs created from 0.5.15 have their own
-[lab SSH key](../../architecture/ssh.md#lab-ssh-key) and keep running.
+in the lab's folder, or from the web UI. Labs created from 0.5.15 have their own lab SSH key and
+keep running.
 
 The update script checks before it installs anything. While such labs exist it stops, names
 them, and starts the running release again:

@@ -13,7 +13,6 @@ Sherpa organises files across several directories under `/opt/sherpa/`.
 ├── bins/                    # Unikernel binaries
 ├── labs/                    # Per-lab runtime files
 │   └── <lab-id>/
-│       ├── sherpa_ssh_key   # The lab's SSH key pair
 │       ├── certs/           # Lab CA and node certificates
 │       ├── ztp/             # Generated node configs
 │       └── ...
@@ -77,7 +76,6 @@ virsh pool-info sherpa-pool
 
 Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This directory contains:
 
-- The lab's own [SSH key pair](ssh.md#lab-ssh-key), which only the `sherpa` user can read
 - **ZTP configuration** the boot server serves while the lab exists: its DHCP and DNS config,
   and the TFTP and HTTP files of nodes that boot by them
 - **Container configuration**: the files each container node mounts
@@ -107,6 +105,11 @@ Nor is a Talos cluster's plan: its members are in the lab's definition, and the 
 chose for it (its endpoint, shared address and load balancer addresses) in the database.
 Releases up to 0.6.4 kept it here as `clusters/<cluster>/cluster.toml`; `sherpad` 0.6.5 stored
 it and deleted the file the first time it started.
+
+Nor is an SSH key: Sherpa has none of its own for nodes (see
+[SSH](ssh.md#logging-in-to-nodes)). A lab created before 0.7.0 still has its old key pair here,
+`sherpa_ssh_key` and `sherpa_ssh_key.pub`, readable only by the `sherpa` user, until the lab is
+destroyed.
 
 VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
 `/opt/sherpa/libvirt/images/`. A VM's boot files, such as its cloud-init `user-data` and the ISO
