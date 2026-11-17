@@ -35,19 +35,19 @@ model = "ubuntu_linux"
 
 [[links]]
 src = "spine01::eth1"
-dst = "leaf01::eth51"
+dst = "leaf01::eth31"
 
 [[links]]
 src = "spine01::eth2"
-dst = "leaf02::eth51"
+dst = "leaf02::eth31"
 
 [[links]]
 src = "spine02::eth1"
-dst = "leaf01::eth52"
+dst = "leaf01::eth32"
 
 [[links]]
 src = "spine02::eth2"
-dst = "leaf02::eth52"
+dst = "leaf02::eth32"
 
 [[links]]
 src = "leaf01::eth1"
