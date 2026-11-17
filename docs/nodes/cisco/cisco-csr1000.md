@@ -1,16 +1,16 @@
-# Juniper vSwitch
+# Cisco CSR1000v
 
 ## Base Image
 
-Base images can be downloaded from the [download](https://support.juniper.net/support/downloads/?p=vjunos) page.
+See the [general notes](general.md) for information on obtaining a base image.
 
 ## Import Image
 
 ```
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
-  --version 25.2R1.9 \
-  --model juniper_vswitch \
+  --version 17.03.08a \
+  --model cisco_csr1000 \
   --default
 ```
 
@@ -19,30 +19,26 @@ sherpa server image import \
 | Property             | Value           |
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
-| Tested Version       | 25.2R1.9        |
-| CPU                  | 4               |
-| RAM                  | 5GB             |
+| Tested Version       | 17.03.08a       |
+| CPU                  | 1               |
+| RAM                  | 3GB             |
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP                  | `cdrom`         |
-| Management Interface | fxp0            |
-| Data Interfaces      | ge-0/0/0-9      |
-| Interface Driver     | virtio          |
+| Management Interface | GigabitEthernet1 |
+| Data Interfaces      | gig2-16         |
+| Interface Driver     | vmxnet3         |
 
 ## Example Manifest
 
 ```toml
-name = "juniper-vswitch"
+name = "cisco-csr1000"
 
 [[nodes]]
 name = "dev01"
-model = "juniper_vswitch"
+model = "cisco_csr1000"
 ```
-
-## ZTP
-
-ZTP config must be provided in a file named `juniper.conf` in the root directory of an `ISO` image.
 
 
 ## Node Access
@@ -61,4 +57,4 @@ ZTP config must be provided in a file named `juniper.conf` in the root directory
 
 ## Notes
 
-- Approximate time for the system to be ready: `4 minutes`
+- Approximate time for the system to be ready: `3 minutes`

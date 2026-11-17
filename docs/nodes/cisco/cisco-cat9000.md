@@ -1,16 +1,20 @@
-# Cisco ASAv
+# Cisco CAT9000v
 
 ## Base Image
 
 See the [general notes](general.md) for information on obtaining a base image.
+
+!!! Note
+
+    The Catalyst 9000v is available in 2 variants: `q200` and `uadp`. This page refers to the `uadp` variant.
 
 ## Import Image
 
 ```
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
-  --version 9-23-1 \
-  --model cisco_asav \
+  --version 17.15.03 \
+  --model cisco_cat9000 \
   --default
 ```
 
@@ -19,25 +23,25 @@ sherpa server image import \
 | Property             | Value           |
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
-| Tested Version       | 9-23-1          |
-| CPU                  | 1               |
-| RAM                  | 2GB             |
-| CDROM Driver         | IDE             |
+| Tested Version       | 17.15.03        |
+| CPU                  | 4               |
+| RAM                  | 18GB            |
+| CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | SATA            |
 | ZTP                  | `cdrom`         |
-| Management Interface | eth0            |
-| Data Interfaces      | gig0-8          |
-| Interface Driver     | virtio          |
+| Management Interface | GigabitEthernet0/0 |
+| Data Interfaces      | gig0/0/1-8      |
+| Interface Driver     | e1000           |
 
 ## Example Manifest
 
 ```toml
-name = "cisco-asav"
+name = "cisco-cat9000"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_asav"
+model = "cisco_cat9000"
 ```
 
 
@@ -57,5 +61,5 @@ model = "cisco_asav"
 
 ## Notes
 
-- Approximate time for the system to be ready: `3 minutes`
-- ASAv forces a password reset on first login.
+- Approximate time for the system to be ready: `4 minutes`
+- Sherpa is tested with the `UADP` image variant.

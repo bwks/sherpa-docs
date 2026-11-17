@@ -88,7 +88,7 @@ method = "disabled"
 
 [[nodes]]
 name = "dev02"
-model = "juniper_vsrxv3"
+model = "juniper_srxv3"
 
 [nodes.ztp]
 method = "tftp"
@@ -131,7 +131,7 @@ Vault's own configuration file.
 
 [[nodes]]
 name = "dev01"
-model = "cisco_cat8000v"
+model = "cisco_cat8000"
 
 [nodes.ztp]
 config = "/some/path/dev01.conf"

@@ -608,7 +608,7 @@ sherpa image show <model>
 | Flag | Description |
 | ---- | ----------- |
 | `--version` | Show a specific version (defaults to the default version) |
-| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
+| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind. `generic` has no default, so it needs `--kind`; the containers of `arista_eos` and `juniper_evolved` need `--kind container` |
 
 It prints the same table as [`sherpa server image show`](#sherpa-server-image-show).
 
@@ -846,6 +846,18 @@ and without it uses the model's default kind; `kind` in the manifest works the s
 [`kind`](manifest.md#kind-string). A kind the model does not take is refused, naming the kinds it
 takes. `list` and `scan` take `--kind` to work on one kind only.
 
+Most models take one kind, so `--kind` is not needed on them. `arista_eos` and
+`juniper_evolved` default to the virtual machine: their container images (cEOS-lab and
+cJunosEvolved) need `--kind container` on every command that names one image. `generic` has no
+default kind, so every command that names a `generic` image needs `--kind`, and without it is
+refused: `Model 'generic' has no default kind; set its kind to one of: virtual_machine,
+container, unikernel`.
+
+```
+sherpa server image show arista_eos --kind container
+sherpa server image delete --model juniper_evolved --kind container --version 26.2R1.7
+```
+
 ### `sherpa server image show`
 
 Show detailed information about an image.
@@ -857,7 +869,7 @@ sherpa server image show <model>
 | Flag | Description |
 | ---- | ----------- |
 | `--version` | Show a specific version (defaults to the default version) |
-| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
+| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind. `generic` has no default, so it needs `--kind`; the containers of `arista_eos` and `juniper_evolved` need `--kind container` |
 
 The table names each row by its key in the image's JSON, such as `cpu.count` and
 `interfaces.data_count`. It leaves out the settings the image's kind does not use: a
@@ -902,7 +914,7 @@ recorded as a version, with the repository a node of that version runs:
 
 - Without `--model` and `--repo`, each container model with a built-in repo, such as
   `nokia_srlinux` (`ghcr.io/nokia/srlinux`) or `nats_bus` (`nats`), gets that repo's local tags.
-  The models with no built-in repo (`generic_container`, `mysql_db` and `postgresql_db`) are
+  The models with no built-in repo (`mysql_db`, `postgresql_db`, and `generic` containers) are
   listed as skipped, since a local image cannot be told apart as one of them.
 - With `--model` and `--repo`, only that repo's local tags are recorded, as versions of that
   model. This records images for a model with no built-in repo, or for a built-in model from
@@ -933,7 +945,7 @@ sherpa server image import --src <path> --version <version> --model <model>
 | `--src`, `-s` | Source path of the disk image (required) |
 | `--version`, `-v` | Version of the device model (required). See [image versions](#image-versions) |
 | `--model`, `-m` | Model of the device (required) |
-| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
+| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind. `generic` has no default, so it needs `--kind`; the containers of `arista_eos` and `juniper_evolved` need `--kind container` |
 | `--default` | Set this image as the default version |
 
 The image is copied to a temporary file next to its destination and moved into place only once
@@ -979,7 +991,7 @@ sherpa server image pull --model <model>
 | Flag | Description |
 | ---- | ----------- |
 | `--model`, `-m` | Model of the device image to pull (required) |
-| `--kind` | Kind of the image, which decides between a registry pull (`container`) and a download (`virtual_machine`): `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
+| `--kind` | Kind of the image, which decides between a registry pull (`container`) and a download (`virtual_machine`): `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind. `generic` has no default, so it needs `--kind`; the containers of `arista_eos` and `juniper_evolved` need `--kind container` |
 | `--version`, `-v` | Version of the image |
 | `--repo`, `-r` | Container image reference with a tag: a Docker Hub image by its short or full name (`nats:2.11` or `docker.io/library/nats:2.11`), or an image in another registry (`registry.io/account/image:version` or `localhost:5000/image:1`); digests (`@sha256:...`) are not supported |
 | `--url`, `-u` | VM image download URL |
@@ -1004,7 +1016,7 @@ sherpa server image delete --model <model> --version <version>
 | Flag | Description |
 | ---- | ----------- |
 | `--model`, `-m` | Model of the device image to delete (required) |
-| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
+| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind. `generic` has no default, so it needs `--kind`; the containers of `arista_eos` and `juniper_evolved` need `--kind container` |
 | `--version`, `-v` | Version of the device image to delete (required) |
 
 ### `sherpa server image set-default`
@@ -1018,7 +1030,7 @@ sherpa server image set-default --model <model> --version <version>
 | Flag | Description |
 | ---- | ----------- |
 | `--model`, `-m` | Model of the device image (required) |
-| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind, which is the only kind every model has today |
+| `--kind` | Kind of the image: `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind. `generic` has no default, so it needs `--kind`; the containers of `arista_eos` and `juniper_evolved` need `--kind container` |
 | `--version`, `-v` | Version to set as default (required) |
 
 ## Server Daemon

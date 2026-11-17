@@ -10,7 +10,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
   --version 7.7.0-89 \
-  --model cisco_ftdv \
+  --model cisco_ftd \
   --default
 ```
 
@@ -33,11 +33,11 @@ sherpa server image import \
 ## Example Manifest
 
 ```toml
-name = "cisco-ftdv"
+name = "cisco-ftd"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_ftdv"
+model = "cisco_ftd"
 ```
 
 ## Credentials

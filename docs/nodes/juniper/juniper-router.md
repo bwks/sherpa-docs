@@ -1,20 +1,16 @@
-# Cisco CAT9000v
+# Juniper vRouter
 
 ## Base Image
 
-See the [general notes](general.md) for information on obtaining a base image.
-
-!!! Note
-
-    The Catalyst 9000v is available in 2 variants: `q200` and `uadp`. This page refers to the `uadp` variant.
+Base images can be downloaded from the [download](https://support.juniper.net/support/downloads/?p=vjunos-router) page.
 
 ## Import Image
 
 ```
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
-  --version 17.15.03 \
-  --model cisco_cat9000v \
+  --version 25.2R1.9 \
+  --model juniper_router \
   --default
 ```
 
@@ -23,26 +19,30 @@ sherpa server image import \
 | Property             | Value           |
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
-| Tested Version       | 17.15.03        |
+| Tested Version       | 25.2R1.9        |
 | CPU                  | 4               |
-| RAM                  | 18GB            |
+| RAM                  | 5GB             |
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
-| DISK Driver          | SATA            |
+| DISK Driver          | virtio          |
 | ZTP                  | `cdrom`         |
-| Management Interface | GigabitEthernet0/0 |
-| Data Interfaces      | gig0/0/1-8      |
-| Interface Driver     | e1000           |
+| Management Interface | fxp0            |
+| Data Interfaces      | ge-0/0/0-9      |
+| Interface Driver     | virtio          |
 
 ## Example Manifest
 
 ```toml
-name = "cisco-cat8000v"
+name = "juniper-router"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_cat9000v"
+model = "juniper_router"
 ```
+
+## ZTP
+
+ZTP config must be provided in a file named `juniper.conf` in the root directory of an `ISO` image.
 
 
 ## Node Access
@@ -62,4 +62,3 @@ model = "cisco_cat9000v"
 ## Notes
 
 - Approximate time for the system to be ready: `4 minutes`
-- Sherpa is tested with the `UADP` image variant.

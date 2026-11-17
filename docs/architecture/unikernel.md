@@ -4,11 +4,11 @@ Unikernels are single-purpose machine images that package an application with on
 
 ![Unikernel architecture: sherpad drives libvirtd, which runs one QEMU process per unikernel on KVM; the kernel ELF or boot disk is a copy in sherpa-pool](unikernel.svg)
 
-Sherpa supports three unikernel models:
+Sherpa supports three unikernel models. `generic` takes other kinds too, so its nodes set `kind = "unikernel"`:
 
 | Model | Boot Mode | Description |
 | ----- | --------- | ----------- |
-| `generic_unikernel` | DirectKernel | Generic type for custom unikernels |
+| `generic` (`kind = "unikernel"`) | DirectKernel | Generic type for custom unikernels |
 | `unikraft_unikernel` | DirectKernel | [Unikraft](https://unikraft.org/)-based unikernels |
 | `nanos_unikernel` | DiskBoot | [NanoVMs](https://nanovms.com/)-based unikernels |
 

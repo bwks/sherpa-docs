@@ -151,7 +151,7 @@ returns `path`, the backup file on the server, and `size_bytes`. See
 
 ## Node images
 
-Showing an image (`GET /api/v1/images/{model}`, the WebSocket RPC method `image.show`, or
+Showing an image (`GET /api/v1/images/{model}/{kind}`, the WebSocket RPC method `image.show`, or
 `sherpa server --output json image show <model>`) returns its definition, with its settings
 nested by group. For `ubuntu_linux`:
 
@@ -215,7 +215,7 @@ Every image carries every group, but not every kind uses them. A container does 
 `machine`, `boot_disk` or `cdrom`. A unikernel uses `machine.kind` and not `machine.bios`,
 `boot_disk` or `cdrom`. Their images carry the defaults there: `pc`, `sea_bios`, `virtio`, a
 `null` CD-ROM image and `virtio`. Images stored by releases up to 0.6.0 could hold other values,
-such as a `q35` machine on `arista_ceos`; the update resets them. The `image show` tables and
+such as a `q35` machine on an Arista cEOS image; the update resets them. The `image show` tables and
 the web UI's image and node pages leave these settings out; the JSON keeps them.
 
 Releases up to 0.5.35 returned these settings as flat fields. Each moved into its group:
@@ -257,12 +257,30 @@ An image is a model, a kind and a version. The RPC requests that name one image,
 `image.import`, `image.delete`, `image.set_default`, `image.pull` and `image.download`, and the
 JSON bodies of `POST /api/v1/images/import`, `pull` and `download`, take an optional `kind`:
 `virtual_machine`, `container` or `unikernel`. Without it, the request is for the model's
-default kind. A kind the model does not take is refused as invalid (400, or `InvalidParams`),
-naming the kinds it takes. `image.pull` also refuses a kind other than `container`. Every
-model takes one kind today, so a request without `kind` works as before. The REST paths
-`GET /api/v1/images/{model}`, `DELETE /api/v1/images/{model}/{version}` and
-`POST /api/v1/images/{model}/{version}/default`, and the upload form, name no kind and use the
-model's default kind.
+default kind. `generic` has no default kind, so a request for a `generic` image must set
+`kind`. A kind the model does not take is refused as invalid (400, or `InvalidParams`), naming
+the kinds it takes. `image.pull` also refuses a kind other than `container`. For the container
+images of `arista_eos` and `juniper_evolved`, which default to the virtual machine, set
+`kind` to `container`.
+
+The REST paths that name one image carry the kind:
+
+| Method | Path | |
+| ------ | ---- | - |
+| `GET` | `/api/v1/images/{model}/{kind}` | Show the image; `?version=` picks a version, else the default |
+| `DELETE` | `/api/v1/images/{model}/{kind}/{version}` | Delete the image |
+| `POST` | `/api/v1/images/{model}/{kind}/{version}/default` | Make the version the default |
+
+`{kind}` is `virtual_machine`, `container` or `unikernel`; an unknown model or kind, an old
+model name, or a kind the model does not take is a bad request (400). The paths without a kind,
+`/api/v1/images/{model}`, `/api/v1/images/{model}/{version}` and
+`/api/v1/images/{model}/{version}/default`, were removed in 0.7.0. The multipart form of
+`POST /api/v1/images/upload` takes a `kind` field; without it, or empty, the model's default
+kind.
+
+The web UI's image pages are under `/admin/images/{model}/{kind}/`, and its image list has one
+row per model and kind. The upload form and the lab-create page offer a kind for a model that
+takes several.
 
 ## Errors
 

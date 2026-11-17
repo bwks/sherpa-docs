@@ -19,7 +19,7 @@ When a lab is created, Sherpa performs the following for each container node:
 
 Every container model has a default data interface count and privileged mode. Sherpa does not
 limit a container's CPU or memory: containers accept `cpu.count` and `memory` in the manifest,
-but only `juniper_cevolved` uses them, to size the router VM inside the container.
+but only a `juniper_evolved` container uses them, to size the router VM inside the container.
 
 Options configurable in the manifest, in the node's [`container`](../manifest.md#container-object)
 group unless noted:
@@ -52,7 +52,7 @@ Each end of a [link](networking/modes/point-to-point.md) on a container is a vet
 
 A container with no link uses Docker **macvlan** networks in bridge mode for its other data interfaces: [private bridge](networking/modes/private-bridge.md) members, and unconnected interfaces. Several macvlan networks share one Linux bridge: the private bridge, or the node's isolated bridge.
 
-After attachment, data interfaces are set to promiscuous mode and brought up. Disabled interfaces (unconnected links) are left admin-down, except on `juniper_cevolved`: it waits at boot until all its data interfaces are up, so its disabled interfaces stay up, on the node's isolated bridge or with no carrier.
+After attachment, data interfaces are set to promiscuous mode and brought up. Disabled interfaces (unconnected links) are left admin-down, except on a `juniper_evolved` container: it waits at boot until all its data interfaces are up, so its disabled interfaces stay up, on the node's isolated bridge or with no carrier.
 
 ## Provisioning
 

@@ -36,11 +36,12 @@ A link needs only its two ends.
 ```toml
 [[nodes]]
 name = "dev01"
-model = "arista_veos"
+model = "arista_eos"
 
 [[nodes]]
 name = "dev02"
-model = "arista_ceos"
+model = "arista_eos"
+kind = "container"
 
 [[links]]
 src = "dev01::eth1"

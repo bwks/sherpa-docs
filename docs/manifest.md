@@ -16,7 +16,8 @@ model = "sonic_linux"
 
 [[nodes]]
 name = "dev02"
-model = "arista_ceos"
+model = "arista_eos"
+kind = "container"
 
 [[links]]
 src = "dev01::gig4"
@@ -57,11 +58,17 @@ name = "dev01"
 
 ##### model (string)
 
-The model of the device.
+The model of the device. Each model has a page under Nodes. Some models take several kinds,
+see [`kind`](#kind-string).
 
 ```toml
 model = "sonic_linux"
 ```
+
+Nineteen model names were renamed in Sherpa 0.7.0, such as `arista_ceos` to `arista_eos` with
+`kind = "container"`. An old name is refused with a message naming the new model and kind; the
+full table is in
+[Updating to 0.7.0](install-update/update/sherpa.md#node-models-renamed-and-nodes-take-a-kind).
 
 #### Optional Node Parameters
 
@@ -108,7 +115,9 @@ node.
 A node's kind is its [`kind`](#kind-string), or else its model's default kind. Sherpa refuses
 a setting the node's kind does not take, and a `vm`, `container` or `unikernel` group on a node
 of another kind. The message names the node, the key and the kind, for example
-``Manifest - node: 'web01' sets `container`, which does not apply to virtual_machine nodes``.
+``Manifest - node: 'web01' sets `container`, which does not apply to virtual_machine nodes; 'ubuntu_linux' is a virtual_machine``.
+On a model that takes several kinds, the message names the kind the setting needs:
+``Manifest - node: 'r1' sets `container`, which does not apply to virtual_machine nodes; 'arista_eos' is a virtual_machine unless the node sets `kind = "container"` ``.
 
 | Setting | Virtual machine | Container | Unikernel |
 |---|---|---|---|
@@ -140,10 +149,10 @@ On a container node, `memory` and `cpu.count` are Docker limits:
 A container that sets neither runs without limits. The image's
 CPU and memory values do not apply to containers.
 
-`juniper_cevolved` is the exception: `memory` and `cpu.count` size the router virtual machine
-inside the container, defaulting to the image's. Its container always gets a memory limit of
-that memory plus 2048 MB, for the container's own processes, and no CPU quota. See
-[Juniper cJunosEvolved](nodes/juniper/juniper-cevolved.md).
+A `juniper_evolved` container is the exception: `memory` and `cpu.count` size the router
+virtual machine inside the container, defaulting to the image's. Its container always gets a
+memory limit of that memory plus 2048 MB, for the container's own processes, and no CPU quota.
+See [Juniper cJunosEvolved](nodes/juniper/juniper-evolved.md#container-cjunosevolved).
 
 Within a kind, a setting may still apply only to some models or ZTP methods; each section below
 says so.
@@ -234,10 +243,19 @@ model = "frr_linux"
 kind = "container"
 ```
 
-Every model takes one kind today, which is its default, so `kind` is never needed; setting it
-says which kind the node is. A kind the model does not take is refused, naming the kinds it
-takes:
-``Manifest - node: 'fw1' sets `kind = "container"`, but 'cisco_asav' comes only as: virtual_machine``.
+Most models take one kind, which is their default, so `kind` is not needed on them. Three
+models take several:
+
+| Model | Kinds | Default |
+|---|---|---|
+| [`arista_eos`](nodes/arista/arista-eos.md) | `virtual_machine` (vEOS-lab), `container` (cEOS-lab) | `virtual_machine` |
+| [`juniper_evolved`](nodes/juniper/juniper-evolved.md) | `virtual_machine` (vJunosEvolved), `container` (cJunosEvolved) | `virtual_machine` |
+| [`generic`](nodes/generic/generic.md) | `virtual_machine`, `container`, `unikernel` | none |
+
+A `generic` node must set `kind`; without it the node is refused:
+``Manifest - node: 'g1' sets no `kind`, which 'generic' needs; set it to one of: virtual_machine, container, unikernel``.
+A kind the model does not take is refused, naming the kinds it takes:
+``Manifest - node: 'fw1' sets `kind = "container"`, but 'cisco_asa' comes only as: virtual_machine``.
 The node's version and image are the model's images of that kind, and the
 [kind settings groups](#which-node-kinds-take-which-settings) it may set are its kind's.
 
@@ -713,7 +731,7 @@ platform = "bx"
 | `shm_size` | int | Shared memory (`/dev/shm`) size in bytes |
 | `commands` | list&lt;string&gt; | The container's command, in place of the image's |
 | `volumes` | list&lt;object&gt; | Bind mounts of server paths into the container: `src`, the path on the Sherpa server, and `dst`, the path in the container |
-| `platform` | string | The PTX router a `juniper_cevolved` node emulates, see below |
+| `platform` | string | The PTX router a `juniper_evolved` container emulates, see below |
 
 A privileged container, or one that can mount server paths, is root on the Sherpa server, so
 only admins may set `privileged` or `volumes`; `up` and `redeploy` refuse a manifest from
@@ -723,8 +741,8 @@ Some models set their own command, user, privileges or mounts to start their sof
 their ZTP config; see the model's page under Nodes.
 
 `platform` is `bt` (PTX10001-36MR, 12 data interfaces) or `bx` (PTX10002-36QDD, up to 36).
-Without it, the node is `bt`. Other models do not take `platform`. See
-[Juniper cEvolved](nodes/juniper/juniper-cevolved.md#platforms).
+Without it, the node is `bt`. Only a `juniper_evolved` container takes `platform`. See
+[Juniper cJunosEvolved](nodes/juniper/juniper-evolved.md#platforms).
 
 ##### unikernel (object)
 
@@ -808,7 +826,7 @@ redeployed without them (code: -32006)
 
 The holding node and lab are named to admins and to that lab's owner. Everyone else reads "a
 node of another lab" instead. `sherpa up` and `sherpa redeploy` exit with status `75`
-([exit status](../command-reference.md#exit-status)); run the command again once the CPUs are
+([exit status](command-reference.md#exit-status)); run the command again once the CPUs are
 free, or pin other CPUs.
 
 Labs created by earlier releases may already share a CPU, since two labs started at the same

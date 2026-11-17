@@ -49,7 +49,7 @@ also gets any keys the manifest sets in `ssh.authorized_keys` or `ssh.authorized
 Manifest `user_scripts` run as your account, and manifest `environment_variables` are set in
 your account's login shells.
 
-`generic_vm` nodes are set up as a Linux VM that uses `cloud-init`.
+`generic` virtual machine nodes are set up as a Linux VM that uses `cloud-init`.
 
 ### Windows
 
@@ -69,13 +69,13 @@ Aruba AOS-CX is the exception: you log in by key only, and `admin` is locked (se
 
 | Models | Admin rights | Key types | Keys used |
 |---|---|---|---|
-| `cisco_iosv`, `cisco_iosvl2`, `cisco_iol`, `cisco_ioll2`, `cisco_csr1000v`, `cisco_cat8000v`, `cisco_cat9000v` | privilege 15 | RSA | first 2 |
-| `cisco_iosxrv9000` | `root-lr` and `netadmin` groups | RSA | first 4 |
-| `cisco_asav` | privilege 15 | Ed25519, ECDSA, RSA | first 1 |
-| `cisco_nexus9300v` | `network-admin` | ECDSA, RSA | first 1 |
-| `arista_veos`, `arista_ceos` | privilege 15 | Ed25519, ECDSA, RSA | first 2 |
+| `cisco_ios`, `cisco_iosl2`, `cisco_iol`, `cisco_ioll2`, `cisco_csr1000`, `cisco_cat8000`, `cisco_cat9000` | privilege 15 | RSA | first 2 |
+| `cisco_iosxr9000` | `root-lr` and `netadmin` groups | RSA | first 4 |
+| `cisco_asa` | privilege 15 | Ed25519, ECDSA, RSA | first 1 |
+| `cisco_nexus9300` | `network-admin` | ECDSA, RSA | first 1 |
+| `arista_eos` | privilege 15 | Ed25519, ECDSA, RSA | first 2 |
 | `aruba_aoscx` | `administrators` | Ed25519, ECDSA, RSA | first 32 |
-| `juniper_vrouter`, `juniper_vswitch`, `juniper_vsrxv3`, `juniper_vevolved`, `juniper_cevolved` | `super-user` | Ed25519, ECDSA, RSA | all |
+| `juniper_router`, `juniper_switch`, `juniper_srxv3`, `juniper_evolved` | `super-user` | Ed25519, ECDSA, RSA | all |
 | `nokia_srlinux` | superuser role | Ed25519, ECDSA, RSA | first 32 |
 | `paloalto_panos` | superuser | Ed25519, RSA | first 1 |
 | `mikrotik_chr` | `full` group | Ed25519, RSA | all |
@@ -133,7 +133,7 @@ AOS-CX, which has no hash form, gets no password at all.
 
 | Models | Login | Password in the configuration | Delivered by |
 |---|---|---|---|
-| Ubuntu, Alma, Rocky, CentOS, Fedora, openSUSE, RHEL, SUSE, Kali, Omarchy, `devbox_linux`, `generic_vm`, Infrahub, Jenkins, Nautobot, NetBox, SigNoz, `virt_server` | you, `sudo` | SHA-512 hash | cloud-init CD-ROM |
+| Ubuntu, Alma, Rocky, CentOS, Fedora, openSUSE, RHEL, SUSE, Kali, Omarchy, `devbox_linux`, `generic` virtual machines, Infrahub, Jenkins, Nautobot, NetBox, SigNoz, `virt_server` | you, `sudo` | SHA-512 hash | cloud-init CD-ROM |
 | NixOS | you, `wheel` | SHA-512 hash | cloud-init CD-ROM |
 | Alpine | you, `wheel` and `doas` | SHA-512 hash | cloud-init CD-ROM |
 | FreeBSD | you, `wheel` and `sudo` | SHA-512 hash | cloud-init CD-ROM |
@@ -175,8 +175,8 @@ it. Start the lab from an account with a name the node takes.
 | Models | Limit |
 |---|---|
 | Windows Server, `devbox_windows` | at most 20 characters |
-| `cisco_nexus9300v` | at most 28 characters, and a letter or digit first |
-| `arista_veos`, `arista_ceos` | a letter or digit first (not `_`) |
+| `cisco_nexus9300` | at most 28 characters, and a letter or digit first |
+| `arista_eos` | a letter or digit first (not `_`) |
 | `paloalto_panos` | at most 31 characters |
 | `open_bsd` | at most 31 characters |
 
