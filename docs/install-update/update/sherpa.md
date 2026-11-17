@@ -231,7 +231,7 @@ the old flags.
 
 ### Node models renamed, and nodes take a kind
 
-Thirteen node models are renamed, and some are merged into one model that takes several kinds.
+Nineteen node model names are renamed, and some are merged into one model that takes several kinds.
 There are no aliases: an old name is refused in the manifest, the CLI and the API, with a
 message that names the new model and kind:
 
@@ -245,18 +245,23 @@ Unknown node model 'arista_ceos': it was renamed in 0.7.0. Use model = "arista_e
 | `arista_ceos` | `arista_eos` | `container` |
 | `cisco_asav` | `cisco_asa` | `virtual_machine` |
 | `cisco_ftdv` | `cisco_ftd` | `virtual_machine` |
-| `cisco_iosxrv9000` | `cisco_iosxr` | `virtual_machine` |
+| `cisco_iosxrv9000` | `cisco_iosxr9000` | `virtual_machine` |
+| `cisco_iosv` | `cisco_ios` | `virtual_machine` |
+| `cisco_iosvl2` | `cisco_iosl2` | `virtual_machine` |
+| `cisco_csr1000v` | `cisco_csr1000` | `virtual_machine` |
+| `cisco_cat8000v` | `cisco_cat8000` | `virtual_machine` |
+| `cisco_cat9000v` | `cisco_cat9000` | `virtual_machine` |
+| `cisco_nexus9300v` | `cisco_nexus9300` | `virtual_machine` |
 | `juniper_vrouter` | `juniper_router` | `virtual_machine` |
 | `juniper_vswitch` | `juniper_switch` | `virtual_machine` |
 | `juniper_vevolved` | `juniper_evolved` | `virtual_machine` (the default) |
 | `juniper_cevolved` | `juniper_evolved` | `container` |
-| `juniper_vsrxv3` | `juniper_srx` | `virtual_machine` |
+| `juniper_vsrxv3` | `juniper_srxv3` | `virtual_machine` |
 | `generic_vm` | `generic` | `virtual_machine` |
 | `generic_container` | `generic` | `container` |
 | `generic_unikernel` | `generic` | `unikernel` |
 
-Every other model keeps its name, `cisco_iosv`, `cisco_csr1000v` and `cisco_nexus9300v`
-included.
+Every model name loses its "v" or "c"; the models whose names had none keep them.
 
 `arista_eos` and `juniper_evolved` take two kinds; a node that sets no
 [`kind`](../../manifest.md#kind-string) is the virtual machine. `generic` takes all three and

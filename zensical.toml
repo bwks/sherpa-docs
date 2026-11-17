@@ -66,17 +66,17 @@ nav = [
     { "Cisco" = [
       "nodes/cisco/general.md",
       "nodes/cisco/cisco-asa.md",
-      "nodes/cisco/cisco-cat8000v.md",
-      "nodes/cisco/cisco-cat9000v.md",
-      "nodes/cisco/cisco-csr1000v.md",
+      "nodes/cisco/cisco-cat8000.md",
+      "nodes/cisco/cisco-cat9000.md",
+      "nodes/cisco/cisco-csr1000.md",
       "nodes/cisco/cisco-ftd.md",
       "nodes/cisco/cisco-iol.md",
       "nodes/cisco/cisco-ioll2.md",
-      "nodes/cisco/cisco-iosv.md",
-      "nodes/cisco/cisco-iosvl2.md",
-      "nodes/cisco/cisco-iosxr.md",
+      "nodes/cisco/cisco-ios.md",
+      "nodes/cisco/cisco-iosl2.md",
+      "nodes/cisco/cisco-iosxr9000.md",
       "nodes/cisco/cisco-ise.md",
-      "nodes/cisco/cisco-nexus9300v.md",
+      "nodes/cisco/cisco-nexus9300.md",
     ] },
     { "Cumulus" = [
       "nodes/cumulus/cumulus-linux.md",
@@ -104,7 +104,7 @@ nav = [
     { "Juniper" = [
       "nodes/juniper/juniper-evolved.md",
       "nodes/juniper/juniper-router.md",
-      "nodes/juniper/juniper-srx.md",
+      "nodes/juniper/juniper-srxv3.md",
       "nodes/juniper/juniper-switch.md",
     ] },
     { "Linux" = [
@@ -232,10 +232,16 @@ search = {}
 "nodes/arista/arista-ceos.md" = "nodes/arista/arista-eos.md#container-ceos-lab"
 "nodes/cisco/cisco-asav.md" = "nodes/cisco/cisco-asa.md"
 "nodes/cisco/cisco-ftdv.md" = "nodes/cisco/cisco-ftd.md"
-"nodes/cisco/cisco-iosxrv9000.md" = "nodes/cisco/cisco-iosxr.md"
+"nodes/cisco/cisco-iosxrv9000.md" = "nodes/cisco/cisco-iosxr9000.md"
+"nodes/cisco/cisco-iosv.md" = "nodes/cisco/cisco-ios.md"
+"nodes/cisco/cisco-iosvl2.md" = "nodes/cisco/cisco-iosl2.md"
+"nodes/cisco/cisco-csr1000v.md" = "nodes/cisco/cisco-csr1000.md"
+"nodes/cisco/cisco-cat8000v.md" = "nodes/cisco/cisco-cat8000.md"
+"nodes/cisco/cisco-cat9000v.md" = "nodes/cisco/cisco-cat9000.md"
+"nodes/cisco/cisco-nexus9300v.md" = "nodes/cisco/cisco-nexus9300.md"
 "nodes/juniper/juniper-vrouter.md" = "nodes/juniper/juniper-router.md"
 "nodes/juniper/juniper-vswitch.md" = "nodes/juniper/juniper-switch.md"
-"nodes/juniper/juniper-vsrxv3.md" = "nodes/juniper/juniper-srx.md"
+"nodes/juniper/juniper-vsrxv3.md" = "nodes/juniper/juniper-srxv3.md"
 "nodes/juniper/juniper-vevolved.md" = "nodes/juniper/juniper-evolved.md"
 "nodes/juniper/juniper-cevolved.md" = "nodes/juniper/juniper-evolved.md#container-cjunosevolved"
 "nodes/generic/virtual-machine.md" = "nodes/generic/generic.md#virtual-machine"

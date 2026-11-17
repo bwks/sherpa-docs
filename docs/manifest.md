@@ -65,7 +65,7 @@ see [`kind`](#kind-string).
 model = "sonic_linux"
 ```
 
-Thirteen models were renamed in Sherpa 0.7.0, such as `arista_ceos` to `arista_eos` with
+Nineteen model names were renamed in Sherpa 0.7.0, such as `arista_ceos` to `arista_eos` with
 `kind = "container"`. An old name is refused with a message naming the new model and kind; the
 full table is in
 [Updating to 0.7.0](install-update/update/sherpa.md#node-models-renamed-and-nodes-take-a-kind).

@@ -10,7 +10,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
   --version 10.5.3.F \
-  --model cisco_nexus9300v \
+  --model cisco_nexus9300 \
   --default
 ```
 
@@ -33,11 +33,11 @@ sherpa server image import \
 ## Example Manifest
 
 ```toml
-name = "cisco-nexus9300v"
+name = "cisco-nexus9300"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_nexus9300v"
+model = "cisco_nexus9300"
 ```
 
 

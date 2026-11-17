@@ -1,4 +1,4 @@
-# Cisco IOSvL2
+# Cisco IOSv
 
 ## Base Image
 
@@ -9,14 +9,14 @@ See the [general notes](general.md) for information on obtaining a base image.
 ```
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
-  --version 20200929 \
-  --model cisco_iosvl2 \
+  --version 159-3.m10 \
+  --model cisco_ios \
   --default
 ```
 
 ## ZTP Disk
 
-IOSvL2 reads its config from a disk formatted in a particular way. Each node gets a copy of
+IOSv reads its config from a disk formatted in a particular way. Each node gets a copy of
 `/opt/sherpa/images/blank_disk/iosv.img`, which the install and update scripts create (see
 [Blank Disks](../../install-update/install/automated.md#blank-disks)). If it is missing, run the
 [update script](../../install-update/update/sherpa.md) again: it creates the missing blank disks
@@ -27,25 +27,25 @@ and changes none that are there.
 | Property             | Value           |
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
-| Tested Version       | 20200929        |
+| Tested Version       | 159-3.m10       |
 | CPU                  | 1               |
-| RAM                  | 1GB             |
+| RAM                  | 768MB           |
 | CDROM Driver         | virtio          |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP                  | `disk`          |
 | Management Interface | GigabitEthernet0/0 |
-| Data Interfaces      | gig0/1-3, gig1/0-3, gig2/0-3, gig3/0-3 |
+| Data Interfaces      | gig0/0-15       |
 | Interface Driver     | e1000           |
 
 ## Example Manifest
 
 ```toml
-name = "cisco-iosvl2"
+name = "cisco-iosv"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_iosvl2"
+model = "cisco_ios"
 ```
 
 

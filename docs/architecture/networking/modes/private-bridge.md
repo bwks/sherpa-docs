@@ -21,11 +21,11 @@ name = "betty-bridges"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_cat8000v"
+model = "cisco_cat8000"
 
 [[nodes]]
 name = "dev02"
-model = "cisco_cat8000v"
+model = "cisco_cat8000"
 
 [[nodes]]
 name = "dev03"

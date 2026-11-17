@@ -69,13 +69,13 @@ Aruba AOS-CX is the exception: you log in by key only, and `admin` is locked (se
 
 | Models | Admin rights | Key types | Keys used |
 |---|---|---|---|
-| `cisco_iosv`, `cisco_iosvl2`, `cisco_iol`, `cisco_ioll2`, `cisco_csr1000v`, `cisco_cat8000v`, `cisco_cat9000v` | privilege 15 | RSA | first 2 |
-| `cisco_iosxr` | `root-lr` and `netadmin` groups | RSA | first 4 |
+| `cisco_ios`, `cisco_iosl2`, `cisco_iol`, `cisco_ioll2`, `cisco_csr1000`, `cisco_cat8000`, `cisco_cat9000` | privilege 15 | RSA | first 2 |
+| `cisco_iosxr9000` | `root-lr` and `netadmin` groups | RSA | first 4 |
 | `cisco_asa` | privilege 15 | Ed25519, ECDSA, RSA | first 1 |
-| `cisco_nexus9300v` | `network-admin` | ECDSA, RSA | first 1 |
+| `cisco_nexus9300` | `network-admin` | ECDSA, RSA | first 1 |
 | `arista_eos` | privilege 15 | Ed25519, ECDSA, RSA | first 2 |
 | `aruba_aoscx` | `administrators` | Ed25519, ECDSA, RSA | first 32 |
-| `juniper_router`, `juniper_switch`, `juniper_srx`, `juniper_evolved` | `super-user` | Ed25519, ECDSA, RSA | all |
+| `juniper_router`, `juniper_switch`, `juniper_srxv3`, `juniper_evolved` | `super-user` | Ed25519, ECDSA, RSA | all |
 | `nokia_srlinux` | superuser role | Ed25519, ECDSA, RSA | first 32 |
 | `paloalto_panos` | superuser | Ed25519, RSA | first 1 |
 | `mikrotik_chr` | `full` group | Ed25519, RSA | all |
@@ -175,7 +175,7 @@ it. Start the lab from an account with a name the node takes.
 | Models | Limit |
 |---|---|
 | Windows Server, `devbox_windows` | at most 20 characters |
-| `cisco_nexus9300v` | at most 28 characters, and a letter or digit first |
+| `cisco_nexus9300` | at most 28 characters, and a letter or digit first |
 | `arista_eos` | a letter or digit first (not `_`) |
 | `paloalto_panos` | at most 31 characters |
 | `open_bsd` | at most 31 characters |

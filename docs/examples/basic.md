@@ -6,7 +6,7 @@ The smallest useful lab: two network devices joined by a single point-to-point l
 
 | Node    | Model                                            | Kind            |
 | ------- | ------------------------------------------------ | --------------- |
-| `dev01` | [Cisco IOSv](../nodes/cisco/cisco-iosv.md)       | Virtual machine |
+| `dev01` | [Cisco IOSv](../nodes/cisco/cisco-ios.md)       | Virtual machine |
 | `dev02` | [Nokia SR Linux](../nodes/nokia/nokia-srlinux.md) | Container       |
 
 | Link | `dev01` interface | `dev02` interface |
@@ -27,7 +27,7 @@ name = "sherpa-basic"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_iosv"
+model = "cisco_ios"
 
 [[nodes]]
 name = "dev02"

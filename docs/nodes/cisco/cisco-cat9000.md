@@ -14,7 +14,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
   --version 17.15.03 \
-  --model cisco_cat9000v \
+  --model cisco_cat9000 \
   --default
 ```
 
@@ -37,11 +37,11 @@ sherpa server image import \
 ## Example Manifest
 
 ```toml
-name = "cisco-cat8000v"
+name = "cisco-cat9000"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_cat9000v"
+model = "cisco_cat9000"
 ```
 
 

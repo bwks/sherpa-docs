@@ -1,4 +1,4 @@
-# Cisco CAT8000v
+# Cisco CSR1000v
 
 ## Base Image
 
@@ -9,8 +9,8 @@ See the [general notes](general.md) for information on obtaining a base image.
 ```
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
-  --version 17.16.01a \
-  --model cisco_cat8000v \
+  --version 17.03.08a \
+  --model cisco_csr1000 \
   --default
 ```
 
@@ -19,25 +19,25 @@ sherpa server image import \
 | Property             | Value           |
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
-| Tested Version       | 17.16.01a       |
+| Tested Version       | 17.03.08a       |
 | CPU                  | 1               |
-| RAM                  | 4GB             |
+| RAM                  | 3GB             |
 | CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP                  | `cdrom`         |
 | Management Interface | GigabitEthernet1 |
 | Data Interfaces      | gig2-16         |
-| Interface Driver     | virtio          |
+| Interface Driver     | vmxnet3         |
 
 ## Example Manifest
 
 ```toml
-name = "cisco-cat8000v"
+name = "cisco-csr1000"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_cat8000v"
+model = "cisco_csr1000"
 ```
 
 
@@ -57,4 +57,4 @@ model = "cisco_cat8000v"
 
 ## Notes
 
-- Approximate time for the system to be ready: `4 minutes`
+- Approximate time for the system to be ready: `3 minutes`
