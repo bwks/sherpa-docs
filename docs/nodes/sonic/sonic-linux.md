@@ -32,7 +32,7 @@ sherpa server image import \
 | DISK Driver          | virtio          |
 | ZTP                  | `http`          |
 | Management Interface | eth0            |
-| Data Interfaces      | eth1-52         |
+| Data Interfaces      | eth1-32         |
 | Interface Driver     | virtio          |
 
 ## Example Manifest
@@ -59,6 +59,14 @@ model = "sonic_linux"
     ```
     sherpa console <node-name>
     ```
+
+## Front-panel Ports
+
+The VM has 32 front-panel ports, `Ethernet0` to `Ethernet124`. Data interface `ethN` is port
+`Ethernet(4 × (N − 1))`: `eth1` is `Ethernet0`, `eth2` is `Ethernet4` and `eth32` is `Ethernet124`.
+
+Sherpa's ZTP brings all 32 ports up administratively (`admin_status` up), linked or not, and
+saves the result to `/etc/sonic/config_db.json`, so the ports stay up after a reboot.
 
 ## Notes
 

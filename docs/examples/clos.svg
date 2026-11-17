@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 324" width="640" height="324" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <title id="title">CLOS example topology</title>
-  <desc id="desc">Two SONiC spine VMs, spine01 and spine02, each connect to all four SONiC leaf VMs, leaf01 to leaf04. Each leaf uses eth51 towards spine01 and eth52 towards spine02.</desc>
+  <desc id="desc">Two SONiC spine VMs, spine01 and spine02, each connect to all four SONiC leaf VMs, leaf01 to leaf04. Each leaf uses eth31 towards spine01 and eth32 towards spine02.</desc>
   <style>
     svg {
       --bg: #fdffff;

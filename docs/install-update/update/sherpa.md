@@ -117,6 +117,18 @@ image pages and editor, and the [image API](../../api-reference.md#node-images) 
 them. Update the CLI and the server to 0.7.0 together: a CLI and a server on different sides of
 this change cannot read each other's image details.
 
+### SONiC has 32 data interfaces
+
+A `sonic_linux` node now has 32 data interfaces, `eth1` to `eth32`, one for each front-panel
+port of the SONiC VM; it had 52. The update sets every `sonic_linux` image still at 52 to 32. An
+image set to another count keeps it.
+
+- **Manifests:** a link on `eth33` to `eth52` of a SONiC node is refused at `sherpa up`. Move it
+  to an interface from `eth1` to `eth32`. Those interfaces never reached a switch port.
+- **Running labs** keep their nodes' 52 interfaces until a node is redeployed.
+
+See [SONiC](../../nodes/sonic/sonic-linux.md#front-panel-ports).
+
 ## Updating to 0.6.4 and 0.6.5
 
 Updating from 0.6.3 or earlier, the first time `sherpad` starts after the update it records each existing lab's definition from
