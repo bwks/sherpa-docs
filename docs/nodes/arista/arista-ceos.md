@@ -20,7 +20,7 @@ the local container images:
 
 ```
 docker image import cEOS64-lab-4.35.1F.tar.xz localrepo/arista_ceos:4.35.1F
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 !!! warning

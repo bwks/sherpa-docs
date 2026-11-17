@@ -22,7 +22,7 @@ a version, with that repo:
 
 ```
 docker pull postgres:17
-sherpa server image scan --container --model postgresql_db --repo postgres
+sherpa server image scan --kind container --model postgresql_db --repo postgres
 ```
 
 ## Default Node Parameters

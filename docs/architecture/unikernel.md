@@ -70,7 +70,7 @@ sherpa server image import \
   --model <model_name>
 ```
 
-Use the `--unikernel` flag with `sherpa server image list` or `sherpa server image scan` to filter for unikernel images. To build an image, see the [Unikraft](../nodes/unikernel/unikraft.md#building-an-image) and [Nanos](../nodes/unikernel/nanos.md#building-an-image) pages.
+Use `--kind unikernel` with `sherpa server image list` or `sherpa server image scan` to filter for unikernel images. To build an image, see the [Unikraft](../nodes/unikernel/unikraft.md#building-an-image) and [Nanos](../nodes/unikernel/nanos.md#building-an-image) pages.
 
 ## Networking
 

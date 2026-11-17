@@ -20,7 +20,7 @@ version:
 
 ```
 docker pull surrealdb/surrealdb:v2.2
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 ## Default Node Parameters

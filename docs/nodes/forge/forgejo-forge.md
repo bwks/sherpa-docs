@@ -20,7 +20,7 @@ scan records each local tag of `codeberg.org/forgejo/forgejo` as a version:
 
 ```
 docker pull codeberg.org/forgejo/forgejo:<tag>
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 ## Default Node Parameters

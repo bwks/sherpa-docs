@@ -22,7 +22,7 @@ version:
 
 ```
 docker pull hashicorp/vault:1.21
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 ## Default Node Parameters

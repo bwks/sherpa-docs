@@ -49,7 +49,7 @@ adds a small program that connects the container's interfaces to IOL.
 Register the images built on the Sherpa server by scanning the local container images:
 
 ```
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 Built on another machine, save the image and import the archive:

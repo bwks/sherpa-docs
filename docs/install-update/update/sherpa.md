@@ -138,6 +138,24 @@ image set to another count keeps it.
 
 See [SONiC](../../nodes/sonic/sonic-linux.md#front-panel-ports).
 
+### Image commands take `--kind`
+
+The image commands name a kind with `--kind <kind>`, `virtual_machine`, `container` or
+`unikernel`, the values a manifest node's [`kind`](../../manifest.md#kind-string) takes.
+`--virtual-machine`, `--container` and `--unikernel` are gone, and are refused as unknown
+arguments.
+
+| Before | 0.7.0 |
+|---|---|
+| `sherpa server image scan --container` | `sherpa server image scan --kind container` |
+| `sherpa server image scan --container --model mysql_db --repo mysql` | `sherpa server image scan --kind container --model mysql_db --repo mysql` |
+| `sherpa image list --unikernel` | `sherpa image list --kind unikernel` |
+| `sherpa server image list --virtual-machine` | `sherpa server image list --kind virtual_machine` |
+
+`show`, `import`, `pull`, `delete` and `set-default` take `--kind` too. Without it they use the
+model's default kind, which is the only kind every model has, so a command without a kind flag
+works as before. Update scripts that pass the old flags.
+
 ## Updating to 0.6.4 and 0.6.5
 
 Updating from 0.6.3 or earlier, the first time `sherpad` starts after the update it records each existing lab's definition from

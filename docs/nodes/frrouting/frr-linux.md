@@ -21,7 +21,7 @@ version:
 
 ```
 docker pull quay.io/frrouting/frr:10.5.2
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 ## Default Node Parameters

@@ -20,7 +20,7 @@ scan records each local tag of `nats` as a version:
 
 ```
 docker pull nats:2.11
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 ## Default Node Parameters

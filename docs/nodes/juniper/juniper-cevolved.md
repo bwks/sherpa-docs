@@ -17,7 +17,7 @@ Sherpa by scanning the local container images:
 ```
 docker load -i cJunosEvolved-26.2R1.7-EVO.tar.gz
 docker tag cjunosevolved:26.2R1.7-EVO localrepo/juniper_cevolved:26.2R1.7
-sherpa server image scan --container
+sherpa server image scan --kind container
 ```
 
 !!! warning
