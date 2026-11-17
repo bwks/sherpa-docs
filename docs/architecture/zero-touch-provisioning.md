@@ -62,12 +62,12 @@ in the web UI.
 | `usb` | [USB Disk](#usb-disk) | Cumulus Linux, Juniper vEvolved |
 | `disk` | [Config Disk](#config-disk) | Cisco IOSv, IOSvL2 and ISE, MikroTik CHR |
 | `cdrom` | [CDROM](#cdrom) | Cisco IOS XE, ASAv, Nexus, IOS XR and FTDv, Juniper vRouter, vSwitch and vSRX, Palo Alto PAN-OS |
-| `tftp` | [TFTP](#tftp) | Arista vEOS, Aruba AOS-CX, Juniper vEvolved and vSRX |
+| `tftp` | [TFTP](#tftp) | Arista vEOS, Aruba AOS-CX, Juniper vEvolved |
 | `http` | [HTTP](#http) | SONiC |
 | `volume` | [Container Volumes](#container-volumes) | Arista cEOS, Nokia SR Linux, Juniper cEvolved, Cisco IOL, FRR |
 
-A model takes only the methods listed against it, and most take one. Juniper vSRX takes `cdrom`
-or `tftp`, and Juniper vEvolved `tftp` or `usb`. Application containers and unikernels take
+A model takes only the methods listed against it, and all but one take one: Juniper vEvolved
+takes `tftp` or `usb`. Application containers and unikernels take
 only `disabled`. Sherpa refuses any other setting when the image is saved, when a manifest is
 validated, and before `sherpa up` or `sherpa redeploy` changes anything.
 

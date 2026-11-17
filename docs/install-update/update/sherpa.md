@@ -234,6 +234,22 @@ image set to another count keeps it.
 
 See [SONiC](../../nodes/sonic/sonic-linux.md#front-panel-ports).
 
+### vSRX takes its config from CD-ROM only
+
+A `juniper_srxv3` node takes its configuration from a CD-ROM only. `cdrom` was already its
+default; `tftp`, which stalled the node without a config, is no longer allowed.
+
+- **Images:** the update sets every `juniper_srxv3` image on `tftp` to `cdrom`. An image set to
+  `disabled` keeps it.
+- **Manifests:** a vSRX node that sets `ztp = { method = "tftp" }` is refused by
+  `sherpa validate`, `sherpa up` and `sherpa redeploy`, with the methods it allows,
+  `disabled, cdrom`. Remove the setting, or set `cdrom`.
+- **Running labs:** a vSRX built on TFTP keeps running, and `sherpa resume` starts it as it was.
+  `sherpa redeploy` with the manifest still on `tftp` is refused before the node is touched; fix
+  the manifest and redeploy it, and it is rebuilt from a CD-ROM.
+
+See [Juniper vSRX v3](../../nodes/juniper/juniper-srxv3.md).
+
 ### Image commands take `--kind`
 
 The image commands name a kind with `--kind <kind>`, `virtual_machine`, `container` or
