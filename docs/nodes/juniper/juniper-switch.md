@@ -1,20 +1,16 @@
-# Juniper vSRX v3
+# Juniper vSwitch
 
 ## Base Image
 
-Base images can be downloaded from the [download](https://support.juniper.net/support/downloads/?p=vsrxeval) page.
-
-!!! Note
-
-    An account is required to download the image.
+Base images can be downloaded from the [download](https://support.juniper.net/support/downloads/?p=vjunos) page.
 
 ## Import Image
 
 ```
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
-  --version 23.2R2.21 \
-  --model juniper_vsrxv3 \
+  --version 25.2R1.9 \
+  --model juniper_switch \
   --default
 ```
 
@@ -23,31 +19,25 @@ sherpa server image import \
 | Property             | Value           |
 | -------------------- | --------------- |
 | Kind                 | Virtual Machine |
-| Tested Version       | 23.2R2.21       |
-| CPU                  | 2               |
-| RAM                  | 4GB             |
-| CDROM Driver         | IDE             |
+| Tested Version       | 25.2R1.9        |
+| CPU                  | 4               |
+| RAM                  | 5GB             |
+| CDROM Driver         | SATA            |
 | DISK                 | virtioa.qcow2   |
 | DISK Driver          | virtio          |
 | ZTP                  | `cdrom`         |
 | Management Interface | fxp0            |
-| Data Interfaces      | ge-0/0/0-7      |
+| Data Interfaces      | ge-0/0/0-9      |
 | Interface Driver     | virtio          |
-
-!!! note
-
-    vSRX reads its startup config from a CD-ROM. Its factory config runs no DHCP client, so the
-    TFTP method that older Sherpa releases used left it without a config. Upgrading the server to
-    Sherpa 0.5.8 moves existing vSRX images to the CD-ROM method.
 
 ## Example Manifest
 
 ```toml
-name = "juniper-vsrxv3"
+name = "juniper-switch"
 
 [[nodes]]
 name = "dev01"
-model = "juniper_vsrxv3"
+model = "juniper_switch"
 ```
 
 ## ZTP

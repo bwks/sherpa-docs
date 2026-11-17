@@ -88,7 +88,7 @@ method = "disabled"
 
 [[nodes]]
 name = "dev02"
-model = "juniper_vsrxv3"
+model = "juniper_srx"
 
 [nodes.ztp]
 method = "tftp"

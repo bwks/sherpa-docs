@@ -28,7 +28,7 @@ docs/
 ```
 
 Navigation is defined in the `nav` array of `zensical.toml`. Update it when adding new pages.
-Each entry is a page path (`"nodes/cisco/cisco-asav.md"`), a titled page (`{ "Manifest" = "manifest.md" }`) or a section (`{ "Cisco" = [ ... ] }`).
+Each entry is a page path (`"nodes/cisco/cisco-asa.md"`), a titled page (`{ "Manifest" = "manifest.md" }`) or a section (`{ "Cisco" = [ ... ] }`).
 
 ## Node Documentation Template
 
@@ -84,6 +84,12 @@ model = "<model_name>"
 - Approximate time for the system to be ready: `X minutes`
 ```
 
+### Models with several kinds
+
+A model that takes several kinds (`arista_eos`, `juniper_evolved`, `generic`) has one page, with
+an H2 section per kind, each holding its own import, parameters, example manifest and access.
+An example of a kind other than the model's default sets `kind`; every `generic` example sets it.
+
 ### Container Nodes
 
 Container nodes differ slightly:
@@ -91,7 +97,7 @@ Container nodes differ slightly:
 - Mention Docker CLI as an alternative import method
 - Parameters table uses `Container` for Kind, includes `macvlan` interface driver
 - No CDROM/DISK fields in the parameters table
-- ZTP is `volume` for the containers whose config Sherpa mounts (`arista_ceos`, `nokia_srlinux`, `juniper_cevolved`, `frr_linux`) and `disabled` for every other container
+- ZTP is `volume` for the containers whose config Sherpa mounts (`arista_eos` and `juniper_evolved` containers, `nokia_srlinux`, `frr_linux`) and `disabled` for every other container
 - Example manifest includes `version` field in the node definition
 
 ## Writing Style
@@ -103,8 +109,8 @@ Container nodes differ slightly:
 - Use admonitions (`!!! info`, `!!! warning`, `!!! danger`) sparingly for important callouts
 - Tables for specifications and parameter lists
 - Cross-reference other docs with relative markdown links: `[text](relative/path.md)`
-- Model names use underscores: `cisco_asav`, `ubuntu_linux`, `mysql`
-- Lab names in manifests use hyphens: `cisco-asav`, `ubuntu-linux`
+- Model names use underscores: `cisco_asa`, `ubuntu_linux`, `mysql`
+- Lab names in manifests use hyphens: `cisco-asa`, `ubuntu-linux`
 
 ## Key Rules
 

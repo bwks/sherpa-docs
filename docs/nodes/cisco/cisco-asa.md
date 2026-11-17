@@ -10,7 +10,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
   --version 9-23-1 \
-  --model cisco_asav \
+  --model cisco_asa \
   --default
 ```
 
@@ -33,11 +33,11 @@ sherpa server image import \
 ## Example Manifest
 
 ```toml
-name = "cisco-asav"
+name = "cisco-asa"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_asav"
+model = "cisco_asa"
 ```
 
 

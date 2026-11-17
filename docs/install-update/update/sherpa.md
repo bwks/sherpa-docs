@@ -225,8 +225,85 @@ arguments.
 | `sherpa server image list --virtual-machine` | `sherpa server image list --kind virtual_machine` |
 
 `show`, `import`, `pull`, `delete` and `set-default` take `--kind` too. Without it they use the
-model's default kind, which is the only kind every model has, so a command without a kind flag
-works as before. Update scripts that pass the old flags.
+model's default kind. For a model with one kind a command without a kind flag works as before;
+the models that take several kinds are described in the next section. Update scripts that pass
+the old flags.
+
+### Node models renamed, and nodes take a kind
+
+Thirteen node models are renamed, and some are merged into one model that takes several kinds.
+There are no aliases: an old name is refused in the manifest, the CLI and the API, with a
+message that names the new model and kind:
+
+```
+Unknown node model 'arista_ceos': it was renamed in 0.7.0. Use model = "arista_eos" with kind = "container".
+```
+
+| Old model | New model | Kind |
+|---|---|---|
+| `arista_veos` | `arista_eos` | `virtual_machine` (the default) |
+| `arista_ceos` | `arista_eos` | `container` |
+| `cisco_asav` | `cisco_asa` | `virtual_machine` |
+| `cisco_ftdv` | `cisco_ftd` | `virtual_machine` |
+| `cisco_iosxrv9000` | `cisco_iosxr` | `virtual_machine` |
+| `juniper_vrouter` | `juniper_router` | `virtual_machine` |
+| `juniper_vswitch` | `juniper_switch` | `virtual_machine` |
+| `juniper_vevolved` | `juniper_evolved` | `virtual_machine` (the default) |
+| `juniper_cevolved` | `juniper_evolved` | `container` |
+| `juniper_vsrxv3` | `juniper_srx` | `virtual_machine` |
+| `generic_vm` | `generic` | `virtual_machine` |
+| `generic_container` | `generic` | `container` |
+| `generic_unikernel` | `generic` | `unikernel` |
+
+Every other model keeps its name, `cisco_iosv`, `cisco_csr1000v` and `cisco_nexus9300v`
+included.
+
+`arista_eos` and `juniper_evolved` take two kinds; a node that sets no
+[`kind`](../../manifest.md#kind-string) is the virtual machine. `generic` takes all three and
+has no default: a `generic` node must set `kind`, and is refused without it. Messages that name
+a node's model name the kind too for a model with two kinds, such as
+`Node 'r1' (arista_eos, container)`.
+
+What the update does:
+
+- **Images.** The database update renames the model of every image; each image keeps its kind,
+  its settings and its default flag. Nothing is re-imported. `sherpa inspect`,
+  `sherpa server image list` and the web UI show the new names.
+- **Image folders.** At startup `sherpad` moves `/opt/sherpa/images/<old>/` to
+  `/opt/sherpa/images/<new>/`. `generic_vm/` and `generic_unikernel/` are merged into
+  `generic/`, and the `arista_ceos/`, `juniper_cevolved/` and `generic_container/` folders,
+  which hold no image files, go too. It never deletes or replaces an image file: an entry the
+  new folder already has is left in the old folder, and logged. The vEOS Aboot ISO moves with
+  its folder, to `/opt/sherpa/images/arista_eos/aboot_iso/aboot.iso`.
+- **Labs.** Running labs and their stored definitions follow the renamed images, since a node
+  refers to its image.
+- **Container images.** Existing container images are not retagged. Their images keep the repo
+  they were imported or pulled as, such as `localrepo/arista_ceos:4.35.1F`, so existing labs
+  and images keep working.
+
+A virtual machine node built before the update has a disk that names its base image by the old
+folder. While any such disk exists, `sherpad` leaves the old folder name as a link to the new
+folder, so stopped and running nodes keep starting. A later start of `sherpad` removes the link
+once no node needs it, after the last such node is redeployed or destroyed.
+
+What you need to do:
+
+- **Edit your manifests.** `sherpa validate`, `sherpa up`, `sherpa resume` and `sherpa redeploy`
+  read your manifest, and refuse one that names an old model; edit every manifest to the new model and,
+  for the merged containers and every `generic` node, its `kind`. A redeploy from the web UI
+  rebuilds the node from the stored definition and works without editing.
+- **Add `--kind container` to image commands for cEOS and cJunosEvolved.** Every image command,
+  `import`, `pull`, `show`, `delete`, `set-default` and `scan --model`, means the virtual machine
+  of `arista_eos` and `juniper_evolved` unless it sets `--kind container`. Image commands for
+  `generic` need `--kind` always.
+- **Tag new cEOS and cJunosEvolved images with the new repo.** The built-in repos are now
+  `localrepo/arista_eos` and `localrepo/juniper_evolved`. `sherpa server image scan --kind container`
+  no longer finds new tags under `localrepo/arista_ceos` or `localrepo/juniper_cevolved`. See
+  [Arista EOS](../../nodes/arista/arista-eos.md#container-ceos-lab) and
+  [Juniper Junos OS Evolved](../../nodes/juniper/juniper-evolved.md#container-cjunosevolved).
+- **Update scripts that call the image API.** Image paths carry the kind, such as
+  `GET /api/v1/images/{model}/{kind}`; see [Node images](../../api-reference.md#node-images).
+- **Update the CLI and the server together.** The model names and the API paths changed.
 
 ## Updating to 0.6.4 and 0.6.5
 

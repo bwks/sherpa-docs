@@ -29,7 +29,8 @@ model = "cisco_cat8000v"
 
 [[nodes]]
 name = "dev03"
-model = "arista_ceos"
+model = "arista_eos"
+kind = "container"
 
 [[bridges]]
 name = "private"

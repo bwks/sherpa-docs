@@ -10,7 +10,7 @@ See the [general notes](general.md) for information on obtaining a base image.
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
   --version 25.1.1 \
-  --model cisco_iosxrv9000 \
+  --model cisco_iosxr \
   --default
 ```
 
@@ -33,11 +33,11 @@ sherpa server image import \
 ## Example Manifest
 
 ```toml
-name = "cisco-iosxrv9000"
+name = "cisco-iosxr"
 
 [[nodes]]
 name = "dev01"
-model = "cisco_iosxrv9000"
+model = "cisco_iosxr"
 ```
 
 

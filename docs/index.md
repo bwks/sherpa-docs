@@ -15,11 +15,13 @@ name = "my-lab"
 
 [[nodes]]
 name = "spine01"
-model = "arista_ceos"
+model = "arista_eos"
+kind = "container"
 
 [[nodes]]
 name = "spine02"
-model = "arista_ceos"
+model = "arista_eos"
+kind = "container"
 
 [[nodes]]
 name = "leaf01"

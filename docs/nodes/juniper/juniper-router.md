@@ -1,8 +1,8 @@
-# Juniper vSwitch
+# Juniper vRouter
 
 ## Base Image
 
-Base images can be downloaded from the [download](https://support.juniper.net/support/downloads/?p=vjunos) page.
+Base images can be downloaded from the [download](https://support.juniper.net/support/downloads/?p=vjunos-router) page.
 
 ## Import Image
 
@@ -10,7 +10,7 @@ Base images can be downloaded from the [download](https://support.juniper.net/su
 sherpa server image import \
   --src /some/path/<image_name>.qcow2 \
   --version 25.2R1.9 \
-  --model juniper_vswitch \
+  --model juniper_router \
   --default
 ```
 
@@ -33,11 +33,11 @@ sherpa server image import \
 ## Example Manifest
 
 ```toml
-name = "juniper-vswitch"
+name = "juniper-router"
 
 [[nodes]]
 name = "dev01"
-model = "juniper_vswitch"
+model = "juniper_router"
 ```
 
 ## ZTP
