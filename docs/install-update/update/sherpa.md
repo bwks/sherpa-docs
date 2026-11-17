@@ -90,7 +90,7 @@ so `sherpa down` powers their nodes off, `sherpa redeploy` refuses their workers
 ### Your login on nodes
 
 0.7.0 gives every node Sherpa builds one login, yours. The shared `sherpa` account and its
-published password, `Everest1953!`, are gone from new nodes. See
+published password are gone from new nodes. See
 [Your Login on Nodes](../../architecture/personal-accounts.md).
 
 - **Set a device password before the next `sherpa up` or `sherpa redeploy`.** Both refuse to
@@ -128,6 +128,28 @@ published password, `Everest1953!`, are gone from new nodes. See
 - **Update the CLI and the server together.** A 0.7.0 CLI and an older server, or the other way
   round, disagree on the manifest and on what a response carries.
 
+### Keycloak and SurrealDB have their own administrators
+
+New and redeployed `keycloak_server` and `surreal_db` nodes no longer start with the `sherpa`
+administrator and its published password. Each node gets its own: Keycloak's `master` realm admin
+is `admin`, and SurrealDB's root user is `root`, each with a random password generated when the
+node is created and kept when it is redeployed. The Keycloak `sherpa` realm no longer has a
+`sherpa` user; you are its only user.
+
+- **Find them in the lab folder.** `sherpa up` and `sherpa download` write Keycloak's admin into
+  `.sherpa/keycloak/keycloak-<node>.toml`, beside the realm's users, and SurrealDB's root user
+  into `.sherpa/surrealdb/surrealdb-<node>.toml`. Only the lab's owner can download them. See
+  [Keycloak](../../nodes/keycloak/keycloak-server.md#node-access) and
+  [SurrealDB](../../nodes/sql/surrealdb.md#root-user).
+- **Existing nodes keep the old password until redeployed.** Keycloak and SurrealDB nodes built
+  before 0.7.0 keep the `sherpa` administrator and its published password. Run
+  `sherpa redeploy -n <node>` to give each its own, then `sherpa download --force` for the files.
+  The redeploy empties the node, as it always has: Keycloak makes the `sherpa` realm again with
+  your user and its password, and SurrealDB starts with an empty database.
+- **Scripts that log in as `sherpa` must read the file.** Anything that logged in to Keycloak or
+  SurrealDB as `sherpa` with the published password must read the new user and password from the
+  lab folder.
+
 ### Aruba AOS-CX: key login only
 
 New and redeployed AOS-CX nodes take no password. Their configuration, served over TFTP, has
@@ -153,8 +175,8 @@ cancel, impair links on and destroy any lab, and clean up. They can no longer:
 
 - **Download another user's lab.** `sherpa download`, the RPC `download`, the web UI's download
   and the RPC `node.host_keys` are refused with `Only the owner of lab '<id>' can perform this
-  operation`. The files hold the SSH config, `known_hosts`, the Talos, Vault and Keycloak
-  credentials and the lab CA. The web lab page shows the download link to the owner only.
+  operation`. The files hold the SSH config, `known_hosts`, the Talos, Vault, Keycloak and
+  SurrealDB credentials and the lab CA. The web lab page shows the download link to the owner only.
 - **Connect to its nodes.** `sherpa ssh`, `sherpa console` and `sherpa provision` stop with
   `Only the owner of lab '<id>' can connect to its nodes` in a folder whose
   `.sherpa/lab-info.toml` names another user's lab.
@@ -186,8 +208,10 @@ each admin action on another user's lab as a warning (`auth.admin_lab_access`) a
 A Windows node (`windows_server`, `devbox_windows`) with cloud-init ZTP is now reported ready only
 once its SSH server runs with the config Sherpa gave it, after cloudbase-init has created your
 account and written your keys. Before, it was reported ready minutes before key login worked.
-`sherpa up` and `sherpa redeploy` may therefore take longer on these nodes. A Windows node with
-ZTP disabled is not affected. See [Windows Server](../../nodes/windows/windows-server.md).
+`sherpa up` and `sherpa redeploy` may therefore take longer on these nodes. The background
+scan, `sherpa resume` and a host key refresh wait for the same thing, so a node whose `sherpa up`
+stopped waiting stays starting until key login works. A Windows node with ZTP disabled, and a
+Windows node built before 0.7.0, are not affected. See [Windows Server](../../nodes/windows/windows-server.md).
 
 ### Image ZTP login settings removed
 

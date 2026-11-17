@@ -170,9 +170,10 @@ an error, as nothing bootstraps it again; the rest of the lab is kept. See
 `up` writes the [lab CA](architecture/certificates.md) to `.sherpa/ca/lab-ca.crt`; for each
 [Vault](nodes/hashicorp/hashicorp-vault.md) node Sherpa initialised, its address, root token and
 unseal key to `.sherpa/vault/vault-<node>.toml`; and for each
-[Keycloak](nodes/keycloak/keycloak-server.md) node, its `sherpa` realm's users and passwords to
-`.sherpa/keycloak/keycloak-<node>.toml`. The credential files
-are readable only by you.
+[Keycloak](nodes/keycloak/keycloak-server.md) node, its admin and its `sherpa` realm's users and
+passwords to `.sherpa/keycloak/keycloak-<node>.toml`; and for each
+[SurrealDB](nodes/sql/surrealdb.md) node, its address and root user to
+`.sherpa/surrealdb/surrealdb-<node>.toml`. The credential files are readable only by you.
 
 #### Stopping a running command
 
@@ -537,8 +538,8 @@ Download lab files into `.sherpa/` (SSH config, `lab-info.toml`, the nodes' host
 in `ssh/known_hosts`, and each cluster's `k8s/kubeconfig-<cluster>` and
 `talos/talosconfig-<cluster>`) for CLI use from a remote lab. Like `up`, it prints each Cilium
 cluster's Gateway and Hubble UI addresses, and writes `ca/lab-ca.crt`, each Vault node's
-`vault/vault-<node>.toml` and each Keycloak node's `keycloak/keycloak-<node>.toml`, all under
-`.sherpa/`.
+`vault/vault-<node>.toml`, each Keycloak node's `keycloak/keycloak-<node>.toml` and each SurrealDB
+node's `surrealdb/surrealdb-<node>.toml`, all under `.sherpa/`.
 
 It writes no `manifest.toml`: the server keeps the lab's definition, but not your manifest's
 files or secrets. Every command that reaches the lab's nodes works in the folder (`inspect`,
@@ -546,8 +547,8 @@ files or secrets. Every command that reaches the lab's nodes works in the folder
 `provision` need the lab's own manifest. See [Lab Lifecycle](#lab-lifecycle).
 
 Only the lab's owner can download a lab, admins included: the files hold the SSH config, the
-nodes' host keys, the Talos, Vault and Keycloak credentials and the lab CA, which let the holder
-log in to the nodes. Anyone else is refused with `Only the owner of lab '<id>' can perform this
+nodes' host keys, the Talos, Vault, Keycloak and SurrealDB credentials and the lab CA, which let
+the holder log in to the nodes. Anyone else is refused with `Only the owner of lab '<id>' can perform this
 operation`. No SSH key is downloaded: nodes take your own
 keys (see [SSH](architecture/ssh.md#logging-in-to-nodes)). A `.sherpa/ssh/key` that a Sherpa
 before 0.7.0 saved is left in place.

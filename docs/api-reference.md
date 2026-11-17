@@ -508,8 +508,8 @@ The built-in `admin` account cannot create, resume or redeploy labs, on any tran
 return `403 Forbidden` on REST and `AccessDenied` on WebSocket RPC. It can still inspect, stop,
 destroy and clean up any lab. Start labs from your own account, which may also be an admin. Labs also need the account to have a [device password](architecture/device-password.md).
 
-Downloads hold the SSH config, `known_hosts`, the Talos cluster credentials, the Vault and
-Keycloak credentials and the lab CA, which a lab's owner needs to log in to its nodes, so an
+Downloads hold the SSH config, `known_hosts`, the Talos cluster credentials, the Vault,
+Keycloak and SurrealDB credentials and the lab CA, which a lab's owner needs to log in to its nodes, so an
 admin is refused them with `Only the owner of lab '<id>' can perform this operation`. Likewise
 the console address and VNC port are what reaches a node without its login. Admins keep
 everything else: listing, inspect, down, resume, cancel, link impairment, destroy and clean.

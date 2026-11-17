@@ -19,12 +19,27 @@ Aruba AOS-CX takes no password: you log in by key only, and its `admin` is locke
 See [Your Login on Nodes](personal-accounts.md) for each model.
 
 A lab's credentials belong to its owner. `sherpa download` hands the lab's SSH config, host keys,
-Talos cluster credentials, Vault and Keycloak credentials and lab CA to the owner only, not to
-admins. An admin who resets a user's Sherpa password can still sign in as them; that is logged.
+Talos cluster credentials, Vault, Keycloak and SurrealDB credentials and lab CA to the owner only,
+not to admins. An admin who resets a user's Sherpa password can still sign in as them; that is logged.
 See [Overview](overview.md).
 
-Before 0.7.0 every node also had a `sherpa` account with a published password. New nodes do not.
+Before 0.7.0 every node also had a `sherpa` account with a published password, and Keycloak and
+SurrealDB nodes had it as their administrator. New nodes do not.
 See [Updating Sherpa](../install-update/update/sherpa.md) for labs built before then.
+
+## Application Administrators
+
+Some application containers have an administrator of their own. Sherpa gives each node its own,
+with a random password generated when the node is created and kept when it is redeployed:
+
+| Model | Administrator | Where to find it after `sherpa up` or `sherpa download` |
+| ----- | ------------- | ------------------------------------------------------- |
+| `keycloak_server` | `admin`, in the `master` realm | `.sherpa/keycloak/keycloak-<node>.toml` |
+| `surreal_db` | `root` | `.sherpa/surrealdb/surrealdb-<node>.toml` |
+
+The files are readable only by you. The server keeps its copy in the lab's directory, readable
+only by `sherpad`, not in its database. A password is also in its container's environment, where
+anyone in the Sherpa host's `docker` group can read it; that group is root on the host.
 
 !!! Info
 
