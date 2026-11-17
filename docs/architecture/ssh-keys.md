@@ -86,8 +86,11 @@ each device takes.
     Open the **Profile** page, paste the contents of the `.pub` file into **Add SSH Public
     Key** and save.
 
-Administrators can manage another user's keys with `--user <username>`, and can add keys when
-creating a user with `sherpa server user create --ssh-key`.
+Only you can add a key to your account, administrators included. `sherpa server user create`
+takes no keys, so a new user adds their own after their first login, and cannot start a lab
+until they have. Administrators can still list and remove another user's keys, with
+`--user <username>` or the delete button on the user's page in the web UI. The web page has no
+form to add a key for someone else.
 
 Your password on lab nodes is your [device password](device-password.md), set on the same
 **Profile** page or with `sherpa server user device-password`.

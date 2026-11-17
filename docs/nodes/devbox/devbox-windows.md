@@ -90,6 +90,10 @@ are installed for all users, as mise cannot manage them on Windows.
 - Approximate time for the system to be ready: `5 minutes`. SSH answers after about 3.5
   minutes; cloudbase-init then reboots once to apply the hostname, which can close an early
   session.
+- With cloud-init ZTP, Sherpa reports the node ready only once its SSH server runs with the
+  config Sherpa gave it, after cloudbase-init has created your account and written your keys
+  (`VersionAddendum sherpa-ready` in the SSH identification line; no credentials are sent). A
+  node with ZTP disabled is not affected.
 - `mise install` takes about 8 minutes on first run.
 - The Windows 11 Enterprise Evaluation expires 90 days after the image is built.
 - Docker, QEMU/KVM and other tools from [Devbox Linux](devbox-linux.md) that need nested

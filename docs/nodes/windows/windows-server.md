@@ -78,3 +78,8 @@ account is disabled. Check with `Get-LocalUser` in PowerShell.
 ## Notes
 
 - Approximate time for the system to be ready: `3 minutes`
+- With cloud-init ZTP, Sherpa reports the node ready only once its SSH server runs with the
+  config Sherpa gave it, which happens after cloudbase-init has created your account and written
+  your keys. Sherpa's `sshd_config` sets `VersionAddendum sherpa-ready`, and the ready check reads
+  the SSH identification line without sending credentials. A node with ZTP disabled is not
+  affected.

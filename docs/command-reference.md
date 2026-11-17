@@ -351,6 +351,10 @@ result for each node and exits with an error if any node was not provisioned.
 | ---- | ----------- |
 | `--node`, `-n` | Target a specific node (omit for all nodes with provisioners) |
 
+It stops with `Only the owner of lab '<id>' can connect to its nodes` when the folder's
+`.sherpa/lab-info.toml` names a lab owned by someone else, as in an admin's copy of another
+user's lab folder. A folder with only a manifest is always your own lab.
+
 ### `sherpa destroy`
 
 Destroy the lab and all its resources, including its Tailscale gateway and
@@ -396,6 +400,9 @@ The lab details include the manifest's **Description**, and **Client Host** and
 For Tailscale-enabled labs, refreshes gateway state, Tailscale addresses, advertised
 management routes, route approval, and warnings. This is the default command when
 no subcommand is specified.
+
+An admin inspecting another user's lab sees everything but each node's serial console address and
+VNC port: the console address is empty and the VNC port shows `-`. Only the owner sees them.
 
 #### Link states
 
@@ -483,6 +490,10 @@ sherpa ssh <name>
 - If your key has a passphrase, or the Sherpa server needs your password, you are asked for
   it, as with OpenSSH. A key loaded in your SSH agent needs no prompt. See
   [SSH](architecture/ssh.md).
+- It stops before connecting, with `Only the owner of lab '<id>' can connect to its nodes`, when
+  the folder's `.sherpa/lab-info.toml` names a lab owned by someone other than the logged-in
+  user, as in an admin's copy of another user's lab folder. A folder with only a manifest is
+  always your own lab.
 
 ### `sherpa console`
 
@@ -510,6 +521,9 @@ sherpa console <name>
   that another client may hold it.
 - If the console refuses the connection or closes, the message says so; check the node is
   running with `sherpa inspect`.
+- It stops before connecting with `Only the owner of lab '<id>' can connect to its nodes` in the
+  same case as [`sherpa ssh`](#sherpa-ssh): a folder whose `.sherpa/lab-info.toml` names another
+  user's lab. The server also gives the console address only to the lab's owner.
 - Container nodes have no serial console, and `sherpa console` refuses them before connecting.
   Use `sherpa ssh`, or `docker exec` on the server.
 - It asks the Sherpa server where the node's console is, so it needs you to be logged in, and
@@ -531,7 +545,10 @@ files or secrets. Every command that reaches the lab's nodes works in the folder
 `ssh`, `console`, `down`, `resume`, `destroy` and `link impair`); `up`, `redeploy` and
 `provision` need the lab's own manifest. See [Lab Lifecycle](#lab-lifecycle).
 
-Only the lab's owner and admins can download a lab. No SSH key is downloaded: nodes take your own
+Only the lab's owner can download a lab, admins included: the files hold the SSH config, the
+nodes' host keys, the Talos, Vault and Keycloak credentials and the lab CA, which let the holder
+log in to the nodes. Anyone else is refused with `Only the owner of lab '<id>' can perform this
+operation`. No SSH key is downloaded: nodes take your own
 keys (see [SSH](architecture/ssh.md#logging-in-to-nodes)). A `.sherpa/ssh/key` that a Sherpa
 before 0.7.0 saved is left in place.
 
@@ -705,7 +722,6 @@ sherpa server user create <username>
 | Flag | Description |
 | ---- | ----------- |
 | `--admin` | Make the user an administrator |
-| `--ssh-key` | SSH public keys (can be specified multiple times) |
 
 Usernames are also your login name on lab nodes, so they follow Linux login name rules. A
 username must:
@@ -720,6 +736,10 @@ and you can log in as either.
 
 You are asked for the new user's password twice, and it cannot be empty. It is always typed:
 `SHERPA_USER_PASSWORD` is not used, as it holds your own password for `sherpa login`.
+
+The command takes no SSH keys: each user adds their own with
+[`ssh-key add`](#sherpa-server-user-ssh-key) or on the **Profile** page, and cannot start a lab
+until they have. An admin cannot add a key to another account.
 
 Reserved names include `admin`, `root` and `sherpa`, system accounts such as `daemon` and
 `nobody`, names starting with `systemd-`, and the default users of common images and network
@@ -796,18 +816,19 @@ again replaces it.
 ### `sherpa server user ssh-key`
 
 Manage SSH public keys. You need at least one registered key to start labs; see
-[SSH Keys](architecture/ssh-keys.md). Each command acts on your own account. Admins can act on
-any user with `--user`.
+[SSH Keys](architecture/ssh-keys.md). Each command acts on your own account. Admins can list
+and remove any user's keys with `--user`, but only a user can add a key to their own account:
+`add` takes no `--user`, and the server refuses a key for any other account, admins included.
 
 ```
 sherpa server user ssh-key list [--user <username>]
-sherpa server user ssh-key add <key or .pub file> [--user <username>]
+sherpa server user ssh-key add <key or .pub file>
 sherpa server user ssh-key remove <key, .pub file or SHA256 fingerprint> [--user <username>]
 ```
 
 | Flag | Description |
 | ---- | ----------- |
-| `--user` | User whose keys to manage (defaults to the logged-in user) |
+| `--user` | `list` and `remove` only: user whose keys to manage (defaults to the logged-in user) |
 
 `list` shows each key's type, `SHA256:` fingerprint and comment. Adding a key that is already
 registered, even with a different comment, is refused.

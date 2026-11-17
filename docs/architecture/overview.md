@@ -66,6 +66,23 @@ replace it, because a new secret logs every user out; see
 
 User accounts have one of two roles: **Basic** (lab operations) or **Admin** (full access including user and image management). `sherpad init` creates the built-in `admin` account and a first user account. The built-in `admin` account cannot be deleted, renamed or lose its admin role, and cannot start, resume or redeploy labs; labs are started from personal user accounts, which can also be admins.
 
+Admins can list, inspect, stop, resume and destroy other users' labs, but cannot log in to their
+nodes or get what is needed to. For another user's lab an admin cannot download the lab files
+(SSH config, `known_hosts`, Talos, Vault and Keycloak credentials, the lab CA), cannot see its
+nodes' serial console addresses or VNC ports, and cannot add SSH keys to the user's account;
+`sherpa ssh`, `sherpa console` and `sherpa provision` refuse a folder that holds another user's
+lab. The server logs each admin action on another user's lab and each refusal. Some access
+remains:
+
+- An admin who resets a user's Sherpa password can sign in as that user. The reset is logged and
+  ends the user's sessions.
+- Root on the Sherpa host can reach consoles, VNC, disks and the database key. Admins can start
+  privileged containers and host mounts, which is root on the host. Host-level console and VNC
+  isolation is tracked in issues #674 and #683.
+
+The boundary is for the admin role through Sherpa's interfaces. It is not a defence against root
+on the host.
+
 ## TLS
 
 TLS is enabled by default. On first startup, the server auto-generates a self-signed certificate if none is configured. Clients can download and trust the server certificate via `sherpa cert trust` or from the HTTP endpoint at `http://<server>:3031/cert`. See [Credentials](credentials.md) for details.
