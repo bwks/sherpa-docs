@@ -158,7 +158,7 @@ AOS-CX, which has no hash form, gets no password at all.
 | Cisco IOS XRv 9000 | you, `admin` | plain text | CD-ROM |
 | Cisco ISE | you, the only administrator | plain text | disk |
 | Cisco FTDv | `admin` | plain text | CD-ROM |
-| Juniper vSRX3, vRouter, vSwitch, vEvolved, cEvolved | you, `root` | SHA-512 hash | TFTP (vSRX3, vEvolved), CD-ROM, USB (vEvolved), container volume (cEvolved) |
+| Juniper vSRX3, vRouter, vSwitch, vEvolved, cEvolved | you, `root` | SHA-512 hash | CD-ROM (vSRX3, vRouter, vSwitch), TFTP or USB (vEvolved), container volume (cEvolved) |
 | Nokia SR Linux | you, `admin-user` | plain text; SR Linux hashes it on commit | container volume |
 | Palo Alto PAN-OS | you, `admin` | SHA-256 hash | bootstrap CD-ROM |
 | MikroTik CHR | you, `admin` | plain text | config disk |

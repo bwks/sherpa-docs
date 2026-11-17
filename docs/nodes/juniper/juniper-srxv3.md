@@ -36,9 +36,10 @@ sherpa server image import \
 
 !!! note
 
-    vSRX reads its startup config from a CD-ROM. Its factory config runs no DHCP client, so the
-    TFTP method that older Sherpa releases used left it without a config. Upgrading the server to
-    Sherpa 0.5.8 moves existing vSRX images to the CD-ROM method.
+    vSRX reads its startup config from a CD-ROM, the only ZTP method it takes: a node or image set
+    to `tftp` is refused. Up to 0.6.5 vSRX also took `tftp`, which stalled the node without a
+    config. Updating the server to 0.7.0 moves vSRX images set to `tftp` to `cdrom`; see
+    [Updating to 0.7.0](../../install-update/update/sherpa.md#vsrx-takes-its-config-from-cd-rom-only).
 
 ## Example Manifest
 
