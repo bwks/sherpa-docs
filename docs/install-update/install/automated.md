@@ -48,6 +48,28 @@ edit either file, use `sudoedit` or `sudo -u sherpa`. Members of the `sherpa` gr
 log, `/opt/sherpa/logs/sherpad.log`, which `sherpad` writes when it is not run by systemd; under
 systemd it logs to the journal.
 
+## Blank Disks
+
+Some nodes boot with a small configuration disk, which `sherpad` copies from a blank disk
+template in `/opt/sherpa/images/blank_disk/` and writes the node's config onto:
+
+| File | Disk | Used by |
+|---|---|---|
+| `fat32.img` | 64 MiB, FAT32 | Cumulus Linux USB, MikroTik CHR config disk |
+| `junos.img` | 64 MiB, FAT16, label `vmm-data` | Juniper vEvolved USB |
+| `iosv.img` | 64 MiB, FAT16 | Cisco IOSv and IOSvL2 config disk |
+| `ise.img` | 10 MiB, ext4, label `ISE-ZTP` | Cisco ISE config disk |
+| `ext4-500mb.img` | 500 MiB, ext4, label `data-disk` | Flatcar Linux data disk |
+
+The install script creates them, with `base.img`, `fat16.img` and ext4 `data-disk` disks of
+100 MiB, 200 MiB and 1 to 5 GiB that no node uses yet. Each is `644`, owned by `sherpa:sherpa`,
+in a folder `775`. It installs the tools that make them, `qemu-utils`, `dosfstools` and
+`e2fsprogs`, with its other packages.
+
+The script only creates a disk that is missing, and never changes one that is there. The
+[update script](../update/sherpa.md) does the same on every run, so running it again restores a
+disk that was deleted.
+
 ## Before the First Lab
 
 Each user sets a [device password](../../architecture/device-password.md), with

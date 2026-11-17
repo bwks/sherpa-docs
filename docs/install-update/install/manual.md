@@ -13,7 +13,10 @@ sudo apt install \
   mtools \
   e2tools \
   gzip \
-  unzip
+  unzip \
+  qemu-utils \
+  dosfstools \
+  e2fsprogs
 ```
 
 ### Check Virtualization Capabilities
@@ -180,13 +183,15 @@ sudo systemctl restart libvirtd.service
 
 ### Create Blank Disks
 
-!!! info
-
-    This section needs to be updated.
+Some nodes boot from a copy of a [blank disk](automated.md#blank-disks) in
+`/opt/sherpa/images/blank_disk/`. Once the Sherpa binaries are in `/opt/sherpa/bin`, run the
+update script for the version you installed: it finds nothing to install, and creates the blank
+disks that are missing, with their folder. It never changes a disk that is there, so it is safe
+to run again.
 
 ```
-bash scripts/create_blank_disks.sh
-bash scripts/create_iosv_disk.sh
+curl -fsSLO https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_update.sh
+sudo bash sherpa_update.sh --version <installed version>
 ```
 
 ### Sherpa Client
