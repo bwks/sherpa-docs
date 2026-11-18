@@ -184,7 +184,9 @@ brings them all up administratively.
 ### Configuration
 
 Sherpa's configuration sets the hostname and brings the ports up. It is loaded when the
-container first starts and saved to `/etc/sonic/config_db.json`. After that:
+container first starts and saved to `/etc/sonic/config_db.json`. The container's Linux hostname,
+which your prompt shows, is the node name too, so `hostname` and SONiC's own hostname
+(`show runningconfiguration all`) agree. After that:
 
 - `sherpa down` and `sherpa resume` pause and resume the container: everything is kept, saved
   or not.
@@ -205,7 +207,8 @@ it changes. You still get your login.
   Build the image as the build page says.
 - With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node still waits for its
   data interfaces and starts its SSH server, but has no login and no Sherpa configuration. Reach
-  it with `docker exec`.
+  it with `docker exec`. Its Linux hostname is still the node name; SONiC's own hostname is
+  the image's, as Sherpa's configuration is what sets it.
 - The container is privileged, like the other network OS containers.
 - Each node makes its own SSH host keys on its first start and keeps them across a restart.
   A redeploy gives it new ones, which `sherpa redeploy` saves to the lab's `known_hosts` file.

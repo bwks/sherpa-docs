@@ -733,6 +733,9 @@ platform = "bx"
 | `volumes` | list&lt;object&gt; | Bind mounts of server paths into the container: `src`, the path on the Sherpa server, and `dst`, the path in the container |
 | `platform` | string | The PTX router a `juniper_evolved` container emulates, see below |
 
+Every container's hostname is its node name, whatever its model, and it keeps it across a
+restart, `down`/`resume` and `redeploy`.
+
 A privileged container, or one that can mount server paths, is root on the Sherpa server, so
 only admins may set `privileged` or `volumes`; `up` and `redeploy` refuse a manifest from
 another user that does.
