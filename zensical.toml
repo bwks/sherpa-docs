@@ -147,6 +147,7 @@ nav = [
     ] },
     { "Sonic" = [
       "nodes/sonic/sonic-linux.md",
+      "nodes/sonic/build-container-image.md",
     ] },
     { "SQL" = [
       "nodes/sql/mongo.md",
