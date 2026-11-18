@@ -204,7 +204,7 @@ which rebuilds the node with your current keys and password.
 
 Only the lab owner can redeploy, even if an administrator asks. Likewise only the owner can
 download the lab's files or connect to its nodes: an administrator can manage another user's lab
-but is not given the SSH config, host keys, credentials, console or VNC port. An administrator
+but is not given the SSH config, host keys, credentials, console or VNC console. An administrator
 can still reset a user's Sherpa password and sign in as them; that is logged and ends the user's
 sessions. See [Overview](overview.md). After a redeploy the CLI
 downloads the refreshed SSH configuration for you. If you redeploy from another client or the

@@ -1,53 +1,103 @@
 # VNC
 
-VNC (Virtual Network Computing) provides graphical console access to virtual machine nodes. This is useful for devices that require GUI interaction or when SSH is not yet available (e.g., during initial boot or password recovery).
+VNC (Virtual Network Computing) shows a virtual machine node's screen and takes its keyboard and
+mouse. Use it for devices that need a graphical console, or when SSH is not up yet, for example
+during the first boot or a password recovery. `sherpa vnc <node>` connects your own VNC viewer to
+it, from any machine with the CLI.
 
 ## How it Works
 
-Every virtual machine node in Sherpa has a VNC graphics adapter. When the lab is created, Sherpa
-reserves a VNC port on the server for each VM, from `5900` to `6999`, and the VM keeps it for its
-life: stopping, resuming and redeploying the node do not change it. The port is written into the
-libvirt domain, for example:
-
-```xml
-<graphics type='vnc' port='5901' autoport='no'/>
-```
-
-## Finding the VNC Port
-
-The VNC port for each VM node is displayed in the `sherpa inspect` output under the `VNC Port` column.
+Every virtual machine node has a VNC graphics adapter. QEMU listens for VNC on a UNIX socket on
+the Sherpa server, next to the node's [serial console](console.md):
 
 ```
-sherpa inspect
+/opt/sherpa/run/console/<lab-id>/<node-index>.vnc
 ```
 
-The web UI's node page shows it too. Container and unikernel nodes do not have VNC ports.
+Nothing listens for VNC on a network port. Before 0.7.1 each VM had a VNC port on the server's
+loopback address, from `5900` to `6999`, that any account on the server could reach. Nodes no
+longer get a port, and `sherpa inspect`, the inspect API and the web UI no longer show one.
 
-Only the lab's owner is told the port. For anyone else, an admin included, `sherpa inspect` and
-the web UI show `-`. Root on the Sherpa host can still reach every VNC port; see
-[Overview](overview.md).
+The socket is in the lab's console folder, owned `sherpa:kvm` with mode `2770`. Only `sherpa`,
+members of `kvm` and root can reach it. Members of `kvm` can already read every lab's disks.
 
 ## Connecting
 
-### From the Sherpa Server
-
-If you have direct access to the Sherpa server, connect with any VNC client:
+Run `sherpa vnc` in the lab's folder:
 
 ```
-vncviewer localhost:<vnc-port>
+sherpa vnc <node> [--force]
 ```
 
-### From a Remote Machine
+It opens a port on `127.0.0.1` on your machine, picked by the system, and prints the address:
 
-Use SSH tunneling to forward the VNC port from the Sherpa server to your local machine:
-
-```bash
-# ssh -N -L {local-port}:localhost:{vnc-port} {sherpa-server}
-
-ssh -N -L 5901:localhost:5901 sherpa-server
+```
+VNC console of ubu01 in lab my-lab: connect a VNC viewer to 127.0.0.1:40123. Ctrl+C to stop.
 ```
 
-Then connect your VNC client to `localhost:5901` on your local machine.
+Point any VNC viewer at that address. Each connection your viewer makes is relayed over a
+WebSocket to `sherpad`, which connects to the node's socket:
+
+```
+GET /api/v1/labs/{lab_id}/nodes/{node_name}/vnc
+```
+
+`sherpa vnc` sends your login token and uses the same TLS settings and trusted certificate as
+every other command. See the [API Reference](../api-reference.md#vnc-console). There is no SSH
+tunnel, so you need no SSH key or account on the server. It works the same on Windows.
+
+`sherpa vnc` keeps listening until you press `Ctrl+C`, so your viewer can disconnect and connect
+again. Viewers that read a small number after a colon as a display number take a port this
+high as a port; TigerVNC's `vncviewer` also takes `127.0.0.1::40123`, with two colons, as always
+meaning a port.
+
+!!! note
+
+    The port is on your machine's loopback address, but other accounts on your machine can
+    connect to it while `sherpa vnc` runs. The node's VNC server asks for no password.
+
+## Who Can Connect
+
+Only the lab's owner can open a node's VNC console. Admins are refused too. When the server
+refuses, `sherpa vnc` prints the reason when your viewer connects, and the viewer gets nothing.
+
+- `Access denied: only the owner of lab '<lab-id>' can open its consoles`, the node or lab not
+  found, `Not logged in`, or a node with no VNC console end `sherpa vnc` with an error.
+- A node that is not running, or a VNC console in use, is printed, and `sherpa vnc` keeps
+  listening, so you can connect again.
+
+## One Session
+
+A VNC console serves one session at a time, as the serial console does, so one viewer at a time
+sees and drives the screen. A node's VNC and serial consoles are separate: you can have both
+open. While your viewer is connected, a second connection is refused at once with
+`The VNC console of <node> is in use by <user> from <client-ip> since <time> UTC. Close that
+session, or take it over with 'sherpa vnc <node> --force'.`
+
+With `sherpa vnc <node> --force`, each connection takes the VNC console over from a session of
+your own, for example one left open on another machine. A session of another user is never taken
+over.
+
+## How a Session Ends
+
+A viewer's connection ends when the viewer disconnects, when you press `Ctrl+C`, when the node's
+VNC server closes it (`The node's VNC console closed the connection.`, for example when the node
+stops), when another session of yours takes it over with `--force`, and when your login ends. The
+server checks the login every 30 seconds. `sherpa vnc` prints a line for each connection that
+ends, with the server's reason.
+
+`sherpad` logs each session as the events `console.opened`, `console.refused` and
+`console.closed` with `console = "vnc"`, with the user, lab, node, client address, duration and
+reason. It never logs the screen or the keys.
+
+## Nodes Running at an Upgrade
+
+Nodes that are running when the server is upgraded to 0.7.1 keep their VNC port until they stop,
+and `sherpa vnc` refuses them with `Node '<node>' was started before its VNC console moved behind
+Sherpa. Stop and resume the lab ('sherpa down', then 'sherpa resume'), or redeploy the node, to
+use its VNC console.` `sherpad` moves every stopped node's VNC to its socket at startup, and
+`sherpa resume` moves a node's VNC when it starts the node. See
+[Updating to 0.7.1](../install-update/update/sherpa.md#vnc-goes-through-sherpad).
 
 ## Applicability
 
@@ -56,7 +106,3 @@ Then connect your VNC client to `localhost:5901` on your local machine.
 | Virtual Machine | Yes |
 | Container | No |
 | Unikernel | No |
-
-!!! note
-
-    VNC binds to `localhost` on the Sherpa server by default. It is not exposed externally — use SSH tunneling for remote access.

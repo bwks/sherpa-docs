@@ -589,6 +589,33 @@ The errors come as HTTP statuses before the upgrade:
 A node that was running when the server was upgraded to 0.7.0 is refused until it is stopped and
 resumed, or redeployed.
 
+### VNC console
+
+```
+GET /api/v1/labs/{lab_id}/nodes/{node_name}/vnc
+```
+
+Upgrades to a WebSocket that relays the VNC console of a virtual machine node. This is what
+`sherpa vnc` uses. See [VNC](architecture/vnc.md).
+
+- **Auth**, **Access** and **Query** (`force=true`): as for the serial console. A node's VNC and
+  serial consoles are held apart: one session each.
+- **Frames**: the RFB protocol of the node's VNC server, as QEMU speaks it, in binary frames both
+  ways. Text frames are ignored. The server's VNC asks for no password.
+
+The errors are those of the serial console, with these differences:
+
+| Status | Message |
+| ------ | ------- |
+| `400` | `<node> is a container, and containers have no VNC console. Connect with 'sherpa ssh <node>' instead.` |
+| `400` | `<node> is a unikernel, and unikernels have no VNC console. Use 'sherpa console <node>' instead.` |
+| `409` | `The VNC console of <node> is in use by <user> from <client-ip> since <YYYY-MM-DD HH:MM:SS> UTC. Close that session, or take it over with 'sherpa vnc <node> --force'.` |
+| `409` | `Node '<node>' was started before its VNC console moved behind Sherpa. Stop and resume the lab ('sherpa down', then 'sherpa resume'), or redeploy the node, to use its VNC console.` A node that was running when the server was upgraded to 0.7.1 |
+
+A session ends with the serial console's close frames, except that `1000` says `The node's VNC
+console closed the connection.`: the node's VNC server closed it, for example as the node
+stopped.
+
 A session ends with a close frame:
 
 | Code | Meaning |
@@ -598,8 +625,8 @@ A session ends with a close frame:
 | `4002` | The login session behind the token ended. Checked every 30 seconds |
 | `1011` | The relay failed |
 
-The inspect response's `devices[]` carry no console address. Servers before 0.7.0 sent
-`console_address`; it is removed. `vnc_port` is unchanged.
+The inspect response's `devices[]` carry no console address and no VNC port. Servers before 0.7.0
+sent `console_address`, and servers before 0.7.1 sent `vnc_port`; both are removed.
 
 ## Lab Access
 
@@ -610,8 +637,7 @@ Every lab operation applies the same rule on REST, WebSocket RPC and the web UI:
 | Create | Any authenticated user; the lab is owned by the caller |
 | List | The caller's own labs. Admins may list another user's labs with `GET /api/v1/labs?username=<user>` |
 | Inspect, destroy, down, resume, cancel, update link impairment | The lab owner or an admin |
-| Inspect: each node's `vnc_port` | The lab owner only. For an admin it is empty (`None`) |
-| Open a node's serial console | The lab owner only, including for admins |
+| Open a node's serial or VNC console | The lab owner only, including for admins |
 | Download (RPC `download`; the web UI's lab download) | The lab owner only, including for admins |
 | Refresh a node's host key (RPC `node.host_keys`) | The lab owner only, including for admins |
 | Redeploy a node | The lab owner only, including for admins, because the node is rebuilt with the owner's SSH keys and account |
@@ -624,8 +650,8 @@ destroy and clean up any lab. Start labs from your own account, which may also b
 Downloads hold the SSH config, `known_hosts`, the Talos cluster credentials, the Vault,
 Keycloak and SurrealDB credentials and the lab CA, which a lab's owner needs to log in to its nodes, so an
 admin is refused them with `Only the owner of lab '<id>' can perform this operation`. Likewise
-a node's serial console and VNC port reach it without its login, so an admin is refused the
-console and sees no VNC port. Admins keep
+a node's serial and VNC consoles reach it without its login, so an admin is refused both.
+Admins keep
 everything else: listing, inspect, down, resume, cancel, link impairment, destroy and clean.
 The server logs a warning (`auth.admin_lab_access`) each time an admin acts on another user's
 lab, and each refusal (`auth.access_denied`). There is no REST download endpoint.

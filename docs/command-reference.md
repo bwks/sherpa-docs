@@ -413,8 +413,7 @@ For Tailscale-enabled labs, refreshes gateway state, Tailscale addresses, advert
 management routes, route approval, and warnings. This is the default command when
 no subcommand is specified.
 
-An admin inspecting another user's lab sees everything but each node's VNC port, which shows `-`.
-Only the owner sees it.
+Inspect shows no console address or VNC port: connect with `sherpa console` and `sherpa vnc`.
 
 #### Link states
 
@@ -556,6 +555,50 @@ sherpa console <name> [--force]
 - It needs you to be logged in, and works in a folder made by `sherpa download`, as it takes the
   lab from the folder's `.sherpa/lab-info.toml`.
 
+### `sherpa vnc`
+
+Relay the VNC console of a virtual machine node to a VNC viewer on your machine. `sherpa vnc`
+listens on `127.0.0.1` on a free port, prints the address, and relays each connection your viewer
+makes to the Sherpa server's API over TLS with your login token, until you press `Ctrl+C`. It
+makes no SSH connection and replaces an `ssh -L` tunnel to the server's VNC port. See
+[VNC](architecture/vnc.md).
+
+```
+sherpa vnc <name> [--force]
+```
+
+| Flag | Description |
+| ---- | ----------- |
+| `--force` | Take the VNC console over from a session of your own, for example one left open on another machine. Applies to every connection |
+
+- It prints `VNC console of <node> in lab <lab>: connect a VNC viewer to 127.0.0.1:<port>. Ctrl+C
+  to stop.` Point your viewer at that address.
+- For each connection it prints `Viewer <address> connected to the VNC console of <node>.`, and
+  when it ends `Viewer <address> disconnected from the VNC console of <node>.`, or `The VNC
+  console of <node> closed for viewer <address>: <reason>` when the server ended it.
+- `Ctrl+C` stops it with `Stopped relaying the VNC console of <node>.` and exit code 0.
+- Only the lab's owner can open a node's VNC console, admins included. The server decides, when
+  your viewer connects: the viewer gets nothing, and `sherpa vnc` ends with the reason, such as
+  `Access denied: only the owner of lab '<lab-id>' can open its consoles`.
+- A VNC console serves one session at a time, apart from the node's serial console. A connection
+  while another session holds it is refused with `The VNC console of <node> is in use by <user>
+  from <client-ip> since <time> UTC. Close that session, or take it over with 'sherpa vnc <node>
+  --force'.`; `sherpa vnc` prints it and keeps listening. So does a node that is not running.
+- Refusals that end `sherpa vnc`:
+    - `<node> is a container, and containers have no VNC console. Connect with 'sherpa ssh
+      <node>' instead.`
+    - `<node> is a unikernel, and unikernels have no VNC console. Use 'sherpa console <node>'
+      instead.`
+    - `Not logged in to the Sherpa server, or the login has expired: run 'sherpa login'.`
+    - `The Sherpa server has no VNC console route: it is older than this client. Upgrade the
+      server.` The client and the server must both be 0.7.1 or later.
+- `Node '<node>' was started before its VNC console moved behind Sherpa. Stop and resume the lab
+  ('sherpa down', then 'sherpa resume'), or redeploy the node, to use its VNC console.` See
+  [Updating to 0.7.1](install-update/update/sherpa.md#vnc-goes-through-sherpad).
+- Other accounts on your machine can connect to the port while `sherpa vnc` runs. The node's VNC
+  server asks for no password.
+- It works in a folder made by `sherpa download`.
+
 ### `sherpa download`
 
 Download lab files into `.sherpa/` (SSH config, `lab-info.toml`, the nodes' host keys
@@ -567,7 +610,7 @@ node's `surrealdb/surrealdb-<node>.toml`, all under `.sherpa/`.
 
 It writes no `manifest.toml`: the server keeps the lab's definition, but not your manifest's
 files or secrets. Every command that reaches the lab's nodes works in the folder (`inspect`,
-`ssh`, `console`, `down`, `resume`, `destroy` and `link impair`); `up`, `redeploy` and
+`ssh`, `console`, `vnc`, `down`, `resume`, `destroy` and `link impair`); `up`, `redeploy` and
 `provision` need the lab's own manifest. See [Lab Lifecycle](#lab-lifecycle).
 
 Only the lab's owner can download a lab, admins included: the files hold the SSH config, the

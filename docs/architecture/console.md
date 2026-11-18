@@ -11,6 +11,9 @@ libvirt binds each node's serial console to a UNIX socket on the Sherpa server:
 /opt/sherpa/run/console/<lab-id>/<node-index>.serial
 ```
 
+A virtual machine's VNC console is a socket in the same folder, `<node-index>.vnc`; see
+[VNC](vnc.md).
+
 Nothing listens on a network address for a console. Before 0.7.0 each console was a telnet
 listener on a loopback address (`127.127.<lab>.<node-index>`, port `2323`) that any account on the
 server could reach. That range is no longer used, and labs no longer get a loopback network.
