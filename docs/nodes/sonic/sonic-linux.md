@@ -207,5 +207,6 @@ it changes. You still get your login.
   data interfaces and starts its SSH server, but has no login and no Sherpa configuration. Reach
   it with `docker exec`.
 - The container is privileged, like the other network OS containers.
-- Every container built from one image has the same SSH host keys.
+- Each node makes its own SSH host keys on its first start and keeps them across a restart.
+  A redeploy gives it new ones, which `sherpa redeploy` saves to the lab's `known_hosts` file.
 - `bgpd` is started, which the image does not do on its own. LLDP does not run.
