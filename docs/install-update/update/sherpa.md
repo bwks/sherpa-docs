@@ -87,6 +87,29 @@ config logs in with the `sherpa` account instead of yours; and its Talos cluster
 so `sherpa down` powers their nodes off, `sherpa redeploy` refuses their workers and
 `sherpa download` leaves them out. Destroy and recreate such a lab.
 
+### Consoles go through `sherpad`
+
+`sherpa console` now connects to `sherpad`'s API with your login token. See
+[Serial Console](../../architecture/console.md).
+
+- **No SSH hop.** A console needs no SSH key and no OS account on the server, and no `telnet`
+  program. The client and the server must both be 0.7.0: with an older server,
+  `sherpa console` says `The Sherpa server has no console route: it is older than this client.
+  Upgrade the server.`
+- **Only the lab's owner can open a console**, admins included. Each console serves one session.
+  If another session holds it, use `sherpa console <node> --force` to take it over from a session
+  of your own.
+- **Labs lose their loopback network.** Each VM's and unikernel's console is a UNIX socket under
+  `/opt/sherpa/run/console/`, and nothing listens on `127.127.0.0/16`. The "Loopback Network" line
+  is gone from `sherpa inspect`, the web UI and `lab-info.toml`, and `console_address` is gone from
+  the inspect API. The IPv6 loopback range is unchanged.
+- **Nodes running at the upgrade need a stop and resume.** They keep their old TCP console until
+  they stop, and `sherpa console` refuses them with `Node '<node>' was started before consoles
+  moved behind Sherpa. Stop and resume the lab ('sherpa down', then 'sherpa resume'), or redeploy
+  the node, to use its console.` `sherpad` moves every stopped node's console to its socket at
+  startup, and `sherpa resume` moves one as it starts it. `sherpad` logs a warning at startup with
+  the number of running nodes still on TCP. A redeploy also gives the node a socket console.
+
 ### Your login on nodes
 
 0.7.0 gives every node Sherpa builds one login, yours. The shared `sherpa` account and its
@@ -177,11 +200,12 @@ cancel, impair links on and destroy any lab, and clean up. They can no longer:
   and the RPC `node.host_keys` are refused with `Only the owner of lab '<id>' can perform this
   operation`. The files hold the SSH config, `known_hosts`, the Talos, Vault, Keycloak and
   SurrealDB credentials and the lab CA. The web lab page shows the download link to the owner only.
-- **Connect to its nodes.** `sherpa ssh`, `sherpa console` and `sherpa provision` stop with
+- **Connect to its nodes.** `sherpa ssh` and `sherpa provision` stop with
   `Only the owner of lab '<id>' can connect to its nodes` in a folder whose
-  `.sherpa/lab-info.toml` names another user's lab.
-- **See its console or VNC.** `sherpa inspect`, the inspect API and the web UI leave each node's
-  console address empty and show `-` for the VNC port, for anyone but the owner.
+  `.sherpa/lab-info.toml` names another user's lab. The server refuses `sherpa console` with
+  `Access denied: only the owner of lab '<id>' can open its consoles`.
+- **See its VNC.** `sherpa inspect`, the inspect API and the web UI show `-` for each node's VNC
+  port, for anyone but the owner.
 - **Add SSH keys to another account.** `sherpa server user ssh-key add` has no `--user`, the
   server refuses a key for any other account, and the admin page for a user has no form to add
   one. Admins can still remove keys.

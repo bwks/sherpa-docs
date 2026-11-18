@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 642" width="640" height="642" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <title id="title">Sherpa unikernel architecture</title>
-  <desc id="desc">sherpad drives libvirtd, which runs one QEMU process per unikernel on the KVM kernel module and the host CPU's virtualisation extensions. A DirectKernel unikernel loads a copy of its kernel ELF from sherpa-pool; a DiskBoot unikernel boots from a copy of its disk image in sherpa-pool. eth0 joins the management network, data interfaces attach to a link bridge or an eBPF tap, and the serial console is telnet on the node's loopback IP port 2323. There is no VNC display.</desc>
+  <desc id="desc">sherpad drives libvirtd, which runs one QEMU process per unikernel on the KVM kernel module and the host CPU's virtualisation extensions. A DirectKernel unikernel loads a copy of its kernel ELF from sherpa-pool; a DiskBoot unikernel boots from a copy of its disk image in sherpa-pool. eth0 joins the management network, data interfaces attach to a link bridge or an eBPF tap, and the serial console is a UNIX socket under /opt/sherpa/run/console. There is no VNC display.</desc>
   <style>
     svg {
       --bg: #fdffff;
@@ -91,7 +91,7 @@
   <text class="tc" x="494" y="413" text-anchor="middle">Link bridge or eBPF tap</text>
   <line class="ln" x1="276" y1="450" x2="378" y2="450" marker-end="url(#arrow)"/>
   <rect class="box" x="380" y="434" width="228" height="32" rx="6"/>
-  <text class="tc" x="494" y="455" text-anchor="middle">Telnet · loopback IP :2323</text>
+  <text class="tc" x="494" y="455" text-anchor="middle">Serial · UNIX socket</text>
 
   <!-- Kernel and hardware -->
   <line class="ln" x1="162" y1="482" x2="162" y2="504" marker-end="url(#arrow)"/>

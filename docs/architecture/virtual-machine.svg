@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 684" width="640" height="684" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <title id="title">Sherpa virtual machine architecture</title>
-  <desc id="desc">sherpad drives libvirtd, which runs one QEMU process per virtual machine on the KVM kernel module and the host CPU's virtualisation extensions. Each VM's boot disk is a qcow2 overlay on its base image and its ZTP disk holds the node's configuration, both in sherpa-pool; eth0 joins the management network, data interfaces attach to a link bridge or an eBPF tap, the serial console is telnet on the node's loopback IP port 2323, and VNC uses an auto-assigned port.</desc>
+  <desc id="desc">sherpad drives libvirtd, which runs one QEMU process per virtual machine on the KVM kernel module and the host CPU's virtualisation extensions. Each VM's boot disk is a qcow2 overlay on its base image and its ZTP disk holds the node's configuration, both in sherpa-pool; eth0 joins the management network, data interfaces attach to a link bridge or an eBPF tap, the serial console is a UNIX socket under /opt/sherpa/run/console, and VNC uses an auto-assigned port.</desc>
   <style>
     svg {
       --bg: #fdffff;
@@ -93,7 +93,7 @@
   <text class="tc" x="494" y="413" text-anchor="middle">Link bridge or eBPF tap</text>
   <line class="ln" x1="276" y1="450" x2="378" y2="450" marker-end="url(#arrow)"/>
   <rect class="box" x="380" y="434" width="228" height="32" rx="6"/>
-  <text class="tc" x="494" y="455" text-anchor="middle">Telnet · loopback IP :2323</text>
+  <text class="tc" x="494" y="455" text-anchor="middle">Serial · UNIX socket</text>
   <line class="ln" x1="276" y1="492" x2="378" y2="492" marker-end="url(#arrow)"/>
   <rect class="box" x="380" y="476" width="228" height="32" rx="6"/>
   <text class="tc" x="494" y="497" text-anchor="middle">VNC · auto-assigned port</text>

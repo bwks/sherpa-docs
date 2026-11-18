@@ -50,16 +50,16 @@ Use `sherpa inspect <lab-id>` to see the addresses assigned to each node.
 
 ## Loopback Addresses
 
-Each lab also has a loopback range, used for node console access and
-[point-to-point links](modes/point-to-point.md).
+Each lab has an IPv6 loopback range, allocated for the lab.
 
-| | IPv4 | IPv6 |
-| - | ---- | ---- |
-| Server range | `127.127.0.0/16` | `fd00:1001::/48` |
-| Range per lab | `/24` | `/64` |
+| | IPv6 |
+| - | ---- |
+| Server range | `fd00:1001::/48` |
+| Range per lab | `/64` |
 
-Each node gets an IPv4 loopback address matching its position in the manifest, so the first node
-is `.1`. The loopback ranges cannot be changed.
+The range cannot be changed. There is no IPv4 loopback range: before 0.7.0 each lab had a
+`127.127.<lab>.0/24` network for node consoles, and nothing uses or allocates it now. Node
+consoles are UNIX sockets; see [Serial Console](../console.md).
 
 ## Changing the Ranges
 
