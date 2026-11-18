@@ -29,7 +29,9 @@ Run `sherpa vnc` in the lab's folder:
 sherpa vnc <node> [--force]
 ```
 
-It opens a port on `127.0.0.1` on your machine, picked by the system, and prints the address:
+It first asks the server whether you can open the node's VNC console, and stops with the reason
+if not (see [Who Can Connect](#who-can-connect)). Then it opens a port on `127.0.0.1` on your
+machine, picked by the system, and prints the address:
 
 ```
 VNC console of ubu01 in lab my-lab: connect a VNC viewer to 127.0.0.1:40123. Ctrl+C to stop.
@@ -58,13 +60,24 @@ meaning a port.
 
 ## Who Can Connect
 
-Only the lab's owner can open a node's VNC console. Admins are refused too. When the server
-refuses, `sherpa vnc` prints the reason when your viewer connects, and the viewer gets nothing.
+Only the lab's owner can open a node's VNC console. Admins are refused too. `sherpa vnc` asks
+the server before it opens a port, so a refusal ends it at once, with the server's reason and exit
+code 1, and no address is printed:
 
-- `Access denied: only the owner of lab '<lab-id>' can open its consoles`, the node or lab not
-  found, `Not logged in`, or a node with no VNC console end `sherpa vnc` with an error.
-- A node that is not running, or a VNC console in use, is printed, and `sherpa vnc` keeps
-  listening, so you can connect again.
+- `Access denied: only the owner of lab '<lab-id>' can open its consoles`
+- the node or lab not found, or `Not logged in`
+- a container or a unikernel, which have no VNC console
+- `Node '<node>' is not running. Start it with 'sherpa resume'.`
+- a node still on its old VNC port (see [Nodes Running at an Upgrade](#nodes-running-at-an-upgrade))
+
+A VNC console in use by another session of yours is not a refusal: `sherpa vnc` prints its address,
+then `The VNC console of <node> is in use by <user> from <client-ip> since <time> UTC: viewers are
+refused until that session ends, or take it over with 'sherpa vnc <node> --force'.`, and keeps
+listening. With `--force` it says `...: a viewer connecting takes it over.` instead.
+
+Once it is listening, the server checks again each time your viewer connects. If the console is
+in use or the node has stopped by then, `sherpa vnc` prints the reason and keeps listening, so you
+can connect again; any other refusal ends it.
 
 ## One Session
 

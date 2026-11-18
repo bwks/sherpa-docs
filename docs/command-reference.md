@@ -577,14 +577,18 @@ sherpa vnc <name> [--force]
   when it ends `Viewer <address> disconnected from the VNC console of <node>.`, or `The VNC
   console of <node> closed for viewer <address>: <reason>` when the server ended it.
 - `Ctrl+C` stops it with `Stopped relaying the VNC console of <node>.` and exit code 0.
-- Only the lab's owner can open a node's VNC console, admins included. The server decides, when
-  your viewer connects: the viewer gets nothing, and `sherpa vnc` ends with the reason, such as
-  `Access denied: only the owner of lab '<lab-id>' can open its consoles`.
-- A VNC console serves one session at a time, apart from the node's serial console. A connection
-  while another session holds it is refused with `The VNC console of <node> is in use by <user>
-  from <client-ip> since <time> UTC. Close that session, or take it over with 'sherpa vnc <node>
-  --force'.`; `sherpa vnc` prints it and keeps listening. So does a node that is not running.
-- Refusals that end `sherpa vnc`:
+- Only the lab's owner can open a node's VNC console, admins included. `sherpa vnc` asks the
+  server before it opens a port: a refusal ends it at once with the reason and exit code 1, and
+  no address is printed, such as `Access denied: only the owner of lab '<lab-id>' can open its
+  consoles` or `Node '<node>' is not running. Start it with 'sherpa resume'.`
+- A VNC console serves one session at a time, apart from the node's serial console. When another
+  session holds it as `sherpa vnc` starts, it prints the address, then `The VNC console of <node>
+  is in use by <user> from <client-ip> since <time> UTC: viewers are refused until that session
+  ends, or take it over with 'sherpa vnc <node> --force'.`, and keeps listening. A viewer that
+  connects while the console is held is refused with `The VNC console of <node> is in use by ...
+  Close that session, or take it over with 'sherpa vnc <node> --force'.`; `sherpa vnc` prints it
+  and keeps listening. So it does for a node that stopped after it started.
+- Refusals that end `sherpa vnc`, as it starts or when a viewer connects:
     - `<node> is a container, and containers have no VNC console. Connect with 'sherpa ssh
       <node>' instead.`
     - `<node> is a unikernel, and unikernels have no VNC console. Use 'sherpa console <node>'

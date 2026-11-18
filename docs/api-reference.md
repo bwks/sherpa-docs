@@ -589,6 +589,17 @@ The errors come as HTTP statuses before the upgrade:
 A node that was running when the server was upgraded to 0.7.0 is refused until it is stopped and
 resumed, or redeployed.
 
+With `check=true` (`GET .../console?check=true`), the route only checks: it needs no WebSocket
+upgrade and makes none, and takes no session. It refuses with the errors above, except that a
+console in use is not refused, and otherwise answers `200`:
+
+```json
+{ "held_by": "<user> from <client-ip> since <YYYY-MM-DD HH:MM:SS> UTC" }
+```
+
+`held_by` is `null` when no session holds the console. `sherpa vnc` checks the VNC console this
+way before it opens its local port.
+
 ### VNC console
 
 ```
@@ -598,8 +609,8 @@ GET /api/v1/labs/{lab_id}/nodes/{node_name}/vnc
 Upgrades to a WebSocket that relays the VNC console of a virtual machine node. This is what
 `sherpa vnc` uses. See [VNC](architecture/vnc.md).
 
-- **Auth**, **Access** and **Query** (`force=true`): as for the serial console. A node's VNC and
-  serial consoles are held apart: one session each.
+- **Auth**, **Access** and **Query** (`force=true`, `check=true`): as for the serial console. A
+  node's VNC and serial consoles are held apart: one session each.
 - **Frames**: the RFB protocol of the node's VNC server, as QEMU speaks it, in binary frames both
   ways. Text frames are ignored. The server's VNC asks for no password.
 
