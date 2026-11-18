@@ -36,6 +36,7 @@ nav = [
       "architecture/provisioners/ssh.md",
       "architecture/provisioners/container.md",
     ] },
+    "architecture/console.md",
     "architecture/vnc.md",
   ] },
   { "Install / Update" = [

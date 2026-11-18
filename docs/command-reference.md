@@ -413,8 +413,8 @@ For Tailscale-enabled labs, refreshes gateway state, Tailscale addresses, advert
 management routes, route approval, and warnings. This is the default command when
 no subcommand is specified.
 
-An admin inspecting another user's lab sees everything but each node's serial console address and
-VNC port: the console address is empty and the VNC port shows `-`. Only the owner sees them.
+An admin inspecting another user's lab sees everything but each node's VNC port, which shows `-`.
+Only the owner sees it.
 
 #### Link states
 
@@ -509,39 +509,52 @@ sherpa ssh <name>
 
 ### `sherpa console`
 
-Open the serial console of a virtual machine or unikernel node in your terminal. The console is
-served by the Sherpa server, and `sherpa console` reaches it through an SSH connection to the
-server, the same one `sherpa ssh` uses, so it works from any machine with the CLI, remote and
-Windows clients included. Sherpa has its own telnet client, so no `telnet` program needs to be
-installed.
+Open the serial console of a virtual machine or unikernel node in your terminal. `sherpa console`
+connects to the Sherpa server's API over TLS with your login token, so it works from any machine
+with the CLI, remote and Windows clients included. It makes no SSH connection, so you need no SSH
+key or account on the server, and no `telnet` program. See [Serial Console](architecture/console.md).
 
 ```
-sherpa console <name>
+sherpa console <name> [--force]
 ```
+
+| Flag | Description |
+| ---- | ----------- |
+| `--force` | Take the console over from a session of your own, for example one left open on another machine |
 
 - Once connected, it prints `Connected to the console of <node> in lab <lab>. Escape: Ctrl+] or
   ~. at the start of a line.`, and `Connection to the console of <node> closed.` when the
   session ends. Press Enter to see the node's prompt.
 - Press `Ctrl+]` anywhere, or type `~.` at the start of a line, to disconnect. Type `~~` to send
   a single `~`. `sherpa console` exits with code 0 when you disconnect or the console closes.
-- The connection to the Sherpa server asks about its host key, your key's passphrase or your
-  password as [`sherpa ssh`](#sherpa-ssh) does.
-- A console serves one client at a time. If another session holds it, `sherpa console` waits
-  3 seconds and then says the console is in use; close the other session and try again.
-  While it is held, the console takes only two more connections; after that a new one is not
-  answered, and `sherpa console` says after 10 seconds that the console did not answer and
-  that another client may hold it.
-- If the console refuses the connection or closes, the message says so; check the node is
-  running with `sherpa inspect`.
-- It stops before connecting with `Only the owner of lab '<id>' can connect to its nodes` in the
-  same case as [`sherpa ssh`](#sherpa-ssh): a folder whose `.sherpa/lab-info.toml` names another
-  user's lab. The server also gives the console address only to the lab's owner.
-- Container nodes have no serial console, and `sherpa console` refuses them before connecting.
-  Use `sherpa ssh`, or `docker exec` on the server.
-- It asks the Sherpa server where the node's console is, so it needs you to be logged in, and
-  works in a folder made by `sherpa download`. With a server older than the CLI, which does
-  not say, it finds the node by its place in the folder's `manifest.toml`, and without one says
-  to upgrade the server or run it in the folder the lab was started from.
+- Only the lab's owner can open a node's console. An admin is refused too, as is anyone else, with
+  `Access denied: only the owner of lab '<lab-id>' can open its consoles`. The server decides.
+- A console serves one session at a time. If another session holds it, `sherpa console` is refused
+  at once with `The console of <node> is in use by <user> from <client-ip> since <time> UTC. Close
+  that session, or take it over with 'sherpa console <node> --force'.`
+- With `--force`, the session that held the console ends with `Connection to the console of
+  <node> closed: Taken over by <user> from <ip> since <time> UTC.` `--force` takes over only your
+  own sessions.
+- A session also ends when the node stops (`The node's console closed: the node stopped.`) and
+  when your login ends, by `sherpa logout`, a password change or the user being deleted (`Your
+  login session ended. Log in again with 'sherpa login'.`). The server checks the login every 30
+  seconds.
+- Disconnecting does not log the node's session out, because the serial port does not tell the
+  node. Log out before you disconnect. Only the lab's owner can attach to the console, so a
+  session left logged in is reachable only by the owner.
+- Refusals before connecting:
+    - `Node '<node>' is not running. Start it with 'sherpa resume'.`
+    - `<node> is a container, and containers have no serial console. Connect with 'sherpa ssh
+      <node>' instead.` Container nodes have no serial console; use `sherpa ssh`, or `docker exec`
+      on the server.
+    - `Not logged in to the Sherpa server, or the login has expired: run 'sherpa login'.`
+    - `The Sherpa server has no console route: it is older than this client. Upgrade the server.`
+      The client and the server must both be 0.7.0 or later.
+    - `Node '<node>' was started before consoles moved behind Sherpa. Stop and resume the lab
+      ('sherpa down', then 'sherpa resume'), or redeploy the node, to use its console.` See
+      [Updating to 0.7.0](install-update/update/sherpa.md#consoles-go-through-sherpad).
+- It needs you to be logged in, and works in a folder made by `sherpa download`, as it takes the
+  lab from the folder's `.sherpa/lab-info.toml`.
 
 ### `sherpa download`
 

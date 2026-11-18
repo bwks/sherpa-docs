@@ -559,22 +559,47 @@ link since it started, and from servers that do not report link states. `index` 
 }
 ```
 
-### Console address in inspect
+### Serial console
 
-The inspect response's `devices[]` carry `console_address` for virtual machines and unikernels:
-the address on the Sherpa server where the node's serial console listens, as telnet on port
-`2323`. It is reachable only from the server. Containers have no serial console and no
-`console_address`, and servers before it do not send it. Only the lab's owner gets it: for
-anyone else, an admin included, it is empty. The same holds for `vnc_port`, which is `None`
-for anyone but the owner. Part of a device:
-
-```json
-{
-  "name": "vm1",
-  "kind": "virtual_machine",
-  "console_address": "127.127.3.1"
-}
 ```
+GET /api/v1/labs/{lab_id}/nodes/{node_name}/console
+```
+
+Upgrades to a WebSocket that relays the serial console of a virtual machine or unikernel node.
+This is what `sherpa console` uses. See [Serial Console](architecture/console.md).
+
+- **Auth**: `Authorization: Bearer <token>` only. The `sherpa_auth` cookie is not accepted.
+- **Access**: the lab's owner only. Admins are refused.
+- **Query**: `force=true` takes the console over from a session of the caller's own. It never
+  takes over another user's session.
+- **Frames**: raw serial bytes in binary frames, both ways. There is no telnet protocol. Text
+  frames are ignored.
+
+The errors come as HTTP statuses before the upgrade:
+
+| Status | Message |
+| ------ | ------- |
+| `401` | The token is missing, invalid or expired |
+| `403` | `Access denied: only the owner of lab '<lab-id>' can open its consoles` |
+| `404` | The lab or the node was not found |
+| `400` | `<node> is a container, and containers have no serial console. Connect with 'sherpa ssh <node>' instead.` |
+| `409` | `Node '<node>' is not running. Start it with 'sherpa resume'.` |
+| `409` | `The console of <node> is in use by <user> from <client-ip> since <YYYY-MM-DD HH:MM:SS> UTC. Close that session, or take it over with 'sherpa console <node> --force'.` |
+
+A node that was running when the server was upgraded to 0.7.0 is refused until it is stopped and
+resumed, or redeployed.
+
+A session ends with a close frame:
+
+| Code | Meaning |
+| ---- | ------- |
+| `1000` | The node's console closed: the node stopped |
+| `4001` | Another session took it over; the reason names the user, address and time |
+| `4002` | The login session behind the token ended. Checked every 30 seconds |
+| `1011` | The relay failed |
+
+The inspect response's `devices[]` carry no console address. Servers before 0.7.0 sent
+`console_address`; it is removed. `vnc_port` is unchanged.
 
 ## Lab Access
 
@@ -585,7 +610,8 @@ Every lab operation applies the same rule on REST, WebSocket RPC and the web UI:
 | Create | Any authenticated user; the lab is owned by the caller |
 | List | The caller's own labs. Admins may list another user's labs with `GET /api/v1/labs?username=<user>` |
 | Inspect, destroy, down, resume, cancel, update link impairment | The lab owner or an admin |
-| Inspect: each node's `console_address` and `vnc_port` | The lab owner only. For an admin they are empty (`None`) |
+| Inspect: each node's `vnc_port` | The lab owner only. For an admin it is empty (`None`) |
+| Open a node's serial console | The lab owner only, including for admins |
 | Download (RPC `download`; the web UI's lab download) | The lab owner only, including for admins |
 | Refresh a node's host key (RPC `node.host_keys`) | The lab owner only, including for admins |
 | Redeploy a node | The lab owner only, including for admins, because the node is rebuilt with the owner's SSH keys and account |
@@ -598,7 +624,8 @@ destroy and clean up any lab. Start labs from your own account, which may also b
 Downloads hold the SSH config, `known_hosts`, the Talos cluster credentials, the Vault,
 Keycloak and SurrealDB credentials and the lab CA, which a lab's owner needs to log in to its nodes, so an
 admin is refused them with `Only the owner of lab '<id>' can perform this operation`. Likewise
-the console address and VNC port are what reaches a node without its login. Admins keep
+a node's serial console and VNC port reach it without its login, so an admin is refused the
+console and sees no VNC port. Admins keep
 everything else: listing, inspect, down, resume, cancel, link impairment, destroy and clean.
 The server logs a warning (`auth.admin_lab_access`) each time an admin acts on another user's
 lab, and each refusal (`auth.access_denied`). There is no REST download endpoint.

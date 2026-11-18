@@ -166,7 +166,6 @@ are unique, and no two labs share a network.
 | `user`                 | user            | Owner (delete refused)          |
 | `management_network`   | text            | IPv4 management network         |
 | `gateway_ipv4`         | text            | IPv4 gateway address            |
-| `loopback_network`     | text            | IPv4 loopback network           |
 | `description`          | text, optional  | The manifest's `description`    |
 | `ready_timeout`, `provision_concurrency`, `tailscale_*`, `ztp_server_*` | | The manifest's lab-level settings; `ztp_server_password` is encrypted |
 
