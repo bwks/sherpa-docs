@@ -63,8 +63,8 @@ in the web UI.
 | `disk` | [Config Disk](#config-disk) | Cisco IOSv, IOSvL2 and ISE, MikroTik CHR |
 | `cdrom` | [CDROM](#cdrom) | Cisco IOS XE, ASAv, Nexus, IOS XR and FTDv, Juniper vRouter, vSwitch and vSRX, Palo Alto PAN-OS |
 | `tftp` | [TFTP](#tftp) | Arista vEOS, Aruba AOS-CX, Juniper vEvolved |
-| `http` | [HTTP](#http) | SONiC |
-| `volume` | [Container Volumes](#container-volumes) | Arista cEOS, Nokia SR Linux, Juniper cEvolved, Cisco IOL, FRR |
+| `http` | [HTTP](#http) | the SONiC virtual machine |
+| `volume` | [Container Volumes](#container-volumes) | Arista cEOS, Nokia SR Linux, Juniper cEvolved, Cisco IOL, FRR, the SONiC container |
 
 A model takes only the methods listed against it, and all but one take one: Juniper vEvolved
 takes `tftp` or `usb`. Application containers and unikernels take
@@ -217,8 +217,8 @@ lab router's DHCP leases are not served. Up to 0.6.5 the files were under `/conf
 
 ### Container Volumes
 
-Arista cEOS, Nokia SR Linux, Juniper cEvolved, Cisco IOL and FRR containers use the `volume`
-method. Sherpa
+Arista cEOS, Nokia SR Linux, Juniper cEvolved, Cisco IOL, FRR and SONiC containers use the
+`volume` method. Sherpa
 writes the node's configuration files on the Sherpa server and bind mounts them into the
 container, which reads them on startup. The configuration carries your login.
 
@@ -228,7 +228,9 @@ With ZTP `disabled`, one of these containers starts with its image, environment 
 only. Sherpa mounts no configuration and adds no login, so `sherpa ssh` cannot log in to it. What
 the node does with its management address depends on its image: cEOS and SR Linux leave it
 unconfigured, FRR answers on it with no SSH server, cJunosEvolved configures it with SSH for
-the image's own `admin` user, and IOL boots with no configuration and runs its own autoinstall. Each model's page says how to reach it. The node's `container.volumes`
+the image's own `admin` user, and IOL boots with no configuration and runs its own autoinstall.
+A SONiC container is the exception: Sherpa still mounts its start script, which waits for the
+data interfaces and starts the SSH server, but adds no login and no configuration. Each model's page says how to reach it. The node's `container.volumes`
 from the manifest are mounted instead, so you can supply a configuration of your own.
 
 Every other container has no ZTP method. It is configured when the container is created, from

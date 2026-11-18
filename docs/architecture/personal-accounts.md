@@ -164,7 +164,8 @@ AOS-CX, which has no hash form, gets no password at all.
 | MikroTik CHR | you, `admin` | plain text | config disk |
 | FRR | you, `sudo` | SHA-512 hash | container volume |
 | Cumulus | you | plain text | USB disk |
-| SONiC | you, `sudo` | SHA-512 hash | HTTP |
+| SONiC VM | you, `sudo` | SHA-512 hash | HTTP |
+| SONiC container | you, `sudo` (when the image has `sudo`), `frrvty` | SHA-512 hash | container volume |
 
 A configuration delivered on a disk, CD-ROM, USB disk or container volume is not served on the
 network. See [Who Can Read a Node's Configuration](zero-touch-provisioning.md#who-can-read-a-nodes-configuration).

@@ -651,9 +651,9 @@ skip = false
   shows `Node <name> - Waiting for port <port>`. A container that exits while Sherpa waits is
   a failed node; one whose port does not answer in time is reported not ready, as a virtual
   machine is, and stays `starting`. Without a `port`, a container is ready once it keeps
-  running.
+  running, except a `sonic_linux` container, which is checked on SSH port `22`.
 
-The server records each node's ready check (the port, or a virtual machine's model port, and
+The server records each node's ready check (the port, or the model's port, and
 `skip`) when `sherpa up` creates the node, and again when [`sherpa
 redeploy`](command-reference.md#sherpa-redeploy) rebuilds it from the changed manifest.
 `sherpa resume` and the server's [scanner](configuration/sherpa.md#scanner) use that record:
