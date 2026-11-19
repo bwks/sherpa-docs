@@ -98,7 +98,7 @@ The serial console of each VM is a UNIX socket that libvirt binds under `/opt/sh
 
 ### VNC
 
-A VNC graphics adapter is configured on each VM with an auto-assigned port. See [VNC](vnc.md) for connection details.
+Each VM has a VNC graphics adapter. QEMU listens for it on a UNIX socket under `/opt/sherpa/run/console/`, next to the serial console, and no port is opened. Connect a VNC viewer with `sherpa vnc <node>` from any machine with the CLI. The connection goes through `sherpad` and only the lab's owner can open it. See [VNC](vnc.md) and [`sherpa vnc`](../command-reference.md#sherpa-vnc).
 
 ## Lifecycle
 

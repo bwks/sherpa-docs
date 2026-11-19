@@ -68,17 +68,17 @@ User accounts have one of two roles: **Basic** (lab operations) or **Admin** (fu
 
 Admins can list, inspect, stop, resume and destroy other users' labs, but cannot log in to their
 nodes or get what is needed to. For another user's lab an admin cannot download the lab files
-(SSH config, `known_hosts`, Talos, Vault, Keycloak and SurrealDB credentials, the lab CA), cannot see its
-nodes' VNC ports, cannot open its nodes' consoles, and cannot add SSH keys to the user's account;
+(SSH config, `known_hosts`, Talos, Vault, Keycloak and SurrealDB credentials, the lab CA), cannot open its
+nodes' serial or VNC consoles, and cannot add SSH keys to the user's account;
 `sherpa ssh` and `sherpa provision` refuse a folder that holds another user's lab, and the server
-refuses their `sherpa console`. The server logs each admin action on another user's lab and each refusal. Some access
+refuses their `sherpa console` and `sherpa vnc`. The server logs each admin action on another user's lab and each refusal. Some access
 remains:
 
 - An admin who resets a user's Sherpa password can sign in as that user. The reset is logged and
   ends the user's sessions.
 - Root on the Sherpa host can reach consoles, VNC, disks and the database key. So can members of
-  the `kvm` group, for consoles and disks. Admins can start privileged containers and host
-  mounts, which is root on the host. Host-level VNC isolation is tracked in issue #683.
+  the `kvm` group, for consoles, VNC and disks. Admins can start privileged containers and host
+  mounts, which is root on the host.
 
 The boundary is for the admin role through Sherpa's interfaces. It is not a defence against root
 on the host.

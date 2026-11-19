@@ -171,8 +171,7 @@ are unique, and no two labs share a network.
 
 #### node
 
-Stores individual node instances within a lab. Node names and indexes are unique within a lab,
-and VNC ports across all labs.
+Stores individual node instances within a lab. Node names and indexes are unique within a lab.
 
 | Field       | Type                  | Description                           |
 | ----------- | --------------------- | ------------------------------------- |

@@ -59,6 +59,28 @@ the table and logs a warning at each start until you delete it, with
 a password there that you use elsewhere, treat it as exposed. `sherpad init` now refuses to run as
 any account but `sherpa`, root included.
 
+## Updating to 0.7.1
+
+### VNC goes through `sherpad`
+
+A VM's VNC console is no longer a port on the server. `sherpa vnc <node>` relays it to a VNC
+viewer on your machine through `sherpad`'s API with your login token. See [VNC](../../architecture/vnc.md).
+
+- **No port, no SSH tunnel.** QEMU listens for VNC on a UNIX socket under
+  `/opt/sherpa/run/console/`, and nothing listens on ports 5900 to 6999. Instead of
+  `ssh -L <port>:localhost:<vnc-port> <server>`, run `sherpa vnc <node>` and point your viewer at
+  the address it prints. The client and the server must both be 0.7.1.
+- **The VNC port is gone** from `sherpa inspect`, the web UI's node page and nodes table, and the
+  inspect API (`vnc_port`).
+- **Only the lab's owner can open a VNC console**, admins included, one session at a time, with
+  `sherpa vnc <node> --force` to take it over from a session of your own.
+- **Nodes running at the upgrade need a stop and resume.** They keep their VNC port until they
+  stop, and `sherpa vnc` refuses them with `Node '<node>' was started before its VNC console
+  moved behind Sherpa. Stop and resume the lab ('sherpa down', then 'sherpa resume'), or redeploy
+  the node, to use its VNC console.` `sherpad` moves every stopped node's VNC to its socket at
+  startup, and `sherpa resume` moves one as it starts it. `sherpad` logs a warning at startup with
+  the number of running nodes still on a console or VNC port.
+
 ## Updating to 0.7.0
 
 0.7.0 no longer converts what releases before 0.6.5 kept in each lab's directory on the server,
@@ -205,7 +227,8 @@ cancel, impair links on and destroy any lab, and clean up. They can no longer:
   `.sherpa/lab-info.toml` names another user's lab. The server refuses `sherpa console` with
   `Access denied: only the owner of lab '<id>' can open its consoles`.
 - **See its VNC.** `sherpa inspect`, the inspect API and the web UI show `-` for each node's VNC
-  port, for anyone but the owner.
+  port, for anyone but the owner. From 0.7.1 no one sees a port: VNC goes through `sherpa vnc`,
+  which only the owner can open.
 - **Add SSH keys to another account.** `sherpa server user ssh-key add` has no `--user`, the
   server refuses a key for any other account, and the admin page for a user has no form to add
   one. Admins can still remove keys.
@@ -222,7 +245,8 @@ Update the CLI and the server together: an older CLI offers `--user` and `--ssh-
 Some access remains. An admin who resets a user's Sherpa password can sign in as that user; the
 reset is logged and ends the user's sessions. Root on the Sherpa host, and admins, who can start
 privileged containers and host mounts, can still reach consoles, VNC, disks and the database key.
-Host-level console and VNC isolation is tracked in issues #674 and #683. The boundary is for the
+From 0.7.0 consoles, and from 0.7.1 VNC, are sockets only `sherpa`, the `kvm` group and root
+reach (issue #674). The boundary is for the
 admin role through Sherpa's interfaces, not a defence against root on the host. The server logs
 each admin action on another user's lab as a warning (`auth.admin_lab_access`) and each refusal
 (`auth.access_denied`).
