@@ -59,6 +59,32 @@ the table and logs a warning at each start until you delete it, with
 a password there that you use elsewhere, treat it as exposed. `sherpad init` now refuses to run as
 any account but `sherpa`, root included.
 
+## Updating to 0.7.2
+
+### The SSH jump through the server is no longer the default
+
+A lab's SSH config, `.sherpa/ssh/config`, no longer has a `ProxyJump` to the Sherpa server: every
+node is reached directly, at its management address. That works on the Sherpa server itself, and
+on a machine on the lab's [tailnet](../../architecture/networking/tailscale.md) that accepts its
+routes, with no account on the server's host. See [SSH](../../architecture/ssh.md#reaching-nodes).
+
+- **If you reached nodes through the jump**, for example from a laptop off the tailnet, add
+  `--ssh-jump` to `sherpa ssh`, and to `sherpa up`, `sherpa provision` and `sherpa redeploy` for
+  their SSH provisioners. The jump is `<your Sherpa user>@<server>`, as before, for that command
+  only. With plain OpenSSH, add it yourself:
+  `ssh -F .sherpa/ssh/config -J <user>@<server> <node>.<lab-id>`.
+- **Without a route or the jump**, `sherpa ssh` and provisioners stop at once with `<node> at
+  <address>:22 is not reachable from this machine (<cause>). Use --ssh-jump to go through the
+  Sherpa server, or join the lab's tailnet and accept its routes.` They never fall back to the
+  jump on their own.
+- **Existing labs** get the new config at their next `sherpa up` or
+  `sherpa download <lab-id> --force`; no redeploy is needed. Until then their saved config keeps
+  the jump, and plain `ssh` with it still goes through the server.
+- **Update the CLI with the server.** A 0.7.1 CLI with a 0.7.2 lab config runs no SSH
+  provisioners: it reports `<node>.<lab-id> is not in the lab SSH config`. Its `sherpa ssh` goes
+  straight to the node and has no `--ssh-jump`. A 0.7.2 CLI with a config saved by an older server
+  follows that config's jump.
+
 ## Updating to 0.7.1
 
 ### VNC goes through `sherpad`

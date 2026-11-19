@@ -107,8 +107,9 @@ Route approval does not grant access by itself:
     sudo tailscale set --accept-routes
     ```
 
-Connect with the node's normal SSH or HTTPS credentials. The generated `sherpa ssh` config still
-uses the Sherpa server as a jump host. Per-node DNS names are not provided.
+Connect with the node's normal SSH or HTTPS credentials. The lab's SSH config reaches every node
+directly, so `sherpa ssh`, provisioners and `ssh -F .sherpa/ssh/config` go over the tailnet, with
+no jump through the Sherpa server. Per-node DNS names are not provided.
 
 ## Lab Lifecycle
 

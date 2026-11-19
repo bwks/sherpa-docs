@@ -135,6 +135,10 @@ The server records where the lab was started from: your machine's hostname and t
 directory. `sherpa inspect` and the web UI's lab page show them as **Client Host** and
 **Client Folder**, so you can find the folder of a lab later.
 
+| Flag | Description |
+| ---- | ----------- |
+| `--ssh-jump` | Reach the nodes for `ssh` provisioners through the Sherpa server, as `ssh -J <user>@<server>` does. Use it from a machine with no route to the lab's management network; see [SSH](architecture/ssh.md#jump-through-the-sherpa-server) |
+
 The lab is reserved before anything is created: a second `sherpa up` of a lab that exists, or
 that another `up` is creating, is refused at once with "Lab already exists", and does not touch
 the existing lab. Destroy it first to start it again.
@@ -293,6 +297,7 @@ that is not `ready` (see [lab phases](#lab-phases)) is refused.
 | Flag | Description |
 | ---- | ----------- |
 | `--node`, `-n` | Target node to redeploy (required) |
+| `--ssh-jump` | Reach the node for `ssh` provisioners through the Sherpa server, as `ssh -J <user>@<server>` does. Use it from a machine with no route to the lab's management network; see [SSH](architecture/ssh.md#jump-through-the-sherpa-server) |
 
 The rebuilt node's links are attached again. Links that are not attached are listed after the
 result, as for [`sherpa resume`](#sherpa-resume): a link whose peer is down waits for that peer
@@ -362,6 +367,7 @@ result for each node and exits with an error if any node was not provisioned.
 | Flag | Description |
 | ---- | ----------- |
 | `--node`, `-n` | Target a specific node (omit for all nodes with provisioners) |
+| `--ssh-jump` | Reach the nodes for `ssh` provisioners through the Sherpa server, as `ssh -J <user>@<server>` does. Use it from a machine with no route to the lab's management network; see [SSH](architecture/ssh.md#jump-through-the-sherpa-server) |
 
 It stops with `Only the owner of lab '<id>' can connect to its nodes` when the folder's
 `.sherpa/lab-info.toml` names a lab owned by someone else, as in an admin's copy of another
@@ -475,13 +481,20 @@ Validate the `manifest.toml` in the current directory without deploying.
 
 ### `sherpa ssh`
 
-Open an interactive shell on a lab node over SSH, through the Sherpa server as the lab's
-`.sherpa/ssh/config` describes. Sherpa has its own SSH client, so no `ssh` program needs to be
-installed.
+Open an interactive shell on a lab node over SSH, as the lab's `.sherpa/ssh/config` describes:
+straight to the node, from the Sherpa server or a machine on the lab's
+[tailnet](architecture/networking/tailscale.md). Sherpa has its own SSH client, so no `ssh`
+program needs to be installed.
 
 ```
 sherpa ssh <name>
+sherpa ssh <name> --ssh-jump
 ```
+
+| Flag | Description |
+| ---- | ----------- |
+| `--ssh-jump` | Go through the Sherpa server as a jump host, as the logged-in Sherpa user, as `ssh -J <user>@<server>` does. Use it from a machine with no route to the lab's management network; see [SSH](architecture/ssh.md#jump-through-the-sherpa-server) |
+
 
 - The terminal type (`TERM`) and window size are passed to the node, and resizing the window
   resizes the remote terminal.
@@ -491,15 +504,18 @@ sherpa ssh <name>
   answering. Type `~~` to send a single `~`.
 - `sherpa ssh` exits with the exit code of the node's shell, or 255 if the node did not
   report one. Windows nodes do not report it, so it is 0 there.
-- The first time you connect to a Sherpa server, you are shown its host key fingerprint and
-  asked to confirm it, as with OpenSSH. A confirmed key is added to `~/.ssh/known_hosts`. A
+- A node this machine has no route to fails at once, with `<node> at <address>:22 is not
+  reachable from this machine (<cause>). Use --ssh-jump to go through the Sherpa server, or join
+  the lab's tailnet and accept its routes.` It waits at most 10 seconds for the node to answer.
+- With `--ssh-jump`, the first time you connect to a Sherpa server, you are shown its host key
+  fingerprint and asked to confirm it, as with OpenSSH. A confirmed key is added to `~/.ssh/known_hosts`. A
   server whose key has changed is refused.
 - A node's host key is checked against the lab's `.sherpa/ssh/known_hosts` file, which the server
   fills in as nodes become ready, so you are not asked about it. If the node's key has
   changed, as after a restart from the web UI, the new key is fetched from the server with a
   warning. See [Node Host Keys](architecture/ssh.md#node-host-keys).
-- If your key has a passphrase, or the Sherpa server needs your password, you are asked for
-  it, as with OpenSSH. A key loaded in your SSH agent needs no prompt. See
+- If your key has a passphrase, or the node or the Sherpa server needs your password, you are
+  asked for it, as with OpenSSH. A key loaded in your SSH agent needs no prompt. See
   [SSH](architecture/ssh.md).
 - It stops before connecting, with `Only the owner of lab '<id>' can connect to its nodes`, when
   the folder's `.sherpa/lab-info.toml` names a lab owned by someone other than the logged-in

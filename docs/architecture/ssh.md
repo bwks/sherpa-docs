@@ -48,25 +48,62 @@ writes no key to your lab folder.
   Destroy them before updating to 0.6.0; see
   [Updating to 0.6.0](../install-update/update/sherpa.md#updating-to-060).
 
-## Jumphost
+## Reaching Nodes
 
-When the Sherpa server is running on a remote host, lab nodes
-can be accessed via SSH using the Sherpa server as a jumphost.
+`.sherpa/ssh/config` reaches every node directly, at its management address, with no jump host.
+That works from wherever the lab's management network is routed:
 
-The `sherpa ssh <node-name>` command uses the generated
-`.sherpa/ssh/config` file to jump to the lab nodes via the 
-Sherpa server. 
+- **The Sherpa server itself.**
+- **A machine on the lab's tailnet** that accepts its routes, for a lab with a
+  [Tailscale gateway](networking/tailscale.md).
 
 `sherpa ssh` and [SSH provisioners](provisioners/ssh.md) use Sherpa's own SSH client, which
 reads `.sherpa/ssh/config` as `ssh -F .sherpa/ssh/config` would. No `ssh` or `scp` program is
-needed. Like `ssh`, they ask for your key's passphrase or your password on the Sherpa server
-when they need them. Provisioners ask once per run and reuse the answer for every node. A key
-loaded in your SSH agent (`ssh-add`; on Windows the OpenSSH agent service, or Pageant) needs no
-prompt.
+needed. Like `ssh`, they ask for your key's passphrase when they need it. Provisioners ask once
+per run and reuse the answer for every node, and never ask for a node's password. A key loaded
+in your SSH agent (`ssh-add`; on Windows the OpenSSH agent service, or Pageant) needs no prompt.
 
-The Sherpa server's host key is checked against `~/.ssh/known_hosts`. The first time you
-connect, you are shown its fingerprint and asked to confirm it, as with OpenSSH; a confirmed
-key is recorded there. A server whose key has changed is refused.
+When a node cannot be reached from your machine, `sherpa ssh` and the provisioners stop at once,
+after waiting at most 10 seconds for the node to answer, rather than retrying until the lab's
+ready timeout:
+
+```
+dev01 at 172.31.1.21:22 is not reachable from this machine (no answer within 10s). Use --ssh-jump to go through the Sherpa server, or join the lab's tailnet and accept its routes.
+```
+
+They never fall back to the jump on their own.
+
+## Jump Through the Sherpa Server
+
+From a machine with no route to the management network, such as a laptop off the lab's tailnet,
+go through the Sherpa server as an SSH jump host. Add `--ssh-jump` to the command, as `ssh -J`
+adds a jump to a config that has none:
+
+```
+sherpa ssh dev01 --ssh-jump
+sherpa provision --ssh-jump
+sherpa up --ssh-jump
+sherpa redeploy -n dev01 --ssh-jump
+```
+
+The jump is `<user>@<server>`: your Sherpa username, at the host of the server URL the CLI uses.
+It applies to that one command; nothing is saved in the manifest or the lab folder. It needs an
+account on the Sherpa server's host of the same name as your Sherpa user, that accepts your SSH
+key. Sherpa does not create it: ask the server's administrator.
+
+With plain OpenSSH, add the jump yourself:
+
+```
+ssh -F .sherpa/ssh/config -J alice@sherpa.example.com dev01.abcd1234
+```
+
+If your key has a passphrase or the server needs your password, you are asked for it, once per
+run for provisioners. The Sherpa server's host key is checked against `~/.ssh/known_hosts`. The
+first time you connect, you are shown its fingerprint and asked to confirm it, as with OpenSSH; a
+confirmed key is recorded there. A server whose key has changed is refused.
+
+Before 0.7.2, the lab's SSH config always jumped through the server. See
+[Updating to 0.7.2](../install-update/update/sherpa.md#updating-to-072).
 
 ## Node Host Keys
 
@@ -84,7 +121,7 @@ Host 172.31.1.21 dev01.abcd1234 dev01.abcd1234.sherpa.lab.local
 ```
 
 So you are never asked to confirm a node's key. This applies to `sherpa ssh`, provisioners,
-and `ssh` itself through the `~/.ssh/config` include.
+and `ssh` itself through the `~/.ssh/config` include, with or without the jump.
 
 - **Which nodes:** virtual machines whose readiness check is SSH, on port 22, and containers
   with `ready_check.port = 22`. Other containers, unikernels, nodes with another
