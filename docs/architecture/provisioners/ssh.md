@@ -1,9 +1,9 @@
 # SSH
 
 The `ssh` provisioner copies files and runs scripts on Linux and BSD virtual machines. Once a
-node is ready, the `sherpa` CLI on your machine connects to it over SSH, through the Sherpa
-server as a jump host. The server only forwards the encrypted SSH connection, so it never sees or
-stores the contents.
+node is ready, the `sherpa` CLI on your machine connects to it over SSH, directly, or with
+`--ssh-jump` through the Sherpa server as a jump host. The server never sees or stores the
+contents: with the jump it only forwards the encrypted SSH connection.
 
 ## Example
 
@@ -104,10 +104,16 @@ order.
   its own.
 - Nothing extra on your machine: the `sherpa` CLI has its own SSH client. No `ssh` or `scp`
   program is used.
-- A login to the Sherpa server as the jump host. If your key has a passphrase or the server
-  needs your password, you are asked once, even when nodes are provisioned at the same time,
-  and the answer is used for the other nodes. A key loaded in your SSH agent needs no prompt. See
-  [SSH](../ssh.md#jumphost).
+- A route from your machine to the lab's management network: run the command on the Sherpa
+  server, or on a machine on the lab's [tailnet](../networking/tailscale.md) that accepts its
+  routes. A node your machine cannot reach fails at once, saying so; it is not retried until the
+  ready timeout. Otherwise add `--ssh-jump` to `sherpa up`, `sherpa provision` or
+  `sherpa redeploy` to go through the Sherpa server, which needs a login to the server's host;
+  see [SSH](../ssh.md#jump-through-the-sherpa-server).
+- If your key has a passphrase, or the Sherpa server needs your password for the jump, you are
+  asked once, even when nodes are provisioned at the same time, and the answer is used for the
+  other nodes. A node is never asked for a password. A key loaded in your SSH agent needs no
+  prompt.
 - Linux and BSD virtual machines only: the `cloud-init` Linux and BSD models, Alpine and
   Flatcar.
 

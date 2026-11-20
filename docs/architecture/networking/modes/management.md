@@ -32,6 +32,14 @@ A DNS service with the domain name `sherpa.lab.local`. Each node has a forward a
 DNS entry allocated in DNS. Nodes can be looked up via the hostname and FQDN.
 
 
+## Reaching Nodes
+
+The management network is routed on the Sherpa server, so a client there reaches every node at
+its management address. The lab's SSH config, `.sherpa/ssh/config`, connects to nodes there
+directly. From any other machine, either join the lab's tailnet (below), or add `--ssh-jump` to
+`sherpa ssh`, `sherpa up`, `sherpa provision` or `sherpa redeploy` to go through the Sherpa
+server as an SSH jump host. See [SSH](../../ssh.md#reaching-nodes).
+
 ## Access through Tailscale
 
 An optional `[tailscale]` manifest section creates a dedicated subnet router on
@@ -40,7 +48,7 @@ management prefixes to the owner's tailnet. The gateway uses address offset 3 in
 each prefix, below the node allocation range.
 
 Remote clients connect to the node management IPs shown by `sherpa inspect` after
-the routes are approved and tailnet access policy allows them. Generated SSH
-configurations continue to use the configured Sherpa jump host.
+the routes are approved and tailnet access policy allows them. The generated SSH
+configuration reaches the nodes at those addresses directly, with no jump host.
 
 See [Tailscale setup, lifecycle, and recovery](../tailscale.md).
