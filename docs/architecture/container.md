@@ -17,9 +17,21 @@ When a lab is created, Sherpa performs the following for each container node:
 
 ## Resource Allocation
 
-Every container model has a default data interface count and privileged mode. Sherpa does not
-limit a container's CPU or memory: containers accept `cpu.count` and `memory` in the manifest,
-but only a `juniper_evolved` container uses them, to size the router VM inside the container.
+Every container model has a default data interface count and privileged mode. A container node's
+`memory` and `cpu.count` from the manifest are applied as Docker limits when the container is
+created:
+
+- **`memory`** is a hard memory limit, converted from MB to bytes, with the swap limit set equal
+  to it so the container cannot swap.
+- **`cpu.count`** is a CPU quota (Docker `NanoCpus`, `cpu.count` billionths of a CPU each). It
+  limits the CPU time the container may use, on any of the server's CPUs; it does not pin the
+  container to CPUs.
+
+A limit the manifest leaves out is not set, so Docker leaves it unlimited. The image's CPU and
+memory values are not applied to containers. Two models size their limits differently: a
+`juniper_evolved` container takes `memory` (or the image's) as the memory of the router VM inside
+it, and its container's memory limit is that plus 2048 MB, with no CPU quota; a Cisco IOL
+container's memory limit is `memory` (or the image's) plus 128 MB.
 
 Options configurable in the manifest, in the node's [`container`](../manifest.md#container-object)
 group unless noted:
@@ -80,7 +92,7 @@ Container access is available through:
 | Operation | Description |
 | --------- | ----------- |
 | Create | Container is created and started with network attachments |
-| Stop | Container is stopped gracefully |
-| Resume | Stopped container is restarted |
+| Down | `sherpa down` pauses a running container (Docker pause); it is not stopped. A container that is already paused or stopped is reported as such |
+| Resume | `sherpa resume` unpauses a paused container, or starts a stopped one; a running container is left alone |
 | Redeploy | Container is killed and removed, then recreated with fresh configuration |
 | Destroy | Container is killed (SIGKILL), removed, and associated Docker networks are cleaned up |
