@@ -19,8 +19,7 @@ You need the IOL image tarballs from a CML release's reference platform files:
 - `iol-xe-<version>.tar.gz` for `cisco_iol`
 - `ioll2-xe-<version>.tar.gz` for `cisco_ioll2`
 
-The `iol-xe-serial-4eth` image definition uses the same `iol-xe` tarball; Sherpa has no serial
-interface model.
+The `iol-xe-serial-4eth` image definition uses the same `iol-xe` tarball.
 
 ### Build the image
 

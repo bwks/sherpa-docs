@@ -1,8 +1,7 @@
 # Database
 
 `sherpad` keeps its data in an embedded [Turso](https://github.com/tursodatabase/turso)
-database, a Rust rewrite of SQLite that runs inside the `sherpad` process. There is no separate
-database server, container, port or password.
+database, a Rust rewrite of SQLite that runs inside the `sherpad` process.
 
 ## Storage
 

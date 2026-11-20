@@ -57,8 +57,8 @@ Each lab has an IPv6 loopback range, allocated for the lab.
 | Server range | `fd00:1001::/48` |
 | Range per lab | `/64` |
 
-The range cannot be changed. There is no IPv4 loopback range. Node
-consoles are UNIX sockets; see [Serial Console](../console.md).
+The range cannot be changed. Node consoles are UNIX sockets; see
+[Serial Console](../console.md).
 
 ## Changing the Ranges
 

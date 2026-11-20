@@ -542,7 +542,7 @@ This is what `sherpa console` uses. See [Serial Console](architecture/console.md
 - **Access**: the lab's owner only. Admins are refused.
 - **Query**: `force=true` takes the console over from a session of the caller's own. It never
   takes over another user's session.
-- **Frames**: raw serial bytes in binary frames, both ways. There is no telnet protocol. Text
+- **Frames**: raw serial bytes in binary frames, both ways. Text
   frames are ignored.
 
 The errors come as HTTP statuses before the upgrade:
@@ -630,7 +630,7 @@ a node's serial and VNC consoles reach it without its login, so an admin is refu
 Admins keep
 everything else: listing, inspect, down, resume, cancel, link impairment, destroy and clean.
 The server logs a warning (`auth.admin_lab_access`) each time an admin acts on another user's
-lab, and each refusal (`auth.access_denied`). There is no REST download endpoint.
+lab, and each refusal (`auth.access_denied`).
 
 A request for another user's lab returns `403 Forbidden` on REST and an `AccessDenied`
 error on WebSocket RPC. A lab that does not exist returns `404 Not Found` or `NotFound`.

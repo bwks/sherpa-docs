@@ -1152,4 +1152,4 @@ value before changing anything. To change the prefix of a server that already ha
 
 Values come from the flags or the environment variables only; `/opt/sherpa/env/sherpa.env` is not
 read. The install script prints the `sherpad init` command with the address and ports you gave
-it. There are no database flags: the database is a file `sherpad` manages itself.
+it. The database is a file `sherpad` manages itself.

@@ -61,8 +61,7 @@ disabled.
 | Health | `https://<keycloak_mgmt_ip>:9000/health/ready` |
 
 `admin` is the `master` realm's bootstrap admin. Each Keycloak node gets its own, with a random
-password Sherpa generates when the node is created; no two nodes share one, and no password is
-published. Keycloak marks the bootstrap admin as temporary in the admin console; create your own
+password Sherpa generates when the node is created, different for each node. Keycloak marks the bootstrap admin as temporary in the admin console; create your own
 admin user to replace it if you keep the lab.
 
 `sherpa up` and `sherpa download` write the admin and its password to

@@ -7,7 +7,7 @@ depends on the lab and the node, not on any server setting.
 
 Nodes that Sherpa provisions have one login: yours. It is your Sherpa username, with the SSH
 public keys registered to your account and your [device password](device-password.md) as its
-password. Nothing is shared between users or labs, and no password is published.
+password. Each login belongs to one user.
 
 | Username              | Password        | SSH Key                           |
 | --------------------- | --------------- | --------------------------------- |

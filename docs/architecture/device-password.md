@@ -9,7 +9,7 @@ administrators included, can set, read or clear it.
 !!! Warning "Set it before your first lab"
 
     `sherpa up` and node redeploys need a device password. Every user sets one before their
-    first lab. Nothing is generated for you.
+    first lab.
 
 ## Set It
 

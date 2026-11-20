@@ -50,7 +50,7 @@ version = "v2.2"
 
 SurrealDB serves its API on port `8000`, on the node's management address, in memory. It starts
 with one root user, `root`, with a random password Sherpa generates for the node when it is
-created; no two nodes share one, and no password is published.
+created, different for each node.
 
 `sherpa up` and `sherpa download` write the address, user and password to
 `.sherpa/surrealdb/surrealdb-<node>.toml` in the lab folder, readable only by you:

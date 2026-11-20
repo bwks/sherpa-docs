@@ -14,8 +14,6 @@ the Sherpa server, next to the node's [serial console](console.md):
 /opt/sherpa/run/console/<lab-id>/<node-index>.vnc
 ```
 
-Nothing listens for VNC on a network port.
-
 The socket is in the lab's console folder, owned `sherpa:kvm` with mode `2770`. Only `sherpa`,
 members of `kvm` and root can reach it. Members of `kvm` can already read every lab's disks.
 
@@ -43,8 +41,8 @@ GET /api/v1/labs/{lab_id}/nodes/{node_name}/vnc
 ```
 
 `sherpa vnc` sends your login token and uses the same TLS settings and trusted certificate as
-every other command. See the [API Reference](../api-reference.md#vnc-console). There is no SSH
-tunnel, so you need no SSH key or account on the server. It works the same on Windows.
+every other command. See the [API Reference](../api-reference.md#vnc-console). It needs
+no SSH key or account on the server, and works the same on Windows.
 
 `sherpa vnc` keeps listening until you press `Ctrl+C`, so your viewer can disconnect and connect
 again. Viewers that read a small number after a colon as a display number take a port this

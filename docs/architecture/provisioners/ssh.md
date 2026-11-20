@@ -100,8 +100,7 @@ order.
 
 - Run the command from the lab's folder, where `sherpa up` wrote `.sherpa/ssh/config`.
 - One of your [registered SSH keys](../ssh-keys.md), in your SSH agent or your default key
-  files: provisioners log in to each node with it, as `sherpa ssh` does. The lab has no key of
-  its own.
+  files: provisioners log in to each node with it, as `sherpa ssh` does.
 - Nothing extra on your machine: the `sherpa` CLI has its own SSH client. No `ssh` or `scp`
   program is used.
 - A route from your machine to the lab's management network: run the command on the Sherpa

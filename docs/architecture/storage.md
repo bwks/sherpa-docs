@@ -99,9 +99,6 @@ builds `lab-info.toml`, the SSH config and `known_hosts` from it whenever `sherp
 Nor is a Talos cluster's plan: its members are in the lab's definition, and the addresses Sherpa
 chose for it (its endpoint, shared address and load balancer addresses) in the database.
 
-Nor is an SSH key: Sherpa has none of its own for nodes (see
-[SSH](ssh.md#logging-in-to-nodes)).
-
 VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
 `/opt/sherpa/libvirt/images/`. A VM's boot files, such as its cloud-init `user-data` and the ISO
 built from them, are removed from the lab directory once they are in the pool; if the copy

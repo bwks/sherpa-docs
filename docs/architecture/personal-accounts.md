@@ -2,9 +2,7 @@
 
 You log in to lab nodes as yourself: your Sherpa username, your own SSH keys, your
 [device password](device-password.md) and administrator rights. It is the only login Sherpa
-creates. There is no `sherpa` account and no shared password.
-
-There is nothing to enable. Every node whose configuration Sherpa generates gets your login.
+creates. Every node whose configuration Sherpa generates gets your login.
 
 ## Before You Start
 
@@ -44,7 +42,7 @@ run commands as root without a password. On FreeBSD they use passwordless `sudo`
 image includes.
 
 On Flatcar your account joins the `wheel` and `docker` groups and has passwordless `sudo`, and
-gets your account's keys like every other node. The manifest has no way to add keys.
+gets your account's keys like every other node.
 
 Manifest `user_scripts` run as your account, and manifest `environment_variables` are set in
 your account's login shells.

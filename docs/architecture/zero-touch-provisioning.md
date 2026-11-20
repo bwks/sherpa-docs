@@ -18,8 +18,7 @@ The following configuration parameters are applied to nodes via ZTP:
   such as `admin` take the device password too. Aruba AOS-CX gets your keys only, with `admin`
   locked. See [Your Login on Nodes](personal-accounts.md#passwords-on-nodes).
 
-There is no `sherpa` account and no shared password in a configuration Sherpa generates. The
-configurations served over TFTP or HTTP carry only hashes of the device password, and Aruba
+The configurations served over TFTP or HTTP carry only hashes of the device password, and Aruba
 AOS-CX's carries none.
 
 ## Who Can Read a Node's Configuration

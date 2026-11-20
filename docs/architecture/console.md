@@ -14,8 +14,6 @@ libvirt binds each node's serial console to a UNIX socket on the Sherpa server:
 A virtual machine's VNC console is a socket in the same folder, `<node-index>.vnc`; see
 [VNC](vnc.md).
 
-Nothing listens on a network address for a console.
-
 Each lab's folder under `/opt/sherpa/run/console/` is owned `sherpa:kvm` with mode `2770`. Only
 `sherpa`, members of `kvm` and root can reach the sockets. Members of `kvm` can already read
 every lab's disks. `sherpad` creates the folder at `sherpa up` and removes it at `sherpa destroy`.
@@ -30,11 +28,9 @@ GET /api/v1/labs/{lab_id}/nodes/{node_name}/console
 
 It sends your login token as `Authorization: Bearer <token>` and uses the same TLS settings and
 trusted certificate as every other command. `sherpad` connects to the node's socket and relays
-the bytes in both directions. The bytes are raw serial data in binary frames, with no telnet
-protocol. See the [API Reference](../api-reference.md#serial-console).
+the bytes in both directions. The bytes are raw serial data in binary frames. See the [API Reference](../api-reference.md#serial-console).
 
-There is no SSH connection, so you need no SSH key or account on the server, and no `telnet`
-program. It works the same on Windows.
+It needs no SSH key or account on the server. It works the same on Windows.
 
 ## Who Can Connect
 

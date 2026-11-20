@@ -32,8 +32,6 @@ Host 172.31.1.22 router1.abcd1234 router1.abcd1234.sherpa.lab.local
 ```
 
 `ssh`, `sherpa ssh` and provisioners use the keys in your SSH agent or your default key files.
-Sherpa has no key of its own: it never logs in to a node, puts no key of its own on one, and
-writes no key to your lab folder.
 
 - **Redeploy:** `sherpa redeploy` rebuilds the node with your login.
 

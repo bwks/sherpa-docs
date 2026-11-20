@@ -7,8 +7,7 @@ for [your login](personal-accounts.md).
 Only the public key is sent to the server. Keep the private key on your workstation or in your
 SSH agent.
 
-Your registered keys are the only keys a node built by Sherpa trusts. Sherpa has no key of its
-own, and writes no key to your lab folder: `ssh`, `sherpa ssh` and provisioners use the keys in
+Your registered keys are the only keys a node built by Sherpa trusts. `ssh`, `sherpa ssh` and provisioners use the keys in
 your SSH agent or your default key files (see [SSH](ssh.md#logging-in-to-nodes)).
 
 ## Generate a Key
