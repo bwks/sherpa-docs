@@ -994,11 +994,8 @@ the lab owner's account, and nothing else; see
 
 The node's `ssh` group (`authorized_keys`, `authorized_key_files`) has been removed. Keys come
 only from the lab owner's account: add them with `sherpa server user ssh-key add` or on the
-**Profile** page; see [SSH Keys](architecture/ssh-keys.md). A manifest that still has an `ssh`
-group is refused with a message that says the group has been removed, that every node takes the
-SSH keys on your account, and that points you to `sherpa server user ssh-key add` or the
-**Profile** page. The old `ssh_authorized_keys` and `ssh_authorized_key_files` keys are refused
-with an `unknown field` error. Delete them.
+**Profile** page; see [SSH Keys](architecture/ssh-keys.md). A manifest that still has the `ssh` group or the
+old flat `ssh_authorized_keys` and `ssh_authorized_key_files` keys is refused with an `unknown field` error. Delete them.
 
 ### ready_timeout (int)
 
