@@ -992,11 +992,6 @@ the lab owner's account, and nothing else; see
 `provision_current_user`, to `true` or `false`, is refused by `sherpa validate`, `sherpa up` and
 `sherpa redeploy` with ``unknown field `provision_current_user` ``. Delete the line.
 
-The node's `ssh` group (`authorized_keys`, `authorized_key_files`) has been removed. Keys come
-only from the lab owner's account: add them with `sherpa server user ssh-key add` or on the
-**Profile** page; see [SSH Keys](architecture/ssh-keys.md). A manifest that still has the `ssh` group or the
-old flat `ssh_authorized_keys` and `ssh_authorized_key_files` keys is refused with an `unknown field` error. Delete them.
-
 ### ready_timeout (int)
 
 Global timeout in seconds for node readiness checks. Overrides the default timeout for all nodes in the lab.
