@@ -94,6 +94,3 @@ that gives nothing away that root does not already have.
 - Approximate time for the system to be ready: `1 minute`
 - The database is in memory. `sherpa redeploy` starts an empty SurrealDB with the same root user
   and password, so your `.sherpa/surrealdb/surrealdb-<node>.toml` stays right.
-- A SurrealDB node created before Sherpa 0.7.0 keeps the `sherpa` root user, with the password
-  every node had then, until you run `sherpa redeploy -n <node>`, which gives it its own `root`
-  user. Run `sherpa download --force` afterwards for the file.

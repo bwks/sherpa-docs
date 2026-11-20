@@ -65,17 +65,11 @@ see [`kind`](#kind-string).
 model = "sonic_linux"
 ```
 
-Nineteen model names were renamed in Sherpa 0.7.0, such as `arista_ceos` to `arista_eos` with
-`kind = "container"`. An old name is refused with a message naming the new model and kind; the
-full table is in
-[Updating to 0.7.0](install-update/update/sherpa.md#node-models-renamed-and-nodes-take-a-kind).
-
 #### Optional Node Parameters
 
 A node's settings are grouped. A few are top-level keys of the node; the rest sit in a table
 named after their group, such as `[nodes.cpu]`. Every setting is optional: one left out keeps
-the value of the node's image. A key Sherpa does not know is refused, including the flat keys
-of earlier releases (see [Upgrading manifests](#upgrading-manifests-from-flat-keys)).
+the value of the node's image. A key Sherpa does not know is refused.
 
 ```toml
 [[nodes]]
@@ -634,10 +628,7 @@ redeploy`](command-reference.md#sherpa-redeploy) rebuilds it from the changed ma
 `sherpa resume` and the server's [scanner](configuration/sherpa.md#scanner) use that record:
 the scanner probes a node left `starting` on its port, a virtual machine's too, and records it
 `running` only once the port answers. A node with no port, or with `skip = true`, is `running`
-once it runs. The nodes of a lab created before Sherpa recorded ready checks are recorded with
-no `port` and no `skip`, whatever their manifest set: a virtual machine is checked on its
-model's port, and a container or unikernel is ready once it runs. Redeploy a node to have its
-`ready_check` recorded.
+once it runs.
 
 With `skip = true` the node is still created and started; Sherpa just doesn't wait for it to be
 ready, and ignores `port`. A container is not waited for to keep running, but one that is not running right after
@@ -807,9 +798,7 @@ node of another lab" instead. `sherpa up` and `sherpa redeploy` exit with status
 ([exit status](command-reference.md#exit-status)); run the command again once the CPUs are
 free, or pin other CPUs.
 
-Labs created by earlier releases may already share a CPU, since two labs started at the same
-moment could both pass the check. Upgrading keeps their pins as they are, and they are not
-refused: `sherpa resume` and `sherpa redeploy` start such a node and show a warning that names
+Two nodes that already share a pinned CPU are not refused: `sherpa resume` and `sherpa redeploy` start such a node and show a warning that names
 the CPUs, such as `Warning: Host CPU 3 of node 'n1' is also pinned by a node of another lab,
 against the CPU pinning rules. Starting the node anyway; redeploy one of the two on other host
 CPUs to fix it`. `sherpad` also logs each pair of nodes that share a CPU every time it starts.
@@ -829,73 +818,6 @@ slower to reach, instead of being stopped.
 
 Pinning keeps a virtual machine's threads on those CPUs. It does not reserve the CPUs: the
 host can still run other work on them.
-
-##### Upgrading manifests from flat keys
-
-Releases up to 0.5.35 took these settings as flat keys of the node, and the virtual machine
-tuning in a `[nodes.performance_tuning]` table. Sherpa now refuses those keys with an
-`unknown field` error that names the key. Move each to its group:
-
-| Old key | New key |
-|---|---|
-| `cpu_count` | `cpu.count` |
-| `performance_tuning.cpu_mode` | `cpu.mode` |
-| `performance_tuning.cpu_topology` | `cpu.topology` |
-| `performance_tuning.cpu_pinning` | `cpu.pinning` |
-| `performance_tuning.qemu_cpus` | `cpu.emulator_pinning` |
-| `performance_tuning.numa_node` | `numa.node` |
-| `performance_tuning.numa_memory_mode` | `numa.memory_mode` |
-| `boot_disk_size` | `boot_disk.size` |
-| `boot_disk_clone_method` | `boot_disk.clone_method` |
-| `performance_tuning.disk_cache` | `boot_disk.cache` |
-| `performance_tuning.disk_io` | `boot_disk.io` |
-| `performance_tuning.disk_io_thread_cpus` | `boot_disk.io_thread_cpus` |
-| `data_interface_count` | `interfaces.data_count` |
-| `performance_tuning.interface_queues` | `interfaces.queues` |
-| `ztp` | `ztp.method` |
-| `ztp_config` | `ztp.config` |
-| `ready_port` | `ready_check.port` |
-| `skip_ready_check` | `ready_check.skip` |
-| `watchdog` | `vm.watchdog` |
-| `user` | `container.user` |
-| `privileged` | `container.privileged` |
-| `shm_size` | `container.shm_size` |
-| `commands` | `container.commands` |
-| `volumes` | `container.volumes` |
-| `platform` | `container.platform` |
-| `kernel_cmdline` | `unikernel.cmdline` |
-
-`name`, `model`, `image`, `version`, `memory`, `environment_variables`, `text_files`,
-`binary_files`, `systemd_units`, `startup_scripts`, `user_scripts` and `provisioners` are
-unchanged. For example:
-
-```toml
-# Before
-[[nodes]]
-name = "dev01"
-model = "ubuntu_linux"
-cpu_count = 4
-data_interface_count = 2
-skip_ready_check = true
-
-# After
-[[nodes]]
-name = "dev01"
-model = "ubuntu_linux"
-
-[nodes.cpu]
-count = 4
-
-[nodes.interfaces]
-data_count = 2
-
-[nodes.ready_check]
-skip = true
-```
-
-`sherpa resume` of a lab created before the change uses the default readiness settings, because
-the manifest it saved has the old keys, so the server could not record the lab's definition from
-it.
 
 ## Optional Parameters
 
@@ -983,14 +905,7 @@ loss_percent = 1.0
 
 `sherpa validate` and `sherpa up` refuse a value outside these ranges, naming the link.
 
-Every link is a P2P eBPF link. The `p2p` setting has been removed, and a manifest that still
-sets it fails validation; see [the removed `p2p` setting](architecture/networking/modes/point-to-point.md#the-removed-p2p-setting).
-
-The `provision_current_user` setting has been removed. Every node with a generated login gets
-the lab owner's account, and nothing else; see
-[Your Login on Nodes](architecture/personal-accounts.md). A manifest that still sets
-`provision_current_user`, to `true` or `false`, is refused by `sherpa validate`, `sherpa up` and
-`sherpa redeploy` with ``unknown field `provision_current_user` ``. Delete the line.
+Every link is a P2P eBPF link.
 
 ### ready_timeout (int)
 

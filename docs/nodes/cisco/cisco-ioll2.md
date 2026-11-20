@@ -100,9 +100,8 @@ dst = "sw2::Ethernet0/2"
 !!! warning
 
     Trunks need an image built with docker-cisco-iol that includes
-    [the VLAN tag fix](https://github.com/bwks/docker-cisco-iol/pull/2). An image built before it
-    hands IOL every frame on a trunk untagged, so VLANs do not cross the trunk and each switch
-    sees itself as the spanning-tree root. Rebuild the image to fix it.
+    [VLAN tag support](https://github.com/bwks/docker-cisco-iol/pull/2). Without it, VLANs do not
+    cross the trunk and each switch sees itself as the spanning-tree root.
 
 Configure VLANs, access and trunk ports and SVIs on the switch as on any IOS switch. For the lab
 above, on `sw1` (on `sw2` the SVI takes `10.0.10.3`):

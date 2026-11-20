@@ -1,16 +1,15 @@
 # Device Password
 
-Your device password is your password on lab nodes. From Sherpa 0.7.0 it becomes the password of
+Your device password is your password on lab nodes. It is the password of
 your login on every node Sherpa provisions for you, and of the fixed vendor accounts some devices
 have, such as `admin`. Aruba AOS-CX is the one exception: you log in there by key only (see
 [Your Login on Nodes](personal-accounts.md#aruba-aos-cx)). It is yours alone: it is not your Sherpa login password, and nobody else,
 administrators included, can set, read or clear it.
 
-!!! Warning "Set it before your first lab on 0.7.0"
+!!! Warning "Set it before your first lab"
 
-    From Sherpa 0.7.0, `sherpa up` and node redeploys need a device password. Every user,
-    including users from earlier releases, sets one before their first lab on 0.7.0. Nothing is
-    generated for you.
+    `sherpa up` and node redeploys need a device password. Every user sets one before their
+    first lab. Nothing is generated for you.
 
 ## Set It
 

@@ -16,10 +16,6 @@ curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts
 No database server is installed: `sherpad` keeps its data in an embedded database,
 `/opt/sherpa/db/sherpa.sqlite`, which `sherpad init` creates. See [Database](../../architecture/database.md).
 
-To upgrade a server older than 0.5.0, update it to 0.5.12 first; see
-[Updating to 0.5.0](../update/sherpa.md#updating-to-050). The install script refuses to run while
-the old `sherpa-db` SurrealDB container exists.
-
 ## File Permissions
 
 The install script, `sherpad init` and the update script give Sherpa's configuration and log

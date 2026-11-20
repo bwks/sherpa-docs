@@ -281,35 +281,9 @@ its kind's and an image without its kind's group, naming the group. A container 
 machine, disk, CD-ROM or interface device settings: Docker makes its interfaces. A unikernel has
 no firmware, disks, CD-ROM, `vmx`, `os_variant` or ZTP setting.
 
-Releases up to 0.6.5 returned every group for every kind of image. 0.7.0 moves each setting a
-kind alone takes into that kind's group, and removes `interfaces.prefix` and
-`interfaces.first_index`, which nothing read:
+The OpenAPI schema describes the same shape.
 
-| 0.6 field | 0.7.0 field |
-| --------- | ----------- |
-| `repo` | `container.repo` |
-| `os_variant` | `vm.os_variant` |
-| `cpu.architecture`, `cpu.model` | `vm.cpu.*` or `unikernel.cpu.*` |
-| `cpu.vmx` | `vm.cpu.vmx` |
-| `machine.kind` | `vm.machine.kind` or `unikernel.machine.kind` |
-| `machine.bios` | `vm.machine.bios` |
-| `boot_disk`, `cdrom` | `vm.boot_disk`, `vm.cdrom` |
-| `interfaces.kind`, `interfaces.mtu` | `vm.interfaces.*` or `unikernel.interfaces.*` |
-| `interfaces.prefix`, `interfaces.first_index` | removed |
-| `ztp` | `vm.ztp` or `container.ztp` |
-| `unikernel` (`boot_mode`, or `null`) | `unikernel.boot_mode`, present only on a unikernel image |
-
-`model`, `version`, `kind`, `default`, `memory`, `cpu.count`, `interfaces.data_count`,
-`interfaces.management` and `interfaces.reserved_count` are unchanged. The flat fields of
-releases up to 0.5.35 (`cpu_count`, `hdd_bus` and the rest) are refused. The OpenAPI schema
-describes the same shape.
-
-Releases up to 0.6.5 also had `ztp.username`, `ztp.password` and `ztp.password_auth` (flat
-`ztp_username`, `ztp_password` and `ztp_password_auth` up to 0.5.35), and `ztp_password_set`
-beside `image`. Sherpa's node configurations never used them, and 0.7.0 removes them: the
-server drops any stored values, `image.show` no longer returns them, and an `image.import` that
-sends one of them, or any other field it does not take, is refused with an error naming the
-field.
+An `image.import` that sends a field it does not take is refused with an error naming the field.
 
 ### The image's kind
 
@@ -331,10 +305,8 @@ The REST paths that name one image carry the kind:
 | `DELETE` | `/api/v1/images/{model}/{kind}/{version}` | Delete the image |
 | `POST` | `/api/v1/images/{model}/{kind}/{version}/default` | Make the version the default |
 
-`{kind}` is `virtual_machine`, `container` or `unikernel`; an unknown model or kind, an old
-model name, or a kind the model does not take is a bad request (400). The paths without a kind,
-`/api/v1/images/{model}`, `/api/v1/images/{model}/{version}` and
-`/api/v1/images/{model}/{version}/default`, were removed in 0.7.0. The multipart form of
+`{kind}` is `virtual_machine`, `container` or `unikernel`; an unknown model or kind, or a kind
+the model does not take, is a bad request (400). The multipart form of
 `POST /api/v1/images/upload` takes a `kind` field; without it, or empty, the model's default
 kind.
 
@@ -347,8 +319,7 @@ image's own kind's. Its editor takes the same: CPU count, memory and interface c
 kind; the OS, CPU, machine, firmware, disk, CD-ROM, interface device and ZTP settings for a
 virtual machine; the repo and ZTP setting for a container; the CPU, machine and interface device
 settings for a unikernel, whose boot mode is kept. A form that sends a setting the image's kind
-does not take is refused, naming it, and so is one that sends `interface_prefix` or
-`first_interface_index`, removed in 0.7.0.
+does not take is refused, naming it.
 
 ### Deleting an image
 
@@ -357,8 +328,7 @@ then the image itself, and answer with `model`, `kind`, `version`, `db_deleted`,
 `image_deleted` and `new_default`. `image_deleted` says whether the image itself was deleted: a
 virtual machine's or unikernel's file, with its version folder once no other kind's file is
 left in it, or a container's Docker image, its `repo` at its
-`version`. Another tag of the same Docker image, such as the one it was pulled as, is kept. Until
-0.6.5 the field was `disk_deleted`, and a container image's Docker image was left behind.
+`version`. Another tag of the same Docker image, such as the one it was pulled as, is kept.
 
 The delete is refused as a conflict (409, or `Conflict`), naming what holds the image:
 
@@ -460,7 +430,7 @@ these operations first.
 A lab's list entry has `status`, derived from its nodes, and `phase`, which operation owns the
 lab: `creating`, `ready`, `destroying`, `destroy_failed` or `interrupted` (see
 [lab phases](command-reference.md#lab-phases)). Inspect returns them as `lab_state` and
-`lab_phase`. A server before 0.5.27 sends no phase; read its labs as `ready`.
+`lab_phase`.
 
 - Creating a lab whose ID is in use, by an existing lab or one being created, fails before
   anything is created, with an error that says the lab already exists.
@@ -544,8 +514,8 @@ A link that is not attached does not make the node's `success` false.
 The inspect response's `links[]` carry `state`, the link's last state as the server found or
 left it, in the same form: from the server's scan of the lab every `scanner.interval_secs`, or
 from the last resume or redeploy. The field is absent while the server has not checked the
-link since it started, and from servers that do not report link states. `index` is the link's
-`link_index` for [Link Impairment](#link-impairment); servers before it do not send it.
+link since it started. `index` is the link's
+`link_index` for [Link Impairment](#link-impairment).
 
 ```json
 {
@@ -586,9 +556,6 @@ The errors come as HTTP statuses before the upgrade:
 | `409` | `Node '<node>' is not running. Start it with 'sherpa resume'.` |
 | `409` | `The console of <node> is in use by <user> from <client-ip> since <YYYY-MM-DD HH:MM:SS> UTC. Close that session, or take it over with 'sherpa console <node> --force'.` |
 
-A node that was running when the server was upgraded to 0.7.0 is refused until it is stopped and
-resumed, or redeployed.
-
 With `check=true` (`GET .../console?check=true`), the route only checks: it needs no WebSocket
 upgrade and makes none, and takes no session. It refuses with the errors above, except that a
 console in use is not refused, and otherwise answers `200`:
@@ -621,7 +588,6 @@ The errors are those of the serial console, with these differences:
 | `400` | `<node> is a container, and containers have no VNC console. Connect with 'sherpa ssh <node>' instead.` |
 | `400` | `<node> is a unikernel, and unikernels have no VNC console. Use 'sherpa console <node>' instead.` |
 | `409` | `The VNC console of <node> is in use by <user> from <client-ip> since <YYYY-MM-DD HH:MM:SS> UTC. Close that session, or take it over with 'sherpa vnc <node> --force'.` |
-| `409` | `Node '<node>' was started before its VNC console moved behind Sherpa. Stop and resume the lab ('sherpa down', then 'sherpa resume'), or redeploy the node, to use its VNC console.` A node that was running when the server was upgraded to 0.7.1 |
 
 A session ends with the serial console's close frames, except that `1000` says `The node's VNC
 console closed the connection.`: the node's VNC server closed it, for example as the node
@@ -636,8 +602,7 @@ A session ends with a close frame:
 | `4002` | The login session behind the token ended. Checked every 30 seconds |
 | `1011` | The relay failed |
 
-The inspect response's `devices[]` carry no console address and no VNC port. Servers before 0.7.0
-sent `console_address`, and servers before 0.7.1 sent `vnc_port`; both are removed.
+The inspect response's `devices[]` carry no console address and no VNC port.
 
 ## Lab Access
 
@@ -694,8 +659,7 @@ Creating a lab or redeploying a node fails until the caller has at least one reg
 ## User Creation
 
 `user.create` (RPC) and `POST /api/v1/admin/users` (REST) take a username, a password and the
-admin flag, and no `ssh_keys`. Both refuse unknown fields, so a client that still sends
-`ssh_keys` gets an error instead of a user without keys. Each user adds their own keys
+admin flag, and no `ssh_keys`. Both refuse unknown fields, `ssh_keys` included. Each user adds their own keys
 afterwards; see [SSH Keys](#ssh-keys).
 
 ## Usernames
@@ -723,5 +687,4 @@ on the users page.
 `GET /api/v1/labs` requires authentication. Without `?username=` it lists the
 caller's labs.
 
-The caller's identity always comes from their token. Request bodies do not carry a
-`username` field, and one sent by an older client is ignored.
+The caller's identity always comes from their token. A `username` field in a request body is ignored.

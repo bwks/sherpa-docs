@@ -117,9 +117,7 @@ sherpa server image scan --kind container
 
     cEOS images must be imported with the repo set to `localrepo/arista_eos`. The scan only
     registers images with that repo as `arista_eos` container images, and labs start cEOS from
-    it. The first version registered becomes the default. Before Sherpa 0.7.0 the repo was
-    `localrepo/arista_ceos`; images already registered from it keep working, but the scan no
-    longer finds new tags under that name.
+    it. The first version registered becomes the default.
 
 `sherpa server image import` does not work for cEOS: it loads `docker save` archives, not root
 filesystem archives.
@@ -173,8 +171,7 @@ version = "4.35.1F"
 
 - Approximate time for the system to be ready: `1 minutes`
 - The node boots from its ZTP configuration, copied to `flash:startup-config` the first time the
-  container starts. `write memory` saves to it as usual (since Sherpa 0.4.16; before, it failed
-  with `Device or resource busy`). The saved configuration is kept across `sherpa down` and
+  container starts. `write memory` saves to it as usual. The saved configuration is kept across `sherpa down` and
   `sherpa resume`. `sherpa redeploy` creates a new container, so it starts again from the ZTP
   configuration.
 - With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as shipped: it starts without Sherpa's startup configuration, so it has no management IP address and no `sherpa` login, and `sherpa ssh` cannot reach it. Reach it with `docker exec -it <node-name>-<lab-id> Cli`. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.

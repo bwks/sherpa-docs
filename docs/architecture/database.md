@@ -1,11 +1,8 @@
 # Database
 
-Since version 0.5.0, `sherpad` keeps its data in an embedded [Turso](https://github.com/tursodatabase/turso)
+`sherpad` keeps its data in an embedded [Turso](https://github.com/tursodatabase/turso)
 database, a Rust rewrite of SQLite that runs inside the `sherpad` process. There is no separate
 database server, container, port or password.
-
-Servers older than 0.5.0 used a SurrealDB container. They must update to 0.5.12 first, which
-moves their data across; see [Updating to 0.5.0](../install-update/update/sherpa.md#updating-to-050).
 
 ## Storage
 
@@ -33,19 +30,9 @@ written: `KEY=$VAR` keeps the name `$VAR`, never its value. The `sherpa` CLI sti
 files and resolves the variables, and sends them with each `sherpa up` and `sherpa redeploy` to
 build the node, but the server does not write them to its database.
 
-Labs started before 0.6.4 got theirs from the manifest the server saved, the first time
-`sherpad` 0.6.4 or 0.6.5 started, which then deleted it. That saved manifest was resolved, so the
-import kept only what it held as written: `ztp.config`, `environment_variables` and
-`provisioners` were left out, and are stored again the next time you redeploy the node with
-`sherpa redeploy`. 0.7.0 no longer imports, and no longer refuses a web UI redeploy of an
-imported node that has not been redeployed from the CLI since: it would rebuild the node without
-them. See [Updating to 0.7.0](../install-update/update/sherpa.md#updating-to-070).
-
 A lab with no definition is used with the defaults: `sherpa resume` waits the default readiness
 timeout, containers get their image's number of data interfaces, and it cannot be redeployed
-from the web UI until `sherpa redeploy` records one. A CLI older than the server sends only
-resolved values, so a lab it starts has no `ztp.config`, environment variables or provisioners
-recorded.
+from the web UI until `sherpa redeploy` records one.
 
 ### Database key
 
@@ -55,9 +42,7 @@ not encrypted. The key is in
 `/opt/sherpa/.secret/db.key`, beside the JWT secret in a folder only `sherpa` can open (mode
 `700`): 32 random bytes, readable only by `sherpa`, which `sherpad` creates
 the first time it starts. The key is never in the database or its backups, so a database or a
-backup copied off the server shows no password. Releases up to 0.6.5 also stored an encrypted
-ZTP password for each image; 0.7.0 drops it, with the image's ZTP username and password-auth
-setting.
+backup copied off the server shows no password.
 
 Keep the key with the database:
 
@@ -184,7 +169,7 @@ Stores individual node instances within a lab. Node names and indexes are unique
 | `mgmt_mac`  | text, optional        | Management MAC address                |
 | `state`     | text                  | [Node state](../command-reference.md#node-states) |
 | `ssh_host_key` | text, optional     | The SSH host key the node offered when it last became ready |
-| `ssh_username` | text, optional     | The account the lab's SSH config logs in to the node with: the lab owner's on a node with a generated login, `admin` on Cisco FTDv, `sherpa` on a node built before 0.7.0, else empty and the owner's name is used |
+| `ssh_username` | text, optional     | The account the lab's SSH config logs in to the node with: the lab owner's on a node with a generated login, `admin` on Cisco FTDv, else empty and the owner's name is used |
 | `version`, `manifest_memory`, `cpu_*`, `numa_*`, `boot_disk_*`, `interfaces_*`, `ztp_*`, `vm_*`, `container_*`, `unikernel_*`, ... | | The node's settings from the manifest |
 
 #### manifest_*

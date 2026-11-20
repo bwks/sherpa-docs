@@ -144,7 +144,3 @@ root does not already have.
   `sherpa redeploy` starts an empty Keycloak, with the same admin and password. Sherpa then
   makes the `sherpa` realm again, with the same users and passwords; users and groups you added
   are gone. Your `.sherpa/keycloak/keycloak-<node>.toml` stays right.
-- A Keycloak node created before Sherpa 0.7.0 keeps its old `sherpa` admin, with the password
-  every node had then, until you run `sherpa redeploy -n <node>`. The redeploy gives it its own
-  `admin` and removes the `sherpa` user from the realm; run `sherpa download --force` afterwards
-  for the new file.

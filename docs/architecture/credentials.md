@@ -23,10 +23,6 @@ Talos cluster credentials, Vault, Keycloak and SurrealDB credentials and lab CA 
 not to admins. An admin who resets a user's Sherpa password can still sign in as them; that is logged.
 See [Overview](overview.md).
 
-Before 0.7.0 every node also had a `sherpa` account with a published password, and Keycloak and
-SurrealDB nodes had it as their administrator. New nodes do not.
-See [Updating Sherpa](../install-update/update/sherpa.md) for labs built before then.
-
 ## Application Administrators
 
 Some application containers have an administrator of their own. Sherpa gives each node its own,
@@ -55,7 +51,4 @@ login.
 
 ## Server Configuration
 
-No setting in `sherpa.toml` changes node credentials. Releases up to 0.6.5 wrote a
-`[ztp_server]` table there with the default password; nothing read it, and `sherpad` now
-ignores it with a warning. You can delete it; see
-[Updating Sherpa](../install-update/update/sherpa.md).
+No setting in `sherpa.toml` changes node credentials.

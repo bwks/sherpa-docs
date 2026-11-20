@@ -14,14 +14,11 @@ libvirt binds each node's serial console to a UNIX socket on the Sherpa server:
 A virtual machine's VNC console is a socket in the same folder, `<node-index>.vnc`; see
 [VNC](vnc.md).
 
-Nothing listens on a network address for a console. Before 0.7.0 each console was a telnet
-listener on a loopback address (`127.127.<lab>.<node-index>`, port `2323`) that any account on the
-server could reach. That range is no longer used, and labs no longer get a loopback network.
+Nothing listens on a network address for a console.
 
 Each lab's folder under `/opt/sherpa/run/console/` is owned `sherpa:kvm` with mode `2770`. Only
 `sherpa`, members of `kvm` and root can reach the sockets. Members of `kvm` can already read
-every lab's disks. `sherpad` creates the folder at `sherpa up` (and at `resume` or `redeploy` for
-a lab made by an older release) and removes it at `sherpa destroy`.
+every lab's disks. `sherpad` creates the folder at `sherpa up` and removes it at `sherpa destroy`.
 
 ## Connecting
 
@@ -75,10 +72,3 @@ reachable only by the owner.
 `sherpad` logs each session as the events `console.opened`, `console.refused` and
 `console.closed`, with the user, lab, node, client address, duration and reason. It never logs the
 bytes.
-
-## Nodes Running at an Upgrade
-
-Nodes that are running when the server is upgraded to 0.7.0 keep their old TCP console until they
-stop, and their console is refused. Stop and resume the lab, or redeploy the node. `sherpad` moves
-every stopped node's console to its socket at startup, and `sherpa resume` moves a node's console
-when it starts the node. See [Updating to 0.7.0](../install-update/update/sherpa.md#consoles-go-through-sherpad).

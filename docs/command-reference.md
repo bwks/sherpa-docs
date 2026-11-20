@@ -73,8 +73,7 @@ into the folder, the commands refuse to run and name both labs. Destroy the old 
 A lab's ID is in `.sherpa/lab-info.toml`, so the commands find the lab whatever your computer
 account is called: on another machine, as another user, or in a folder made by
 `sherpa download`. A new lab's ID comes from your Sherpa username and the lab's name, so it is
-the same on every machine you log in from, and two Sherpa users never share one. Labs created by
-older clients got their ID from the computer account's name instead, and keep it.
+the same on every machine you log in from, and two Sherpa users never share one.
 
 A folder made by `sherpa download` has no `manifest.toml`. `inspect`, `ssh`, `console`, `down`,
 `resume`, `destroy` and `link impair` work there. `up`, `redeploy` and `provision` build nodes
@@ -86,11 +85,7 @@ This folder has no manifest.toml, and 'sherpa redeploy' needs the lab's source m
 ```
 
 Every file Sherpa generates in the lab folder goes in a `.sherpa/` folder next to `manifest.toml`.
-`.sherpa/` and the folders in it are readable only by you, and so are the secret files. A lab
-folder from a client before 0.5.15, with these files loose in the folder, keeps working: each command
-that uses the lab folder first moves the files Sherpa generated into `.sherpa/`, rewrites the
-paths in the SSH config, and points the `~/.ssh/sherpa_lab_hosts` include at
-`.sherpa/ssh/config`. It prints `Moved N lab files into .sherpa` when it does. A `.sherpa` that
+`.sherpa/` and the folders in it are readable only by you, and so are the secret files. A `.sherpa` that
 is a symlink is refused.
 
 ### `sherpa new`
@@ -343,14 +338,7 @@ Node 'dev01' cannot be redeployed from the web UI: it needs ztp.config, text_fil
 ```
 
 Run `sherpa redeploy -n <node>` from the lab's folder instead: the CLI reads the files and
-variables there. A lab started before the server recorded definitions, which has none, cannot
-be redeployed from the web UI at all.
-
-The nodes of a lab started before 0.6.4, whose definition `sherpad` imported from the manifest
-it saved, are not refused from 0.7.0 on, but their definition may lack the node's `ztp.config`,
-environment variables and provisioners: a web UI redeploy rebuilds the node without them. Redeploy
-such a node once with `sherpa redeploy -n <node>` from the lab's folder first; see
-[Updating to 0.7.0](install-update/update/sherpa.md#updating-to-070).
+variables there.
 
 ### `sherpa provision`
 
@@ -389,12 +377,6 @@ deletes the `.sherpa/` folder in the lab folder, with everything `sherpa up` and
 such as your own `kubeconfig-prod` or `manifest.toml`, are left alone. A `.sherpa` that is a
 symlink is not deleted.
 
-If a lab folder from a Sherpa before 0.5.15 cannot be moved into `.sherpa` (every other command stops
-on this), destroy prints a warning with the error and carries on. It still removes the include
-of either the old `sherpa_ssh_config` or the new `.sherpa/ssh/config`, deletes `.sherpa/`, and
-deletes the loose files the older Sherpa generated, such as `sherpa_ssh_config`, `lab-info.toml`
-and `vault-<node>.toml`, by their exact names.
-
 A destroy that waited behind another destroy of the same lab, and finds it gone, succeeds.
 
 If the server cannot remove every resource, destroy prints what failed and exits with an
@@ -412,8 +394,7 @@ A container node's state is read from Docker each time, so a container that has 
 it was recorded `running` shows as `stopped` at once, before the server's
 [scanner](configuration/sherpa.md#scanner) records it.
 The lab details include the manifest's **Description**, and **Client Host** and
-**Client Folder**, the machine and directory `sherpa up` ran in. Labs started from the web UI or the API, and labs started before Sherpa
-0.5.6, have neither.
+**Client Folder**, the machine and directory `sherpa up` ran in. Labs started from the web UI or the API have neither.
 For Tailscale-enabled labs, refreshes gateway state, Tailscale addresses, advertised
 management routes, route approval, and warnings. This is the default command when
 no subcommand is specified.
@@ -562,11 +543,7 @@ sherpa console <name> [--force]
       <node>' instead.` Container nodes have no serial console; use `sherpa ssh`, or `docker exec`
       on the server.
     - `Not logged in to the Sherpa server, or the login has expired: run 'sherpa login'.`
-    - `The Sherpa server has no console route: it is older than this client. Upgrade the server.`
-      The client and the server must both be 0.7.0 or later.
-    - `Node '<node>' was started before consoles moved behind Sherpa. Stop and resume the lab
-      ('sherpa down', then 'sherpa resume'), or redeploy the node, to use its console.` See
-      [Updating to 0.7.0](install-update/update/sherpa.md#consoles-go-through-sherpad).
+    - `The Sherpa server has no console route: it is older than this client. Update the server to the client's version.`
 - It needs you to be logged in, and works in a folder made by `sherpa download`, as it takes the
   lab from the folder's `.sherpa/lab-info.toml`.
 
@@ -575,7 +552,7 @@ sherpa console <name> [--force]
 Relay the VNC console of a virtual machine node to a VNC viewer on your machine. `sherpa vnc`
 listens on `127.0.0.1` on a free port, prints the address, and relays each connection your viewer
 makes to the Sherpa server's API over TLS with your login token, until you press `Ctrl+C`. It
-makes no SSH connection and replaces an `ssh -L` tunnel to the server's VNC port. See
+makes no SSH connection. See
 [VNC](architecture/vnc.md).
 
 ```
@@ -609,11 +586,8 @@ sherpa vnc <name> [--force]
     - `<node> is a unikernel, and unikernels have no VNC console. Use 'sherpa console <node>'
       instead.`
     - `Not logged in to the Sherpa server, or the login has expired: run 'sherpa login'.`
-    - `The Sherpa server has no VNC console route: it is older than this client. Upgrade the
-      server.` The client and the server must both be 0.7.1 or later.
-- `Node '<node>' was started before its VNC console moved behind Sherpa. Stop and resume the lab
-  ('sherpa down', then 'sherpa resume'), or redeploy the node, to use its VNC console.` See
-  [Updating to 0.7.1](install-update/update/sherpa.md#vnc-goes-through-sherpad).
+    - `The Sherpa server has no VNC console route: it is older than this client. Update the
+      server to the client's version.`
 - Other accounts on your machine can connect to the port while `sherpa vnc` runs. The node's VNC
   server asks for no password.
 - It works in a folder made by `sherpa download`.
@@ -636,8 +610,7 @@ Only the lab's owner can download a lab, admins included: the files hold the SSH
 nodes' host keys, the Talos, Vault, Keycloak and SurrealDB credentials and the lab CA, which let
 the holder log in to the nodes. Anyone else is refused with `Only the owner of lab '<id>' can perform this
 operation`. No SSH key is downloaded: nodes take your own
-keys (see [SSH](architecture/ssh.md#logging-in-to-nodes)). A `.sherpa/ssh/key` that a Sherpa
-before 0.7.0 saved is left in place.
+keys (see [SSH](architecture/ssh.md#logging-in-to-nodes)).
 
 ```
 sherpa download <lab_id>
@@ -653,8 +626,7 @@ sherpa download <lab_id>
 
 Change the impairment on a running P2P link. Run it in the lab's folder, which can be one
 made by `sherpa download`: the link is found by either of its ends among the lab's links, as
-`sherpa inspect` lists them. With a server older than the CLI, the link is found in the folder's
-`manifest.toml` instead.
+`sherpa inspect` lists them.
 
 ```
 sherpa link impair dev01::eth1 --delay 20 --loss 1.5
@@ -1147,10 +1119,7 @@ it has these setup commands.
 ### `sherpad check-database`
 
 Check, without changing it, that this release can use the server's database, as it does when
-it starts. It fails while labs created before Sherpa 0.5.15 exist, naming them, as their nodes
-log in with the server's shared SSH key, which 0.6.0 removes. The update script runs the new
-release's check before installing it; see
-[Updating to 0.6.0](install-update/update/sherpa.md#updating-to-060). Run it as the `sherpa`
+it starts. The update script runs the new release's check before installing it. Run it as the `sherpa`
 user, while `sherpad` is stopped. It takes no flags.
 
 ### `sherpad init`
@@ -1181,7 +1150,6 @@ shorter, and not a `x.x.0.0/24`, with room for a lab's `/24`. The IPv6 managemen
 value before changing anything. To change the prefix of a server that already has a config, see
 [Changing the Ranges](architecture/networking/ip-addressing.md#changing-the-ranges).
 
-Values come from the flags or the environment variables only. From 0.5.1, `sherpad init` no
-longer reads `/opt/sherpa/env/sherpa.env`: the install script prints the `sherpad init` command
-with the address and ports you gave it. Since 0.5.0 there are no database flags: the database is
-a file `sherpad` manages itself.
+Values come from the flags or the environment variables only; `/opt/sherpa/env/sherpa.env` is not
+read. The install script prints the `sherpad init` command with the address and ports you gave
+it. There are no database flags: the database is a file `sherpad` manages itself.

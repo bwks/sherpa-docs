@@ -114,7 +114,7 @@ AOS-CX nodes. USB ZTP, which would keep the configuration off the network, is tr
 FTDv takes no account at boot. Its only login is `admin`, with your device password and no SSH
 key.
 
-### Not Changed
+### Nodes Without a Login
 
 Talos, application containers such as databases and Git servers, and unikernels have no way to
 add an account at boot, so Sherpa creates no login on them.
@@ -187,9 +187,6 @@ it. Start the lab from an account with a name the node takes.
 | `arista_eos` | a letter or digit first (not `_`) |
 | `paloalto_panos` | at most 31 characters |
 | `open_bsd` | at most 31 characters |
-
-An older account named like a reserved login (`root`, `sherpa`, `admin`) cannot start labs at
-all.
 
 ## Connect
 
