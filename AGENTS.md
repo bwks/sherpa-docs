@@ -125,7 +125,7 @@ Container nodes differ slightly:
 
 ## Git
 
-- Use `git config user.name "Claude"` and `git config user.email "noreply@anthropic.com"` for commits in this repo.
+- Commit as the checkout's own git identity. Never set or change `user.name` or `user.email` (no `git config`, `-c` flags or `--author`); credit the model in a `Co-Authored-By` trailer.
 - Use the `gh` CLI for all GitHub operations (push, PRs, issues). Auth is configured via `GH_TOKEN`. Run `gh auth setup-git` before `git push` if needed.
 
 ## Building / Serving Docs
