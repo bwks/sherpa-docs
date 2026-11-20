@@ -27,8 +27,8 @@ from, **as you wrote it**. `sherpa redeploy` replaces the redeployed node's.
 
 **File contents and variable values are not stored.** Files and scripts are recorded by the path
 and settings the manifest gives: `ztp.config`, `text_files` (`src`, `dst`, `user`, `group`,
-`permissions`), `binary_files`, `systemd_units`, `startup_scripts`, `user_scripts`,
-`ssh.authorized_key_files` and each provisioner's files. Environment variables are recorded as
+`permissions`), `binary_files`, `systemd_units`, `startup_scripts`, `user_scripts`
+and each provisioner's files. Environment variables are recorded as
 written: `KEY=$VAR` keeps the name `$VAR`, never its value. The `sherpa` CLI still reads the
 files and resolves the variables, and sends them with each `sherpa up` and `sherpa redeploy` to
 build the node, but the server does not write them to its database.

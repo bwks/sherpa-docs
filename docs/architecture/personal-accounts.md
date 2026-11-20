@@ -43,8 +43,8 @@ FreeBSD and OpenBSD also keep their own tools: your account gets the `sh` shell 
 run commands as root without a password. On FreeBSD they use passwordless `sudo`, which the
 image includes.
 
-On Flatcar your account joins the `wheel` and `docker` groups and has passwordless `sudo`. It
-also gets any keys the manifest sets in `ssh.authorized_keys` or `ssh.authorized_key_files`.
+On Flatcar your account joins the `wheel` and `docker` groups and has passwordless `sudo`, and
+gets your account's keys like every other node. The manifest has no way to add keys.
 
 Manifest `user_scripts` run as your account, and manifest `environment_variables` are set in
 your account's login shells.

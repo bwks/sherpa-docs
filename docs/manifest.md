@@ -104,7 +104,6 @@ node.
 | [`boot_disk`](#boot_disk-object) | `size`, `clone_method`, `cache`, `io`, `io_thread_cpus` |
 | [`interfaces`](#interfaces-object) | `data_count`, `queues` |
 | [`ztp`](#ztp-object) | `method`, `config` |
-| [`ssh`](#ssh-object) | `authorized_keys`, `authorized_key_files` |
 | [`ready_check`](#ready_check-object) | `port`, `skip` |
 | [`vm`](#vm-object) | `watchdog` |
 | [`container`](#container-object) | `user`, `privileged`, `shm_size`, `commands`, `volumes`, `platform` |
@@ -597,30 +596,6 @@ Nodes that join a [Talos cluster](#talos_clusters-listtalos_cluster_object) cann
 
 _This group applies to virtual machine and container nodes._
 
-##### ssh (object)
-
-SSH public keys to authorize on the node.
-
-```toml
-[nodes.ssh]
-authorized_keys = [
-  "ssh-ed25519 AAAA... user@host",
-]
-authorized_key_files = [
-  { source = "~/.ssh/id_ed25519.pub" },
-]
-```
-
-| Key | Type | Description |
-|---|---|---|
-| `authorized_keys` | list&lt;string&gt; | Public keys, inline |
-| `authorized_key_files` | list&lt;object&gt; | Public key files whose keys to authorize on a Flatcar Linux node. Each has a `source`: the path of the public key file on the client |
-
-The `sherpa` CLI reads each key file on your machine and sends the key; the server checks it and
-never reads the path. A relative path starts at the manifest's folder.
-
-_This group applies to virtual machine and container nodes._
-
 ##### ready_check (object)
 
 How Sherpa decides the node is ready after `sherpa up`, `sherpa redeploy` and `sherpa resume`.
@@ -879,8 +854,6 @@ tuning in a `[nodes.performance_tuning]` table. Sherpa now refuses those keys wi
 | `performance_tuning.interface_queues` | `interfaces.queues` |
 | `ztp` | `ztp.method` |
 | `ztp_config` | `ztp.config` |
-| `ssh_authorized_keys` | `ssh.authorized_keys` |
-| `ssh_authorized_key_files` | `ssh.authorized_key_files` |
 | `ready_port` | `ready_check.port` |
 | `skip_ready_check` | `ready_check.skip` |
 | `watchdog` | `vm.watchdog` |
