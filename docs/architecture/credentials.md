@@ -49,6 +49,3 @@ configuration Sherpa generates, so it has the accounts and passwords the file se
 for you. A node with `ztp.method = "disabled"` boots as its image ships, with the vendor's own
 login.
 
-## Server Configuration
-
-No setting in `sherpa.toml` changes node credentials.
