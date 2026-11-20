@@ -44,7 +44,7 @@ Unikernels are single-purpose machine images that run directly on KVM/QEMU via L
 
 ## Database
 
-Sherpa stores lab state, node configurations, user accounts, and image metadata in an embedded [Turso](https://github.com/tursodatabase/turso) database, a Rust rewrite of SQLite that runs inside `sherpad`. The data is a single file, `/opt/sherpa/db/sherpa.sqlite`; there is no database server. See [Database](database.md) for details.
+Sherpa stores lab state, node configurations, user accounts, and image metadata in an embedded [Turso](https://github.com/tursodatabase/turso) database, a Rust rewrite of SQLite that runs inside `sherpad`. The data is a single file, `/opt/sherpa/db/sherpa.sqlite`. See [Database](database.md) for details.
 
 ## Authentication
 

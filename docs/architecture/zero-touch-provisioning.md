@@ -18,8 +18,7 @@ The following configuration parameters are applied to nodes via ZTP:
   such as `admin` take the device password too. Aruba AOS-CX gets your keys only, with `admin`
   locked. See [Your Login on Nodes](personal-accounts.md#passwords-on-nodes).
 
-There is no `sherpa` account and no shared password in a configuration Sherpa generates. The
-configurations served over TFTP or HTTP carry only hashes of the device password, and Aruba
+The configurations served over TFTP or HTTP carry only hashes of the device password, and Aruba
 AOS-CX's carries none.
 
 ## Who Can Read a Node's Configuration
@@ -98,9 +97,7 @@ To change a node's method in a running lab, change `ztp.method` and run
 `sherpa redeploy -n <node>`. When the node moves onto or off `tftp` or `http`, the lab router's
 DHCP options for it change too, and Sherpa recreates the lab router, which runs the lab's DHCP,
 DNS, TFTP and HTTP services, for that. Lab nodes keep their addresses, but those services and
-the lab's outside access pause for a few seconds while it is recreated. In a lab made before
-0.7.0, the first redeploy of a VM recreates it too, to stop it serving the TFTP configurations
-over HTTP. A redeploy that keeps the node's method does not restart it. The files of the node's
+the lab's outside access pause for a few seconds while it is recreated. A redeploy that keeps the node's method does not restart it. The files of the node's
 old method are removed.
 
 ### Disabled
@@ -210,8 +207,7 @@ Configuration is served over the network via HTTP on port 8080 of the lab router
 Only the files of the nodes that boot by HTTP are served, from the root of the server: today
 SONiC's, `<node>.conf` (the ZTP file that DHCP names), `<node>_config_db.json` and
 `<node>_ztp_user.sh` (your account). The TFTP configurations are served over TFTP only, and the
-lab router's DHCP leases are not served. Up to 0.6.5 the files were under `/configs/`, and
-`/tftp/` and `/dnsmasq/dnsmasq.leases` were served too.
+lab router's DHCP leases are not served.
 
 ![The VM gets its address and config URL from DHCP on the lab router, then downloads the files over HTTP](ztp-http.svg)
 

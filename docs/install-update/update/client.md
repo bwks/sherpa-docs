@@ -7,8 +7,7 @@ A CLI whose version differs from the server's prints a warning when it connects:
 WARNING: Version mismatch - client: 0.5.30, server: 0.6.0
 ```
 
-The CLI still runs, but a release that changes what the server sends breaks an older CLI. 0.6.0
-is such a release; see [Updating to 0.6.0](sherpa.md#updating-to-060). Check the server's
+The CLI still runs, but a release that changes what the server sends breaks an older CLI. Check the server's
 version with `sherpad --version` on the server, and the client's with `sherpa --version`.
 
 Installing for the first time is described in [Client](../install/client.md).
@@ -61,5 +60,5 @@ Install it to the folder the old one is in; `command -v sherpa` shows where that
 `sherpa` command keeps running the old version until it exits.
 
 The CLI's configuration, login and trusted certificates, in `~/.sherpa` (`$HOME\.sherpa` on
-Windows), are kept across updates. A release that ends existing logins says so in its update
-notes, such as [Updating to 0.5.23](sherpa.md#updating-to-0523).
+Windows), are kept across updates. A release that ends existing logins says so in its release
+notes.

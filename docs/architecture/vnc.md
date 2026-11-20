@@ -14,10 +14,6 @@ the Sherpa server, next to the node's [serial console](console.md):
 /opt/sherpa/run/console/<lab-id>/<node-index>.vnc
 ```
 
-Nothing listens for VNC on a network port. Before 0.7.1 each VM had a VNC port on the server's
-loopback address, from `5900` to `6999`, that any account on the server could reach. Nodes no
-longer get a port, and `sherpa inspect`, the inspect API and the web UI no longer show one.
-
 The socket is in the lab's console folder, owned `sherpa:kvm` with mode `2770`. Only `sherpa`,
 members of `kvm` and root can reach it. Members of `kvm` can already read every lab's disks.
 
@@ -45,8 +41,8 @@ GET /api/v1/labs/{lab_id}/nodes/{node_name}/vnc
 ```
 
 `sherpa vnc` sends your login token and uses the same TLS settings and trusted certificate as
-every other command. See the [API Reference](../api-reference.md#vnc-console). There is no SSH
-tunnel, so you need no SSH key or account on the server. It works the same on Windows.
+every other command. See the [API Reference](../api-reference.md#vnc-console). It needs
+no SSH key or account on the server, and works the same on Windows.
 
 `sherpa vnc` keeps listening until you press `Ctrl+C`, so your viewer can disconnect and connect
 again. Viewers that read a small number after a colon as a display number take a port this
@@ -68,7 +64,6 @@ code 1, and no address is printed:
 - the node or lab not found, or `Not logged in`
 - a container or a unikernel, which have no VNC console
 - `Node '<node>' is not running. Start it with 'sherpa resume'.`
-- a node still on its old VNC port (see [Nodes Running at an Upgrade](#nodes-running-at-an-upgrade))
 
 A VNC console in use by another session of yours is not a refusal: `sherpa vnc` prints its address,
 then `The VNC console of <node> is in use by <user> from <client-ip> since <time> UTC: viewers are
@@ -102,15 +97,6 @@ ends, with the server's reason.
 `sherpad` logs each session as the events `console.opened`, `console.refused` and
 `console.closed` with `console = "vnc"`, with the user, lab, node, client address, duration and
 reason. It never logs the screen or the keys.
-
-## Nodes Running at an Upgrade
-
-Nodes that are running when the server is upgraded to 0.7.1 keep their VNC port until they stop,
-and `sherpa vnc` refuses them with `Node '<node>' was started before its VNC console moved behind
-Sherpa. Stop and resume the lab ('sherpa down', then 'sherpa resume'), or redeploy the node, to
-use its VNC console.` `sherpad` moves every stopped node's VNC to its socket at startup, and
-`sherpa resume` moves a node's VNC when it starts the node. See
-[Updating to 0.7.1](../install-update/update/sherpa.md#vnc-goes-through-sherpad).
 
 ## Applicability
 

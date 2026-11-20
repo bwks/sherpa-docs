@@ -89,38 +89,20 @@ Each lab gets a dedicated directory at `/opt/sherpa/labs/<lab-id>/`. This direct
   Sherpa built from Talos Linux nodes, in `clusters/<cluster>/`
 
 The lab's manifest is not kept here: the server records it in its
-[database](database.md#lab-definitions) as the lab's definition. Older releases saved a copy as
-`manifest.toml` (or `manifest.json`); `sherpad` 0.6.4 and 0.6.5 deleted it the first time they
-started.
+[database](database.md#lab-definitions) as the lab's definition.
 
 Nor are the lab info and SSH files. The lab's networks, its owner, each node's address and host
 key, and the account each node's SSH config logs in with are in the database, and the server
 builds `lab-info.toml`, the SSH config and `known_hosts` from it whenever `sherpa up`,
-`sherpa download` or the web UI's lab download gives them to you. The files you get are the same
-as before. Releases up to 0.6.4 kept them here as `lab-info.toml`, `sherpa_ssh_config` and
-`sherpa_known_hosts`; `sherpad` 0.6.5 stored what only `lab-info.toml` held and deleted the
-three the first time it started.
+`sherpa download` or the web UI's lab download gives them to you.
 
 Nor is a Talos cluster's plan: its members are in the lab's definition, and the addresses Sherpa
 chose for it (its endpoint, shared address and load balancer addresses) in the database.
-Releases up to 0.6.4 kept it here as `clusters/<cluster>/cluster.toml`; `sherpad` 0.6.5 stored
-it and deleted the file the first time it started.
-
-Nor is an SSH key: Sherpa has none of its own for nodes (see
-[SSH](ssh.md#logging-in-to-nodes)). A lab created before 0.7.0 still has its old key pair here,
-`sherpa_ssh_key` and `sherpa_ssh_key.pub`, readable only by the `sherpa` user, until the lab is
-destroyed.
 
 VM disks and the ISO images built from ZTP configuration are copied into the storage pool,
 `/opt/sherpa/libvirt/images/`. A VM's boot files, such as its cloud-init `user-data` and the ISO
 built from them, are removed from the lab directory once they are in the pool; if the copy
-fails they are kept, in `vm-boot.d/<node>/`, until the lab is destroyed or the node redeployed, so the failure can be looked at. Releases up to
-0.6.4 kept them, wrote an empty `dnsmasq.leases` and issued unikernel nodes certificates they
-never used; `sherpad` 0.6.5 removed those files the first time it started.
-
-From 0.7.0, `sherpad` no longer converts or deletes any of these older files. One still in a
-lab directory, on a server that did not run 0.6.5 first, is ignored, and stays until the lab is
-destroyed; see [Updating to 0.7.0](../install-update/update/sherpa.md#updating-to-070).
+fails they are kept, in `vm-boot.d/<node>/`, until the lab is destroyed or the node redeployed, so the failure can be looked at.
 
 When a lab is destroyed, its entire lab directory is cleaned up.
 

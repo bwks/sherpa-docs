@@ -77,14 +77,6 @@ overcommit_percent = 100
 | `bins_dir` | string | | Directory for binary files (required) |
 | `allow_signup` | bool | `false` | Let anyone create an account on the web UI's signup page. Off, the page returns 404 and only admins create accounts, with [`sherpa server user create`](../command-reference.md#sherpa-server-user-create) |
 
-### Removed: `[ztp_server]`
-
-Releases up to 0.6.5 wrote a `[ztp_server]` table with `enable`, `username` and `password`.
-Nothing read it, and it does not set node credentials (see
-[Node Credentials](../architecture/credentials.md)). `sherpad` ignores the table and logs a
-warning at startup until you delete it from `/opt/sherpa/config/sherpa.toml`. A lab's
-[`ztp_server`](../manifest.md#ztp_server-object) in its manifest is a different setting.
-
 ### `[server_connection]`
 
 Internal server connection settings.
@@ -159,8 +151,7 @@ neighbour's link down, and `sherpa inspect` shows the links as `not checked` unt
 ### `[tailscale]`
 
 Server settings for each lab's [Tailscale gateway](../architecture/networking/tailscale.md).
-These defaults are included in newly generated server configurations. Existing
-files may omit the section, and partial sections override only the listed fields.
+The section is optional, and a partial section overrides only the listed fields.
 Restart `sherpad` after editing the server configuration.
 
 | Property | Type | Default | Description |

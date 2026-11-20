@@ -7,7 +7,7 @@ depends on the lab and the node, not on any server setting.
 
 Nodes that Sherpa provisions have one login: yours. It is your Sherpa username, with the SSH
 public keys registered to your account and your [device password](device-password.md) as its
-password. Nothing is shared between users or labs, and no password is published.
+password. Each login belongs to one user.
 
 | Username              | Password        | SSH Key                           |
 | --------------------- | --------------- | --------------------------------- |
@@ -22,10 +22,6 @@ A lab's credentials belong to its owner. `sherpa download` hands the lab's SSH c
 Talos cluster credentials, Vault, Keycloak and SurrealDB credentials and lab CA to the owner only,
 not to admins. An admin who resets a user's Sherpa password can still sign in as them; that is logged.
 See [Overview](overview.md).
-
-Before 0.7.0 every node also had a `sherpa` account with a published password, and Keycloak and
-SurrealDB nodes had it as their administrator. New nodes do not.
-See [Updating Sherpa](../install-update/update/sherpa.md) for labs built before then.
 
 ## Application Administrators
 
@@ -53,9 +49,3 @@ configuration Sherpa generates, so it has the accounts and passwords the file se
 for you. A node with `ztp.method = "disabled"` boots as its image ships, with the vendor's own
 login.
 
-## Server Configuration
-
-No setting in `sherpa.toml` changes node credentials. Releases up to 0.6.5 wrote a
-`[ztp_server]` table there with the default password; nothing read it, and `sherpad` now
-ignores it with a warning. You can delete it; see
-[Updating Sherpa](../install-update/update/sherpa.md).

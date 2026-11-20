@@ -19,8 +19,7 @@ You need the IOL image tarballs from a CML release's reference platform files:
 - `iol-xe-<version>.tar.gz` for `cisco_iol`
 - `ioll2-xe-<version>.tar.gz` for `cisco_ioll2`
 
-The `iol-xe-serial-4eth` image definition uses the same `iol-xe` tarball; Sherpa has no serial
-interface model.
+The `iol-xe-serial-4eth` image definition uses the same `iol-xe` tarball.
 
 ### Build the image
 
@@ -111,9 +110,8 @@ dst = "r2::Ethernet0/1"
 !!! warning
 
     802.1Q tagged frames need an image built with docker-cisco-iol that includes
-    [the VLAN tag fix](https://github.com/bwks/docker-cisco-iol/pull/2). An image built before it
-    hands IOL every received frame untagged, so subinterfaces receive nothing. Rebuild the image
-    to fix it.
+    [VLAN tag support](https://github.com/bwks/docker-cisco-iol/pull/2). Without it,
+    subinterfaces receive nothing.
 
 IOL routes between VLANs on `encapsulation dot1Q` subinterfaces. The parent interface starts
 shut down, so bring it up with no address, and put the addresses on the subinterfaces.
@@ -202,8 +200,8 @@ interface.
 !!! warning
 
     Link state needs an image built with docker-cisco-iol that includes
-    [the link state change](https://github.com/bwks/docker-cisco-iol/pull/3), from 14 November 2026. In an image built before it,
-    interfaces stay up when their link goes down. Rebuild the image to fix it.
+    [link state support](https://github.com/bwks/docker-cisco-iol/pull/3). Without it,
+    interfaces stay up when their link goes down.
 
 IOL follows link state through keepalives, not at once: an interface goes down about
 12 seconds after its link loses carrier, and comes back about 2 seconds after the link

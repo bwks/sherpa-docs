@@ -2,9 +2,7 @@
 
 You log in to lab nodes as yourself: your Sherpa username, your own SSH keys, your
 [device password](device-password.md) and administrator rights. It is the only login Sherpa
-creates. There is no `sherpa` account and no shared password.
-
-There is nothing to enable. Every node whose configuration Sherpa generates gets your login.
+creates. Every node whose configuration Sherpa generates gets your login.
 
 ## Before You Start
 
@@ -44,7 +42,7 @@ run commands as root without a password. On FreeBSD they use passwordless `sudo`
 image includes.
 
 On Flatcar your account joins the `wheel` and `docker` groups and has passwordless `sudo`, and
-gets your account's keys like every other node. The manifest has no way to add keys.
+gets your account's keys like every other node.
 
 Manifest `user_scripts` run as your account, and manifest `environment_variables` are set in
 your account's login shells.
@@ -114,7 +112,7 @@ AOS-CX nodes. USB ZTP, which would keep the configuration off the network, is tr
 FTDv takes no account at boot. Its only login is `admin`, with your device password and no SSH
 key.
 
-### Not Changed
+### Nodes Without a Login
 
 Talos, application containers such as databases and Git servers, and unikernels have no way to
 add an account at boot, so Sherpa creates no login on them.
@@ -187,9 +185,6 @@ it. Start the lab from an account with a name the node takes.
 | `arista_eos` | a letter or digit first (not `_`) |
 | `paloalto_panos` | at most 31 characters |
 | `open_bsd` | at most 31 characters |
-
-An older account named like a reserved login (`root`, `sherpa`, `admin`) cannot start labs at
-all.
 
 ## Connect
 

@@ -13,8 +13,7 @@ in `~/.ssh/config` will have a line added:
 The `sherpa_lab_hosts` file has `Include` references to the labs SSH
 config file (`<lab folder>/.sherpa/ssh/config`) added and removed during start up and tear down.
 The config's `UserKnownHostsFile` is an absolute path to `.sherpa/ssh/known_hosts`, so `ssh -F .sherpa/ssh/config <node>.<lab-id>` works from the
-lab folder. A lab from a client before 0.5.15 has these files loose in the lab folder; Sherpa moves
-them into `.sherpa/` and repoints the include the next time a command uses the lab folder.
+lab folder.
 
 A lab folder whose path has spaces is included in double quotes, as `ssh` needs. If
 `~/.ssh/config` is a symbolic link, as dotfile managers make it, the file it points to is
@@ -33,20 +32,8 @@ Host 172.31.1.22 router1.abcd1234 router1.abcd1234.sherpa.lab.local
 ```
 
 `ssh`, `sherpa ssh` and provisioners use the keys in your SSH agent or your default key files.
-Sherpa has no key of its own: it never logs in to a node, puts no key of its own on one, and
-writes no key to your lab folder.
 
-- **Labs built before 0.7.0** keep their `sherpa` account, its published password and their own
-  lab key until their nodes are redeployed. Their SSH config says `User sherpa`. A lab folder from
-  before 0.7.0 keeps its `.sherpa/ssh/key`: `sherpa download --force` writes an SSH config without
-  the `IdentityFile` line and leaves the key, so `sherpa ssh` asks for the old password, and
-  `ssh -F .sherpa/ssh/config -i .sherpa/ssh/key <node>.<lab-id>` still logs in with the key.
-  `sherpa destroy` deletes it with `.sherpa/`. See
-  [Updating to 0.7.0](../install-update/update/sherpa.md#updating-to-070).
 - **Redeploy:** `sherpa redeploy` rebuilds the node with your login.
-- **Labs created before Sherpa 0.5.15** used the server's shared key, which 0.6.0 removes.
-  Destroy them before updating to 0.6.0; see
-  [Updating to 0.6.0](../install-update/update/sherpa.md#updating-to-060).
 
 ## Reaching Nodes
 
@@ -102,9 +89,6 @@ run for provisioners. The Sherpa server's host key is checked against `~/.ssh/kn
 first time you connect, you are shown its fingerprint and asked to confirm it, as with OpenSSH; a
 confirmed key is recorded there. A server whose key has changed is refused.
 
-Before 0.7.2, the lab's SSH config always jumped through the server. See
-[Updating to 0.7.2](../install-update/update/sherpa.md#updating-to-072).
-
 ## Node Host Keys
 
 When a lab node answers on SSH, the Sherpa server records the host key it offers with the
@@ -125,7 +109,7 @@ and `ssh` itself through the `~/.ssh/config` include, with or without the jump.
 
 - **Which nodes:** virtual machines whose readiness check is SSH, on port 22, and containers
   with `ready_check.port = 22`. Other containers, unikernels, nodes with another
-  `ready_check.port`, nodes with `ready_check.skip`, and labs created before this feature keep
+  `ready_check.port` and nodes with `ready_check.skip` keep
   `StrictHostKeyChecking no`.
 - **When keys change:** some network operating systems, such as Cisco IOSv, make a new key
   every time they boot, and a redeployed node has a new one. The server records the new key

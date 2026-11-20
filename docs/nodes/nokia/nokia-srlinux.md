@@ -23,9 +23,8 @@ docker pull ghcr.io/nokia/srlinux:26.3.1
 sherpa server image scan --kind container
 ```
 
-Sherpa's startup config is tested on release 26.3.1. Sherpa 0.5.8 and later configure DNS as a
-`dns-instance` named `mgmt`, which release 26 introduced in place of the `dns` client, so releases
-before 26 reject the startup config.
+Sherpa's startup config is tested on release 26.3.1. It configures DNS as a
+`dns-instance` named `mgmt`, which SR Linux takes from release 26, so earlier releases reject it.
 
 ## Default Node Parameters
 

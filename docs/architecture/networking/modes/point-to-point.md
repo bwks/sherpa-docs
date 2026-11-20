@@ -143,12 +143,3 @@ Available impairment parameters:
 | `loss_percent`    | Packet loss percentage             | 0.0 - 100.0  |
 | `reorder_percent` | Packet reordering percentage       | 0.0 - 100.0  |
 | `corrupt_percent` | Bit-flip corruption percentage     | 0.0 - 100.0  |
-
-### The removed `p2p` setting
-
-Links once had a `p2p` setting, and a link without `p2p = true` was joined through a pair of
-Linux bridges. Since Sherpa 0.4.14 every link is a P2P eBPF link, and a manifest that still
-sets `p2p` (to `true` or `false`) fails validation: delete the setting from the link.
-
-A lab created before 0.4.14 with links that did not set `p2p = true` has bridge links, which
-Sherpa no longer supports. Destroy such a lab before upgrading, and create it again after.

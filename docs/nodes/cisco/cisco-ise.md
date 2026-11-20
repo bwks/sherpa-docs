@@ -58,9 +58,7 @@ sherpa server image import \
 
 !!! note
 
-    ISE reads its ZTP config from a disk. Images imported before Sherpa 0.5.7 had the CD-ROM
-    method, which ISE does not support, so `sherpa up` failed on them; upgrading the server
-    moves them to the disk method.
+    ISE reads its ZTP config from a disk.
 
 ## Example Manifest
 

@@ -50,7 +50,7 @@ version = "v2.2"
 
 SurrealDB serves its API on port `8000`, on the node's management address, in memory. It starts
 with one root user, `root`, with a random password Sherpa generates for the node when it is
-created; no two nodes share one, and no password is published.
+created, different for each node.
 
 `sherpa up` and `sherpa download` write the address, user and password to
 `.sherpa/surrealdb/surrealdb-<node>.toml` in the lab folder, readable only by you:
@@ -94,6 +94,3 @@ that gives nothing away that root does not already have.
 - Approximate time for the system to be ready: `1 minute`
 - The database is in memory. `sherpa redeploy` starts an empty SurrealDB with the same root user
   and password, so your `.sherpa/surrealdb/surrealdb-<node>.toml` stays right.
-- A SurrealDB node created before Sherpa 0.7.0 keeps the `sherpa` root user, with the password
-  every node had then, until you run `sherpa redeploy -n <node>`, which gives it its own `root`
-  user. Run `sherpa download --force` afterwards for the file.

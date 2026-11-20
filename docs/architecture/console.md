@@ -14,14 +14,9 @@ libvirt binds each node's serial console to a UNIX socket on the Sherpa server:
 A virtual machine's VNC console is a socket in the same folder, `<node-index>.vnc`; see
 [VNC](vnc.md).
 
-Nothing listens on a network address for a console. Before 0.7.0 each console was a telnet
-listener on a loopback address (`127.127.<lab>.<node-index>`, port `2323`) that any account on the
-server could reach. That range is no longer used, and labs no longer get a loopback network.
-
 Each lab's folder under `/opt/sherpa/run/console/` is owned `sherpa:kvm` with mode `2770`. Only
 `sherpa`, members of `kvm` and root can reach the sockets. Members of `kvm` can already read
-every lab's disks. `sherpad` creates the folder at `sherpa up` (and at `resume` or `redeploy` for
-a lab made by an older release) and removes it at `sherpa destroy`.
+every lab's disks. `sherpad` creates the folder at `sherpa up` and removes it at `sherpa destroy`.
 
 ## Connecting
 
@@ -33,11 +28,9 @@ GET /api/v1/labs/{lab_id}/nodes/{node_name}/console
 
 It sends your login token as `Authorization: Bearer <token>` and uses the same TLS settings and
 trusted certificate as every other command. `sherpad` connects to the node's socket and relays
-the bytes in both directions. The bytes are raw serial data in binary frames, with no telnet
-protocol. See the [API Reference](../api-reference.md#serial-console).
+the bytes in both directions. The bytes are raw serial data in binary frames. See the [API Reference](../api-reference.md#serial-console).
 
-There is no SSH connection, so you need no SSH key or account on the server, and no `telnet`
-program. It works the same on Windows.
+It needs no SSH key or account on the server. It works the same on Windows.
 
 ## Who Can Connect
 
@@ -75,10 +68,3 @@ reachable only by the owner.
 `sherpad` logs each session as the events `console.opened`, `console.refused` and
 `console.closed`, with the user, lab, node, client address, duration and reason. It never logs the
 bytes.
-
-## Nodes Running at an Upgrade
-
-Nodes that are running when the server is upgraded to 0.7.0 keep their old TCP console until they
-stop, and their console is refused. Stop and resume the lab, or redeploy the node. `sherpad` moves
-every stopped node's console to its socket at startup, and `sherpa resume` moves a node's console
-when it starts the node. See [Updating to 0.7.0](../install-update/update/sherpa.md#consoles-go-through-sherpad).

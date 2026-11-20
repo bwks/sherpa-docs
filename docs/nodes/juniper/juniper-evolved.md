@@ -102,9 +102,7 @@ sherpa server image scan --kind container
 
     cJunosEvolved images must be tagged with the repo `localrepo/juniper_evolved`. The scan only
     registers images with that repo as `juniper_evolved` container images, and labs start
-    cJunosEvolved from it. The first version registered becomes the default. Before Sherpa 0.7.0
-    the repo was `localrepo/juniper_cevolved`; images already registered from it keep working,
-    but the scan no longer finds new tags under that name.
+    cJunosEvolved from it. The first version registered becomes the default.
 
 Every other image command takes `--kind container` for a cJunosEvolved image; without it, the
 command means the vJunosEvolved image. For example:
