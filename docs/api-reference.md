@@ -428,9 +428,9 @@ these operations first.
 ## Lab Phases
 
 A lab's list entry has `status`, derived from its nodes, and `phase`, which operation owns the
-lab: `creating`, `ready`, `destroying`, `destroy_failed` or `interrupted` (see
-[lab phases](command-reference.md#lab-phases)). Inspect returns them as `lab_state` and
-`lab_phase`.
+lab: `creating`, `ready`, `destroying`, `destroy_failed`, `interrupted` or `unknown` (see
+[lab phases](command-reference.md#lab-phases)). `unknown` is a phase this version does not know,
+such as one written by a newer server. Inspect returns them as `lab_state` and `lab_phase`.
 
 - Creating a lab whose ID is in use, by an existing lab or one being created, fails before
   anything is created, with an error that says the lab already exists.
