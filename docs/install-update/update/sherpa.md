@@ -39,7 +39,12 @@ ISE, MikroTik CHR and Flatcar Linux, fail to start without it. If `qemu-img`, `m
 `mkfs.vfat` or `mkfs.ext4` is missing, the script first installs `qemu-utils`, `dosfstools` and `e2fsprogs`; if
 a disk cannot be made, it stops before changing the binaries.
 
-On every run, even when there is nothing to install, the update script sets `/opt/sherpa/config`,
+On every run, even when there is nothing to install, the update script makes `/opt/sherpa`,
+`/opt/sherpa/bin` and `/opt/sherpa/libvirt` root's and `755`, creates the folders `sherpad`
+writes that are missing, and stops if any of these paths has a symlink in it. It runs an
+installed binary to read its version only when the binary is root's and no other account can
+write it. A binary owned by `sherpa`, as older releases installed them, is never run and is
+replaced, even at the version asked for. It sets `/opt/sherpa/config`,
 `/opt/sherpa/env` and `/opt/sherpa/logs` to `750`, `sherpa.toml`, `sherpa.env` and
 `sherpa.env.example` to `600`, and `sherpad.log` and its rotated copies to `640`, and makes
 `sherpa` their owner. It changes no file's contents and leaves a symlink alone. Members of the

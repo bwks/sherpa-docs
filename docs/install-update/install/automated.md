@@ -18,6 +18,16 @@ No database server is installed: `sherpad` keeps its data in an embedded databas
 
 ## File Permissions
 
+`/opt/sherpa`, the binaries in `/opt/sherpa/bin` and `/opt/sherpa/libvirt` are owned by root
+and `755`: systemd runs `sherpad` from there, so neither `sherpa` nor members of the `sherpa`
+group can change them. `sherpa` owns only the folders `sherpad` writes to, which the install and
+update scripts create, as `sherpad` cannot create a folder in `/opt/sherpa`. The scripts change
+these folders' owners and modes only, never what is in them, and stop without changing a path
+that has a symlink in it.
+
+Members of the `sherpa` group can read the lab folders and the log, and can write the images
+folder, `/opt/sherpa/images`, and its blank disk folder; nothing else.
+
 The install script, `sherpad init` and the update script give Sherpa's configuration and log
 files these modes, all owned by `sherpa:sherpa`. The files that can hold secrets are readable
 by the `sherpa` user only, not by members of the `sherpa` group: `sherpa.toml` can hold
@@ -26,6 +36,8 @@ OpenTelemetry collector that needs a token.
 
 | Path | Mode | Set by |
 |---|---|---|
+| `/opt/sherpa`, `/opt/sherpa/bin`, `/opt/sherpa/libvirt` | `755`, root's | install, update |
+| `/opt/sherpa/bin/sherpad`, `/opt/sherpa/bin/sherpa` | `755`, root's | install, update |
 | `/opt/sherpa/config` | `750` | install, update |
 | `/opt/sherpa/config/sherpa.toml` | `600` | `sherpad init`, update |
 | `/opt/sherpa/env` | `750` | install, update |
@@ -34,8 +46,10 @@ OpenTelemetry collector that needs a token.
 | `/opt/sherpa/logs` | `750` | install, update, `sherpad` |
 | `/opt/sherpa/logs/sherpad.log` | `640` | `sherpad`, update |
 | `/opt/sherpa/.secret` | `700` | install, update, `sherpad` |
-| `/opt/sherpa/.certs` | `700` | `sherpad` |
+| `/opt/sherpa/.certs` | `700` | install, update, `sherpad` |
 | `/opt/sherpa/db` | `750` | install, update, `sherpad` |
+| `/opt/sherpa/images` | `775` | install, update |
+| `/opt/sherpa/containers`, `/opt/sherpa/bins`, `/opt/sherpa/run` | `755` | install, update |
 
 Run `sherpad init` as `sherpa` (`sudo -u sherpa -H sherpad init`): `sherpad` runs as `sherpa`
 and cannot read a `sherpa.toml` another account owns. `sherpad init` refuses any other account,
@@ -57,9 +71,9 @@ template in `/opt/sherpa/images/blank_disk/` and writes the node's config onto:
 | `ise.img` | 10 MiB, ext4, label `ISE-ZTP` | Cisco ISE config disk |
 | `ext4-500mb.img` | 500 MiB, ext4, label `data-disk` | Flatcar Linux data disk |
 
-The install script creates them, with `base.img`, `fat16.img` and ext4 `data-disk` disks of
-100 MiB, 200 MiB and 1 to 5 GiB that no node uses yet. Each is `644`, owned by `sherpa:sherpa`,
-in a folder `775`. It installs the tools that make them, `qemu-utils`, `dosfstools` and
+The install script creates them, as `sherpa`, with `base.img`, `fat16.img` and ext4 `data-disk`
+disks of 100 MiB, 200 MiB and 1 to 5 GiB that no node uses yet. Each is `644`, owned by
+`sherpa:sherpa`, in a folder `775`. It installs the tools that make them, `qemu-utils`, `dosfstools` and
 `e2fsprogs`, with its other packages.
 
 The script only creates a disk that is missing, and never changes one that is there. The
