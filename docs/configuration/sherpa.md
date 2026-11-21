@@ -121,6 +121,19 @@ OpenTelemetry observability configuration. When enabled, Sherpa exports distribu
 | `service_name` | string | `sherpad` | Service name reported to the collector |
 | `sample_ratio` | float | `1.0` | Trace sampling ratio (`0.0` - `1.0`) |
 
+To see traces on the Sherpa server, run Jaeger all-in-one, which takes OTLP over gRPC on port
+`4317` and serves its UI on port `16686`:
+
+```bash
+docker run -d --name jaeger \
+  -p 16686:16686 \
+  -p 4317:4317 \
+  jaegertracing/all-in-one:latest
+```
+
+Set `enabled = true` with the default `endpoint`, restart `sherpad`, run some commands, then open
+`http://localhost:16686` and select the `sherpad` service.
+
 ### `[scanner]`
 
 The background scanner keeps [node states](../command-reference.md#node-states) in line with the
