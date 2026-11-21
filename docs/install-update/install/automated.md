@@ -2,16 +2,24 @@
 
 Sherpa can be installed via a convenience installation script.
 
-!!! danger
-
-    Piping to sudo can be dangerous. You are strongly encouraged to review the below script
-    before executing the below command.
-
-`sudo` privileges are requried. Run the following command to start the installation.
+`sudo` privileges are required. Download the install script and the release's checksums from the
+[releases page](https://github.com/bwks/sherpa/releases), check the script, read it, and run it.
+Set `VERSION` to the release's tag, such as `v0.7.2`.
 
 ```
-curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_install.sh | sudo bash
+VERSION=<release tag>
+cd "$(mktemp -d)"
+curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/sherpa_install.sh"
+curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/SHA256SUMS"
+sha256sum --check --ignore-missing SHA256SUMS
+sudo bash sherpa_install.sh --version "${VERSION}"
 ```
+
+`sha256sum` must print `sherpa_install.sh: OK`. The script checks each archive it downloads
+against the same `SHA256SUMS` before it uses it, and stops at one that does not match. It
+installs Docker from [Docker's apt repository](https://docs.docker.com/engine/install/ubuntu/)
+once Docker's signing key matches the one the script pins, and pulls the Sherpa router image by
+its digest.
 
 No database server is installed: `sherpad` keeps its data in an embedded database,
 `/opt/sherpa/db/sherpa.sqlite`, which `sherpad init` creates. See [Database](../../architecture/database.md).
