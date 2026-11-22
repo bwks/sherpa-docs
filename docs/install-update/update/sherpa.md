@@ -1,6 +1,7 @@
 # Sherpa
 
-The update script replaces the Sherpa binaries with a release from GitHub and restarts `sherpad`.
+The update script replaces the Sherpa binaries with a release from GitHub and restarts `sherpad`,
+taking a backup of the database and its key first.
 It does not reinstall system packages or change users, and creates the
 [blank disks](../install/automated.md#blank-disks) that are missing. It updates the `sherpa` CLI on the server
 only: update it on every other client too, to the same version, as described in
@@ -25,11 +26,40 @@ sudo bash sherpa_update.sh --version v0.5.0
 sudo bash sherpa_update.sh --force
 ```
 
-Take a [database backup](../../architecture/database.md#backups) before updating, and keep a
-copy of the [database key](../../architecture/database.md#database-key),
-`/opt/sherpa/.secret/db.key`, alongside it but separately. `sherpad` encrypts passwords in the
-database with that key, and does not start on a database without it. The update
-script creates `/opt/sherpa/.secret` (mode `700`, owned by `sherpa`) if it is missing.
+## What the update does
+
+1. It downloads the release while `sherpad` is still running. If a download fails, it stops and
+   changes nothing, and `sherpad` keeps running.
+2. It stops `sherpad` and copies the database, `/opt/sherpa/db/sherpa.sqlite` with its `-wal` and
+   `-shm` files, and the [database key](../../architecture/database.md#database-key),
+   `/opt/sherpa/.secret/db.key`, to a new folder, `/var/backups/sherpa/update-<UTC time>/`. Only
+   root can read it. The script prints the folder's path, and at the end prints it again.
+3. It installs the new binaries and starts `sherpad`. The new release counts as started once it
+   has run for ten seconds without systemd restarting it.
+
+If anything fails after `sherpad` stops, the script starts `sherpad` again. If the new release
+does not start, for example because it cannot migrate the database, the script first puts back
+the binaries that were installed, then restores the database and the key from the backup, and
+starts the release you had. Anything the new release wrote in the seconds it ran is lost. The
+script exits with an error and names the backup.
+
+The script never removes its backups, and no uninstall mode removes `/var/backups/sherpa`. Remove
+old backups yourself. To restore one by hand, stop `sherpad` and copy the files back as `sherpa`,
+mode `600`. Delete the database's `-wal` and `-shm` files first if the backup has none.
+
+```
+sudo systemctl stop sherpad
+sudo rm -f /opt/sherpa/db/sherpa.sqlite-wal /opt/sherpa/db/sherpa.sqlite-shm
+sudo install -o sherpa -g sherpa -m 600 /var/backups/sherpa/update-<time>/sherpa.sqlite* /opt/sherpa/db/
+sudo install -o sherpa -g sherpa -m 600 /var/backups/sherpa/update-<time>/db.key /opt/sherpa/.secret/
+sudo systemctl start sherpad
+```
+
+`sherpad` encrypts passwords in the database with the key and does not start on a database
+without it, so a backup is only usable with the key from the same folder. For backups you keep
+yourself, use [`sherpa server backup`](../../architecture/database.md#backups) and keep a copy of
+the key apart from it. The update script creates `/opt/sherpa/.secret` (mode `700`, owned by
+`sherpa`) if it is missing.
 
 On every run, even when there is nothing to install, the update script creates each
 [blank disk](../install/automated.md#blank-disks) that is missing from
