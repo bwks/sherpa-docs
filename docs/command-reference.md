@@ -45,6 +45,13 @@ Login to the Sherpa server. The username and password come from `SHERPA_USER_NAM
 for scripts; the password is never taken as a flag, so it stays out of the process list and shell
 history.
 
+A refused login, whether the password is wrong, the username does not exist or the account is
+locked, always says `username and/or password is incorrect`. Three failed logins in a row, on the
+CLI, the REST API or the web UI, lock the account. A successful login sets the count back to 0.
+A locked account is refused even with the right password until an admin unlocks it with
+[`sherpa server user unlock`](#sherpa-server-user-unlock); it is never unlocked by time. See
+[Locked accounts](help/troubleshooting.md#a-user-cannot-log-in-the-account-is-locked).
+
 ### `sherpa logout`
 
 Logout from the Sherpa server. It ends the session on the server, so the token stops working
@@ -840,6 +847,21 @@ sherpa server user delete <username>
 | ---- | ----------- |
 | `--force` | Skip confirmation prompt |
 
+### `sherpa server user unlock`
+
+Unlock an account that three failed logins in a row locked, and set its count of failed logins
+back to 0. Admin only. The user can then log in with their password.
+
+```
+sherpa server user unlock <username>
+```
+
+Unlocking an account that is not locked is not an error; an unknown username is. Admins can also
+unlock an account with the **Unlock** button in the **Locked** column of the **Users** admin page,
+which shows the button only for locked accounts. The built-in `admin` account is unlocked by
+root on the server; see
+[The built-in admin account is locked](help/troubleshooting.md#the-built-in-admin-account-is-locked).
+
 ### `sherpa server user passwd`
 
 Change a user's password.
@@ -855,7 +877,8 @@ password is not. You are then asked for the new password twice, and it cannot be
 
 A password change logs the user out everywhere else. Changing your own password ends all your
 other sessions, in the web UI and on other machines, and keeps the one you ran the command from.
-An admin resetting another user's password ends all of that user's sessions.
+An admin resetting another user's password ends all of that user's sessions. A reset does not
+unlock a locked account; unlock it with [`sherpa server user unlock`](#sherpa-server-user-unlock).
 
 ### `sherpa server user info`
 
