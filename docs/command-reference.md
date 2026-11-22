@@ -255,6 +255,8 @@ already running guest. A paused
 container is unpaused, a stopped one is started, and a running node is left as it is.
 A booted node is `starting` until it is ready, then `running`; one that is not ready in time
 stays `starting` until the server sees it answer.
+A [Vault](nodes/hashicorp/hashicorp-vault.md#after-a-restart) node it starts again is unsealed
+with its saved key; one Sherpa cannot unseal fails that node's result with the reason.
 
 Resume refuses, with a reason in the node's result, a node that is `building` or `missing`, a
 virtual machine that crashed, a container that is dead, and one that is between states, such as
@@ -418,6 +420,9 @@ management routes, route approval, and warnings. This is the default command whe
 no subcommand is specified.
 
 Inspect shows no console address or VNC port: connect with `sherpa console` and `sherpa vnc`.
+
+A [Vault](nodes/hashicorp/hashicorp-vault.md#when-vault-stays-sealed) node the server cannot
+unseal shows why under its state, such as `Vault sealed: key refused`.
 
 #### Link states
 
