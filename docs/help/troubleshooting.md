@@ -25,7 +25,7 @@ Invalid username or password
 `sherpad` limits failed logins. It refuses logins for 15 minutes:
 
 - for a username, after 5 failed logins for it within 15 minutes
-- from an address, after 20 failed logins from it within 15 minutes
+- from an address, after 20 failed logins from it within 15 minutes; every IPv6 address in one /64 prefix counts as one address
 
 The limit is the same for `sherpa login`, the REST API and the web UI login form, and it applies
 to the built-in `admin` account too. A refused login gets the same answer as a wrong password,
