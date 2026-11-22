@@ -100,6 +100,35 @@ A Vault that was already initialised before Sherpa sent any init, with no creden
 Sherpa, is reported as "initialised outside Sherpa" instead. `sherpa redeploy` resets that node
 the same way.
 
+## After a Restart
+
+Vault seals itself whenever it restarts, for example after the server reboots or the container is
+restarted with `docker restart`, and a sealed Vault serves no secrets. Sherpa unseals it again
+with the saved unseal key:
+
+- **The server's scanner** checks each running Vault node on Sherpa's config on its regular pass,
+  and unseals one it finds sealed. Nothing is initialised: only `sherpa up` and `sherpa redeploy`
+  do that.
+- **`sherpa resume`** unseals a Vault node it starts again, and waits until it is active, so you
+  don't wait for the next scan. Its result for the node ends in `Vault unsealed`.
+
+### When Vault Stays Sealed
+
+When Sherpa cannot unseal a Vault node, `sherpa inspect` shows why under the node's state, and
+the web UI's lab page shows it under the node in the nodes table:
+
+| State | Meaning |
+| - | - |
+| `Vault sealed: no saved unseal key` | Vault is initialised, and Sherpa has no unseal key saved for it |
+| `Vault sealed: key file unreadable: <cause>` | The node's saved credentials file on the server cannot be read |
+| `Vault sealed: key refused` | Vault refused the saved unseal key |
+
+`sherpa resume` fails that node's result with the same reason, and starts the rest of the lab.
+The server logs it once, at `warn`, when it starts, and at `info` when the node is unsealed again.
+The state clears once the Vault is unsealed, for example by unsealing it yourself with
+`vault operator unseal`, or when the node stops. `sherpa redeploy --node <node>` resets the node
+with empty Vault storage, as in [When Initialisation Fails](#when-initialisation-fails).
+
 ## Node Access
 
 Vault serves its web UI and API over HTTPS on port `8200`, on the node's management address.
@@ -143,7 +172,7 @@ gets the Vault Secrets Operator. For each such cluster, Sherpa sets up Vault:
 A node with its own [`ztp.config`](../../manifest.md) runs that config instead. Vault's ZTP
 setting is `disabled`, and it is the one node that takes a `ztp.config` with ZTP off: the file
 is Vault's own configuration. Sherpa then
-does not initialise or unseal it, and sets `VAULT_ADDR=http://127.0.0.1:8200` in the container.
+does not initialise, unseal or report it, even after a restart, and sets `VAULT_ADDR=http://127.0.0.1:8200` in the container.
 The lab certificate is still mounted at `/etc/sherpa/certs/` for your config to use.
 
 ## Notes
@@ -151,6 +180,7 @@ The lab certificate is still mounted at `/etc/sherpa/certs/` for your config to 
 - Approximate time for the system to be ready: `1 minute`
 - Vault is configured with Raft integrated storage and the web UI enabled.
 - Vault's data is kept in the container. `sherpa down` and `sherpa resume` pause and resume
-  it, so it stays unsealed. `sherpa redeploy` starts an empty Vault: Sherpa initialises it again,
+  it, so it stays unsealed; a Vault that restarted is unsealed again (see
+  [After a Restart](#after-a-restart)). `sherpa redeploy` starts an empty Vault: Sherpa initialises it again,
   writes its new root token and unseal key, and sets it up again for the clusters that use it.
   Secrets you wrote are gone.
