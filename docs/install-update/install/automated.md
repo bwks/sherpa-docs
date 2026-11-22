@@ -13,6 +13,10 @@ Sherpa can be installed via a convenience installation script.
 curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_install.sh | sudo bash
 ```
 
+The script installs Docker from [Docker's apt repository](https://docs.docker.com/engine/install/ubuntu/),
+once Docker's signing key matches the one the script pins. A key that does not match stops the
+install before apt trusts it.
+
 No database server is installed: `sherpad` keeps its data in an embedded database,
 `/opt/sherpa/db/sherpa.sqlite`, which `sherpad init` creates. See [Database](../../architecture/database.md).
 
