@@ -56,7 +56,7 @@ The database key /opt/sherpa/.secret/db.key is damaged
 
 ### Fix
 
-`sherpad` encrypts secret values in its database, such as a lab's `ztp_server.password`, with
+`sherpad` encrypts secret values in its database, such as each user's device password, with
 the key in `/opt/sherpa/.secret/db.key`; see [Database key](../architecture/database.md#database-key).
 The key is not in the database or its backups, so a restored database needs the key it was
 backed up with. Copy that key back, owned by `sherpa` with mode `600`, then start `sherpad`:

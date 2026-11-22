@@ -999,20 +999,3 @@ Each cluster needs one or three controllers. Two are refused: etcd needs a major
 members to stay up, so two controllers survive no failure and are less available than one.
 A lab can have several clusters; at most two of them can have three controllers, and at most
 two can use Cilium.
-
-### ztp_server (object)
-
-Configure the Zero-Touch Provisioning server settings.
-
-```toml
-[ztp_server]
-enable = true
-username = "sherpa"
-password = "sherpa"
-```
-
-| Property | Type | Default | Description |
-| -------- | ---- | ------- | ----------- |
-| `enable` | bool | `true` | Enable or disable the ZTP server |
-| `username` | string | `"sherpa"` | Username for ZTP authentication |
-| `password` | string | `"sherpa"` | Password for ZTP authentication |
