@@ -28,7 +28,9 @@ dst = "dev02::gig4"
 
 ### name (string)
 
-The name of the lab.
+The name of the lab: 1 to 63 letters, digits, `-` or `_`, starting with a letter or digit, as a
+node's name is. `sherpa validate`, `sherpa up`, `sherpa redeploy` and the server refuse any
+other name.
 
 To avoid naming collisions, the `lab name` is hashed with the users `username`
 to create a `lab-id`. Resources are suffixed with the `lab-id` to create unique resource names.
@@ -128,6 +130,10 @@ On a model that takes several kinds, the message names the kind the setting need
 | `vm` | yes | | |
 | `container` | | yes | |
 | `unikernel` | | | yes |
+
+`memory`, `cpu.count`, `boot_disk.size`, `interfaces.data_count` and `ready_check.port` must be
+at least 1. `sherpa validate`, `sherpa up`, `sherpa redeploy` and the server refuse 0, naming
+the node and the setting.
 
 ##### Container CPU and memory limits
 
@@ -910,7 +916,8 @@ Every link is a P2P eBPF link.
 ### ready_timeout (int)
 
 Global timeout in seconds for node readiness checks. Overrides the default timeout for all nodes in the lab.
-It applies to `sherpa up`, `sherpa redeploy` and `sherpa resume`.
+It applies to `sherpa up`, `sherpa redeploy` and `sherpa resume`. It must be at least 1:
+`sherpa validate`, `sherpa up`, `sherpa redeploy` and the server refuse 0.
 
 ```toml
 ready_timeout = 300
