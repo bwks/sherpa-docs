@@ -40,12 +40,11 @@ apply to the built-in `admin` account too. A refused login gets the same answer 
 password, and the password is not checked. Wait 15 minutes, then log in again.
 
 A successful login clears only the count for that username from that address: a lock from another
-address stays, and failures from every address still count toward the limit of 50. The counts
-and locks are kept in memory only, so restarting `sherpad` clears all of them:
+address stays, and failures from every address still count toward the limit of 50.
 
-```
-sudo systemctl restart sherpad
-```
+The counts and locks are kept in the database, so they survive a restart of `sherpad`:
+restarting it does not lift a lock. `sherpad` deletes counts and locks once they have ended, when
+it starts and every 15 minutes.
 
 `sherpad` logs each lockout once, at `warn`, with the username and the address.
 

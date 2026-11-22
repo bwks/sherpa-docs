@@ -226,6 +226,23 @@ to each, in order.
 | `node`       | node   | Member node (cascade delete)        |
 | `interface`  | text   | Member interface                    |
 
+#### login_limit
+
+Stores the [login limit](../help/troubleshooting.md#login-refused-with-the-right-password)'s
+counts of failed logins and its locks, so a lock survives a restart of `sherpad`. A row is one
+username from one address, one address, or one username from every address. No password, nor
+anything made from one, is stored. `sherpad` deletes rows that have ended when it starts and
+every 15 minutes.
+
+| Field          | Type           | Description                                                  |
+| -------------- | -------------- | ------------------------------------------------------------ |
+| `kind`         | text           | `pair`, `address` or `username`                              |
+| `username`     | text           | The username as logins look it up; empty on an `address` row |
+| `address`      | text           | An IPv4 address or an IPv6 /64 prefix; empty on a `username` row |
+| `failures`     | number         | Login attempts counted                                       |
+| `window_start` | time           | When the first counted attempt started                       |
+| `locked_until` | time, optional | When the lock ends; none while not locked                    |
+
 ### Referential Integrity
 
 The database enforces these rules itself:
