@@ -361,6 +361,23 @@ error objects, with `code`, `message`, and `data` where the code defines it.
 | Host CPUs pinned by another node | `409`, `CPU_PINS_HELD` | `-32006` |
 | Any other failure | `500`, `INTERNAL_ERROR` | `-32000` |
 
+### A request that does not parse
+
+A REST body, form, query string or path parameter that is not of the request's type, as a
+missing field, a field the request does not take, a field given more than once in a form, or a
+value of the wrong type or out of range, returns `400`, `BAD_REQUEST`, `Invalid request`. Its
+`details` name the field by its path and say what is wrong with it, but never repeat the value
+sent:
+
+```json
+{ "error": { "code": "BAD_REQUEST", "message": "Invalid request", "details": "field `nodes[0].model` has the wrong type or value" } }
+```
+
+A JSON body that is not valid JSON, or that is sent without `Content-Type: application/json`,
+also returns `400` with the JSON error object, and its `details` say only that. WebSocket RPC
+parameters that do not parse return `-32602` (`InvalidParams`) with the same text in the error's
+context.
+
 ### Not enough host memory
 
 Creating a lab, redeploying a node or resuming nodes is refused when the virtual machines,
@@ -473,8 +490,9 @@ The values replace the impairment on the directions named; the other direction k
 Omitted values are `0`, and all zeros remove the impairment from those directions. The change
 applies at once and is kept across `down`/`resume` and redeploying either end.
 
-An unknown `direction`, or a number out of range for its field, returns
-`422 Unprocessable Entity` on REST and `InvalidParams` on WebSocket RPC. A delay or jitter
+An unknown `direction`, or a number out of range for its field, does not parse: it returns
+`400 Bad Request` on REST and `InvalidParams` on WebSocket RPC, naming the field (see
+[A request that does not parse](#a-request-that-does-not-parse)). A delay or jitter
 over `274877` ms (the longest netem holds) or a percentage outside `0` - `100` returns
 `400 Bad Request` and `InvalidParams`. When `direction` is `both` and the second direction
 cannot be changed, the first is put back, so the link is never left half changed. If the change

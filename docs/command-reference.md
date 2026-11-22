@@ -70,6 +70,17 @@ both files are present and the lab's name in `manifest.toml` is not the one in
 into the folder, the commands refuse to run and name both labs. Destroy the old lab, or remove
 `.sherpa/lab-info.toml`, before using the folder for the other one.
 
+A `.sherpa/lab-info.toml` that is there but does not parse stops the command, even with a
+`manifest.toml` beside it, and the error names the file and how to fix it:
+
+```
+.sherpa/lab-info.toml does not parse; restore it with 'sherpa download' of the lab, or remove it if this folder is for the lab named in manifest.toml
+```
+
+Run `sherpa download` of the lab to restore the file. If the folder is for the lab in
+`manifest.toml`, remove the file instead. Only a folder with no `.sherpa/lab-info.toml` is the
+lab of its `manifest.toml`.
+
 A lab's ID is in `.sherpa/lab-info.toml`, so the commands find the lab whatever your computer
 account is called: on another machine, as another user, or in a folder made by
 `sherpa download`. A new lab's ID comes from your Sherpa username and the lab's name, so it is
