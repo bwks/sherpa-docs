@@ -159,7 +159,9 @@ says so.
 
 ##### environment_variables (list&lt;string&gt;)
 
-A list of environment variables to pass to a node.
+A list of environment variables to pass to a node. Each entry is `KEY=VALUE`, where `KEY` is
+letters, digits and `_` and does not start with a digit. `sherpa validate`, `sherpa up`,
+`sherpa redeploy` and the server refuse any other entry, naming the node.
 
 ```toml
 environment_variables = [
