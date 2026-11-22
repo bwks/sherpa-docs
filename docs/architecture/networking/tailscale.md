@@ -161,8 +161,13 @@ network, with an identity volume named `sherpa-tailnet-state-<lab_id>`.
   gateway, but carries no lab traffic. When a direct tunnel cannot be set up, Tailscale relays
   it through a DERP server.
 - The gateway's address is offset 3 in each management subnet, below the node range.
-- Forwarding uses nftables and only permits that lab's management subnets. Forwarded traffic is
-  source NATed to the gateway's address, so nodes need no route back to the tailnet.
+- Forwarding uses nftables, in IPv4 and IPv6:
+    - From the tailnet into the lab, the gateway forwards only to that lab's management
+      subnets, and never to the Sherpa server's address (offset 1) or the lab router's
+      (offset 2) in them. Forwarded traffic is source NATed to the gateway's address, so nodes
+      need no route back to the tailnet.
+    - From the lab out to the tailnet, the gateway forwards only replies to connections a
+      tailnet device opened. A node cannot open a connection to a tailnet device.
 - The auth key is passed over Docker exec stdin into a temporary in-memory file that is removed
   after enrollment. It is not stored in manifests, environment variables, command arguments or
   the database.
