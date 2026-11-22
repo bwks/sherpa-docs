@@ -39,8 +39,9 @@ The limits are the same for `sherpa login`, the REST API and the web UI login fo
 apply to the built-in `admin` account too. A refused login gets the same answer as a wrong
 password, and the password is not checked. Wait 15 minutes, then log in again.
 
-A successful login clears its username's counts, from every address. The counts and locks are
-kept in memory only, so restarting `sherpad` clears all of them:
+A successful login clears only the count for that username from that address: a lock from another
+address stays, and failures from every address still count toward the limit of 50. The counts
+and locks are kept in memory only, so restarting `sherpad` clears all of them:
 
 ```
 sudo systemctl restart sherpad
