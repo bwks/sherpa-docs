@@ -22,29 +22,36 @@ Invalid username or password
 
 ### Fix
 
-`sherpad` limits failed logins. Failures count for 15 minutes from the first one, and each
-limit, once reached, refuses logins for 15 minutes:
+`sherpad` limits failed logins. Each failure counts for 15 minutes after it was made, and a login
+is refused while the failures of the last 15 minutes reach a limit:
 
-- a username from one address: after 5 failed logins for it from that address, that username is
-  refused from that address only. The same user can still log in from another address, so
-  someone who knows a username cannot lock its user out by failing from their own address.
-- an address: after 20 failed logins from it, for any usernames, every login from it is refused.
-- a username from any address: after 50 failed logins for it, from all addresses together, it is
-  refused from every address.
+- a username from one address: 5 failed logins for it from that address refuse that username
+  from that address only. The same user can still log in from another address, so someone who
+  knows a username cannot lock its user out by failing from their own address.
+- an address: 20 failed logins from it, for any usernames, refuse every login from it.
+- a username from any address: 50 failed logins for it, from all addresses together, refuse it
+  from every address.
 
 Every IPv6 address in one /64 prefix counts as one address. The address is the address the
 connection to `sherpad` comes from, so users behind one NAT or proxy share it.
 
 The limits are the same for `sherpa login`, the REST API and the web UI login form, and they
 apply to the built-in `admin` account too. A refused login gets the same answer as a wrong
-password, and the password is not checked. Wait 15 minutes, then log in again.
+password, the password is not checked, and it is not counted as a failure.
 
-A successful login clears only the count for that username from that address: a lock from another
-address stays, and failures from every address still count toward the limit of 50.
+A lock lasts until enough of its failures are 15 minutes old to bring the count under the limit.
+That is at most 15 minutes after the failure that reached the limit, and less when the earlier
+failures were spread out: 4 failures, then a fifth 10 minutes later, lock the username from that
+address for 5 minutes. Trying again while locked does not lengthen the lock. Wait up to 15
+minutes, then log in again.
 
-The counts and locks are kept in the database, so they survive a restart of `sherpad`:
-restarting it does not lift a lock. `sherpad` deletes counts and locks once they have ended, when
-it starts and every 15 minutes.
+A successful login clears only the failures of that username from that address: a lock from
+another address stays, and failures from every other address still count toward the limit of 50.
+
+The failures are kept in the database, so they survive a restart of `sherpad`: restarting it does
+not lift a lock. `sherpad` deletes failures older than 15 minutes when it starts and every 15
+minutes. It keeps at most 100,000; when that many still count, new failures are not counted until
+old ones expire, which `sherpad` logs once at `warn`. A full table never refuses a login.
 
 `sherpad` logs each lockout once, at `warn`, with the username and the address.
 

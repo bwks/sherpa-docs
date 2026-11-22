@@ -226,22 +226,19 @@ to each, in order.
 | `node`       | node   | Member node (cascade delete)        |
 | `interface`  | text   | Member interface                    |
 
-#### login_limit_pair, login_limit_address and login_limit_username
+#### login_failure
 
-Store the [login limit](../help/troubleshooting.md#login-refused-with-the-right-password)'s
-counts of failed logins and its locks, so a lock survives a restart of `sherpad`. A
-`login_limit_pair` row is one username from one address, a `login_limit_address` row one address
-for every username, and a `login_limit_username` row one username from every address. No
-password, nor anything made from one, is stored. `sherpad` deletes rows that have ended when it
-starts and every 15 minutes.
+Stores the [login limit](../help/troubleshooting.md#login-refused-with-the-right-password)'s
+failed logins, one row per failure, so a lock survives a restart of `sherpad`. No lock is stored:
+`sherpad` counts the rows of the last 15 minutes. No password, nor anything made from one, is
+stored. `sherpad` deletes rows older than 15 minutes when it starts and every 15 minutes, and keeps
+at most 100,000 rows.
 
-| Field          | Type           | Description                                                     |
-| -------------- | -------------- | --------------------------------------------------------------- |
-| `username`     | text           | The username as logins look it up; not in `login_limit_address` |
-| `address`      | bytes          | 4 bytes, an IPv4 address, or 8, an IPv6 /64 prefix; not in `login_limit_username` |
-| `failures`     | number         | Login attempts counted                                          |
-| `window_start` | time           | When the first counted attempt started                          |
-| `locked_until` | time, optional | When the lock ends; none while not locked                       |
+| Field       | Type   | Description                                        |
+| ----------- | ------ | -------------------------------------------------- |
+| `username`  | text   | The username as logins look it up                  |
+| `address`   | bytes  | 4 bytes, an IPv4 address, or 8, an IPv6 /64 prefix |
+| `failed_at` | time   | When the failed login started                      |
 
 ### Referential Integrity
 
