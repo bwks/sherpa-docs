@@ -363,20 +363,25 @@ error objects, with `code`, `message`, and `data` where the code defines it.
 
 ### A request that does not parse
 
-A REST body, form, query string or path parameter that is not of the request's type, as a
-missing field, a field the request does not take, a field given more than once in a form, or a
-value of the wrong type or out of range, returns `400`, `BAD_REQUEST`, `Invalid request`. Its
-`details` name the field by its path and say what is wrong with it, but never repeat the value
-sent:
+A REST body, form, query string or path parameter that is not of the request's type, such as
+a missing field, a field the request does not take, a JSON key sent twice, or a value of the
+wrong type or out of range, returns `400`, `BAD_REQUEST`, `Invalid request`. Its `details` are
+`the request is not valid at <path>`, with the path of the field that is wrong, such as
+`password`, `extra` or `files[0].mode`, and never the value sent:
 
 ```json
-{ "error": { "code": "BAD_REQUEST", "message": "Invalid request", "details": "field `nodes[0].model` has the wrong type or value" } }
+{ "error": { "code": "BAD_REQUEST", "message": "Invalid request", "details": "the request is not valid at nodes[0].model" } }
 ```
 
-A JSON body that is not valid JSON, or that is sent without `Content-Type: application/json`,
-also returns `400` with the JSON error object, and its `details` say only that. WebSocket RPC
-parameters that do not parse return `-32602` (`InvalidParams`) with the same text in the error's
-context.
+The `details` are `the request is not valid`, with no path, when a top-level field is missing,
+when the path holds a name sent that is not plain letters, digits, `_` and `-`, and for every
+form, query string and path parameter. They say nothing else about what is wrong.
+
+A JSON body that is not valid JSON, or that is sent without `Content-Type: application/json`, a
+form sent without `Content-Type: application/x-www-form-urlencoded`, and a body that cannot be
+read also return `400` with the JSON error object, and their `details` say only that. WebSocket
+RPC parameters that do not parse return `-32602` (`InvalidParams`) with the same text in the
+error's context.
 
 ### Not enough host memory
 
@@ -491,7 +496,7 @@ Omitted values are `0`, and all zeros remove the impairment from those direction
 applies at once and is kept across `down`/`resume` and redeploying either end.
 
 An unknown `direction`, or a number out of range for its field, does not parse: it returns
-`400 Bad Request` on REST and `InvalidParams` on WebSocket RPC, naming the field (see
+`400 Bad Request` on REST and `InvalidParams` on WebSocket RPC, with the field's path (see
 [A request that does not parse](#a-request-that-does-not-parse)). A delay or jitter
 over `274877` ms (the longest netem holds) or a percentage outside `0` - `100` returns
 `400 Bad Request` and `InvalidParams`. When `direction` is `both` and the second direction
