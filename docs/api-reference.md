@@ -363,19 +363,22 @@ error objects, with `code`, `message`, and `data` where the code defines it.
 
 ### A request that does not parse
 
-A REST body, form, query string or path parameter that is not of the request's type, such as
+A REST body, form or query string that is not of the request's type, such as
 a missing field, a field the request does not take, a JSON key sent twice, or a value of the
 wrong type or out of range, returns `400`, `BAD_REQUEST`, `Invalid request`. Its `details` are
 `the request is not valid at <path>`, with the path of the field that is wrong, such as
-`password`, `extra` or `files[0].mode`, and never the value sent:
+`password`, `extra`, `port` or `files[0].mode`, and never the value sent:
 
 ```json
 { "error": { "code": "BAD_REQUEST", "message": "Invalid request", "details": "the request is not valid at nodes[0].model" } }
 ```
 
-The `details` are `the request is not valid`, with no path, when a top-level field is missing,
-when the path holds a name sent that is not plain letters, digits, `_` and `-`, and for every
-form, query string and path parameter. They say nothing else about what is wrong.
+The `details` are `the request is not valid`, with no path, when a top-level field is missing or
+when the path holds a name sent that is not plain letters, digits, `_` and `-`. They say nothing
+else about what is wrong.
+
+A path parameter that is not of its type, such as a link index that is not a number, returns
+`400` with a plain-text message that can quote the value, which is part of the URL.
 
 A JSON body that is not valid JSON, or that is sent without `Content-Type: application/json`, a
 form sent without `Content-Type: application/x-www-form-urlencoded`, and a body that cannot be
