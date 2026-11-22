@@ -2,7 +2,7 @@
 
 Provisioners get secrets onto lab nodes without the Sherpa server storing them. Use them for
 passwords, API keys and tokens. The other manifest fields that put data on a node
-(`environment_variables`, `text_files`, `startup_scripts` and `user_scripts`) are sent to the
+(`environment_variables`, `text_files`, `startup_scripts` and `systemd_units`) are sent to the
 server and stored there, so they are not for secrets.
 
 Each node lists its provisioners in the manifest, and each provisioner has a `type`:
