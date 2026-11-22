@@ -126,7 +126,7 @@ their existing tokens stop working.
 | User | Change password, info | Self, or admin for any user |
 | User | Set device password | Self only, admins included |
 | User | Add own SSH key | Self only, admins included |
-| User | Create, list, delete | Admin |
+| User | Create, list, delete, unlock | Admin |
 | Admin | Force clean lab | Admin |
 | Admin | Back up database | Admin |
 
@@ -681,6 +681,34 @@ returns `409 Conflict`, an invalid key `400 Bad Request`, another user's keys `4
 and a key that is not registered `404 Not Found`.
 
 Creating a lab or redeploying a node fails until the caller has at least one registered key.
+
+## Account Lockout
+
+Every refused login gets the same answer, whether the password is wrong, the username does not
+exist or the account is locked:
+
+| Transport | Answer |
+| --------- | ------ |
+| REST `POST /api/v1/auth/login` | `401 Unauthorized`, message `username and/or password is incorrect` |
+| WebSocket RPC `auth.login` | `AuthInvalid` (`-32001`), message `username and/or password is incorrect` |
+| Web UI login form | `username and/or password is incorrect`, no session cookie |
+
+Three failed logins in a row, counted across all three, lock the account; a successful login sets
+the count back to 0. A locked account is refused even with the right password, and stays locked
+until an admin unlocks it. Logins that arrive at the same time are counted one by one, so no more
+than three passwords are tried against an account before it locks.
+
+An admin unlocks an account with `POST /api/v1/admin/users/{username}/unlock` or the RPC method
+`user.unlock` (`username`), which answer `success` and `username`, as `sherpa server user unlock`
+and the **Unlock** button on the **Users** admin page do. An unknown username is `404 Not Found`,
+or `NotFound`; a caller who is not an admin is `403 Forbidden`, or `AccessDenied`. Resetting a
+user's password does not unlock their account.
+
+The server stores each login attempt on an account that is not locked, with its time, whether it
+succeeded and the address it came from; see
+[the `login_attempt` table](architecture/database.md#login_attempt). It logs every attempt with
+the username and address, never the password. An attempt on a locked account and a failed login
+for a username that does not exist are logged, not stored.
 
 ## User Creation
 

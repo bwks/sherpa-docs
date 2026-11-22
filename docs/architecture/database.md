@@ -107,6 +107,20 @@ Stores user accounts and credentials.
 | `created_at`    | time            | Account creation time           |
 | `updated_at`    | time            | Last update time                |
 | `device_password` | text, optional | The user's [device password](device-password.md), encrypted; none until set |
+| `failed_logins` | number          | Failed logins since the last successful one; 3 in a row lock the account |
+| `locked_at`     | time, optional  | When failed logins locked the account; none when it is not locked |
+
+#### login_attempt
+
+One row for each login attempt on an account that was not locked. Rows are kept; they are
+deleted only with their user.
+
+| Field          | Type    | Description                                           |
+| -------------- | ------- | ----------------------------------------------------- |
+| `user`         | user    | The account (cascade delete)                          |
+| `attempted_at` | time    | When the attempt was made                             |
+| `succeeded`    | boolean | Whether the login succeeded                           |
+| `address`      | bytes   | The source address: 4 bytes for IPv4, 16 for IPv6. An IPv4 address sent as IPv6 (`::ffff:192.0.2.1`) is stored as IPv4 |
 
 #### node_image
 
@@ -235,6 +249,7 @@ The database enforces these rules itself:
   and its definition.
 - Deleting a **node** deletes its **links** and its bridge memberships.
 - Deleting a **node_image** is refused while any **node** uses it.
+- Deleting a **user** deletes their **login_attempt** rows.
 - Changes that touch several records, such as creating a bridge with its members, either happen
   completely or not at all.
 

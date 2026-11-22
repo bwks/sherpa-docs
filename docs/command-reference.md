@@ -45,6 +45,13 @@ Login to the Sherpa server. The username and password come from `SHERPA_USER_NAM
 for scripts; the password is never taken as a flag, so it stays out of the process list and shell
 history.
 
+A refused login, whether the password is wrong, the username does not exist or the account is
+locked, always says `username and/or password is incorrect`. Three failed logins in a row, on the
+CLI, the REST API or the web UI, lock the account. A successful login sets the count back to 0.
+A locked account is refused even with the right password until an admin unlocks it with
+[`sherpa server user unlock`](#sherpa-server-user-unlock); it is never unlocked by time. See
+[Locked accounts](help/troubleshooting.md#a-user-cannot-log-in-the-account-is-locked).
+
 ### `sherpa logout`
 
 Logout from the Sherpa server. It ends the session on the server, so the token stops working
@@ -840,6 +847,22 @@ sherpa server user delete <username>
 | ---- | ----------- |
 | `--force` | Skip confirmation prompt |
 
+### `sherpa server user unlock`
+
+Unlock an account that three failed logins in a row locked, and set its count of failed logins
+back to 0. Admin only. The user can then log in with their password.
+
+```
+sherpa server user unlock <username>
+```
+
+Unlocking an account that is not locked is not an error; an unknown username is. Admins can also
+unlock an account with the **Unlock** button in the **Locked** column of the **Users** admin page,
+which shows the button only for locked accounts. When no admin can log in, root unlocks an
+account, the built-in `admin` included, on the server with
+[`sherpad user unlock`](#sherpad-user-unlock); see
+[The built-in admin account is locked](help/troubleshooting.md#the-built-in-admin-account-is-locked).
+
 ### `sherpa server user passwd`
 
 Change a user's password.
@@ -855,7 +878,8 @@ password is not. You are then asked for the new password twice, and it cannot be
 
 A password change logs the user out everywhere else. Changing your own password ends all your
 other sessions, in the web UI and on other machines, and keeps the one you ran the command from.
-An admin resetting another user's password ends all of that user's sessions.
+An admin resetting another user's password ends all of that user's sessions. A reset does not
+unlock a locked account; unlock it with [`sherpa server user unlock`](#sherpa-server-user-unlock).
 
 ### `sherpa server user info`
 
@@ -1125,7 +1149,7 @@ sherpa server image set-default --model <model> --version <version>
 ## Server Daemon
 
 `sherpad` runs on the server. Besides `start`, `stop`, `restart`, `status`, `logs` and `doctor`,
-it has these setup commands.
+it has these setup and recovery commands.
 
 ### `sherpad check-database`
 
@@ -1164,3 +1188,20 @@ value before changing anything. To change the prefix of a server that already ha
 Values come from the flags or the environment variables only; `/opt/sherpa/env/sherpa.env` is not
 read. The install script prints the `sherpad init` command with the address and ports you gave
 it. The database is a file `sherpad` manages itself.
+
+### `sherpad user unlock`
+
+Unlock an account that three failed logins in a row locked, the built-in `admin` included, and
+set its count of failed logins back to 0, when no admin can log in to do it with
+[`sherpa server user unlock`](#sherpa-server-user-unlock). It works on the database directly,
+which `sherpad` holds while it runs, so stop `sherpad` first and start it again after:
+
+```
+sudo systemctl stop sherpad
+sudo -u sherpa sherpad user unlock <username>
+sudo systemctl start sherpad
+```
+
+While `sherpad` is running it refuses, saying to stop it, and changes nothing. Run it as the
+`sherpa` user; it refuses any other account, root included, and changes nothing. An unknown
+username is an error; an account that is not locked is not, and it says so.
