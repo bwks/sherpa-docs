@@ -367,6 +367,23 @@ error objects, with `code`, `message`, and `data` where the code defines it.
 | Host CPUs pinned by another node | `409`, `CPU_PINS_HELD` | `-32006` |
 | Any other failure | `500`, `INTERNAL_ERROR` | `-32000` |
 
+### An unexpected failure
+
+A failure of none of the kinds above is answered only with a reference to the server's log:
+
+```json
+{ "error": { "code": "INTERNAL_ERROR", "message": "internal error (ref 3f9a1c07); see the server log" } }
+```
+
+Over RPC the `message` is the same, with no `context` or `data`. The streamed `error` event of a
+REST operation, and the job page of a lab made or destroyed in the web UI, say the same. The
+server logs the reference at `error` level with what failed and the full error, so an admin can
+find it with `grep 3f9a1c07` in the server's log. No answer, of any kind, carries a file path,
+libvirt or Docker text, or the error's chain: a refusal of a known kind carries only its own
+message. The errors a destroy or a clean reports for a resource it could not remove, the
+errors of an up's Keycloak and Vault nodes, and the per-node messages of down and resume give
+the reference the same way.
+
 ### A request that does not parse
 
 A REST body, form or query string that is not of the request's type, such as
@@ -452,7 +469,10 @@ server stops the operation at its next safe point and responds once it has ended
 { "lab_id": "a1b2c3d4", "stopped": true }
 ```
 
-`stopped` is `false` if nothing was running. A cancelled `up` removes what it had created. The
+`stopped` is `true` only when an `up`, `redeploy` or `resume` was running, or waiting for the
+lab, and was stopped. It is `false`, at once, when none was: when nothing runs on the lab, or only
+a `down`, a destroy or the server's scan of the lab's nodes does. Cancel never stops those; a
+`down` runs on to its end. A cancelled `up` removes what it had created. The
 CLI calls cancel when you answer yes after pressing Ctrl-C. Destroying a lab also stops any of
 these operations first.
 
