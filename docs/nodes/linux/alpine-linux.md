@@ -61,4 +61,4 @@ model = "alpine_linux"
 - Approximate time for the system to be ready: `1 minute`
 - Alpine keeps its native tools: the `ash` shell (`/bin/sh`) and `doas`. Bash and `sudo` are
   not installed, including for [your account](../../architecture/personal-accounts.md).
-  Start `startup_scripts` and `user_scripts` with `#!/bin/sh`, or install Bash first.
+  Start `startup_scripts` with `#!/bin/sh`, or install Bash first.

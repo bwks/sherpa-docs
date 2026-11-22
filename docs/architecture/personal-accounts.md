@@ -44,8 +44,8 @@ image includes.
 On Flatcar your account joins the `wheel` and `docker` groups and has passwordless `sudo`, and
 gets your account's keys like every other node.
 
-Manifest `user_scripts` run as your account, and manifest `environment_variables` are set in
-your account's login shells.
+Manifest `environment_variables` are set in your account's login shells, and an
+[`ssh` provisioner](provisioners/ssh.md)'s scripts run as your account.
 
 `generic` virtual machine nodes are set up as a Linux VM that uses `cloud-init`.
 

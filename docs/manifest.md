@@ -126,7 +126,8 @@ On a model that takes several kinds, the message names the kind the setting need
 | `ztp`, `ssh` | yes | yes | |
 | `ready_check.port` | yes | yes | yes |
 | `ready_check.skip` | yes | yes | yes |
-| `environment_variables`, `text_files`, `binary_files`, `systemd_units`, `startup_scripts`, `user_scripts` | yes | yes | |
+| `environment_variables` | yes | yes | |
+| `text_files`, `startup_scripts`, `systemd_units` | some models, see each | | |
 | `vm` | yes | | |
 | `container` | | yes | |
 | `unikernel` | | | yes |
@@ -156,21 +157,6 @@ See [Juniper cJunosEvolved](nodes/juniper/juniper-evolved.md#container-cjunosevo
 Within a kind, a setting may still apply only to some models or ZTP methods; each section below
 says so.
 
-##### binary_files (list&lt;object&gt;)
-
-Binary files to copy onto a Flatcar Linux node's data disk, at its root. The `sherpa` CLI reads
-each file on your machine and sends it to the server, which never reads paths from a manifest.
-A relative path starts at the manifest's folder.
-
-```toml
-[[nodes.binary_files]]
-source = "bin/tool"
-```
-
-| Property | Type | Description |
-| -------- | ---- | ----------- |
-| `source` | string | Path of the file on the client. Its file name is kept, and cannot start with `-` |
-
 ##### environment_variables (list&lt;string&gt;)
 
 A list of environment variables to pass to a node.
@@ -186,7 +172,7 @@ environment_variables = [
 
 !!! warning "Not for secrets"
     Do not put passwords, API keys or tokens in `environment_variables`, `text_files`,
-    `startup_scripts` or `user_scripts`. Their contents are sent to the Sherpa server, which
+    `startup_scripts` or `systemd_units`. Their contents are sent to the Sherpa server, which
     keeps them with the lab: in the node's generated configuration and its first-boot media. Sherpa server administrators can read them there. Values loaded from your
     client environment with `$` are kept the same way. The server's
     [database](architecture/database.md#lab-definitions) records only their paths, and
@@ -203,8 +189,8 @@ Where the variables are set depends on the node:
   `~/.sherpa_env` in the home directory of the login user, which is
   [your account on the node](architecture/personal-accounts.md). The file is readable only by that user, and nothing is written system-wide.
   A line that sources it is added to `~/.bash_profile`, or to `~/.profile` when there is no
-  `~/.bash_profile`, so the variables are set in login shells, including
-  [`user_scripts`](#user_scripts-liststring).
+  `~/.bash_profile`, so the variables are set in login shells, including the scripts of an
+  [`ssh` provisioner](architecture/provisioners/ssh.md).
 - **Windows VMs**: the variables are set machine-wide. A value is set as written, `%`, `"` and
   `'` included: `%NAME%` is not expanded.
 - **Containers**: the variables are set in the container environment.
@@ -372,8 +358,13 @@ startup_scripts = [
 ]
 ```
 
-_This parameter currently only applies to node models
-that support the `cloud-init` based ZTP method._
+**Taken by:** virtual machines using `cloud-init` ZTP: Linux, BSD and Windows (cloudbase-init).
+Flatcar, network devices and containers do not take it.
+
+Taken only where a node's first-boot config carries it. `sherpa validate`, `sherpa up` and
+`sherpa redeploy` refuse it on any other node, on a node whose ZTP is `disabled`, and on a node
+with its own `ztp.config`, naming the node, the setting and the model, for example
+`Manifest - node: 'r1' sets text_files, which arista_eos does not use as a virtual_machine`.
 
 Like [`environment_variables`](#environment_variables-liststring), startup scripts are
 stored on the Sherpa server and are not for secrets.
@@ -386,6 +377,13 @@ such as `#!/bin/bash`, to choose its interpreter. A script without one runs with
 
 Systemd units to deploy to a Flatcar Linux node. The `sherpa` CLI reads each unit file on your
 machine and sends its contents. A relative path starts at the manifest's folder.
+
+**Taken by:** Flatcar Linux, using `ignition` ZTP. No other node takes it.
+
+Taken only where a node's first-boot config carries it. `sherpa validate`, `sherpa up` and
+`sherpa redeploy` refuse it on any other node, on a node whose ZTP is `disabled`, and on a node
+with its own `ztp.config`, naming the node, the setting and the model, for example
+`Manifest - node: 'r1' sets systemd_units, which ubuntu_linux does not use`.
 
 ```toml
 [[nodes.systemd_units]]
@@ -413,8 +411,14 @@ group = "sherpa"
 permissions = 600
 ```
 
-_This parameter currently only applies to node models
-that support the `cloud-init` based ZTP method._
+**Taken by:** virtual machines using `cloud-init` ZTP (Linux, BSD and Windows through
+cloudbase-init) and Flatcar Linux using `ignition`. Network devices and containers do not take
+it.
+
+Taken only where a node's first-boot config carries it. `sherpa validate`, `sherpa up` and
+`sherpa redeploy` refuse it on any other node, on a node whose ZTP is `disabled`, and on a node
+with its own `ztp.config`, naming the node, the setting and the model, for example
+`Manifest - node: 'r1' sets text_files, which arista_eos does not use as a virtual_machine`.
 
 !!! note
     The `dst` should be a fully qualified path.
@@ -442,25 +446,6 @@ that support the `cloud-init` based ZTP method._
 | `user` | string | File owner |
 | `group` | string | File group |
 | `permissions` | int | File permissions as octal digits (e.g., `600`), up to `777`. `sherpa validate` and `sherpa up` refuse other values. Write the digits as a plain number: `0644` is not valid TOML, and TOML's octal literal `0o644` is the number 420, which Sherpa reads as mode `420` |
-
-##### user_scripts (list&lt;string&gt;)
-
-A list of paths to user scripts on the client. A path may start with `~`; a relative path
-starts at the manifest's folder.
-
-```toml
-user_scripts = [
-  "/path/to/user-script.sh",
-]
-```
-
-User scripts are stored on the Sherpa server and are not for secrets. See
-[`environment_variables`](#environment_variables-liststring).
-
-User scripts run at the end of the first boot, as
-[your account on the node](architecture/personal-accounts.md). They run in a login shell, so `environment_variables` are set. Like
-[`startup_scripts`](#startup_scripts-liststring), each script is run directly, so its shebang
-line chooses the interpreter.
 
 ##### version (string)
 

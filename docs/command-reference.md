@@ -346,8 +346,8 @@ with its other settings as last deployed. A node that needs any of these is refu
 it was:
 
 - `ztp.config`
-- `text_files`, `binary_files` or `systemd_units`
-- `startup_scripts` or `user_scripts`
+- `text_files` or `systemd_units`
+- `startup_scripts`
 - `environment_variables` with a `$VAR` value
 - `provisioners`, which only the CLI runs
 

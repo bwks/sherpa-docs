@@ -72,10 +72,13 @@ Containers do not use traditional ZTP methods (TFTP, cloud-init). Instead, provi
 
 ### File Injection
 
-Files can be injected into containers via volume mounts defined in the manifest:
+Files reach a container through:
 
-- **`text_files`** — source file, destination path, owner, group, and permissions
 - **`container.volumes`** — bind mounts of server paths (admins only)
+- **[`container` provisioners](provisioners/container.md)** — secret files, mounted at `/run/secrets`
+
+Containers take no `text_files`, `startup_scripts` or `systemd_units`; a manifest that sets one
+on a container is refused.
 
 Every container gets the [lab CA and its node certificate](certificates.md), mounted read-only
 at `/etc/sherpa/certs/`.
