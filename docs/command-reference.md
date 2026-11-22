@@ -1041,6 +1041,11 @@ Docker Hub repo by its short name (`mysql`) or in full as `docker.io/library/<na
 `index.docker.io/library/mysql` match nothing, and the scan says no local images were found.
 Tags that are not valid [image versions](#image-versions) are left out.
 
+The scan lists every image it found with its status. A version it failed to record has
+`error: ...` as its status, and the command then exits non-zero, naming each version not
+recorded, with text and JSON output alike. A scan that recorded every version it found, or
+found it already recorded, exits 0.
+
 ### `sherpa server image import`
 
 Import a disk image file for a VM or unikernel model.
@@ -1094,17 +1099,28 @@ An image version names the image's folder on the server and, for containers, its
 Pull a container image from an OCI registry or download a VM image from a URL.
 
 ```
-sherpa server image pull --model <model>
+sherpa server image pull --model <model> --version <version>
+sherpa server image pull --model <model> --repo <image>:<tag>
 ```
 
 | Flag | Description |
 | ---- | ----------- |
 | `--model`, `-m` | Model of the device image to pull (required) |
 | `--kind` | Kind of the image, which decides between a registry pull (`container`) and a download (`virtual_machine`): `virtual_machine`, `container` or `unikernel`. Without it, the model's default kind. `generic` has no default, so it needs `--kind`; the containers of `arista_eos` and `juniper_evolved` need `--kind container` |
-| `--version`, `-v` | Version of the image |
-| `--repo`, `-r` | Container image reference with a tag: a Docker Hub image by its short or full name (`nats:2.11` or `docker.io/library/nats:2.11`), or an image in another registry (`registry.io/account/image:version` or `localhost:5000/image:1`); digests (`@sha256:...`) are not supported |
+| `--version`, `-v` | Version of the image. For a container pulled without `--repo`, the tag pulled from the model's built-in repo. Required for a VM download |
+| `--repo`, `-r` | Container image reference with a tag: a Docker Hub image by its short or full name (`nats:2.11` or `docker.io/library/nats:2.11`), or an image in another registry (`registry.io/account/image:version` or `localhost:5000/image:1`); digests (`@sha256:...`) are not supported. Optional: without it, the server pulls the model's built-in repo at `--version` |
 | `--url`, `-u` | VM image download URL |
 | `--default` | Set this image as the default version |
+
+Without `--repo`, the server pulls the model's built-in repo, the one `sherpa server image scan`
+matches the model's local images by, at the `--version` tag:
+
+```
+sherpa server image pull --model nats_bus --version 2.11
+```
+
+A model with no built-in repo (`mysql_db`, `postgresql_db`, and `generic` containers) is refused
+without `--repo`, with a message naming the model.
 
 The tag is the version Sherpa records. Sherpa also records the repo as you wrote it, and container
 nodes of that version run that repo unless the manifest sets `image` on the node. This applies to
