@@ -711,12 +711,15 @@ sherpa image list [model]
 Manage trusted server certificates using the Trust-On-First-Use (TOFU) system.
 
 On first connecting to a server whose certificate no public certificate authority issued, such
-as the self-signed one Sherpa generates, `sherpa` shows the certificate and its SHA-256
-fingerprint and asks whether to trust it. Check the fingerprint against the server's before you
-answer: the server's administrator can read it with the command in
-[Certificate Fingerprint](install-update/install/automated.md#certificate-fingerprint), and
-`sherpad` logs it when it starts. A trusted certificate is saved, and later connections use it
-without asking. The certificate is fetched from the server's HTTP port, `http_port` in
+as the self-signed one Sherpa generates, `sherpa` shows the certificate and its key pin, the
+SHA-256 of the server's public key, and asks whether to trust it. Check the key pin against the
+server's before you answer: the server's administrator can read it with the command in
+[Server Key Pin](install-update/install/automated.md#server-key-pin), and `sherpad` logs it
+when it starts. A trusted certificate is saved, and later connections trust the server whenever
+it presents the same public key, so a certificate the server renews with its key is trusted
+without asking. A server that presents another key is refused, unless a public certificate
+authority issued its certificate and `validate_certs` is on; delete the saved certificate with
+`sherpa cert delete` to be asked again. The certificate is fetched from the server's HTTP port, `http_port` in
 `[server_connection]` (`3031` by default).
 
 `cert show`, `cert trust` and `cert delete` take the server as a host (`10.100.58.10`), a
@@ -726,7 +729,7 @@ ones, are refused.
 
 ### `sherpa cert list`
 
-List all trusted certificates.
+List all trusted certificates, with each one's subject and key pin.
 
 ### `sherpa cert show`
 

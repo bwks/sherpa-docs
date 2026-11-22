@@ -91,17 +91,23 @@ Each user sets a [device password](../../architecture/device-password.md), with
 key, before the first `sherpa up`. `sherpad init` sets neither password for you, and `sherpa up`
 refuses to start a lab without a device password.
 
-## Certificate Fingerprint
+## Server Key Pin
 
-`sherpad` generates a self-signed TLS certificate when it first starts. The first time a client
-connects, it shows the certificate's fingerprint and asks the user to check it. Read the
-fingerprint on the server and give it to your users:
+`sherpad` makes its TLS key when it first starts and keeps it. On every start it writes a new
+self-signed certificate for that key, valid for `cert_validity_days` and naming the server's
+current addresses, so a restart renews the certificate and follows a changed address; see
+[`[tls]`](../../configuration/sherpa.md#tls).
+
+Clients trust the server's key, not one certificate. The first time a client connects, it shows
+the key pin, the SHA-256 of the server's public key, and asks the user to check it. A renewed
+certificate has the same key, so clients do not ask again. Read the key pin on the server and give
+it to your users:
 
 ```
-sudo openssl x509 -in /opt/sherpa/.certs/server.crt -noout -fingerprint -sha256
+sudo -u sherpa -H sherpad status
 ```
 
-`sherpad` also logs it each time it starts, as `TLS certificate fingerprint (SHA-256)`.
+`sherpad` also logs it each time it starts, as `TLS key pin (SHA-256 of the server's public key)`.
 
 ## Transparent Hugepages
 

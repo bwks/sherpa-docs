@@ -85,7 +85,7 @@ on the host.
 
 ## TLS
 
-TLS is enabled by default. On first startup, the server auto-generates a self-signed certificate if none is configured. Clients can download and trust the server certificate via `sherpa cert trust` or from the HTTP endpoint at `http://<server>:3031/cert`. See [Credentials](credentials.md) for details.
+TLS is enabled by default. With `self_generate_cert` on, the default, the server keeps its key and writes a new self-signed certificate for it on every start, and clients trust the key, so a renewed certificate needs no new trust. Clients can download and trust the server certificate via `sherpa cert trust` or from the HTTP endpoint at `http://<server>:3031/cert`. See [Credentials](credentials.md) for details.
 
 ## Networking
 
