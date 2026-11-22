@@ -321,6 +321,12 @@ virtual machine; the repo and ZTP setting for a container; the CPU, machine and 
 settings for a unikernel, whose boot mode is kept. A form that sends a setting the image's kind
 does not take is refused, naming it.
 
+### Pulling a container image
+
+`image.pull` and `POST /api/v1/images/pull` take an optional `repo`, the repository without its
+tag, which is in `tag`. Without `repo`, the server pulls the model's built-in repo; a model with
+none is refused as invalid (400, or `InvalidParams`), naming the model.
+
 ### Deleting an image
 
 `image.delete` and `DELETE /api/v1/images/{model}/{kind}/{version}` delete the image's record,
