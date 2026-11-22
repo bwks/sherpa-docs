@@ -325,6 +325,11 @@ stop cleanly.
 - A **worker** can be redeployed: it is rebuilt from the cluster's saved secrets and rejoins.
 - A **controller** cannot: its etcd member would have to be removed first. Destroy and
   recreate the lab instead.
+- A redeploy keeps the node's cluster and role. The manifest must give the node the cluster
+  and role it has in the lab: one that moves it to another cluster, changes its role, or takes
+  it out of its cluster or into one is refused before the node is touched, naming the node, its
+  cluster and role in the lab, and the manifest's. To change a cluster, destroy the lab and run
+  `sherpa up` again.
 - A cluster's **Vault** node can be redeployed. It starts empty: Sherpa sets it up for the
   cluster again, but you must write its secrets again.
 - A cluster's **Keycloak** node can be redeployed. Sherpa makes the `sherpa` realm again, with

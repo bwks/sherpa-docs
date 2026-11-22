@@ -205,7 +205,8 @@ Where the variables are set depends on the node:
   A line that sources it is added to `~/.bash_profile`, or to `~/.profile` when there is no
   `~/.bash_profile`, so the variables are set in login shells, including
   [`user_scripts`](#user_scripts-liststring).
-- **Windows VMs**: the variables are set machine-wide.
+- **Windows VMs**: the variables are set machine-wide. A value is set as written, `%`, `"` and
+  `'` included: `%NAME%` is not expanded.
 - **Containers**: the variables are set in the container environment.
 
 !!! note
