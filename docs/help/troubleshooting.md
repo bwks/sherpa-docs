@@ -102,16 +102,15 @@ Logging in as `admin` gives `username and/or password is incorrect` even with th
 ### Fix
 
 If another admin can log in, they unlock it with `sherpa server user unlock admin`. Otherwise,
-root unlocks it on the Sherpa server. `sherpad` holds the database file open, so stop it first,
-run one `UPDATE` as the `sherpa` user with `sqlite3`, then start it again:
+root unlocks it on the Sherpa server with [`sherpad user unlock`](../command-reference.md#sherpad-user-unlock).
+`sherpad` holds the database file open, so stop it first, unlock `admin` as the `sherpa` user,
+then start it again:
 
 ```
-sudo apt install sqlite3
 sudo systemctl stop sherpad
-sudo -u sherpa sqlite3 /opt/sherpa/db/sherpa.sqlite "UPDATE user SET failed_logins = 0, locked_at = NULL WHERE username = 'admin';"
+sudo -u sherpa sherpad user unlock admin
 sudo systemctl start sherpad
 ```
 
-`sqlite3` is not installed with Sherpa, so the first command installs it. The `UPDATE` changes
-only whether `admin` is locked and its count of failed logins; `admin` then logs in with its
-password.
+`sherpad user unlock` changes only whether `admin` is locked and its count of failed logins;
+`admin` then logs in with its password. It works the same for any other account.
