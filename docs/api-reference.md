@@ -55,6 +55,10 @@ curl -X POST https://<server>:3030/api/v1/auth/login \
   -d '{"username": "admin", "password": "password"}'
 ```
 
+A wrong password, an unknown username and a login refused by the login limit all get the same
+`401 Unauthorized` and message. See
+[Login refused with the right password](help/troubleshooting.md#login-refused-with-the-right-password).
+
 Check a token with the validate endpoint, the REST form of `sherpa whoami`. It answers
 `"valid": false` for a token that is invalid or expired, or whose session has ended, rather than
 an error:

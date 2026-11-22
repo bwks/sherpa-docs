@@ -12,6 +12,35 @@ qcow2: Image is corrupt; cannot be opened read/write
 qemu-img check -r all  /opt/sherpa/images/<device_model>/<version>/virtioa.qcow2
 ```
 
+## Login refused with the right password
+
+### Error
+
+```
+Invalid username or password
+```
+
+### Fix
+
+`sherpad` limits failed logins. It refuses logins for 15 minutes:
+
+- for a username, after 5 failed logins for it within 15 minutes
+- from an address, after 20 failed logins from it within 15 minutes
+
+The limit is the same for `sherpa login`, the REST API and the web UI login form, and it applies
+to the built-in `admin` account too. A refused login gets the same answer as a wrong password,
+and the password is not checked. Wait 15 minutes, then log in again.
+
+The address is the address the connection to `sherpad` comes from. Users behind one NAT or
+proxy share it. A successful login clears its username's count. The counts are kept in memory,
+so a restart of `sherpad` clears them:
+
+```
+sudo systemctl restart sherpad
+```
+
+`sherpad` logs each lockout once, at `warn`, with the username and the address.
+
 ## sherpad does not start: the JWT secret is the wrong length
 
 ### Error

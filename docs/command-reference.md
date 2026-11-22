@@ -45,6 +45,9 @@ Login to the Sherpa server. The username and password come from `SHERPA_USER_NAM
 for scripts; the password is never taken as a flag, so it stays out of the process list and shell
 history.
 
+Failed logins are limited, the same for `sherpa login`, the REST API and the web UI. See
+[Login refused with the right password](help/troubleshooting.md#login-refused-with-the-right-password).
+
 ### `sherpa logout`
 
 Logout from the Sherpa server. It ends the session on the server, so the token stops working
