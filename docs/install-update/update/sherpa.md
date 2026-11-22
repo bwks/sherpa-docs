@@ -6,22 +6,24 @@ It does not reinstall system packages or change users, and creates the
 only: update it on every other client too, to the same version, as described in
 [Client](client.md).
 
-Download the update script of the release you update to, with the release's checksums, check
-the script, and run it. Set `VERSION` to the release's tag from the
-[releases page](https://github.com/bwks/sherpa/releases).
+!!! danger
+
+    Piping to sudo can be dangerous. You are strongly encouraged to review the below script
+    before executing the below command.
+
+Update to the latest release:
 
 ```
-VERSION=<release tag>
-cd "$(mktemp -d)"
-curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/sherpa_update.sh"
-curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/SHA256SUMS"
-sha256sum --check --ignore-missing SHA256SUMS
-sudo bash sherpa_update.sh --version "${VERSION}"
+curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_update.sh | sudo bash
 ```
 
-`sha256sum` must print `sherpa_update.sh: OK`. Add `--force` to reinstall the version that is
-there. The script checks each archive it downloads against the release's `SHA256SUMS` before it
-uses it, and refuses a release that publishes none.
+Update to a specific release, or reinstall the current one:
+
+```
+curl -fsSLO https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_update.sh
+sudo bash sherpa_update.sh --version v0.5.0
+sudo bash sherpa_update.sh --force
+```
 
 Take a [database backup](../../architecture/database.md#backups) before updating, and keep a
 copy of the [database key](../../architecture/database.md#database-key),

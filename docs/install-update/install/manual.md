@@ -192,13 +192,9 @@ owned by `sherpa`, with links in `/usr/local/bin`. Set `VERSION` to the release'
 VERSION=<release tag>
 TARGET=x86_64-unknown-linux-gnu
 cd "$(mktemp -d)"
-curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/SHA256SUMS"
 for binary in sherpad sherpa; do
   curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/${binary}-${TARGET}.tar.gz"
-done
-sha256sum --check --ignore-missing SHA256SUMS
-for binary in sherpad sherpa; do
-  tar xzf "${binary}-${TARGET}.tar.gz" --no-same-owner "${binary}"
+  tar xzf "${binary}-${TARGET}.tar.gz"
   sudo install -D -o sherpa -g sherpa -m 755 "${binary}" "/opt/sherpa/bin/${binary}"
   sudo ln -sf "/opt/sherpa/bin/${binary}" "/usr/local/bin/${binary}"
 done
@@ -208,15 +204,9 @@ sherpad --version
 ### Pull the Sherpa Router Image
 
 Each lab's router, which serves DHCP, DNS and the nodes' boot files, runs from this image.
-Pull it by the digest the release's install script pins, `SHERPA_ROUTER_DIGEST`, and tag it with
-the name `sherpad` runs it by.
 
 ```
-curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/sherpa_install.sh"
-sha256sum --check --ignore-missing SHA256SUMS
-DIGEST=$(sed -n 's/^SHERPA_ROUTER_DIGEST="\(.*\)"$/\1/p' sherpa_install.sh)
-sudo docker image pull "ghcr.io/bwks/sherpa-router@${DIGEST}"
-sudo docker image tag "ghcr.io/bwks/sherpa-router@${DIGEST}" ghcr.io/bwks/sherpa-router:latest
+sudo docker image pull ghcr.io/bwks/sherpa-router:latest
 ```
 
 ### Install the Service
@@ -271,9 +261,8 @@ disks that are missing, with their folder. It never changes a disk that is there
 to run again.
 
 ```
-curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/sherpa_update.sh"
-sha256sum --check --ignore-missing SHA256SUMS
-sudo bash sherpa_update.sh --version "${VERSION}"
+curl -fsSLO https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_update.sh
+sudo bash sherpa_update.sh --version <installed version>
 ```
 
 ### Initialize and Start

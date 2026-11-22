@@ -5,16 +5,8 @@
 The quickest way to get started with Sherpa is to use the convenience installer [script](install-update/install/automated.md).
 
 ```
-VERSION=<release tag>
-cd "$(mktemp -d)"
-curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/sherpa_install.sh"
-curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/SHA256SUMS"
-sha256sum --check --ignore-missing SHA256SUMS
-sudo bash sherpa_install.sh --version "${VERSION}"
+curl -fsSL https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_install.sh | sudo bash
 ```
-
-Set `VERSION` to a tag from the [releases page](https://github.com/bwks/sherpa/releases);
-`sha256sum` must print `sherpa_install.sh: OK`.
 
 This will install all the dependencies as well as the Sherpa, 
 server and client binaries.
