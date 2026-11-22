@@ -291,11 +291,11 @@ sudo systemctl start sherpad
 Lab management subnets come from `172.31.0.0/16` and `fd00:b00b::/48`. If either is in use on
 your network, add `--management-prefix-ipv4 <prefix>` or `--management-prefix-ipv6 <prefix>`.
 
-Give your users the server certificate's fingerprint, which clients ask them to check on their
-first connection:
+Give your users the server's key pin, the SHA-256 of its public key, which clients ask them to
+check on their first connection; see [Server Key Pin](automated.md#server-key-pin):
 
 ```
-sudo openssl x509 -in /opt/sherpa/.certs/server.crt -noout -fingerprint -sha256
+sudo -u sherpa -H sherpad status
 ```
 
 ### Sherpa Client

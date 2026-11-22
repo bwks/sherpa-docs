@@ -126,8 +126,8 @@ sherpa --version
 2. Run [`sherpa login`](../../command-reference.md#sherpa-login) with the account the server's
    administrator gave you.
 3. The first time the CLI connects to a server with Sherpa's self-signed certificate, it shows
-   the certificate's SHA-256 fingerprint and asks whether to trust it. Compare it with the
-   server's [certificate fingerprint](automated.md#certificate-fingerprint) before you answer;
+   the key pin, the SHA-256 of the server's public key, and asks whether to trust it. Compare it
+   with the server's [key pin](automated.md#server-key-pin) before you answer;
    see [Certificate Commands](../../command-reference.md#certificate-commands).
 4. Set your [device password](../../architecture/device-password.md) with
    `sherpa server user device-password`, or on the web UI **Profile** page, before the first

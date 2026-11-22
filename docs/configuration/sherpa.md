@@ -35,7 +35,7 @@ allow_signup = false
 
 [tls]
 enabled = true
-auto_generate_cert = true
+self_generate_cert = true
 cert_validity_days = 365
 
 [otel]
@@ -93,7 +93,8 @@ Internal server connection settings.
 With `validate_certs = true`, the client first trusts the public certificate authorities. A
 server with a publicly issued certificate is trusted without a prompt. For any other
 certificate, such as the self-signed one Sherpa generates, the client shows the certificate and
-its fingerprint and asks you to trust it (see [Certificate Commands](../command-reference.md#certificate-commands)).
+its key pin, the SHA-256 of the server's public key, and asks you to trust it. Later connections
+trust the server while it presents the same public key, whatever certificate it carries (see [Certificate Commands](../command-reference.md#certificate-commands)).
 With `validate_certs = false`, the client trusts only certificates you have trusted, and asks
 about every new server. `ca_cert_path` and `insecure` take precedence over both.
 
@@ -106,9 +107,22 @@ TLS configuration for the server.
 | `enabled` | bool | `true` | Enable TLS for connections |
 | `cert_path` | string | `/opt/sherpa/.certs/server.crt` | Path to server certificate (PEM) |
 | `key_path` | string | `/opt/sherpa/.certs/server.key` | Path to server private key (PEM) |
-| `auto_generate_cert` | bool | `true` | Auto-generate self-signed certificate if none exists |
-| `cert_validity_days` | int | `365` | Certificate validity in days (for auto-generated certs) |
-| `san` | list&lt;string&gt; | `[]` | Subject Alternative Names (DNS names, IPs) |
+| `self_generate_cert` | bool | `true` | Whether `sherpad` owns the certificate and key; see below |
+| `cert_validity_days` | int | `365` | Validity in days of the certificate `sherpad` writes when `self_generate_cert` is on |
+| `san` | list&lt;string&gt; | `[]` | Subject Alternative Names (DNS names, IPs) of the certificate `sherpad` writes; without them, the server's addresses, `localhost` and its host name |
+
+With `self_generate_cert = true`, `sherpad` owns the files at `cert_path` and `key_path`. It
+keeps the key, and makes a new one only when the key file is missing or does not load. On every
+start it writes a new self-signed certificate for that key, valid for `cert_validity_days` and
+naming the server's current addresses, so restarting `sherpad` renews the certificate and
+follows a changed address. Clients trust the key, so they do not ask again. A new key, made when
+the old one is lost, is a new identity, and each client must trust the server again.
+
+With `self_generate_cert = false`, you provide the certificate and key, and `sherpad` never
+writes them. It does not start when either file is missing, and names the missing file. It
+starts with a warning in its log, and `sherpad status` shows the same warning, when the
+certificate expires within 30 days or does not name `server_ipv4` or `server_ipv6`. Replace
+the files and restart `sherpad` to serve a new certificate.
 
 ### `[otel]`
 
