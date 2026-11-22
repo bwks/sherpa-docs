@@ -22,18 +22,25 @@ Invalid username or password
 
 ### Fix
 
-`sherpad` limits failed logins. It refuses logins for 15 minutes:
+`sherpad` limits failed logins. Failures count for 15 minutes from the first one, and each
+limit, once reached, refuses logins for 15 minutes:
 
-- for a username, after 5 failed logins for it within 15 minutes
-- from an address, after 20 failed logins from it within 15 minutes; every IPv6 address in one /64 prefix counts as one address
+- a username from one address: after 5 failed logins for it from that address, that username is
+  refused from that address only. The same user can still log in from another address, so
+  someone who knows a username cannot lock its user out by failing from their own address.
+- an address: after 20 failed logins from it, for any usernames, every login from it is refused.
+- a username from any address: after 50 failed logins for it, from all addresses together, it is
+  refused from every address.
 
-The limit is the same for `sherpa login`, the REST API and the web UI login form, and it applies
-to the built-in `admin` account too. A refused login gets the same answer as a wrong password,
-and the password is not checked. Wait 15 minutes, then log in again.
+Every IPv6 address in one /64 prefix counts as one address. The address is the address the
+connection to `sherpad` comes from, so users behind one NAT or proxy share it.
 
-The address is the address the connection to `sherpad` comes from. Users behind one NAT or
-proxy share it. A successful login clears its username's count. The counts are kept in memory,
-so a restart of `sherpad` clears them:
+The limits are the same for `sherpa login`, the REST API and the web UI login form, and they
+apply to the built-in `admin` account too. A refused login gets the same answer as a wrong
+password, and the password is not checked. Wait 15 minutes, then log in again.
+
+A successful login clears its username's counts, from every address. The counts and locks are
+kept in memory only, so restarting `sherpad` clears all of them:
 
 ```
 sudo systemctl restart sherpad
