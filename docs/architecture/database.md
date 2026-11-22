@@ -35,8 +35,8 @@ from the web UI until `sherpa redeploy` records one.
 
 ### Database key
 
-Passwords are stored encrypted (AES-256-GCM): `ztp_server.password` from a lab's manifest, and
-each user's [device password](device-password.md). The database refuses a device password that is
+Passwords are stored encrypted (AES-256-GCM): each user's
+[device password](device-password.md). The database refuses a device password that is
 not encrypted. The key is in
 `/opt/sherpa/.secret/db.key`, beside the JWT secret in a folder only `sherpa` can open (mode
 `700`): 32 random bytes, readable only by `sherpa`, which `sherpad` creates
@@ -151,7 +151,7 @@ are unique, and no two labs share a network.
 | `management_network`   | text            | IPv4 management network         |
 | `gateway_ipv4`         | text            | IPv4 gateway address            |
 | `description`          | text, optional  | The manifest's `description`    |
-| `ready_timeout`, `provision_concurrency`, `tailscale_*`, `ztp_server_*` | | The manifest's lab-level settings; `ztp_server_password` is encrypted |
+| `ready_timeout`, `provision_concurrency`, `tailscale_*` | | The manifest's lab-level settings |
 
 #### node
 
