@@ -119,19 +119,20 @@ sudo adduser --system \
   sherpa
 ```
 
-Add your username to the group
+Add your username to the group. Members of the `sherpa` group can read the lab folders and the
+log, and can copy node images into `/opt/sherpa/images`. They cannot change anything `sherpad`
+runs or reads its secrets from.
 
 ```
 sudo usermod -aG sherpa $USER
 ```
 
-Create `sherpa` directory
+Create the `sherpa` directory, the folder of the binaries and the folder of the storage pool,
+owned by root. systemd runs `sherpad` from there, so neither `sherpa` nor its group may change
+them
 
 ```
-sudo mkdir -p /opt/sherpa && \
-    sudo chown sherpa:sherpa /opt/sherpa && \
-    sudo chgrp sherpa /opt/sherpa && \
-    sudo chmod 2775 /opt/sherpa
+sudo install -d -o root -g root -m 755 /opt/sherpa /opt/sherpa/bin /opt/sherpa/libvirt
 ```
 
 Create the lab directory, readable only by the `sherpa` user and group
@@ -147,11 +148,20 @@ password hashes
 sudo install -d -o sherpa -g sherpa -m 750 /opt/sherpa/db
 ```
 
-Create the secrets directory, which only the `sherpa` user can open. `sherpad` keeps its login
-token secret and its [database key](../../architecture/database.md#database-key) there
+Create the secrets and certificate directories, which only the `sherpa` user can open. `sherpad`
+keeps its login token secret and its [database key](../../architecture/database.md#database-key)
+in the first, and its TLS certificate and key in the second
 
 ```
-sudo install -d -o sherpa -g sherpa -m 700 /opt/sherpa/.secret
+sudo install -d -o sherpa -g sherpa -m 700 /opt/sherpa/.secret /opt/sherpa/.certs
+```
+
+Create the folders `sherpad` writes its images, container and binary files, PID file and
+console sockets to. `sherpad` cannot create a folder in `/opt/sherpa` itself, as that is root's
+
+```
+sudo install -d -o sherpa -g sherpa -m 775 /opt/sherpa/images
+sudo install -d -o sherpa -g sherpa -m 755 /opt/sherpa/containers /opt/sherpa/bins /opt/sherpa/run
 ```
 
 Create the config, environment and log directories, open to the `sherpa` user and group only
@@ -185,7 +195,7 @@ sudo systemctl restart libvirtd.service
 
 Download `sherpad` and the `sherpa` CLI for the release you want from the
 [releases page](https://github.com/bwks/sherpa/releases), and install them in `/opt/sherpa/bin`,
-owned by `sherpa`, with links in `/usr/local/bin`. Set `VERSION` to the release's tag, such as
+owned by root, with links in `/usr/local/bin`. Set `VERSION` to the release's tag, such as
 `v0.7.0`.
 
 ```
@@ -195,7 +205,7 @@ cd "$(mktemp -d)"
 for binary in sherpad sherpa; do
   curl -fsSLO "https://github.com/bwks/sherpa/releases/download/${VERSION}/${binary}-${TARGET}.tar.gz"
   tar xzf "${binary}-${TARGET}.tar.gz"
-  sudo install -D -o sherpa -g sherpa -m 755 "${binary}" "/opt/sherpa/bin/${binary}"
+  sudo install -o root -g root -m 755 "${binary}" "/opt/sherpa/bin/${binary}"
   sudo ln -sf "/opt/sherpa/bin/${binary}" "/usr/local/bin/${binary}"
 done
 sherpad --version
