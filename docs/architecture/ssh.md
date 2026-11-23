@@ -15,7 +15,10 @@ config file (`<lab folder>/.sherpa/ssh/config`) added and removed during start u
 The config's `UserKnownHostsFile` is an absolute path to `.sherpa/ssh/known_hosts`, so `ssh -F .sherpa/ssh/config <node>.<lab-id>` works from the
 lab folder.
 
-A lab folder whose path has spaces is included in double quotes, as `ssh` needs. If
+A lab folder whose path has spaces is included in double quotes, as `ssh` needs, and the
+config's `UserKnownHostsFile` names it in double quotes too: unquoted, `ssh` would read the
+path as a list of files. A lab folder whose path has a double quote cannot be named in an SSH
+config, so its files are not saved. If
 `~/.ssh/config` is a symbolic link, as dotfile managers make it, the file it points to is
 updated and the link is kept. Each file is replaced whole, keeping its permissions, so an
 interrupted update never leaves it cut short.
@@ -137,8 +140,8 @@ Host 172.31.1.*
     UserKnownHostsFile ~/.ssh/known_hosts /home/me/labs/dev/.sherpa/ssh/known_hosts
 ```
 
-Keys are recorded by address, as `172.31.1.21`, or `[172.31.1.21]:2222` for a port other than
-22, the names `ssh` looks up when it connects to the address in `HostName`.
+Keys are recorded by address, as `172.31.1.21`, the name `ssh` looks up when it connects to the
+address in `HostName`.
 
 ## Tunneling
 
