@@ -943,6 +943,9 @@ key is required for creation and for each whole-lab resume, because `sherpa down
 logs the gateway out. Omitting the section
 or setting `enabled = false` requires no credential and creates no gateway.
 
+With `enabled = true`, no container node can be named `sherpa-tailnet`, the name of the lab's
+gateway container.
+
 Enrollment requires server TLS and WSS with certificate validation enabled.
 Route approval is separate from enrollment; pending approval produces a warning
 without failing lab creation. See [Tailscale setup and route approval](architecture/networking/tailscale.md).
