@@ -52,7 +52,7 @@ sherpa login
 # REST
 curl -X POST https://<server>:3030/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username": "admin", "password": "password"}'
+  -d '{"username": "alice", "password": "password"}'
 ```
 
 Check a token with the validate endpoint, the REST form of `sherpa whoami`. It answers
@@ -671,7 +671,7 @@ Every lab operation applies the same rule on REST, WebSocket RPC and the web UI:
 | Redeploy a node | The lab owner only, including for admins, because the node is rebuilt with the owner's SSH keys and account |
 | Force clean | Admins only |
 
-The built-in `admin` account cannot create, resume or redeploy labs, on any transport: these
+The built-in `sherpa-admin` account cannot create, resume or redeploy labs, on any transport: these
 return `403 Forbidden` on REST and `AccessDenied` on WebSocket RPC. It can still inspect, stop,
 destroy and clean up any lab. Start labs from your own account, which may also be an admin. Labs also need the account to have a [device password](architecture/device-password.md).
 
@@ -757,7 +757,7 @@ Deleting a user follows the same rules on REST, WebSocket RPC and the web UI:
 | Refusal | REST | WebSocket RPC |
 | ------- | ---- | ------------- |
 | Deleting your own account | `403 Forbidden` | `AccessDenied` |
-| Deleting the built-in `admin` account | `403 Forbidden` | `AccessDenied` |
+| Deleting the built-in `sherpa-admin` account | `403 Forbidden` | `AccessDenied` |
 | Deleting the last admin account | `403 Forbidden` | `AccessDenied` |
 | The user owns labs | `409 Conflict`, listing the labs | `ServerError`, listing the labs |
 

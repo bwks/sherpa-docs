@@ -254,10 +254,10 @@ The database enforces these rules itself:
 
 ## Initialization
 
-`sherpad init` creates the database file, applies the schema, and creates the built-in `admin`
-account and a first user account. On every start, `sherpad` opens the file and brings the schema
-up to date. If the `admin` account is missing, the server creates it when `SHERPA_ADMIN_PASSWORD`
+`sherpad init` creates the database file, applies the schema, and creates the built-in
+`sherpa-admin` account and a first user account. On every start, `sherpad` opens the file and
+brings the schema up to date. If the `sherpa-admin` account is missing, the server creates it when `SHERPA_ADMIN_PASSWORD`
 is set, and otherwise refuses to start until you run `sherpad init`.
 
-The schema protects the built-in `admin` account: it cannot be deleted, renamed or lose its admin
-flag, even by a statement run directly against the database.
+The schema protects the built-in `sherpa-admin` account: it cannot be deleted, renamed or lose
+its admin flag, even by a statement run directly against the database.

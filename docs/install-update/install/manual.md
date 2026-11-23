@@ -278,7 +278,7 @@ sudo bash sherpa_update.sh --version <installed version>
 ### Initialize and Start
 
 Initialize the server as `sherpa`, with the address clients reach it on. It writes
-`/opt/sherpa/config/sherpa.toml`, creates the database, and asks for the `admin` password and
+`/opt/sherpa/config/sherpa.toml`, creates the database, and asks for the `sherpa-admin` password and
 for your own user: its name, password and SSH public key. `sherpa` cannot read your home folder,
 so paste the key itself when asked. See
 [file permissions](automated.md#file-permissions).

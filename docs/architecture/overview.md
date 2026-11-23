@@ -64,7 +64,7 @@ start. If the file is damaged (it is not 32 bytes long), `sherpad` refuses to st
 replace it, because a new secret logs every user out; see
 [Troubleshooting](../help/troubleshooting.md#sherpad-does-not-start-the-jwt-secret-is-the-wrong-length).
 
-User accounts have one of two roles: **Basic** (lab operations) or **Admin** (full access including user and image management). `sherpad init` creates the built-in `admin` account and a first user account. The built-in `admin` account cannot be deleted, renamed or lose its admin role, and cannot start, resume or redeploy labs; labs are started from personal user accounts, which can also be admins.
+User accounts have one of two roles: **Basic** (lab operations) or **Admin** (full access including user and image management). `sherpad init` creates the built-in `sherpa-admin` account and a first user account. The built-in `sherpa-admin` account cannot be deleted, renamed or lose its admin role, and cannot start, resume or redeploy labs; labs are started from personal user accounts, which can also be admins.
 
 Admins can list, inspect, stop, resume and destroy other users' labs, but cannot log in to their
 nodes or get what is needed to. For another user's lab an admin cannot download the lab files

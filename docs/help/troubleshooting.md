@@ -93,24 +93,24 @@ sherpa server user unlock <username>
 or with the **Unlock** button in the **Locked** column of the **Users** admin page in the web UI.
 The user can then log in with their password. Resetting the password does not unlock the account.
 
-## The built-in admin account is locked
+## The built-in sherpa-admin account is locked
 
 ### Error
 
-Logging in as `admin` gives `username and/or password is incorrect` even with the right password.
+Logging in as `sherpa-admin` gives `username and/or password is incorrect` even with the right password.
 
 ### Fix
 
-If another admin can log in, they unlock it with `sherpa server user unlock admin`. Otherwise,
+If another admin can log in, they unlock it with `sherpa server user unlock sherpa-admin`. Otherwise,
 root unlocks it on the Sherpa server with [`sherpad user unlock`](../command-reference.md#sherpad-user-unlock).
-`sherpad` holds the database file open, so stop it first, unlock `admin` as the `sherpa` user,
+`sherpad` holds the database file open, so stop it first, unlock `sherpa-admin` as the `sherpa` user,
 then start it again:
 
 ```
 sudo systemctl stop sherpad
-sudo -u sherpa sherpad user unlock admin
+sudo -u sherpa sherpad user unlock sherpa-admin
 sudo systemctl start sherpad
 ```
 
-`sherpad user unlock` changes only whether `admin` is locked and its count of failed logins;
-`admin` then logs in with its password. It works the same for any other account.
+`sherpad user unlock` changes only whether `sherpa-admin` is locked and its count of failed
+logins; `sherpa-admin` then logs in with its password. It works the same for any other account.

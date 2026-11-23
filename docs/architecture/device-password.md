@@ -35,7 +35,7 @@ Setting it again replaces it. A new device password applies to nodes you create 
 afterwards; running nodes keep the one they started with. Sherpa never shows the device password
 again, so a forgotten one is replaced, not recovered.
 
-The built-in `admin` account cannot start labs, so it has no device password.
+The built-in `sherpa-admin` account cannot start labs, so it has no device password.
 
 ## Check It
 
