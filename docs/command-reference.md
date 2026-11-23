@@ -635,13 +635,21 @@ the holder log in to the nodes. Anyone else is refused with `Only the owner of l
 operation`. No SSH key is downloaded: nodes take your own
 keys (see [SSH](architecture/ssh.md#logging-in-to-nodes)).
 
+It refuses a folder that already holds any of the files it would write, `lab-info.toml` or not,
+naming the first one it finds, and changes nothing there:
+
+```
+Lab files already exist in this directory (.sherpa/vault/vault-vault01.toml).
+Use --force to overwrite.
+```
+
 ```
 sherpa download <lab_id>
 ```
 
 | Flag | Description |
 | ---- | ----------- |
-| `--force`, `-f` | Overwrite existing lab files if they exist |
+| `--force`, `-f` | Overwrite the lab files that are already in the folder |
 
 ## Link Commands
 
