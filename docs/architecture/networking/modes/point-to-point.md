@@ -29,6 +29,25 @@ Cisco IOL's interfaces are fixed at MTU 1500. A Linux node linked to an IOL node
 Every L2 protocol passes end to end, including LLDP, STP, LACP, CDP, pause frames, and VLAN
 and QinQ tagged frames, and each link end on the host can be captured with `tcpdump`.
 
+### LACP Bonds on Linux VMs
+
+A VM's link interfaces are virtio interfaces, and they report unknown speed and duplex. A Linux
+bond in 802.3ad mode turns LACP off on a member that is not full duplex, so it sends no LACPDU
+and never bundles, though LLDP and every other frame pass. In the guest, set each member's speed
+and duplex before adding it to the bond; 10000 matches a container's link ends:
+
+```sh
+ethtool -s eth1 speed 10000 duplex full
+ethtool -s eth2 speed 10000 duplex full
+ip link add bond1 type bond mode 802.3ad
+ip link set eth1 down && ip link set eth1 master bond1
+ip link set eth2 down && ip link set eth2 master bond1
+ip link set bond1 up && ip link set eth1 up && ip link set eth2 up
+```
+
+The setting does not survive a reboot; set it wherever the guest's bond is configured. Sherpa
+does not set it.
+
 ### Configuration
 
 A link needs only its two ends.
