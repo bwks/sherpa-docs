@@ -53,9 +53,10 @@ Use a **reusable, ephemeral, pre-approved** key with the tag your route auto-app
 - **Pre-approved** is needed if your tailnet requires device approval.
 - **Reusable** lets one key enroll many labs, and enroll a lab again each time it resumes.
 
-The key is needed when the lab is created and each time the whole lab is resumed, because
-`sherpa down` logs the gateway out. Sherpa never stores the key; keep it in the variable named
-by `auth_key_env`.
+The key is needed when the lab is created and when the whole lab is resumed with the gateway
+not connected, as after `sherpa down`, which logs the gateway out. A resume that finds the
+gateway connected leaves it as it is and needs no key. Sherpa never stores the key; keep it in
+the variable named by `auth_key_env`.
 
 !!! warning "Non-ephemeral keys"
 
@@ -64,7 +65,8 @@ by `auth_key_env`.
     `sherpa destroy` until you remove it in the Tailscale admin console.
 
 - REST API callers send the key as `tailscale_auth_key` in the creation and resume requests.
-  The web UI cannot enroll a lab, so it cannot resume a whole lab that uses Tailscale.
+  The web UI cannot enroll a lab, so it can resume a whole lab that uses Tailscale only while
+  the gateway is connected.
 
 ## Route Approval
 
@@ -79,16 +81,16 @@ approved, other devices cannot reach the lab. Lab creation still succeeds, with 
 3. Generate the auth key with that tag attached.
 4. Create the lab.
 
-Each resume enrolls a new gateway device, so with automatic approval its routes are approved
-again without you doing anything.
+Each resume that enrolls the gateway makes a new device, so with automatic approval its routes
+are approved again without you doing anything.
 
 The policy lives in Tailscale. Sherpa never changes it and needs no Tailscale admin credential.
 
 ### Manual approval
 
 Open the gateway device in the Tailscale admin console and approve its advertised IPv4 and
-IPv6 routes. Each `sherpa resume` enrolls a new device, so approve its routes again after every
-resume.
+IPv6 routes. A `sherpa resume` that enrolls the gateway makes a new device, so approve its
+routes again after such a resume.
 
 ### Check the result
 
@@ -117,7 +119,7 @@ no jump through the Sherpa server. Per-node DNS names are not provided.
 | ------- | ------- |
 | `sherpa up` | Created and joined to the tailnet. If enrollment fails, the lab is rolled back. A route approval warning does not fail the lab. |
 | `sherpa down` | Logged out of the tailnet, then stopped along with the lab. An ephemeral device is removed at once. |
-| `sherpa resume` | Started and enrolled again with the key from `auth_key_env` before nodes resume, as a new device with new Tailscale addresses. Its routes need approval again, which is automatic with [automatic approval](#automatic-approval). |
+| `sherpa resume` | Left as it is if it is running and connected, with no key needed. Otherwise started and enrolled again with the key from `auth_key_env` before nodes resume, as a new device with new Tailscale addresses; its routes need approval again, which is automatic with [automatic approval](#automatic-approval). If enrollment fails, the gateway is stopped again and no node starts. |
 | `sherpa destroy` or `sherpa server clean <lab_id>` | Logged out if it is running, then removed with its identity volume. If removal fails, the lab record is kept so you can retry. |
 
 If logging out fails, for example because the server has no internet access, Sherpa still
@@ -131,10 +133,10 @@ Stopping or resuming an individual node leaves the gateway alone.
 | Problem | What to do |
 | ------- | ---------- |
 | Environment variable is not set | Set the variable named by `auth_key_env` in your client shell, then retry. |
-| Resume asks for an auth key | Run `sherpa resume` in the lab folder, so it can read `auth_key_env` from `manifest.toml`, with that variable set. REST callers send `tailscale_auth_key`. |
+| Resume asks for an auth key | The gateway is not connected, so resume must enroll it again. Run `sherpa resume` in the lab folder with the variable named by `auth_key_env` set; the error names it. With the variable unset, `sherpa resume` sends no key, which is enough only while the gateway is connected. REST callers send `tailscale_auth_key`. |
 | Plaintext connection, or certificate validation disabled | Enable server TLS, connect over WSS and trust the server certificate without `--insecure`. |
 | Invalid or expired key, or enrollment timed out | Check the key, device approval, the server's internet access and `/dev/net/tun`. The lab is rolled back. Retry with a fresh key. A one-use key may already be spent. |
-| Gateway does not reconnect on resume | Check the key as for enrollment: it may have expired, been revoked, or been a one-use key that is already spent. Generate a new key and run `sherpa resume` again. |
+| Gateway does not reconnect on resume | The resume fails, the gateway is stopped again and no node starts. Check the key as for enrollment: it may have expired, been revoked, or been a one-use key that is already spent. Generate a new key and run `sherpa resume` again. |
 | Routes are pending | Approve them as described above. No restart is needed. |
 | Routes approved but unreachable | Check your ACLs, that your client accepts routes, the node state, and address conflicts. |
 | Address conflicts | Management ranges must not overlap other advertised networks or your client's local networks. Sherpa avoids conflicts on one server, but cannot see other servers or tailnets. Configure distinct management ranges before creating labs. |

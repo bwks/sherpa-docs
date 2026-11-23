@@ -192,9 +192,10 @@ Restart `sherpad` after editing the server configuration.
 | `stop_timeout_secs` | int | `10` | Docker stop grace period before the gateway is killed |
 
 Timeouts must be positive seconds. `stop_timeout_secs` must fit a signed 32-bit
-integer. Keep `exec_timeout_secs` longer than `enrollment_timeout_secs` so the
-Docker command can finish. Socket paths must fit Linux's Unix socket path limit.
-An empty image, invalid socket path, or invalid timeout prevents server startup.
+integer. `exec_timeout_secs` must be longer than `enrollment_timeout_secs`, so the
+enrollment command, which holds the auth key, ends before the server stops waiting
+for it. Socket paths must fit Linux's Unix socket path limit. An empty image,
+invalid socket path, or invalid timeout prevents server startup.
 
 For example, increase the enrollment wait while keeping the other defaults:
 
