@@ -9,9 +9,8 @@ The following configuration parameters are applied to nodes via ZTP:
 - Hostname
 - Management IPv4/6 addresses
 - Default route
-- DNS domain
-- DNS name servers
-- DNS search domains
+- DNS domain and name server, on the models listed under
+  [Name Server](#name-server)
 - Your login: your Sherpa username, your registered SSH keys and your
   [device password](device-password.md), written in the form the device takes. Where a device
   stores a hash, the configuration carries a salted hash, not the password. Fixed vendor accounts
@@ -20,6 +19,23 @@ The following configuration parameters are applied to nodes via ZTP:
 
 The configurations served over TFTP or HTTP carry only hashes of the device password, and Aruba
 AOS-CX's carries none.
+
+### Name Server
+
+A node's name server is the lab router, the `.2` address of the management network, which
+resolves the name of every node in the lab. Sherpa writes it into the configuration of:
+
+- Arista vEOS and cEOS
+- Aruba AOS-CX
+- Cisco ASAv, FTDv, IOL and IOL L2, IOSv, IOSvL2, IOS XE, IOS XR, ISE and Nexus
+- Cumulus Linux
+- MikroTik RouterOS
+- Nokia SR Linux
+- Palo Alto PAN-OS
+- Nodes configured by cloud-init, cloudbase-init or Ignition
+
+Nodes that take their address by DHCP get the same name server from the lab router. Junos, FRR
+and SONiC configurations set no name server.
 
 ## Who Can Read a Node's Configuration
 
@@ -191,6 +207,10 @@ On boot, the device detects the secondary disk and applies the configuration.
 ### CDROM
 
 Configuration files are packaged into an ISO image and mounted as a read-only CDROM device. The device scans the CDROM for a specific filename during boot.
+
+Palo Alto PAN-OS reads a bootstrap ISO instead: a volume labelled `bootstrap` with `config`,
+`content`, `license` and `software` folders. Its `config` folder holds `init-cfg.txt` and
+`bootstrap.xml`, or, when the node has a custom `ztp.config`, that file alone as `init-cfg.txt`.
 
 ![sherpad packages the config file into an ISO attached to the VM as a CD-ROM](ztp-cdrom.svg)
 
