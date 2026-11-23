@@ -8,6 +8,15 @@ Private bridge networks have no connectivity outside of the bridge.
 All interfaces in the bridge are in the same layer 2 broadcast domain
 and set to the up state.
 
+A VM joins the bridge through its tap. A container joins it through a veth pair, made
+into the container once it has started, whose host end is a port of the bridge; the
+container's other data interfaces are veths too. A bridge of containers alone works,
+and a container restarted outside Sherpa gets its bridge interface back from the
+server's [scanner](../../../configuration/sherpa.md#scanner) within one scan.
+
+Labs made by an earlier release joined a container on no link to a bridge through a Docker
+macvlan network. Redeploy the node, or destroy and rebuild the lab, to move it to veths.
+
 ![Private bridge: two VMs and a container connected to the same isolated bridge](network-private-bridge.svg)
 
 ## Example Manifest
