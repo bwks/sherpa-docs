@@ -28,7 +28,7 @@ with a new `sherpa.toml`. See [`sherpad init`](command-reference.md#sherpad-init
 
 `sherpad init` creates two accounts:
 
-- **`admin`**, the built-in server account. It manages the server, users and images, and can
+- **`sherpa-admin`**, the built-in server account. It manages the server, users and images, and can
   stop, destroy and clean up any lab, but it cannot start labs. Its password is taken from
   `SHERPA_ADMIN_PASSWORD` if that is set, otherwise you are asked for one.
 - **Your user account**, which you start labs from. You choose the username and password,
@@ -40,7 +40,7 @@ with a new `sherpa.toml`. See [`sherpad init`](command-reference.md#sherpad-init
 Labs also need a device password, the password of your login on lab nodes. Set it after you
 log in and before the first `sherpa up`; see [Device Password](#device-password).
 
-Running `sherpad init` again keeps existing accounts: it only creates `admin` if it is missing,
+Running `sherpad init` again keeps existing accounts: it only creates `sherpa-admin` if it is missing,
 and only asks for a user account if there is none.
 
 ### Unattended initialization
@@ -56,7 +56,7 @@ run from a script. A variable that is not set is prompted for.
 | `SHERPA_SERVER_HTTP_PORT` | Certificate endpoint port, as `--http-port` |
 | `SHERPA_MANAGEMENT_PREFIX_IPV4` | Lab management IPv4 prefix, as `--management-prefix-ipv4` |
 | `SHERPA_MANAGEMENT_PREFIX_IPV6` | Lab management IPv6 prefix, as `--management-prefix-ipv6` |
-| `SHERPA_ADMIN_PASSWORD` | Password for `admin` |
+| `SHERPA_ADMIN_PASSWORD` | Password for `sherpa-admin` |
 | `SHERPA_USER_NAME` | Your username |
 | `SHERPA_USER_PASSWORD` | Your password |
 | `SHERPA_USER_IS_ADMIN` | `yes` or `no`; empty means `yes` |

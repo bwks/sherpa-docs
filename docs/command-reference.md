@@ -834,8 +834,9 @@ The command takes no SSH keys: each user adds their own with
 [`ssh-key add`](#sherpa-server-user-ssh-key) or on the **Profile** page, and cannot start a lab
 until they have. An admin cannot add a key to another account.
 
-Reserved names include `admin`, `root` and `sherpa`, system accounts such as `daemon` and
-`nobody`, names starting with `systemd-`, and the default users of common images and network
+Reserved names include `sherpa-admin`, `admin`, `administrator`, `superuser`, `sysadmin`,
+`root` and `sherpa`, system accounts such as `daemon` and `nobody`, names starting with `sherpa-`
+or `systemd-`, and the default users of common images and network
 devices, such as `ubuntu`, `core`, `ec2-user`, `cisco` and `cumulus`.
 
 ### `sherpa server user list`
@@ -850,7 +851,7 @@ Delete a user account. Admin only.
 The server refuses to delete:
 
 - your own account;
-- the built-in `admin` account;
+- the built-in `sherpa-admin` account;
 - the last admin account;
 - a user who owns labs. The error lists the labs. Destroy them first (admins can destroy
   any lab), then delete the user.
@@ -875,9 +876,9 @@ sherpa server user unlock <username>
 Unlocking an account that is not locked is not an error; an unknown username is. Admins can also
 unlock an account with the **Unlock** button in the **Locked** column of the **Users** admin page,
 which shows the button only for locked accounts. When no admin can log in, root unlocks an
-account, the built-in `admin` included, on the server with
+account, the built-in `sherpa-admin` included, on the server with
 [`sherpad user unlock`](#sherpad-user-unlock); see
-[The built-in admin account is locked](help/troubleshooting.md#the-built-in-admin-account-is-locked).
+[The built-in sherpa-admin account is locked](help/troubleshooting.md#the-built-in-sherpa-admin-account-is-locked).
 
 ### `sherpa server user passwd`
 
@@ -918,7 +919,7 @@ sherpa server user device-password
 
 It asks for your Sherpa login password, then the new device password twice. It takes no
 arguments or flags: passwords are always typed at the prompt and `SHERPA_USER_PASSWORD` is not
-used. It sets only your own: administrators cannot set another user's, and the built-in `admin`
+used. It sets only your own: administrators cannot set another user's, and the built-in `sherpa-admin`
 account has none. The device password must meet the
 [rules](architecture/device-password.md#rules) and differ from your login password. Setting it
 again replaces it.
@@ -1192,7 +1193,7 @@ user, while `sherpad` is stopped. It takes no flags.
 ### `sherpad init`
 
 Initialize the server: directories, `sherpa.toml`, libvirt network and storage pool,
-the database, the built-in `admin` account and a first user account. See the
+the database, the built-in `sherpa-admin` account and a first user account. See the
 [Quickstart](quickstart.md) for the accounts and unattended use.
 
 Run it as the `sherpa` user, `sudo -u sherpa -H sherpad init`, so that `sherpad`, which runs as
@@ -1223,8 +1224,8 @@ it. The database is a file `sherpad` manages itself.
 
 ### `sherpad user unlock`
 
-Unlock an account that three failed logins in a row locked, the built-in `admin` included, and
-set its count of failed logins back to 0, when no admin can log in to do it with
+Unlock an account that three failed logins in a row locked, the built-in `sherpa-admin` included,
+and set its count of failed logins back to 0, when no admin can log in to do it with
 [`sherpa server user unlock`](#sherpa-server-user-unlock). It works on the database directly,
 which `sherpad` holds while it runs, so stop `sherpad` first and start it again after:
 
