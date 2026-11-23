@@ -42,7 +42,8 @@ If you already have a key pair, use its existing `.pub` file.
 Linux, BSD and Windows nodes take every key you register. Many network devices take only some
 types, so a lab needs a key each device takes:
 
-- Cisco IOS, IOS XE, IOS XR and ISE take RSA only.
+- Cisco IOS, IOS XE, IOS XR and ISE take RSA only. IOS and IOS XE (IOSv, IOSvL2, IOL, CSR 1000v,
+  Cat8000v and Cat9000v) take RSA keys of 4096 bits or less.
 - Cisco NX-OS takes ECDSA or RSA, not Ed25519.
 - PAN-OS and MikroTik take Ed25519 or RSA, not ECDSA.
 

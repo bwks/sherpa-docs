@@ -211,6 +211,10 @@ back from a cold boot with its VLANs but with its ports in `dynamic auto` and no
 - Link state works as on `cisco_iol`: an interface goes down about 12 seconds after its link
   loses carrier, and an interface with no link shows `notconnect`. See
   [Cisco IOL: Link State](cisco-iol.md#link-state).
+- Your login takes only your RSA keys of 4096 bits or less, the first 2 of them: IOS takes no
+  other key type and no larger RSA key. `sherpa up` lists the keys it leaves out, and stops if
+  none is left; make one with `ssh-keygen -t rsa -b 4096`. See
+  [SSH Keys](../../architecture/ssh-keys.md#which-key-type).
 - The other IOL notes, on saving the configuration with `write memory`, MTU 1500, checksum
   offload, IOL application IDs and ZTP off, apply to `cisco_ioll2` as well. See
   [Cisco IOL: Notes](cisco-iol.md#notes). VLANs are saved apart from the configuration; see

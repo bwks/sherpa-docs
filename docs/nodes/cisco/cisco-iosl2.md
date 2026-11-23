@@ -66,3 +66,7 @@ model = "cisco_iosl2"
 ## Notes
 
 - Approximate time for the system to be ready: `2 minutes`
+- Your login takes only your RSA keys of 4096 bits or less, the first 2 of them: IOS takes no
+  other key type and no larger RSA key. `sherpa up` lists the keys it leaves out, and stops if
+  none is left; make one with `ssh-keygen -t rsa -b 4096`. See
+  [SSH Keys](../../architecture/ssh-keys.md#which-key-type).

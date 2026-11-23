@@ -243,6 +243,10 @@ Except for the startup configuration, these notes apply to [`cisco_ioll2`](cisco
 - Approximate time for the system to be ready: `1 minute`. Sherpa reports the node ready once the
   container is running; SSH answers about a minute later, once IOL has booted and generated its
   RSA key.
+- Your login takes only your RSA keys of 4096 bits or less, the first 2 of them: IOS takes no
+  other key type and no larger RSA key. `sherpa up` lists the keys it leaves out, and stops if
+  none is left; make one with `ssh-keygen -t rsa -b 4096`. See
+  [SSH Keys](../../architecture/ssh-keys.md#which-key-type).
 - The startup configuration sets the hostname, your login, SSH, and the
   management address on `Ethernet0/0`, with a default route through the management network. The
   data interfaces are left as IOL starts them: shut down, with no address.

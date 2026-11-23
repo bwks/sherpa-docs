@@ -67,7 +67,7 @@ Aruba AOS-CX is the exception: you log in by key only, and `admin` is locked (se
 
 | Models | Admin rights | Key types | Keys used |
 |---|---|---|---|
-| `cisco_ios`, `cisco_iosl2`, `cisco_iol`, `cisco_ioll2`, `cisco_csr1000`, `cisco_cat8000`, `cisco_cat9000` | privilege 15 | RSA | first 2 |
+| `cisco_ios`, `cisco_iosl2`, `cisco_iol`, `cisco_ioll2`, `cisco_csr1000`, `cisco_cat8000`, `cisco_cat9000` | privilege 15 | RSA, 4096 bits or less | first 2 |
 | `cisco_iosxr9000` | `root-lr` and `netadmin` groups | RSA | first 4 |
 | `cisco_asa` | privilege 15 | Ed25519, ECDSA, RSA | first 1 |
 | `cisco_nexus9300` | `network-admin` | ECDSA, RSA | first 1 |
@@ -80,9 +80,9 @@ Aruba AOS-CX is the exception: you log in by key only, and `admin` is locked (se
 | `cumulus_linux` | `system-admin` | Ed25519, ECDSA, RSA | all |
 | `sonic_linux`, `frr_linux` | passwordless `sudo` | all | all |
 
-Keys of a type a device does not take, and keys past its limit, are left out, and `sherpa up`
-lists them. If none of your keys fits a node, `sherpa up` stops before it creates anything and
-shows the command that makes a key of the right type. RSA is the only type every device takes;
+Keys of a type a device does not take, RSA keys larger than it takes, and keys past its limit,
+are left out, and `sherpa up` lists them. If none of your keys fits a node, `sherpa up` stops
+before it creates anything and shows the command that makes a key of the right type. RSA is the only type every device takes;
 see [SSH Keys](ssh-keys.md#which-key-type).
 
 Cisco ISE has a single administrator, which is you: your username, your device password and
