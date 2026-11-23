@@ -60,9 +60,11 @@ A Docker **bridge** network provides management connectivity. All containers are
 
 ### Data Networks
 
-Each end of a [link](networking/modes/point-to-point.md) on a container is a veth pair. Once the container has started, Sherpa creates the veth with its container end already inside the container's network namespace, named, in promiscuous mode and up. The host end is joined to its peer by an [eBPF redirect program](networking/modes/point-to-point.md#p2p-ebpf). Nothing runs inside the container, so links work with any image, including images without the `ip` command or without a shell. A container with a link gets veth pairs for all its data interfaces: for a private bridge member, the host end joins the private bridge, and a disabled interface stays down with no carrier.
+Each end of a [link](networking/modes/point-to-point.md) on a container is a veth pair. Once the container has started, Sherpa creates the veth with its container end already inside the container's network namespace, named, in promiscuous mode and up. The host end is joined to its peer by an [eBPF redirect program](networking/modes/point-to-point.md#p2p-ebpf). Nothing runs inside the container, so links work with any image, including images without the `ip` command or without a shell.
 
-A container with no link uses Docker **macvlan** networks in bridge mode for its other data interfaces: [private bridge](networking/modes/private-bridge.md) members, and unconnected interfaces. Several macvlan networks share one Linux bridge: the private bridge, or the node's isolated bridge.
+A [private bridge](networking/modes/private-bridge.md) member is a veth pair made the same way, whose host end is a port of the private bridge.
+
+A container on a link or a private bridge gets veth pairs for all its data interfaces, and a disabled interface stays down with no carrier. A container on no link and no private bridge uses Docker **macvlan** networks in bridge mode for its unconnected interfaces, on the node's isolated bridge.
 
 After attachment, data interfaces are set to promiscuous mode and brought up. Disabled interfaces (unconnected links) are left admin-down, except on a `juniper_evolved` container: it waits at boot until all its data interfaces are up, so its disabled interfaces stay up, on the node's isolated bridge or with no carrier.
 
