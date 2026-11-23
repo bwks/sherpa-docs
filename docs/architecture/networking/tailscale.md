@@ -65,8 +65,11 @@ the variable named by `auth_key_env`.
     `sherpa destroy` until you remove it in the Tailscale admin console.
 
 - REST API callers send the key as `tailscale_auth_key` in the creation and resume requests.
-  The web UI cannot enroll a lab, so it can resume a whole lab that uses Tailscale only while
-  the gateway is connected.
+- The web UI cannot enroll a lab. It can stop a lab that uses Tailscale, and start or stop its
+  nodes one by one, but its whole-lab start is disabled and says to run `sherpa resume` in the
+  lab folder, because the key only comes from the CLI's environment. Start is disabled for every
+  lab with a gateway, even one whose gateway is connected and would resume without a key,
+  because the web UI does not check each gateway's live state when it lists labs.
 
 ## Route Approval
 
@@ -118,7 +121,7 @@ no jump through the Sherpa server. Per-node DNS names are not provided.
 | Command | Gateway |
 | ------- | ------- |
 | `sherpa up` | Created and joined to the tailnet. If enrollment fails, the lab is rolled back. A route approval warning does not fail the lab. |
-| `sherpa down` | Logged out of the tailnet, then stopped along with the lab. An ephemeral device is removed at once. If the logout fails, the gateway is still stopped, and `sherpa down` reports it as failed and exits non-zero. |
+| `sherpa down` | Logged out of the tailnet, then stopped along with the lab. An ephemeral device is removed at once. `sherpa down` prints the Tailscale table with the gateway's state. If the logout fails, the gateway is still stopped, and `sherpa down` reports it as failed and exits non-zero. |
 | `sherpa resume` | Left as it is if it is running and connected, with no key needed. Otherwise started before nodes resume. If it still holds the identity it had before it stopped, it is logged out of that identity first. It is then enrolled with the key from `auth_key_env` as a new device with new Tailscale addresses. Its routes need approval again, which is automatic with [automatic approval](#automatic-approval). If the old identity cannot be logged out, the resume fails before any node starts. If enrollment fails, the gateway is stopped again and no node starts. |
 | `sherpa destroy` or `sherpa server clean <lab_id>` | Logged out if it is running, then removed with its identity volume. If the logout or the removal fails, the lab record is kept so you can retry. |
 
@@ -134,6 +137,10 @@ A gateway that is stopped when you destroy the lab is not started to log it out.
 offline, and Tailscale removes it if the key was ephemeral.
 
 Stopping or resuming an individual node leaves the gateway alone.
+
+The gateway's container is named `sherpa-tailnet-<lab_id>`, and a container node's is
+`<node name>-<lab_id>`, so a lab with `[tailscale]` enabled cannot have a container node named
+`sherpa-tailnet`: `sherpa validate`, `sherpa up` and the server refuse it, naming the node.
 
 ## Recovery
 
