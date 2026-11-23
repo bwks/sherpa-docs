@@ -99,3 +99,4 @@ show logging system ade/ADE.log tail
 
 - Approximate time for the system to be ready: `80 minutes`
 - SSH key authentication is disabled by default, use [password](../../architecture/credentials.md) auth instead.
+- Only your first SSH key is installed: ISE's ZTP file takes one public key. Add more after install with `crypto key import`.
