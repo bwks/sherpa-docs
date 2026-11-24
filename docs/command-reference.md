@@ -108,7 +108,8 @@ is a symlink is refused.
 
 ### `sherpa new`
 
-Create a new example `manifest.toml` in the current directory.
+Create a new example `manifest.toml` in the current directory. Without `--force`, an existing
+`manifest.toml` is left as it is, and the command says so and exits non-zero.
 
 | Flag | Description |
 | ---- | ----------- |
