@@ -758,7 +758,6 @@ Deleting a user follows the same rules on REST, WebSocket RPC and the web UI:
 | ------- | ---- | ------------- |
 | Deleting your own account | `403 Forbidden` | `AccessDenied` |
 | Deleting the built-in `sherpa-admin` account | `403 Forbidden` | `AccessDenied` |
-| Deleting the last admin account | `403 Forbidden` | `AccessDenied` |
 | The user owns labs | `409 Conflict`, listing the labs | `ServerError`, listing the labs |
 
 Destroy the user's labs first, then delete the user. The web UI shows the same messages
