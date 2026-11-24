@@ -229,7 +229,7 @@ pymdownx.tabbed.alternate_style = true
 [project.plugins]
 search = {}
 
-# Pages renamed in Sherpa 0.7.0, when node models were renamed and merged
+# Redirects from the pages of retired node model names to the models that replace them
 [project.plugins.redirects.redirect_maps]
 "nodes/arista/arista-veos.md" = "nodes/arista/arista-eos.md"
 "nodes/arista/arista-ceos.md" = "nodes/arista/arista-eos.md#container-ceos-lab"
