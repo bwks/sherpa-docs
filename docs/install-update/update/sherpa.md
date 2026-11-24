@@ -26,15 +26,21 @@ sudo bash sherpa_update.sh --version v0.5.0
 sudo bash sherpa_update.sh --force
 ```
 
+`--version` needs a version: without one, the script says so, shows its usage and exits 1.
+
 ## What the update does
 
 1. It downloads the release while `sherpad` is still running. If a download fails, it stops and
    changes nothing, and `sherpad` keeps running.
-2. It stops `sherpad` and copies the database, `/opt/sherpa/db/sherpa.sqlite` with its `-wal` and
+2. It pulls the lab router image, `ghcr.io/bwks/sherpa-router`, by the digest the release pins,
+   and tags it `ghcr.io/bwks/sherpa-router:latest`, the name `sherpad` runs it by. Labs started
+   from then on use it; running labs keep the router they have. If the pull fails, it stops and
+   changes nothing. The closing summary names the image by its digest.
+3. It stops `sherpad` and copies the database, `/opt/sherpa/db/sherpa.sqlite` with its `-wal` and
    `-shm` files, and the [database key](../../architecture/database.md#database-key),
    `/opt/sherpa/.secret/db.key`, to a new folder, `/var/backups/sherpa/update-<UTC time>/`. Only
    root can read it. The script prints the folder's path, and at the end prints it again.
-3. It installs the new binaries and starts `sherpad`. The new release counts as started once it
+4. It installs the new binaries and starts `sherpad`. The new release counts as started once it
    has run for ten seconds without systemd restarting it.
 
 If anything fails after `sherpad` stops, the script starts `sherpad` again. If the new release
@@ -62,7 +68,8 @@ yourself, use [`sherpa server backup`](../../architecture/database.md#backups) a
 the key apart from it. The update script creates `/opt/sherpa/.secret` (mode `700`, owned by
 `sherpa`) if it is missing.
 
-On every run, even when there is nothing to install, the update script creates each
+On every run, even when there is nothing to install, the update script pulls the router image
+the release pins, and creates each
 [blank disk](../install/automated.md#blank-disks) that is missing from
 `/opt/sherpa/images/blank_disk/`, before it stops `sherpad`. It never changes a disk that is
 there. Nodes that boot from one, such as Cumulus Linux, Juniper vEvolved, Cisco IOSv, IOSvL2 and
