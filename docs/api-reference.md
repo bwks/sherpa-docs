@@ -22,6 +22,24 @@ GET https://<server>:3030/api/v1/openapi.json
 
 This can be imported into tools like Postman, Insomnia, or any OpenAPI-compatible client for generating API bindings or documentation.
 
+## Sherpa API Specification
+
+Every operation on every transport is listed, without a login, at:
+
+```
+GET https://<server>:3030/api/v1/spec
+```
+
+Each entry in `operations` has its `name`, `description`, `category`, `auth` (`none`,
+`authenticated` or `admin`), its request and response schema names, which are keys of `schemas`,
+and its `transports`: `rest` (method, path, path parameters and stream type), `rpc` (method and
+whether it streams status messages) and `cli` (the command). An operation served over one
+transport only has no key for the other:
+
+- RPC only, with no `rest`: the methods `download` (the lab's files), `node.secrets`,
+  `node.host_keys` and `server.backup`. These are not in the OpenAPI document.
+- REST only, with no `rpc`: the operation `image.upload` (`POST /api/v1/images/upload`).
+
 ## Transports
 
 ### REST API
@@ -309,6 +327,17 @@ The REST paths that name one image carry the kind:
 the model does not take, is a bad request (400). The multipart form of
 `POST /api/v1/images/upload` takes a `kind` field; without it, or empty, the model's default
 kind.
+
+`POST /api/v1/images/upload` answers:
+
+| Status | When |
+| ------ | ---- |
+| `200` | The image was imported; the body is the import's response |
+| `400` | A field is missing or invalid: no model, version or file, an unknown model, a kind the model does not take, or a version that is not allowed, such as one with `/` or `..` |
+| `401` | No login |
+| `403` | The caller is not an admin |
+| `409` | The version's file on the server differs from the upload and lab disks are built on it; destroy those labs or upload it as a new version |
+| `500` | A server fault, answered with a reference to the server log |
 
 The web UI's image pages are under `/admin/images/{model}/{kind}/`, and its image list has one
 row per model and kind. The upload form and the lab-create page offer a kind for a model that
