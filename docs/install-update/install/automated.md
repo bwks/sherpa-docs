@@ -119,3 +119,8 @@ is left as it is, and a kernel without transparent hugepages is skipped with a w
 `madvise` gives huge pages only to programs that ask for them, such as QEMU. To go back to the
 kernel's default, delete `/etc/tmpfiles.d/sherpa-thp.conf` and reboot. The uninstall script
 deletes it too.
+
+## Uninstall
+
+To take Sherpa off the host, destroy its labs and run the uninstall script. See
+[Uninstall](../uninstall.md) for what each mode removes and keeps.

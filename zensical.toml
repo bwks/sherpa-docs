@@ -51,6 +51,7 @@ nav = [
       "install-update/update/client.md",
       "install-update/update/system.md",
     ] },
+    { "Uninstall" = "install-update/uninstall.md" },
   ] },
   { "Manifest" = "manifest.md" },
   { "Nodes" = [
