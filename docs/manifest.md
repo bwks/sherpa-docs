@@ -53,6 +53,8 @@ nodes = []
 
 The name of the device: 1 to 63 letters, digits, `-` or `_`, starting with a letter or digit.
 It becomes the node's host name, so it cannot contain dots, spaces or other characters.
+`supervisor` is a reserved word: a name that contains it, in any case, is refused for every
+model, because the SONiC image treats a host so named as a chassis supervisor card.
 
 ```toml
 name = "dev01"
@@ -577,7 +579,8 @@ Without it, the node uses its image's setting.
 
 Only nodes whose ZTP setting is `tftp`, `nocloud`, `cdrom`, `disk`, `usb` or `volume` take a
 `config`, and a `hashicorp_vault` node, where it is Vault's own configuration file. Sherpa
-refuses it on any other node, including one whose ZTP is `disabled`.
+refuses it on any other node, including one whose ZTP is `disabled`: `sherpa validate`, against
+the model's built-in setting, and `sherpa up` and `sherpa redeploy`, against the node's image.
 
 Nodes that join a [Talos cluster](#talos_clusters-listtalos_cluster_object) cannot set
 `method = "disabled"` or a `config`: Sherpa generates their machine configs.
@@ -904,8 +907,9 @@ Every link is a P2P eBPF link.
 ### ready_timeout (int)
 
 Global timeout in seconds for node readiness checks. Overrides the default timeout for all nodes in the lab.
-It applies to `sherpa up`, `sherpa redeploy` and `sherpa resume`. It must be at least 1:
-`sherpa validate`, `sherpa up`, `sherpa redeploy` and the server refuse 0.
+It applies to `sherpa up`, `sherpa redeploy` and `sherpa resume`. It must be from 1 to
+9223372036854775807: `sherpa validate`, `sherpa up`, `sherpa redeploy` and the server refuse any
+other value before anything is built or torn down.
 
 ```toml
 ready_timeout = 300

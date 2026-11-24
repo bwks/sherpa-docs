@@ -8,6 +8,8 @@ The `sonic_linux` model runs SONiC as a virtual machine (`sonic-vs`) or as a con
 | `virtual_machine` | `sonic-vs`        | `model = "sonic_linux"` (the default kind)    |
 | `container`       | `docker-sonic-vs` | `model = "sonic_linux"`, `kind = "container"` |
 
+A node name may not contain `supervisor`, which the image reads as a chassis supervisor card; see [node names](../../manifest.md#required-node-parameters).
+
 ## Virtual machine
 
 ### Base Image
