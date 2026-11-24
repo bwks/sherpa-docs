@@ -1184,6 +1184,21 @@ sherpa server image set-default --model <model> --version <version>
 `sherpad` runs on the server. Besides `start`, `stop`, `restart`, `status`, `logs` and `doctor`,
 it has these setup and recovery commands.
 
+### `sherpad start` and `sherpad stop`
+
+One server runs on a host. While it runs, `sherpad` holds a lock on its PID file,
+`/opt/sherpa/run/sherpad.pid`, so a second `sherpad start` fails with "Server is already
+running". `stop`, `restart` and `status` act on the PID in the file only when that process is
+`sherpad`: after a crash, a file whose PID another program now has reads as not running, and
+`stop` removes the file without signalling that program. Under systemd, use
+`systemctl start sherpad` and `systemctl stop sherpad`.
+
+### `sherpad doctor`
+
+With `--boxes`, set the modes of the node images in `/opt/sherpa/images`: every folder `775`,
+every file `660`, and the [blank disk](install-update/install/automated.md#blank-disks) templates
+in `blank_disk` `400`, which only `sherpad`, as `sherpa`, reads.
+
 ### `sherpad check-database`
 
 Check, without changing it, that this release can use the server's database, as it does when

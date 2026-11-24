@@ -58,6 +58,8 @@ Container networking uses two Docker network drivers:
 
 A Docker **bridge** network provides management connectivity. All containers are attached to this network on their first interface (`eth0`) with an assigned IPv4 and IPv6 address. This network provides SSH access and ZTP communication with the server.
 
+The network is named after the lab. If a Docker network of that name is already there, for example one an earlier lab of the same name left, `sherpa up` uses it only when its subnets, gateways and bridge are the ones the lab was given. Otherwise the up is refused before it creates anything, with an error that names the network and what differs, and the network is left as it is: remove it with `docker network rm <name>` once nothing uses it, then run `sherpa up` again.
+
 ### Data Networks
 
 Each end of a [link](networking/modes/point-to-point.md) on a container is a veth pair. Once the container has started, Sherpa creates the veth with its container end already inside the container's network namespace, named, in promiscuous mode and up. The host end is joined to its peer by an [eBPF redirect program](networking/modes/point-to-point.md#p2p-ebpf). Nothing runs inside the container, so links work with any image, including images without the `ip` command or without a shell.

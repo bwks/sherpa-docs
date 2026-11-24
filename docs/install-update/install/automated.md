@@ -57,7 +57,9 @@ OpenTelemetry collector that needs a token.
 
 Run `sherpad init` as `sherpa` (`sudo -u sherpa -H sherpad init`): `sherpad` runs as `sherpa`
 and cannot read a `sherpa.toml` another account owns. `sherpad init` refuses any other account,
-root included. systemd reads `sherpa.env` as root. To
+root included. systemd reads `sherpa.env` as root. Running the install script again on an
+installed server keeps `sherpa.env` as it is, your own lines included, and only adds, at its
+end, a setting the script writes that the file lacks. To
 edit either file, use `sudoedit` or `sudo -u sherpa`. Members of the `sherpa` group can read the
 log, `/opt/sherpa/logs/sherpad.log`, which `sherpad` writes when it is not run by systemd; under
 systemd it logs to the journal.
@@ -76,8 +78,9 @@ template in `/opt/sherpa/images/blank_disk/` and writes the node's config onto:
 | `ext4-500mb.img` | 500 MiB, ext4, label `data-disk` | Flatcar Linux data disk |
 
 The install script creates them, as `sherpa`, with `base.img`, `fat16.img` and ext4 `data-disk`
-disks of 100 MiB, 200 MiB and 1 to 5 GiB that no node uses yet. Each is `644`, owned by
-`sherpa:sherpa`, in a folder `775`. It installs the tools that make them, `qemu-utils`, `dosfstools` and
+disks of 100 MiB, 200 MiB and 1 to 5 GiB that no node uses yet. Each is `400`, owned by
+`sherpa:sherpa`, in a folder `775`: only `sherpad`, as `sherpa`, reads a template, to copy it,
+and nodes boot from the copies. `sherpad doctor --boxes` sets the templates back to `400`. It installs the tools that make them, `qemu-utils`, `dosfstools` and
 `e2fsprogs`, with its other packages.
 
 The script only creates a disk that is missing, and never changes one that is there. The
