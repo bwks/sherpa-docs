@@ -43,9 +43,10 @@ the binaries that were installed, then restores the database and the key from th
 starts the release you had. Anything the new release wrote in the seconds it ran is lost. The
 script exits with an error and names the backup.
 
-The script never removes its backups, and no uninstall mode removes `/var/backups/sherpa`. Remove
-old backups yourself. To restore one by hand, stop `sherpad` and copy the files back as `sherpa`,
-mode `600`. Delete the database's `-wal` and `-shm` files first if the backup has none.
+The script never removes its backups. The [uninstall script](../uninstall.md) keeps
+`/var/backups/sherpa`, except with `--remove-all`, which removes it. Remove old backups yourself.
+To restore one by hand, stop `sherpad` and copy the files back as `sherpa`, mode `600`. Delete
+the database's `-wal` and `-shm` files first if the backup has none.
 
 ```
 sudo systemctl stop sherpad

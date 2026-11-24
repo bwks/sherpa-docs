@@ -80,7 +80,8 @@ and the same users log in.
 ### `--remove-data`
 
 Also empties `/opt/sherpa/db`: the database and its backups. It keeps the rest, the database
-key among it. Install again and run `sherpad init` to make a new database.
+key and the update script's backups in `/var/backups/sherpa` among it. Install again and run
+`sherpad init` to make a new database.
 
 ### `--remove-all`
 
@@ -90,13 +91,13 @@ Also removes:
   lab folders, the images and the VM disks
 - the link `/usr/local/bin/sherpa`
 - `/run/sherpa`
+- the update script's backups in `/var/backups/sherpa`, which hold copies of the database and its
+  key
 - the `sherpa` account, which leaves the `docker`, `libvirt` and `kvm` groups. Its `sherpa`
   group goes too, unless it is another account's primary group. Accounts you added to the
   `sherpa` group lose that membership. A `sherpa` account that is not a system account (UID
   1000 or more) is kept.
 
-It keeps the update script's backups in `/var/backups/sherpa`, which hold copies of the database
-and its key. Remove them with `sudo rm -rf /var/backups/sherpa`. It also keeps any stopped
-lab's leftovers and the storage pool, which it lists.
+It keeps any stopped lab's leftovers and the storage pool, which it lists.
 
 Run on a host where nothing is left, the script exits 0.
