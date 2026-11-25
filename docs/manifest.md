@@ -168,22 +168,40 @@ A list of environment variables to pass to a node. Each entry is `KEY=VALUE`, wh
 letters, digits and `_` and does not start with a digit. `sherpa validate`, `sherpa up`,
 `sherpa redeploy` and the server refuse any other entry, naming the node.
 
+`VALUE` follows the same rule as the values in an `ssh` provisioner's
+[env files](architecture/provisioners/ssh.md#variables-from-your-environment):
+
+- `${NAME}`, the whole value or part of it, is replaced with the variable `NAME` from the
+  environment you run `sherpa` in. If `NAME` is not set, `sherpa up` and `sherpa redeploy` stop
+  before anything is built, naming the key and the node, never a value.
+- `\$` is a literal `$`.
+- Any other `$`, such as `$NAME`, `$ecret`, `$HOME/bin` or a lone `$`, is refused:
+  `sherpa validate`, `sherpa up` and `sherpa redeploy` name the key and the node and say to
+  write `${NAME}` or `\$`.
+
 ```toml
 environment_variables = [
   "SOME_VAR1=hello_jimmy",
-  "MUSICAL_GENIUS='xyz-to-da-1-2-3'",
-  # Load variable from your client environment with a dollar sign ($) prefixed variable name.
-  "GIT_AUTHOR_NAME=$GIT_AUTHOR_NAME",
+  # Your value of GIT_AUTHOR_NAME.
+  "GIT_AUTHOR_NAME=${GIT_AUTHOR_NAME}",
+  # Part of a value.
+  "API_URL=https://${API_HOST}:8443",
+  # A literal $: a single-quoted TOML string keeps the backslash as written...
+  'PRICE=\$5',
+  # ...and a double-quoted one needs it doubled.
+  "PASS=\\$ecret",
 ]
 ```
+
+The node gets `PRICE=$5` and `PASS=$ecret`.
 
 !!! warning "Not for secrets"
     Do not put passwords, API keys or tokens in `environment_variables`, `text_files`,
     `startup_scripts` or `systemd_units`. Their contents are sent to the Sherpa server, which
     keeps them with the lab: in the node's generated configuration and its first-boot media. Sherpa server administrators can read them there. Values loaded from your
-    client environment with `$` are kept the same way. The server's
+    client environment with `${NAME}` are kept the same way. The server's
     [database](architecture/database.md#lab-definitions) records only their paths, and
-    `KEY=$VAR` as written, not their contents or values. For containers, environment variables
+    `KEY=${NAME}` as written, not their contents or values. For containers, environment variables
     also appear in `docker inspect` on the server.
 
     Use [`provisioners`](#provisioners-listobject) for secrets. On virtual machines the CLI
@@ -289,14 +307,14 @@ mode = 600
 _Provisioners run only from the `sherpa` CLI. A manifest with provisioners is refused from the
 web UI and the REST API._
 
-[`ssh`](architecture/provisioners/ssh.md) provisioner properties, for Linux and BSD virtual
-machines:
+[`ssh`](architecture/provisioners/ssh.md) provisioner properties, for the Linux and BSD virtual
+machines listed in its [requirements](architecture/provisioners/ssh.md#requirements):
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
 | `type` | string | `ssh` |
 | `files` | list&lt;object&gt; | Files copied to the node over SFTP |
-| `env_files` | list&lt;string&gt; | Env files copied to `~/.env.d/`, which login shells load. A value of exactly `$NAME` or `${NAME}` is replaced with that variable from your environment |
+| `env_files` | list&lt;string&gt; | Env files of `KEY=value` lines copied to `~/.env.d/`, which login shells load. In a value `${NAME}` is replaced with that variable from your environment, `\$` is a literal `$`, and any other `$` is refused, as in [`environment_variables`](#environment_variables-liststring) |
 | `scripts` | list&lt;string&gt; | Scripts run on the node, through their shebang line |
 
 The SSH provisioner runs as the node's login user, in this order: `files`, `env_files`, then
@@ -919,7 +937,9 @@ Every link is a P2P eBPF link.
 ### ready_timeout (int)
 
 Global timeout in seconds for node readiness checks. Overrides the default timeout for all nodes in the lab.
-It applies to `sherpa up`, `sherpa redeploy` and `sherpa resume`. It must be from 1 to
+It applies to `sherpa up`, `sherpa redeploy` and `sherpa resume`, and to an
+[`ssh` provisioner](architecture/provisioners/ssh.md#what-it-does)'s wait for a node's login and
+cloud-init. It must be from 1 to
 9223372036854775807: `sherpa validate`, `sherpa up`, `sherpa redeploy` and the server refuse any
 other value before anything is built or torn down.
 

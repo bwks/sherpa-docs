@@ -8,8 +8,8 @@ cpu = { count = 4 }
 memory = 8192
 boot_disk = { size = 100 }
 environment_variables = [
-  "GH_TOKEN=$GH_TOKEN",
-  "CLAUDE_CODE_OAUTH_TOKEN=$CLAUDE_CODE_OAUTH_TOKEN",
+  "GH_TOKEN=${GH_TOKEN}",
+  "CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN}",
 ]
 text_files = [
   { src = "~/.claude.json", dst = "/home/sherpa/.claude.json", user = "sherpa", group = "sherpa", permissions = 600 },

@@ -343,14 +343,14 @@ scanner check from then on.
 
 The web UI's **Redeploy** button rebuilds the node from the lab's
 [definition](architecture/database.md#lab-definitions), the manifest as you wrote it, which holds
-no file contents and no values of `$VAR` variables. It redeploys a node that needs none of them,
+no file contents and no values of `${NAME}` variables. It redeploys a node that needs none of them,
 with its other settings as last deployed. A node that needs any of these is refused, and left as
 it was:
 
 - `ztp.config`
 - `text_files` or `systemd_units`
 - `startup_scripts`
-- `environment_variables` with a `$VAR` value
+- `environment_variables` with a `$` in a value: a `${NAME}` or a `\$`
 - `provisioners`, which only the CLI runs
 
 The message names the node and what it needs, for example:

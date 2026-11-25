@@ -1,6 +1,7 @@
 # SSH
 
-The `ssh` provisioner copies files and runs scripts on Linux and BSD virtual machines. Once a
+The `ssh` provisioner copies files and runs scripts on the Linux and BSD virtual machines
+listed under [Requirements](#requirements). Once a
 node is ready, the `sherpa` CLI on your machine connects to it over SSH, directly, or with
 `--ssh-jump` through the Sherpa server as a jump host. The server never sees or stores the
 contents: with the jump it only forwards the encrypted SSH connection.
@@ -28,16 +29,32 @@ mode = 600
 With `secrets/dev.env` holding `KEY=value` lines:
 
 ```sh
-GH_TOKEN=$GH_TOKEN
-ANTHROPIC_API_KEY='sk-example'
+# Copied from your shell, so the token is not written in the file.
+GH_TOKEN=${GH_TOKEN}
+API_URL=https://${API_HOST}:8443
+DB_PASSWORD=\$ecret
+EDITOR=vim
 ```
 
-A value that is exactly one variable reference, `KEY=$NAME` or `KEY=${NAME}`, is replaced with
-that variable's value from the environment you run `sherpa` in, as in the manifest's
-`environment_variables`. Here `GH_TOKEN` is copied from your shell, so the token does not have
-to be written in the file. If the variable is not set, provisioning stops before anything on
-the node changes. Other lines are copied as written, so a value such as `$HOME/bin:$PATH` is
-still expanded by the node's shell when it loads the file.
+## Variables From Your Environment
+
+An env file is data, not a shell script. Each line is `KEY=value`, optionally after `export` or
+indented, a comment starting with `#`, or blank; any other line is refused. A value may be in
+one pair of single or double quotes, which are not part of it. Its values follow the one rule
+the manifest's [`environment_variables`](../../manifest.md#environment_variables-liststring)
+follow:
+
+- `${NAME}`, the whole value or part of it, is replaced with the variable `NAME` from the
+  environment you run `sherpa` in.
+- `\$` is a literal `$`: above, `DB_PASSWORD` is `$ecret` on the node.
+- Any other `$`, such as `$NAME`, `$HOME/bin:$PATH`, `$1` or a lone `$`, is refused, naming the
+  file, the line and the key, and saying to write `${NAME}` or `\$`.
+
+Each value reaches the node quoted, so the node's shell expands nothing in it. Use a script for
+anything that needs the node's shell, such as adding to `PATH`.
+
+A variable that is not set, or a `$` the rule refuses, stops provisioning before anything on the
+node changes: the error names the file, the line and the key, never a value.
 
 See [`provisioners`](../../manifest.md#provisioners-listobject) in the manifest reference for
 every field.
@@ -46,16 +63,24 @@ every field.
 
 Everything runs as the node's login user: [your login](../personal-accounts.md). In order:
 
-1. **Waits for the node.** It retries the login until the account exists, then waits for
-   cloud-init to finish first-boot work, so your files are not overwritten by it. Every step
-   on the node then uses that one connection.
-2. **Copies `files`** over SFTP. Missing parent directories are created, private to the user.
+1. **Reads your files.** Every file, env file and script of every `ssh` provisioner on the
+   node is read from your machine, and every env file value is resolved. A
+   missing file, an unset variable or a refused `$` fails the node before it is connected to, so nothing on
+   the node changes, even when the problem is in its second provisioner.
+2. **Waits for the node.** It retries the login until the account exists, then waits for
+   cloud-init to finish first-boot work, so your files are not overwritten by it. The login and
+   the cloud-init wait share the lab's [`ready_timeout`](../../manifest.md#ready_timeout-int),
+   600 seconds by default: a node that has not finished both when it runs out is reported
+   failed, and the next node starts in its place. Every step on the node then uses that one
+   connection.
+3. **Copies `files`** over SFTP. Missing parent directories are created, private to the user.
    Each file is made private before its contents arrive, then given its `mode` (default `600`).
-3. **Copies `env_files`** into `~/.env.d/`, mode `600`, with `$NAME` values replaced from
-   your environment and quoted for the shell, and adds a line to `~/.bash_profile`, or
+4. **Copies `env_files`** into `~/.env.d/`, mode `600`, with their values resolved as in
+   [Variables From Your Environment](#variables-from-your-environment) and quoted for the
+   shell, and adds a line to `~/.bash_profile`, or
    to `~/.profile` when there is no `~/.bash_profile`, that loads every file in `~/.env.d/` in
    login shells, exporting its variables.
-4. **Runs `scripts`.** The script is sent through the SSH session's input, never on a command
+5. **Runs `scripts`.** The script is sent through the SSH session's input, never on a command
    line, and runs through its shebang line in a login shell, as when you log in: the login
    files (`/etc/profile`, `/etc/profile.d/`, and `~/.bash_profile` or `~/.profile`) run first,
    so tools they put on your `PATH`, such as mise or Cargo, are found. On FreeBSD, whose `sh`
@@ -63,7 +88,8 @@ Everything runs as the node's login user: [your login](../personal-accounts.md).
    `~/.profile` prints at login, such as FreeBSD's `fortune` tip, shows in the output. It then gets the
    variables from the manifest's `environment_variables` and from `~/.env.d/`, which take
    priority over the login files. A script that exits with an error stops the node's remaining
-   steps.
+   steps. A script has no time limit: one that never ends holds its node's place until you
+   stop the command.
 
 ## Several Nodes at Once
 
@@ -113,8 +139,12 @@ order.
   asked once, even when nodes are provisioned at the same time, and the answer is used for the
   other nodes. A node is never asked for a password. A key loaded in your SSH agent needs no
   prompt.
-- Linux and BSD virtual machines only: the `cloud-init` Linux and BSD models, Alpine and
-  Flatcar.
+- One of these virtual machine models: `alma_linux`, `alpine_linux`, `centos_linux`,
+  `devbox_linux`, `fedora_linux`, `flatcar_linux`, `kali_linux`, `nixos_linux`,
+  `omarchy_linux`, `opensuse_linux`, `redhat_linux`, `rocky_linux`, `suse_linux`,
+  `ubuntu_linux`, `free_bsd` and `open_bsd`. `sherpa validate` and `sherpa up` refuse an `ssh`
+  provisioner on any other model, `talos_linux`, `sonic_linux`, `generic` and the server
+  appliances included, naming the node and the model.
 
 ## Limits
 
