@@ -128,8 +128,7 @@ See [Tailscale setup and recovery](architecture/networking/tailscale.md) and the
 running server's Swagger UI for the request and response schemas.
 
 Admin rights are read from the user database on every request, not from the token.
-Demoting an admin removes their admin rights immediately, and deleting a user makes
-their existing tokens stop working.
+Deleting a user makes their existing tokens stop working.
 
 ## Operation Categories
 
