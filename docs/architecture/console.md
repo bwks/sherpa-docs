@@ -34,7 +34,8 @@ It needs no SSH key or account on the server. It works the same on Windows.
 
 ## Who Can Connect
 
-Only the lab's owner can open a node's console. Admins are refused too. The route takes only a
+Only the lab's owner can open a node's console. Admins are refused too, and anyone else is
+answered as for a lab that does not exist. The route takes only a
 bearer token, not the web UI's session cookie.
 
 ## One Session
