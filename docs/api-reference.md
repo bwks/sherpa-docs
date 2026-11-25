@@ -620,7 +620,8 @@ Upgrades to a WebSocket that relays the serial console of a virtual machine or u
 This is what `sherpa console` uses. See [Serial Console](architecture/console.md).
 
 - **Auth**: `Authorization: Bearer <token>` only. The `sherpa_auth` cookie is not accepted.
-- **Access**: the lab's owner only. Admins are refused.
+- **Access**: the lab's owner only. Admins are refused, and anyone else is answered as for a
+  lab that does not exist.
 - **Query**: `force=true` takes the console over from a session of the caller's own. It never
   takes over another user's session.
 - **Frames**: raw serial bytes in binary frames, both ways. Text
@@ -631,8 +632,8 @@ The errors come as HTTP statuses before the upgrade:
 | Status | Message |
 | ------ | ------- |
 | `401` | The token is missing, invalid or expired |
-| `403` | `Access denied: only the owner of lab '<lab-id>' can open its consoles` |
-| `404` | The lab or the node was not found |
+| `403` | `Access denied: only the owner of lab '<lab-id>' can open its consoles`, to an admin who does not own the lab |
+| `404` | The lab or the node was not found, or the lab is another user's and the caller is not an admin |
 | `400` | `<node> is a container, and containers have no serial console. Connect with 'sherpa ssh <node>' instead.` |
 | `409` | `Node '<node>' is not running. Start it with 'sherpa resume'.` |
 | `409` | `The console of <node> is in use by <user> from <client-ip> since <YYYY-MM-DD HH:MM:SS> UTC. Close that session, or take it over with 'sherpa console <node> --force'.` |
@@ -713,8 +714,10 @@ everything else: listing, inspect, down, resume, cancel, link impairment, destro
 The server logs a warning (`auth.admin_lab_access`) each time an admin acts on another user's
 lab, and each refusal (`auth.access_denied`).
 
-A request for another user's lab returns `403 Forbidden` on REST and an `AccessDenied`
-error on WebSocket RPC. A lab that does not exist returns `404 Not Found` or `NotFound`.
+A request for another user's lab from a user who is not an admin gets the same answer as a lab
+that does not exist, `Lab not found: <lab-id>`: `404 Not Found` on REST and in the web UI, and a
+`NotFound` error on WebSocket RPC. No answer tells whether another user has a lab of a given
+name. An admin refused an owner-only operation gets `403 Forbidden`, or `AccessDenied`.
 
 ## SSH Keys
 

@@ -546,8 +546,9 @@ sherpa console <name> [--force]
   session ends. Press Enter to see the node's prompt.
 - Press `Ctrl+]` anywhere, or type `~.` at the start of a line, to disconnect. Type `~~` to send
   a single `~`. `sherpa console` exits with code 0 when you disconnect or the console closes.
-- Only the lab's owner can open a node's console. An admin is refused too, as is anyone else, with
-  `Access denied: only the owner of lab '<lab-id>' can open its consoles`. The server decides.
+- Only the lab's owner can open a node's console. An admin is refused with
+  `Access denied: only the owner of lab '<lab-id>' can open its consoles`, and anyone else with
+  `Lab not found: <lab-id>`, as for a lab that does not exist. The server decides.
 - A console serves one session at a time. If another session holds it, `sherpa console` is refused
   at once with `The console of <node> is in use by <user> from <client-ip> since <time> UTC. Close
   that session, or take it over with 'sherpa console <node> --force'.`
@@ -632,8 +633,8 @@ files or secrets. Every command that reaches the lab's nodes works in the folder
 
 Only the lab's owner can download a lab, admins included: the files hold the SSH config, the
 nodes' host keys, the Talos, Vault, Keycloak and SurrealDB credentials and the lab CA, which let
-the holder log in to the nodes. Anyone else is refused with `Only the owner of lab '<id>' can perform this
-operation`. No SSH key is downloaded: nodes take your own
+the holder log in to the nodes. An admin is refused with `Only the owner of lab '<id>' can perform this
+operation`, and anyone else with `Lab not found: <id>`. No SSH key is downloaded: nodes take your own
 keys (see [SSH](architecture/ssh.md#logging-in-to-nodes)).
 
 It refuses a folder that already holds any of the files it would write, `lab-info.toml` or not,
@@ -1195,9 +1196,11 @@ running". `stop`, `restart` and `status` act on the PID in the file only when th
 
 ### `sherpad doctor`
 
-With `--boxes`, set the modes of the node images in `/opt/sherpa/images`: every folder `775`,
+With `--images`, set the modes of the node images in `/opt/sherpa/images`: every folder `775`,
 every file `660`, and the [blank disk](install-update/install/automated.md#blank-disks) templates
-in `blank_disk` `400`, which only `sherpad`, as `sherpa`, reads.
+in `blank_disk` `400`, which only `sherpad`, as `sherpa`, reads. It never follows a symlink: it
+skips each one it finds, leaving the link and its target as they are, names it with
+`Skipped symlink <path>`, and goes on with the rest.
 
 ### `sherpad check-database`
 
