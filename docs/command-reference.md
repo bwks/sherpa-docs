@@ -1196,7 +1196,7 @@ running". `stop`, `restart` and `status` act on the PID in the file only when th
 
 ### `sherpad doctor`
 
-With `--boxes`, set the modes of the node images in `/opt/sherpa/images`: every folder `775`,
+With `--images`, set the modes of the node images in `/opt/sherpa/images`: every folder `775`,
 every file `660`, and the [blank disk](install-update/install/automated.md#blank-disks) templates
 in `blank_disk` `400`, which only `sherpad`, as `sherpa`, reads. It never follows a symlink: it
 skips each one it finds, leaving the link and its target as they are, names it with

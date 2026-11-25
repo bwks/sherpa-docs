@@ -80,7 +80,7 @@ template in `/opt/sherpa/images/blank_disk/` and writes the node's config onto:
 The install script creates them, as `sherpa`, with `base.img`, `fat16.img` and ext4 `data-disk`
 disks of 100 MiB, 200 MiB and 1 to 5 GiB that no node uses yet. Each is `400`, owned by
 `sherpa:sherpa`, in a folder `775`: only `sherpad`, as `sherpa`, reads a template, to copy it,
-and nodes boot from the copies. `sherpad doctor --boxes` sets the templates back to `400`. It installs the tools that make them, `qemu-utils`, `dosfstools` and
+and nodes boot from the copies. `sherpad doctor --images` sets the templates back to `400`. It installs the tools that make them, `qemu-utils`, `dosfstools` and
 `e2fsprogs`, with its other packages.
 
 The script only creates a disk that is missing, and never changes one that is there. The
