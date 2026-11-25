@@ -55,6 +55,9 @@ The name of the device: 1 to 63 letters, digits, `-` or `_`, starting with a let
 It becomes the node's host name, so it cannot contain dots, spaces or other characters.
 `supervisor` is a reserved word: a name that contains it, in any case, is refused for every
 model, because the SONiC image treats a host so named as a chassis supervisor card.
+No two nodes of a lab share a name, in any case: DNS takes `dev01` and `DEV01` as one name, so
+`sherpa validate`, `sherpa up`, `sherpa redeploy` and the server refuse names that differ only
+in case, naming both.
 
 ```toml
 name = "dev01"
@@ -823,7 +826,7 @@ host can still run other work on them.
 Bridges define shared layer 2 network segments that connect multiple node interfaces.
 
 Unlike [links](#links-listlink_object) which create point-to-point connections between two nodes, bridges allow
-three or more interfaces to share a common network segment.
+two or more interfaces to share a common network segment.
 
 Each bridge link is defined with the node `name` and `interface` separated by a double colon `(::)`
 
@@ -835,8 +838,14 @@ links = ["dev01::eth2", "dev02::eth2", "dev03::eth1"]
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-| `name` | string | A user-friendly name for the bridge |
+| `name` | string | The bridge's name, by the rules of a node's `name` in [nodes](#nodes-listnode_object) |
 | `links` | list&lt;string&gt; | A list of `<device>::<interface>` mappings to connect to the bridge |
+
+`sherpa validate`, `sherpa up`, `sherpa redeploy` and the server refuse, naming the bridge:
+
+- a bridge with no link or one link; a bridge needs at least two;
+- two bridges with one name;
+- a bridge name that a node's name could not be.
 
 For more information on bridge types see the [private-bridge](architecture/networking/modes/private-bridge.md) architecture documentation.
 
@@ -866,6 +875,9 @@ Each device is defined with its `name` and `interface` separated by a double col
 src = "dev01::eth0"
 dst = "dev02::eth1"
 ```
+
+A link joins two different nodes: `sherpa validate`, `sherpa up`, `sherpa redeploy` and the
+server refuse a link whose two ends are on one node, naming the link and the node.
 
 #### Link Properties
 
