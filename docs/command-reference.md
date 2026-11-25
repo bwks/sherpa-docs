@@ -64,7 +64,8 @@ is changed.
 
 ### `sherpa whoami`
 
-Show the current authentication status and user information. When your token is invalid or
+Show the current authentication status and user information, with the time the token has left:
+in days, or in hours when under a day, or in minutes when under an hour. When your token is invalid or
 has expired, it says so and exits with an error, so a script can run
 `sherpa whoami || sherpa login`.
 

@@ -105,6 +105,5 @@ These models do not yet configure an IPv6 management address:
   on an IPv6 default route, which would leave the node with no network. Sherpa therefore sends
   OpenBSD nodes IPv4 settings only. See [OpenBSD](../../nodes/bsd/open-bsd.md#notes).
 - Palo Alto PAN-OS
-- SONiC Linux
 
 The generated [SSH config](../ssh.md) always uses the IPv4 address as the host name.
