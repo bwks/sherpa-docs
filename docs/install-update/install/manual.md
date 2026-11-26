@@ -13,6 +13,7 @@ sudo apt install \
   mtools \
   e2tools \
   gzip \
+  bzip2 \
   unzip \
   qemu-utils \
   dosfstools \
@@ -274,6 +275,13 @@ to run again.
 curl -fsSLO https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_update.sh
 sudo bash sherpa_update.sh --version <installed version>
 ```
+
+### Node VM Image
+
+Run the update script again, as in Create Blank Disks, to download the
+[node VM image](automated.md#node-vm-image): the Flatcar disk and kernel in
+`/opt/sherpa/images/node_vm/` that the `arista_eos` container, `nokia_srlinux` and the
+`sonic_linux` container boot. It needs `bunzip2`, from the `bzip2` package.
 
 ### Initialize and Start
 

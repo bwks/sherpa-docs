@@ -1,6 +1,6 @@
 # Container
 
-Containers are supported via the [Docker](https://docs.docker.com/) engine runtime. Sherpa communicates with Docker through the [Bollard](https://github.com/fussybeaver/bollard) async API library — all operations are native API calls, not shell-outs to the Docker CLI.
+Containers are supported via the [Docker](https://docs.docker.com/) engine runtime. The `arista_eos` container, `nokia_srlinux` and the `sonic_linux` container are the exception: each runs in a [node VM](node-vms.md) of its own, and the rest of this page does not describe them. Sherpa communicates with Docker through the [Bollard](https://github.com/fussybeaver/bollard) async API library — all operations are native API calls, not shell-outs to the Docker CLI.
 
 ![Container architecture: sherpad drives the Docker Engine, which runs each container through containerd on the shared host kernel; each part of the container is backed by a host resource](container.svg)
 

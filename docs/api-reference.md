@@ -633,7 +633,7 @@ The errors come as HTTP statuses before the upgrade:
 | `401` | The token is missing, invalid or expired |
 | `403` | `Access denied: only the owner of lab '<lab-id>' can open its consoles`, to an admin who does not own the lab |
 | `404` | The lab or the node was not found, or the lab is another user's and the caller is not an admin |
-| `400` | `<node> is a container, and containers have no serial console. Connect with 'sherpa ssh <node>' instead.` |
+| `400` | `<node> is a container, and containers have no serial console. Connect with 'sherpa ssh <node>' instead.` A container that runs in a [node VM](architecture/node-vms.md) has a serial console |
 | `409` | `Node '<node>' is not running. Start it with 'sherpa resume'.` |
 | `409` | `The console of <node> is in use by <user> from <client-ip> since <YYYY-MM-DD HH:MM:SS> UTC. Close that session, or take it over with 'sherpa console <node> --force'.` |
 
@@ -668,6 +668,7 @@ The errors are those of the serial console, with these differences:
 | ------ | ------- |
 | `400` | `<node> is a container, and containers have no VNC console. Connect with 'sherpa ssh <node>' instead.` |
 | `400` | `<node> is a unikernel, and unikernels have no VNC console. Use 'sherpa console <node>' instead.` |
+| `400` | `<node> runs in a node VM, which has a serial console only. Use 'sherpa console <node>' instead.` |
 | `409` | `The VNC console of <node> is in use by <user> from <client-ip> since <YYYY-MM-DD HH:MM:SS> UTC. Close that session, or take it over with 'sherpa vnc <node> --force'.` |
 
 A session ends with the serial console's close frames, except that `1000` says `The node's VNC

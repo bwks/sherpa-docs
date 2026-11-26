@@ -87,6 +87,24 @@ The script only creates a disk that is missing, and never changes one that is th
 [update script](../update/sherpa.md) does the same on every run, so running it again restores a
 disk that was deleted.
 
+## Node VM Image
+
+The `arista_eos` container, `nokia_srlinux` and the `sonic_linux` container run in
+[node VMs](../../architecture/node-vms.md), which boot a Flatcar Container Linux release from
+`/opt/sherpa/images/node_vm/`:
+
+| File | Content |
+|---|---|
+| `flatcar-<version>.qcow2` | The disk node VMs boot, read-only |
+| `flatcar-<version>.vmlinuz` | The kernel node VMs boot directly |
+
+The install script downloads both from Flatcar's stable release server, as `sherpa`, checks each
+against its SHA-512, and installs them with mode `644`. It installs `bzip2` with its other
+packages, to unpack the disk. It never changes a file that is there, and the
+[update script](../update/sherpa.md) does the same on every run, so running it again restores a
+file that was deleted. `sherpa up` and `sherpa redeploy` refuse a lab with a node VM, before they
+create anything, when either file is missing.
+
 ## Before the First Lab
 
 Each user sets a [device password](../../architecture/device-password.md), with

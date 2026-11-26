@@ -1,7 +1,8 @@
 # Serial Console
 
-Every virtual machine and unikernel node has a serial console. `sherpa console <node>` opens it
-in your terminal. Containers have no serial console; use `sherpa ssh`.
+Every virtual machine and unikernel node has a serial console, and so does a container that runs
+in a [node VM](node-vms.md): its console is the network OS CLI. `sherpa console <node>` opens it
+in your terminal. Other containers have no serial console; use `sherpa ssh`.
 
 ## How it Works
 

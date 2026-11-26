@@ -134,12 +134,12 @@ sherpa server image set-default --model arista_eos --kind container --version 4.
 | Property             | Value       |
 | -------------------- | ----------- |
 | Kind                 | Container   |
-| CPU                  | Not limited |
-| RAM                  | Not limited |
+| CPU                  | Not limited in the node VM |
+| RAM                  | Not limited in the node VM |
 | ZTP                  | `volume`    |
 | Management Interface | eth0        |
 | Data Interfaces      | eth1-52     |
-| Interface Driver     | macvlan     |
+| Interface Driver     | virtio      |
 
 ### Example Manifest
 
@@ -161,10 +161,10 @@ version = "4.35.1F"
     sherpa ssh dev01
     ```
 
-=== "Docker"
+=== "Console"
 
     ```
-    docker exec -it dev01-<lab-id> sudo Cli
+    sherpa console dev01
     ```
 
 ### Notes
@@ -172,6 +172,21 @@ version = "4.35.1F"
 - Approximate time for the system to be ready: `1 minutes`
 - The node boots from its ZTP configuration, copied to `flash:startup-config` the first time the
   container starts. `write memory` saves to it as usual. The saved configuration is kept across `sherpa down` and
-  `sherpa resume`. `sherpa redeploy` creates a new container, so it starts again from the ZTP
+  `sherpa resume`. `sherpa redeploy` creates the node again, so it starts again from the ZTP
   configuration.
-- With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as shipped: it starts without Sherpa's startup configuration, so it has no management IP address and no `sherpa` login, and `sherpa ssh` cannot reach it. Reach it with `docker exec -it <node-name>-<lab-id> Cli`. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.
+- With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as shipped: it starts without Sherpa's startup configuration, so it has no management IP address and no `sherpa login`, and `sherpa ssh` cannot reach it. Reach it with `sherpa console <node-name>`. The node's `volumes` from the manifest are copied into the node when it is created, so you can supply a configuration of your own.
+
+### Node VM
+
+The cEOS container runs in a [node VM](../../architecture/node-vms.md): a Flatcar VM of its own,
+which Sherpa handles as a virtual machine for `down`, `resume` and `status`.
+
+- The container is privileged in that VM, so its privileges reach the VM's kernel, not the
+  server's.
+- `sherpa console <node>` opens the EOS CLI on the VM's serial console: press Enter. `sherpa vnc`
+  is refused.
+- The VM gets the node's `memory` plus 1024 MiB and its `cpu.count` vCPUs.
+- Volumes are copied when the node is created, so a change on the server needs a `sherpa redeploy`.
+- The server needs the Flatcar [base image](../../install-update/install/automated.md#node-vm-image).
+- A node is ready once SSH answers. Without the config Sherpa generates (`ztp` off, or a config of
+  your own) it is ready once the container started, unless `ready_check.port` says otherwise.

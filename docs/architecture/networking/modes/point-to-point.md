@@ -97,7 +97,7 @@ than waiting for their hold timers. When the node starts again and its link is a
 | What happens to the peer | What the surviving node sees |
 | ------------------------ | ---------------------------- |
 | stopped, shut down, crashed or removed (`docker stop`, `virsh destroy`, a guest power-off) | its interface loses carrier (`NO-CARRIER` on Linux) |
-| paused (`docker pause`, `virsh suspend`, or `sherpa down`, which pauses containers) | its interface loses carrier, until the peer is unpaused |
+| paused (`docker pause`, `virsh suspend`, or `sherpa down`, which pauses containers other than those in a [node VM](../../node-vms.md)) | its interface loses carrier, until the peer is unpaused |
 | started or unpaused again | its interface has carrier again, once the link is attached |
 | the link cannot be attached (`failed` in `sherpa inspect`) | both ends lose carrier |
 
