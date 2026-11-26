@@ -37,6 +37,9 @@ resolves the name of every node in the lab. Sherpa writes it into the configurat
 Nodes that take their address by DHCP get the same name server from the lab router. Junos, FRR
 and SONiC configurations set no name server.
 
+The lab router answers a name without a domain that is not a node's as not found, and never
+forwards it to the server's resolver.
+
 ## Who Can Read a Node's Configuration
 
 A node's configuration holds its logins, and a custom `ztp.config` holds whatever you put in it.
