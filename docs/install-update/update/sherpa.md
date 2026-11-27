@@ -78,11 +78,11 @@ ISE, MikroTik CHR and Flatcar Linux, fail to start without it. If `qemu-img`, `m
 a disk cannot be made, it stops before changing the binaries.
 
 On every run, even when there is nothing to install, the update script downloads the
-[node VM image](../install/automated.md#node-vm-image), the Flatcar disk and kernel in
-`/opt/sherpa/images/node_vm/`, when either is missing, and checks each against its SHA-512. It
+[sandbox image](../install/automated.md#sandbox-image), the Flatcar disk and kernel in
+`/opt/sherpa/images/sandbox/`, when either is missing, and checks each against its SHA-512. It
 never changes a file that is there. If `bunzip2` is missing, the script first installs `bzip2`;
 if a file cannot be downloaded or does not match, it stops before changing the binaries. Without
-them, `sherpa up` and `sherpa redeploy` refuse a lab with a node VM.
+them, `sherpa up` and `sherpa redeploy` refuse a lab with a sandbox.
 
 On every run, even when there is nothing to install, the update script makes `/opt/sherpa`,
 `/opt/sherpa/bin` and `/opt/sherpa/libvirt` root's and `755`, creates the folders `sherpad`

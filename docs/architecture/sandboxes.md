@@ -1,12 +1,12 @@
-# Node VMs
+# Sandboxes
 
 The `arista_eos` container (cEOS), `nokia_srlinux` and the `sonic_linux` container each run in a
-[Flatcar Container Linux](https://www.flatcar.org/) virtual machine of their own, a node VM.
+[Flatcar Container Linux](https://www.flatcar.org/) virtual machine of their own, a sandbox.
 Inside it, Docker runs the node's image privileged, so the network OS has the VM's network
 interfaces as its own. Its privileges reach that VM's kernel, not the server's. Every other
 container model runs on the server's Docker, see [Container](container.md).
 
-A node VM is a [virtual machine](virtual-machine.md) to Sherpa for `down`, `resume` and
+A sandbox is a [virtual machine](virtual-machine.md) to Sherpa for `down`, `resume` and
 `status`:
 
 | Operation | What happens |
@@ -16,7 +16,7 @@ A node VM is a [virtual machine](virtual-machine.md) to Sherpa for `down`, `resu
 | `sherpa redeploy` | The VM and its disks are removed and made again from the generated config |
 | `sherpa destroy` | The VM and its disks are removed |
 
-A node VM stopped before its first boot finished needs a `sherpa redeploy`.
+A sandbox stopped before its first boot finished needs a `sherpa redeploy`.
 
 ## Access
 
@@ -24,7 +24,7 @@ A node VM stopped before its first boot finished needs a `sherpa redeploy`.
 | ------- | ------ |
 | `sherpa ssh <node>` | SSH to the node's management address |
 | `sherpa console <node>` | The network OS CLI on the VM's serial console |
-| `sherpa vnc <node>` | Refused: `<node> runs in a node VM, which has a serial console only. Use 'sherpa console <node>' instead.` |
+| `sherpa vnc <node>` | Refused: `<node> runs in a sandbox, which has a serial console only. Use 'sherpa console <node>' instead.` |
 
 Press Enter to open the CLI. It waits for the container to run. When you exit the CLI, the
 prompt comes back. See [Serial Console](console.md).
@@ -70,22 +70,22 @@ cannot be started, fails the node with that reason.
 
 ## Base Image
 
-The server needs the Flatcar base image in `/opt/sherpa/images/node_vm/`:
+The server needs the Flatcar base image in `/opt/sherpa/images/sandbox/`:
 
 | File | Content |
 | ---- | ------- |
-| `flatcar-<version>.qcow2` | The disk node VMs boot, read-only |
-| `flatcar-<version>.vmlinuz` | The kernel node VMs boot directly |
+| `flatcar-<version>.qcow2` | The disk sandboxes boot, read-only |
+| `flatcar-<version>.vmlinuz` | The kernel sandboxes boot directly |
 
-The [install](../install-update/install/automated.md#node-vm-image) and
+The [install](../install-update/install/automated.md#sandbox-image) and
 [update](../install-update/update/sherpa.md) scripts download both files from Flatcar's stable
 release server and check their SHA-512. `sherpa up` and `sherpa redeploy` refuse a lab with a
-node VM, before they create anything, when either file is missing.
+sandbox, before they create anything, when either file is missing.
 
 ## Docker Stores
 
 A VM does not hold a copy of its image for each node. Each image has a Docker store, a disk with
-the image loaded once, and every node VM of the image boots on it without copying the image.
+the image loaded once, and every sandbox of the image boots on it without copying the image.
 
 - The first `sherpa up` or `sherpa redeploy` that needs an image makes its store. It takes
   minutes, and a progress message says so. A later operation that needs the same store waits for

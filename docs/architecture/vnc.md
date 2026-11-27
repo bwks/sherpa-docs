@@ -5,7 +5,7 @@ mouse. Use it for devices that need a graphical console, or when SSH is not up y
 during the first boot or a password recovery. `sherpa vnc <node>` connects your own VNC viewer to
 it, from any machine with the CLI.
 
-A container that runs in a [node VM](node-vms.md) has a serial console only: `sherpa vnc` refuses
+A container that runs in a [sandbox](sandboxes.md) has a serial console only: `sherpa vnc` refuses
 it, and `sherpa console` opens its CLI.
 
 ## How it Works

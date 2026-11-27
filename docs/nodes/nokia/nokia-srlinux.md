@@ -31,8 +31,8 @@ Sherpa's startup config is tested on release 26.3.1. It configures DNS as a
 | Property             | Value     |
 | -------------------- | --------- |
 | Kind                 | Container |
-| CPU                  | Not limited in the node VM |
-| RAM                  | Not limited in the node VM |
+| CPU                  | Not limited in the sandbox |
+| RAM                  | Not limited in the sandbox |
 | ZTP                  | `volume`  |
 | Management Interface | mgmt0     |
 | Data Interfaces      | eth-1/1-34         |
@@ -69,9 +69,9 @@ version = "26.3.1"
 - Approximate time for the system to be ready: `1 minute`
 - With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as shipped: it starts with the image's own configuration, whose DHCP client on `mgmt0.0` takes the management address the lab reserved for it, and it has no `sherpa` login, so `sherpa ssh` cannot log in. Reach it with `sherpa console <node-name>`. The node's `volumes` from the manifest are copied into the node when it is created, so you can supply a configuration of your own.
 
-## Node VM
+## Sandbox
 
-SR Linux runs in a [node VM](../../architecture/node-vms.md): a Flatcar VM of its own, which
+SR Linux runs in a [sandbox](../../architecture/sandboxes.md): a Flatcar VM of its own, which
 Sherpa handles as a virtual machine for `down`, `resume` and `status`.
 
 - The container is privileged in that VM, so its privileges reach the VM's kernel, not the
@@ -81,6 +81,6 @@ Sherpa handles as a virtual machine for `down`, `resume` and `status`.
 - The VM gets the node's `memory` plus 1024 MiB and its `cpu.count` vCPUs.
 - Volumes are copied when the node is created, so a change on the server needs a `sherpa redeploy`.
   What SR Linux saves stays in the VM across `sherpa down` and `sherpa resume`.
-- The server needs the Flatcar [base image](../../install-update/install/automated.md#node-vm-image).
+- The server needs the Flatcar [base image](../../install-update/install/automated.md#sandbox-image).
 - A node is ready once SSH answers. With a config of your own it is ready once the container
   started, unless `ready_check.port` says otherwise.

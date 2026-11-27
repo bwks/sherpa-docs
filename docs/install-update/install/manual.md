@@ -276,11 +276,11 @@ curl -fsSLO https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/script
 sudo bash sherpa_update.sh --version <installed version>
 ```
 
-### Node VM Image
+### Sandbox Image
 
 Run the update script again, as in Create Blank Disks, to download the
-[node VM image](automated.md#node-vm-image): the Flatcar disk and kernel in
-`/opt/sherpa/images/node_vm/` that the `arista_eos` container, `nokia_srlinux` and the
+[sandbox image](automated.md#sandbox-image): the Flatcar disk and kernel in
+`/opt/sherpa/images/sandbox/` that the `arista_eos` container, `nokia_srlinux` and the
 `sonic_linux` container boot. It needs `bunzip2`, from the `bzip2` package.
 
 ### Initialize and Start

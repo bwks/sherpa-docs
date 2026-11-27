@@ -229,7 +229,7 @@ Virtual machines are asked to shut down cleanly (through the QEMU guest agent wh
 has one, otherwise the ACPI power button) and are powered off only if they are still running
 after 60 seconds. Nodes in a [Talos cluster](manifest.md#talos_clusters-listtalos_cluster_object)
 are shut down through the Talos API, workers before controllers. Unikernels and other Talos
-nodes are powered off, and containers are paused. A container that runs in a [node VM](architecture/node-vms.md) is shut down as a virtual machine, over ACPI. The result for each node says whether it
+nodes are powered off, and containers are paused. A container that runs in a [sandbox](architecture/sandboxes.md) is shut down as a virtual machine, over ACPI. The result for each node says whether it
 shut down or was powered off. A node that is already stopped or paused is reported as such, so
 running `sherpa down` twice is not an error. A node that is `building` or `missing` (see
 [node states](#node-states)) is not touched, and its result says why. A lab that is not
@@ -567,7 +567,7 @@ sherpa console <name> [--force]
     - `Node '<node>' is not running. Start it with 'sherpa resume'.`
     - `<node> is a container, and containers have no serial console. Connect with 'sherpa ssh
       <node>' instead.` A container has no serial console; use `sherpa ssh`, or `docker exec`
-      on the server. A container that runs in a [node VM](architecture/node-vms.md) has one: it
+      on the server. A container that runs in a [sandbox](architecture/sandboxes.md) has one: it
       opens the network OS CLI.
     - `Not logged in to the Sherpa server, or the login has expired: run 'sherpa login'.`
     - `The Sherpa server has no console route: it is older than this client. Update the server to the client's version.`
@@ -612,7 +612,7 @@ sherpa vnc <name> [--force]
       <node>' instead.`
     - `<node> is a unikernel, and unikernels have no VNC console. Use 'sherpa console <node>'
       instead.`
-    - `<node> runs in a node VM, which has a serial console only. Use 'sherpa console <node>'
+    - `<node> runs in a sandbox, which has a serial console only. Use 'sherpa console <node>'
       instead.`
     - `Not logged in to the Sherpa server, or the login has expired: run 'sherpa login'.`
     - `The Sherpa server has no VNC console route: it is older than this client. Update the

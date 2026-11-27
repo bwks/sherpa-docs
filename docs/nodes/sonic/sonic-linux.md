@@ -118,7 +118,7 @@ means the virtual machine image.
 | Image                | `docker-sonic-vs` |
 | CPU                  | 2                 |
 | RAM                  | 1GB               |
-| Privileged           | yes, in its node VM |
+| Privileged           | yes, in its sandbox |
 | ZTP                  | `volume`          |
 | Management Interface | eth0              |
 | Data Interfaces      | eth1-32           |
@@ -190,7 +190,7 @@ container first starts and saved to `/etc/sonic/config_db.json`. The container's
 which your prompt shows, is the node name too, so `hostname` and SONiC's own hostname
 (`show runningconfiguration all`) agree. After that:
 
-- `sherpa down` shuts the node VM down and `sherpa resume` boots it: the container restarts and
+- `sherpa down` shuts the sandbox down and `sherpa resume` boots it: the container restarts and
   loads the saved configuration. Changes you did not save with `sudo config save -y` are lost.
 - `sherpa redeploy` creates the node again, which starts again from Sherpa's configuration.
 
@@ -213,9 +213,9 @@ it changes. You still get your login.
   and `sherpa resume`. A redeploy gives it new ones, which `sherpa redeploy` saves to the lab's `known_hosts` file.
 - `bgpd` is started, which the image does not do on its own. LLDP does not run.
 
-### Node VM
+### Sandbox
 
-The container runs in a [node VM](../../architecture/node-vms.md): a Flatcar VM of its own, which
+The container runs in a [sandbox](../../architecture/sandboxes.md): a Flatcar VM of its own, which
 Sherpa handles as a virtual machine for `down`, `resume` and `status`.
 
 - The container is privileged in that VM, so its privileges reach the VM's kernel, not the
@@ -224,5 +224,5 @@ Sherpa handles as a virtual machine for `down`, `resume` and `status`.
   is refused.
 - The VM gets the node's `memory` plus 1024 MiB and its `cpu.count` vCPUs.
 - Volumes are copied when the node is created, so a change on the server needs a `sherpa redeploy`.
-- The server needs the Flatcar [base image](../../install-update/install/automated.md#node-vm-image).
+- The server needs the Flatcar [base image](../../install-update/install/automated.md#sandbox-image).
 - A node is ready once SSH answers on its management address.

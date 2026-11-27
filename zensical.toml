@@ -9,7 +9,7 @@ nav = [
     "architecture/overview.md",
     "architecture/virtual-machine.md",
     "architecture/container.md",
-    "architecture/node-vms.md",
+    "architecture/sandboxes.md",
     "architecture/unikernel.md",
     { "Networking" = [
       "architecture/networking/ip-addressing.md",
