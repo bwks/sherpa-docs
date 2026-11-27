@@ -225,5 +225,6 @@ Sherpa handles as a virtual machine for `down`, `resume` and `status`.
 - The VM gets the node's `memory` plus 1024 MiB and its `cpu.count` vCPUs.
 - Volumes are copied when the node is created, so a change on the server needs a `sherpa redeploy`.
 - The server needs the [`flatcar_sandbox`](../linux/flatcar-sandbox.md) image, which you import
-  once. The sandbox has a management address of its own, named `<node>-sbx`.
+  once. The sandbox has a management address of its own, named `<node>-sbx`, where
+  `ssh core@<node>-sbx` logs in to the sandbox to debug it.
 - A node is ready once SSH answers on its management address.
