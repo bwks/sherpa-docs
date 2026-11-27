@@ -29,6 +29,13 @@ reservation for its own address in that range. See [IP addressing](../ip-address
 A DNS service with the domain name `sherpa.lab.local`. Each node has a forward and reverse
 DNS entry allocated in DNS. Nodes can be looked up via the hostname and FQDN.
 
+### When the router stops
+
+The lab router has no restart policy, and the Sherpa server does not start it when it starts.
+After the server reboots it stays stopped, and the lab's nodes get no DHCP and resolve no names,
+until the lab is resumed: `sherpa resume` starts the router before any node, or creates it
+again if it is gone. `sherpa inspect` shows its state in the **Lab Router** table.
+
 
 ## Reaching Nodes
 
