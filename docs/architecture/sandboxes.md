@@ -56,6 +56,30 @@ Each data interface on a [point-to-point link](networking/modes/point-to-point.m
 NIC is on the lab's [management network](networking/modes/management.md) with the node's
 management addresses.
 
+### The Sandbox's Own Address
+
+The VM has a second NIC on the lab's management network, which the network OS does not see:
+the VM keeps it in a network namespace of its own. It has addresses of its own, IPv4, and IPv6
+when the lab has IPv6:
+
+- They come after the nodes' addresses in the lab's management network: in a lab of N nodes the
+  first sandbox, in manifest order, has the address node N + 1 would have, the second N + 2, and
+  so on.
+- The lab's name server names them `<node>-sbx` and `<node>-sbx.sherpa.lab.local`.
+- They stay the same across `sherpa down`, `sherpa resume` and `sherpa redeploy`, and are given
+  back by `sherpa destroy`.
+- Nothing listens on them; they answer ping from the server and from the lab's nodes.
+
+Because each sandbox takes an address, a lab with sandboxes has room for fewer than 234 nodes.
+`sherpa up` refuses a lab whose nodes and sandboxes need more:
+
+```
+Manifest - 118 nodes defined, 117 of them in a sandbox with a management address of its own,
+which need 235 addresses, but a lab has 234
+```
+
+A node may not be named `<node>-sbx` after a node that runs in a sandbox.
+
 ## Readiness
 
 A node is ready once SSH answers on its management address. Two cases are ready once their VM
@@ -70,17 +94,21 @@ cannot be started, fails the node with that reason.
 
 ## Base Image
 
-The server needs the Flatcar base image in `/opt/sherpa/images/sandbox/`:
+Sandboxes boot the default version of the [`flatcar_sandbox`](../nodes/linux/flatcar-sandbox.md)
+image, Flatcar's OpenStack image, which you import as any VM image. It is the base image of
+sandboxes only: a node of model `flatcar_sandbox` is refused; use
+[`flatcar_linux`](../nodes/linux/flatcar-linux.md) for a Flatcar VM.
 
-| File | Content |
-| ---- | ------- |
-| `flatcar-<version>.qcow2` | The disk sandboxes boot, read-only |
-| `flatcar-<version>.vmlinuz` | The kernel sandboxes boot directly |
+`sherpa up` and `sherpa redeploy` refuse a lab with a sandbox, before they create anything, when
+the server has no `flatcar_sandbox` image:
 
-The [install](../install-update/install/automated.md#sandbox-image) and
-[update](../install-update/update/sherpa.md) scripts download both files from Flatcar's stable
-release server and check their SHA-512. `sherpa up` and `sherpa redeploy` refuse a lab with a
-sandbox, before they create anything, when either file is missing.
+```
+The arista_eos container, nokia_srlinux and the sonic_linux container run in a sandbox, which
+boots the flatcar_sandbox image, and the server has none. ...
+```
+
+The VM boots the image through Flatcar's own bootloader. While it boots, `sherpa console`
+shows Flatcar's boot messages before the network OS CLI.
 
 ## Docker Stores
 

@@ -278,10 +278,9 @@ sudo bash sherpa_update.sh --version <installed version>
 
 ### Sandbox Image
 
-Run the update script again, as in Create Blank Disks, to download the
-[sandbox image](automated.md#sandbox-image): the Flatcar disk and kernel in
-`/opt/sherpa/images/sandbox/` that the `arista_eos` container, `nokia_srlinux` and the
-`sonic_linux` container boot. It needs `bunzip2`, from the `bzip2` package.
+The `arista_eos` container, `nokia_srlinux` and the `sonic_linux` container boot the
+[`flatcar_sandbox`](../../nodes/linux/flatcar-sandbox.md) image, which you import once the server
+runs. Unpacking it needs `bunzip2`, from the `bzip2` package installed above.
 
 ### Initialize and Start
 

@@ -90,20 +90,10 @@ disk that was deleted.
 ## Sandbox Image
 
 The `arista_eos` container, `nokia_srlinux` and the `sonic_linux` container run in
-[sandboxes](../../architecture/sandboxes.md), which boot a Flatcar Container Linux release from
-`/opt/sherpa/images/sandbox/`:
-
-| File | Content |
-|---|---|
-| `flatcar-<version>.qcow2` | The disk sandboxes boot, read-only |
-| `flatcar-<version>.vmlinuz` | The kernel sandboxes boot directly |
-
-The install script downloads both from Flatcar's stable release server, as `sherpa`, checks each
-against its SHA-512, and installs them with mode `644`. It installs `bzip2` with its other
-packages, to unpack the disk. It never changes a file that is there, and the
-[update script](../update/sherpa.md) does the same on every run, so running it again restores a
-file that was deleted. `sherpa up` and `sherpa redeploy` refuse a lab with a sandbox, before they
-create anything, when either file is missing.
+[sandboxes](../../architecture/sandboxes.md), which boot the
+[`flatcar_sandbox`](../../nodes/linux/flatcar-sandbox.md) image. The install script downloads no
+image: download and import it yourself before the first lab with one of those nodes. The script
+installs `bzip2` with its other packages, to unpack the image.
 
 ## Before the First Lab
 
