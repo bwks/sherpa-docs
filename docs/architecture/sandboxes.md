@@ -23,6 +23,7 @@ A sandbox stopped before its first boot finished needs a `sherpa redeploy`.
 | Command | Result |
 | ------- | ------ |
 | `sherpa ssh <node>` | SSH to the node's management address |
+| `ssh <node>-sbx.<lab-id>` | SSH to the sandbox itself, as `core`, see [SSH Into the Sandbox](#ssh-into-the-sandbox) |
 | `sherpa console <node>` | The network OS CLI on the VM's serial console |
 | `sherpa vnc <node>` | Refused: `<node> runs in a sandbox, which has a serial console only. Use 'sherpa console <node>' instead.` |
 
@@ -68,7 +69,8 @@ when the lab has IPv6:
 - The lab's name server names them `<node>-sbx` and `<node>-sbx.sherpa.lab.local`.
 - They stay the same across `sherpa down`, `sherpa resume` and `sherpa redeploy`, and are given
   back by `sherpa destroy`.
-- Nothing listens on them; they answer ping from the server and from the lab's nodes.
+- They answer ping from the server and from the lab's nodes, and SSH, see
+  [SSH Into the Sandbox](#ssh-into-the-sandbox).
 
 Because each sandbox takes an address, a lab with sandboxes has room for fewer than 234 nodes.
 `sherpa up` refuses a lab whose nodes and sandboxes need more:
@@ -79,6 +81,25 @@ which need 235 addresses, but a lab has 234
 ```
 
 A node may not be named `<node>-sbx` after a node that runs in a sandbox.
+
+### SSH Into the Sandbox
+
+To debug a sandbox, log in to the VM itself on its own address:
+
+```
+ssh core@<node>-sbx
+```
+
+- `<node>-sbx` resolves on the lab's name server, so this works from the lab's nodes. From your
+  machine, the lab's [SSH config](ssh.md#sandboxes) has a host `<node>-sbx.<lab-id>` for each
+  sandbox: `ssh <node>-sbx.<lab-id>`. Its addresses, IPv4 and IPv6, work too.
+- The login is `core`, with your own [SSH keys](ssh-keys.md) only: no password, and no `root`.
+  `core` can run `docker ps`, `docker logs`, `journalctl` and `sudo`.
+- `ssh <node>` and `sherpa ssh <node>` still reach the network OS, on the node's address.
+  `sherpa ssh` does not reach the sandbox.
+- The network OS sees neither the sandbox's SSH server nor its address.
+- The sandbox keeps its SSH host key across `sherpa down` and `sherpa resume`, and has a new one
+  after `sherpa redeploy`. The lab's SSH config does not check it.
 
 ## Readiness
 

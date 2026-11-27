@@ -38,6 +38,19 @@ Host 172.31.1.22 router1.abcd1234 router1.abcd1234.sherpa.lab.local
 
 - **Redeploy:** `sherpa redeploy` rebuilds the node with your login.
 
+### Sandboxes
+
+A container node that runs in a [sandbox](sandboxes.md) also has a host for the sandbox itself,
+named `<node>-sbx.<lab-id>`, at the sandbox's own address, which logs in as `core` with your
+keys:
+
+```
+Host 172.31.1.24 router1-sbx.abcd1234 router1-sbx.abcd1234.sherpa.lab.local
+    User core
+```
+
+`ssh router1-sbx.abcd1234` logs in to the sandbox, and `ssh router1.abcd1234` to the network OS.
+
 ## Reaching Nodes
 
 `.sherpa/ssh/config` reaches every node directly, at its management address, with no jump host.
@@ -112,8 +125,8 @@ and `ssh` itself through the `~/.ssh/config` include, with or without the jump.
 
 - **Which nodes:** virtual machines whose readiness check is SSH, on port 22, and containers
   with `ready_check.port = 22`. Other containers, unikernels, nodes with another
-  `ready_check.port` and nodes with `ready_check.skip` keep
-  `StrictHostKeyChecking no`.
+  `ready_check.port`, nodes with `ready_check.skip` and the `<node>-sbx` hosts of
+  [sandboxes](#sandboxes) keep `StrictHostKeyChecking no`.
 - **When keys change:** some network operating systems, such as Cisco IOSv, make a new key
   every time they boot, and a redeployed node has a new one. The server records the new key
   when the node starts, whether from `sherpa resume`, `sherpa redeploy` or the web UI.
