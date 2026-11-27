@@ -123,13 +123,19 @@ Host 172.31.1.21 dev01.abcd1234 dev01.abcd1234.sherpa.lab.local
 So you are never asked to confirm a node's key. This applies to `sherpa ssh`, provisioners,
 and `ssh` itself through the `~/.ssh/config` include, with or without the jump.
 
-- **Which nodes:** virtual machines whose readiness check is SSH, on port 22, and containers
-  with `ready_check.port = 22`. Other containers, unikernels, nodes with another
-  `ready_check.port`, nodes with `ready_check.skip` and the `<node>-sbx` hosts of
-  [sandboxes](#sandboxes) keep `StrictHostKeyChecking no`.
+- **Which nodes:** virtual machines whose readiness check is SSH, on port 22, containers
+  with `ready_check.port = 22`, and the `<node>-sbx` hosts of [sandboxes](#sandboxes), whose
+  key the server reads from the sandbox's own SSH server once it answers. Other containers,
+  unikernels, nodes with another `ready_check.port` and nodes with `ready_check.skip` keep
+  `StrictHostKeyChecking no`, as does a sandbox until its key is recorded.
 - **When keys change:** some network operating systems, such as Cisco IOSv, make a new key
   every time they boot, and a redeployed node has a new one. The server records the new key
-  when the node starts, whether from `sherpa resume`, `sherpa redeploy` or the web UI.
+  when the node starts, whether from `sherpa resume`, `sherpa redeploy` or the web UI. A
+  sandbox keeps its key across `sherpa down` and `sherpa resume`, and has a new one, recorded
+  by `sherpa redeploy`, after a redeploy.
+- **Sandbox keys that do not match:** `sherpa ssh` does not reach a sandbox, so
+  `ssh <node>-sbx.<lab-id>` refuses a key that is not the saved one;
+  `sherpa download <lab-id> --force` saves the lab's current keys.
 - **Keys that do not match:** when `sherpa ssh` or a provisioner finds that a node's key is
   missing from `.sherpa/ssh/known_hosts`, or is not the one recorded, it asks the server to read
   the node's key again, saves the lab's current keys and connects once more. A changed key

@@ -99,7 +99,8 @@ ssh core@<node>-sbx
   `sherpa ssh` does not reach the sandbox.
 - The network OS sees neither the sandbox's SSH server nor its address.
 - The sandbox keeps its SSH host key across `sherpa down` and `sherpa resume`, and has a new one
-  after `sherpa redeploy`. The lab's SSH config does not check it.
+  after `sherpa redeploy`. The Sherpa server records it, and the lab's SSH config checks it, as
+  it does a node's [host key](ssh.md#node-host-keys).
 
 ## Readiness
 
