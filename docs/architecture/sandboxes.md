@@ -109,7 +109,8 @@ boots the flatcar_sandbox image, and the server has none. ...
 
 The VM boots the image through Flatcar's own bootloader, with the kernel argument `quiet`: while
 it boots, `sherpa console` shows the bootloader's menu and kernel errors only, then the network
-OS CLI. The kernel prints only errors there after boot too.
+OS CLI. The kernel prints only errors there after boot too, so its info messages, such as
+interface renames, never mix into the CLI.
 
 ## Boot Disk
 
