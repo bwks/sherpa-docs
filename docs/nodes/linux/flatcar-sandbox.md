@@ -35,7 +35,9 @@ sherpa server image import \
 ```
 
 Sandboxes boot the default version. A lab's sandboxes keep the version they were made with until
-they are redeployed.
+they are redeployed. The first `sherpa up` or `sherpa redeploy` with a sandbox after the import
+makes the version's [boot disk](../../architecture/sandboxes.md#boot-disk), once, in about 30
+seconds.
 
 ## Default Parameters
 

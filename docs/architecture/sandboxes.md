@@ -107,8 +107,25 @@ The arista_eos container, nokia_srlinux and the sonic_linux container run in a s
 boots the flatcar_sandbox image, and the server has none. ...
 ```
 
-The VM boots the image through Flatcar's own bootloader. While it boots, `sherpa console`
-shows Flatcar's boot messages before the network OS CLI.
+The VM boots the image through Flatcar's own bootloader, with the kernel argument `quiet`: while
+it boots, `sherpa console` shows the bootloader's menu and kernel errors only, then the network
+OS CLI. The kernel prints only errors there after boot too.
+
+## Boot Disk
+
+Sandboxes boot no copy of the image: each boots an overlay of the image's boot disk, the image
+with the kernel arguments that sandboxes boot with. The image you imported is not changed.
+
+- The first `sherpa up` or `sherpa redeploy` with a sandbox after a version is imported makes its
+  boot disk: a VM boots the image once to set the kernel arguments, which takes about 30 seconds,
+  and a progress message says so. A later operation waits for it, and every later lab uses it.
+- The boot disk is about the size of the image, in the [storage pool](storage.md), and belongs to
+  no lab: `sherpa destroy` keeps it.
+- Deleting the `flatcar_sandbox` version deletes its boot disk, and so does importing the version
+  again from another file; the next `sherpa up` makes a new one. Both are refused while a lab's
+  sandbox disk is built on the boot disk, as for any image a lab disk is built on.
+- `sherpad` removes what an interrupted boot disk build left when it starts. Finished boot disks
+  are kept.
 
 ## Docker Stores
 
