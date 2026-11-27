@@ -18,6 +18,15 @@ A sandbox is a [virtual machine](virtual-machine.md) to Sherpa for `down`, `resu
 
 A sandbox stopped before its first boot finished needs a `sherpa redeploy`.
 
+A lab brought up before these models ran in sandboxes runs them as containers on the server's
+Docker. `sherpa down` and `sherpa resume` refuse such a node:
+
+```
+Node 'ceos1' was made before its model ran in a sandbox and has none; destroy the lab and bring it up again
+```
+
+Destroy the lab and bring it up again.
+
 ## Access
 
 | Command | Result |
@@ -48,6 +57,23 @@ copied onto the VM's config drive when the node is created.
   config.
 - Secret files sit on the config drive in the server's storage pool until `sherpa destroy` or
   `sherpa redeploy`.
+- A writable volume's empty folders are made in the container too.
+
+The config drive is an ISO 9660 image, so a volume of a node in a sandbox may hold only files
+and folders. `sherpa up` and `sherpa redeploy` refuse a volume whose source holds any of these,
+before any VM is made, naming the path:
+
+| Refused | Why |
+| ------- | --- |
+| A symlink | Sandboxes do not follow it; copy what it points to instead |
+| A FIFO, socket or device | Only files and folders go on the drive |
+| A folder more than four levels below the volume's source | ISO 9660 allows eight levels, and the drive takes four above a volume |
+| A file of 4 GiB or more | ISO 9660 holds files under 4 GiB |
+| A name longer than 31 characters | ISO 9660's names are that long at most |
+
+```
+Node 'ceos1' runs in a sandbox, whose config drive cannot carry volume source /srv/ceos1/flash/link: it is a symlink, which is not followed
+```
 
 ## Networking
 
@@ -65,7 +91,8 @@ when the lab has IPv6:
 - They come after the nodes' addresses in the lab's management network: in a lab of N nodes the
   first sandbox, in manifest order, has the address node N + 1 would have, the second N + 2, and
   so on.
-- The lab's name server names them `<node>-sbx` and `<node>-sbx.sherpa.lab.local`.
+- The lab's name server names them `<node>-sbx` and `<node>-sbx.sherpa.lab.local`, and its DHCP
+  server keeps the IPv4 address for the sandbox, also while the node is down.
 - They are its only addresses besides its IPv6 link-local one: it takes none from a router
   advertisement. The network OS's interfaces are not affected.
 - They stay the same across `sherpa down`, `sherpa resume` and `sherpa redeploy`, and are given
