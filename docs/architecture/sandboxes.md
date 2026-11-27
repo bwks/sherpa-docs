@@ -66,6 +66,8 @@ when the lab has IPv6:
   first sandbox, in manifest order, has the address node N + 1 would have, the second N + 2, and
   so on.
 - The lab's name server names them `<node>-sbx` and `<node>-sbx.sherpa.lab.local`.
+- They are its only addresses besides its IPv6 link-local one: it takes none from a router
+  advertisement. The network OS's interfaces are not affected.
 - They stay the same across `sherpa down`, `sherpa resume` and `sherpa redeploy`, and are given
   back by `sherpa destroy`.
 - Nothing listens on them; they answer ping from the server and from the lab's nodes.
