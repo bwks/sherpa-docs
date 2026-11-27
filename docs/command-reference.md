@@ -268,6 +268,20 @@ is not `ready` (see [lab phases](#lab-phases)) is refused.
 Before starting any node, resume checks that the stopped virtual machines and unikernels fit
 in the server's memory, as `sherpa up` does, and refuses the whole resume if they do not.
 
+Before starting any node, resume brings the lab's router back, as the nodes take their
+addresses and names from it: a stopped router is started, a paused one unpaused, and a missing
+or dead one created again on the lab's router address. A running router is left as it is.
+Resume prints a line when it does something to the router:
+
+```
+✅ Lab router sherpa-router-<lab_id> - started
+```
+
+A router that cannot be brought back fails the resume and no node starts. If the router and
+its config in the lab folder on the server are both gone, destroy the lab and run `sherpa up`
+again. Nothing else starts the router: after the server reboots, or Docker or sherpad restarts,
+it stays stopped until the lab is resumed. `sherpa resume --node` brings it back too.
+
 A node that boots gets new link ends, so resume attaches its [links](architecture/networking/modes/point-to-point.md)
 again, with their impairments. A stopped container that is started gets its data interfaces
 made again, as its old ones went with it. Each link that is not attached is listed under the
@@ -291,8 +305,9 @@ matches. See [Node Host Keys](architecture/ssh.md#node-host-keys).
 With Tailscale enabled, a full resume enrolls the gateway again before resuming
 nodes, as `sherpa down` logged it out. Run it in the lab folder with the variable
 named by `auth_key_env` set, as for `sherpa up`; it needs WSS with certificate
-validation. Using `--node` leaves the gateway alone and needs no key. See
-[Tailscale](architecture/networking/tailscale.md#lab-lifecycle).
+validation. Using `--node` leaves the gateway alone and needs no key. A full resume of a lab whose
+gateway container is gone is refused before any node starts; destroy the lab and run
+`sherpa up` again. See [Tailscale](architecture/networking/tailscale.md#lab-lifecycle).
 
 | Flag | Description |
 | ---- | ----------- |
@@ -420,6 +435,11 @@ The lab details include the manifest's **Description**, and **Client Host** and
 For Tailscale-enabled labs, refreshes gateway state, Tailscale addresses, advertised
 management routes, route approval, and warnings. This is the default command when
 no subcommand is specified.
+
+The **Lab Router** table under the lab details shows the lab's router container and its
+state, as Docker reports it: `running`, `paused`, `exited (<exit code>)`, `missing`, or
+`unknown: Docker did not answer`. A router that is not running gives the lab's nodes no DHCP
+or DNS; `sherpa resume` brings it back.
 
 Inspect shows no console address or VNC port: connect with `sherpa console` and `sherpa vnc`.
 

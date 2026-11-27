@@ -589,6 +589,16 @@ of each of that node's links, when there are any; the field is absent otherwise.
 
 A link that is not attached does not make the node's `success` false.
 
+### Lab router in inspect
+
+The inspect response's `router` gives the lab's router container and its state as Docker
+reports it. `state.state` is `running`, `paused`, `exited` (with `exit_code`), `missing`,
+`other` (with Docker's `status`, such as `dead`), or `unknown` when Docker did not answer.
+
+```json
+"router": { "container": "sherpa-router-a107c03e", "state": { "state": "exited", "exit_code": 255 } }
+```
+
 ### Link state in inspect
 
 The inspect response's `links[]` carry `state`, the link's last state as the server found or
