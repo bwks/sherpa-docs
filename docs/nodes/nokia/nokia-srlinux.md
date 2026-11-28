@@ -31,12 +31,12 @@ Sherpa's startup config is tested on release 26.3.1. It configures DNS as a
 | Property             | Value     |
 | -------------------- | --------- |
 | Kind                 | Container |
-| CPU                  | Not limited |
-| RAM                  | Not limited |
+| CPU                  | Not limited in the sandbox |
+| RAM                  | Not limited in the sandbox |
 | ZTP                  | `volume`  |
 | Management Interface | mgmt0     |
 | Data Interfaces      | eth-1/1-34         |
-| Interface Driver     | macvlan    |
+| Interface Driver     | virtio     |
 
 ## Example Manifest
 
@@ -58,13 +58,34 @@ version = "26.3.1"
     sherpa ssh <node-name>
     ```
 
-=== "Docker"
+=== "Console"
 
     ```
-    docker exec -it <node-name>-<lab-id> sh
+    sherpa console <node-name>
     ```
 
 ## Notes
 
 - Approximate time for the system to be ready: `1 minute`
-- With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as shipped: it starts with the image's own configuration, so once it has booted it has no management IP address, and it has no `sherpa` login. Nothing answers on the address the lab reserved for it, and `sherpa ssh` cannot reach it. Reach it with `docker exec -it <node-name>-<lab-id> sr_cli`. The node's `volumes` from the manifest are mounted, so you can supply a configuration of your own.
+- With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node is the image as shipped: it starts with the image's own configuration, whose DHCP client on `mgmt0.0` takes the management address the lab reserved for it, and it has no `sherpa` login, so `sherpa ssh` cannot log in. Reach it with `sherpa console <node-name>`. The node's `volumes` from the manifest are copied into the node when it is created, so you can supply a configuration of your own.
+
+## Sandbox
+
+SR Linux runs in a [sandbox](../../architecture/sandboxes.md): a Flatcar VM of its own, which
+Sherpa handles as a virtual machine for `down`, `resume` and `status`.
+
+- The container is privileged in that VM, so its privileges reach the VM's kernel, not the
+  server's.
+- `sherpa console <node>` opens `sr_cli` on the VM's serial console: press Enter. `sherpa vnc`
+  is refused.
+- The VM gets the node's `memory` plus 1024 MiB and its `cpu.count` vCPUs.
+- Volumes are copied when the node is created, so a change on the server needs a `sherpa redeploy`.
+  What SR Linux saves stays in the VM across `sherpa down` and `sherpa resume`.
+- The server needs the [`flatcar_sandbox`](../linux/flatcar-sandbox.md) image, which you import
+  once. The sandbox has a management address of its own, named `<node>-sbx`.
+- The sandbox runs the imported image of the node's model and version, from the repo that version
+  was imported or pulled from, with no repo override: `sherpa up` and `sherpa redeploy` refuse a
+  node whose `image` names another repo, before they create anything. To run another repo, pull
+  it as a version of its own and set the node's `version` to it.
+- A node is ready once SSH answers. With a config of your own it is ready once the container
+  started, unless `ready_check.port` says otherwise.

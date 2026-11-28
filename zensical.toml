@@ -9,6 +9,7 @@ nav = [
     "architecture/overview.md",
     "architecture/virtual-machine.md",
     "architecture/container.md",
+    "architecture/sandboxes.md",
     "architecture/unikernel.md",
     { "Networking" = [
       "architecture/networking/ip-addressing.md",
@@ -116,6 +117,7 @@ nav = [
       "nodes/linux/devbox-linux.md",
       "nodes/linux/fedora-linux.md",
       "nodes/linux/flatcar-linux.md",
+      "nodes/linux/flatcar-sandbox.md",
       "nodes/linux/kali-linux.md",
       "nodes/linux/nixos-linux.md",
       "nodes/linux/omarchy-linux.md",

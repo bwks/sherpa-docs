@@ -13,6 +13,7 @@ sudo apt install \
   mtools \
   e2tools \
   gzip \
+  bzip2 \
   unzip \
   qemu-utils \
   dosfstools \
@@ -274,6 +275,12 @@ to run again.
 curl -fsSLO https://raw.githubusercontent.com/bwks/sherpa/refs/heads/main/scripts/sherpa_update.sh
 sudo bash sherpa_update.sh --version <installed version>
 ```
+
+### Sandbox Image
+
+The `arista_eos` container, `nokia_srlinux` and the `sonic_linux` container boot the
+[`flatcar_sandbox`](../../nodes/linux/flatcar-sandbox.md) image, which you import once the server
+runs. Unpacking it needs `bunzip2`, from the `bzip2` package installed above.
 
 ### Initialize and Start
 

@@ -118,7 +118,7 @@ means the virtual machine image.
 | Image                | `docker-sonic-vs` |
 | CPU                  | 2                 |
 | RAM                  | 1GB               |
-| Privileged           | yes               |
+| Privileged           | yes, in its sandbox |
 | ZTP                  | `volume`          |
 | Management Interface | eth0              |
 | Data Interfaces      | eth1-32           |
@@ -154,10 +154,10 @@ dst = "sw2::eth1"
     sherpa ssh <node-name>
     ```
 
-=== "Docker"
+=== "Console"
 
     ```
-    docker exec -it <node-name>-<lab-id> bash
+    sherpa console <node-name>
     ```
 
 You log in as yourself, with your keys or your device password. `root` has no password and no
@@ -190,11 +190,9 @@ container first starts and saved to `/etc/sonic/config_db.json`. The container's
 which your prompt shows, is the node name too, so `hostname` and SONiC's own hostname
 (`show runningconfiguration all`) agree. After that:
 
-- `sherpa down` and `sherpa resume` pause and resume the container: everything is kept, saved
-  or not.
-- A container that was stopped, and is started again by `sherpa resume`, loads the saved
-  configuration. Changes you did not save with `sudo config save -y` are lost.
-- `sherpa redeploy` creates a new container, which starts again from Sherpa's configuration.
+- `sherpa down` shuts the sandbox down and `sherpa resume` boots it: the container restarts and
+  loads the saved configuration. Changes you did not save with `sudo config save -y` are lost.
+- `sherpa redeploy` creates the node again, which starts again from Sherpa's configuration.
 
 A [custom ZTP configuration](../../manifest.md#ztp-object) replaces Sherpa's
 `config_db.json`; it is merged into the configuration the image generates, so it needs only what
@@ -204,14 +202,32 @@ it changes. You still get your login.
 
 - Approximate time for the system to be ready: `1 minute`.
 - Without `sudo` in the image, you can log in and use what needs no root, but not `config …`:
-  the node's log (`docker logs <node-name>-<lab-id>`) says
+  the container logs
   `sherpa-init: this image has no sudo, so <you> has no root access: build the image with sudo`.
   Build the image as the build page says.
 - With [`ztp.method = "disabled"`](../../manifest.md#ztp-object) the node still waits for its
   data interfaces and starts its SSH server, but has no login and no Sherpa configuration. Reach
-  it with `docker exec`. Its Linux hostname is still the node name; SONiC's own hostname is
+  it with `sherpa console <node-name>`. Its Linux hostname is still the node name; SONiC's own hostname is
   the image's, as Sherpa's configuration is what sets it.
-- The container is privileged, like the other network OS containers.
-- Each node makes its own SSH host keys on its first start and keeps them across a restart.
-  A redeploy gives it new ones, which `sherpa redeploy` saves to the lab's `known_hosts` file.
+- Each node makes its own SSH host keys on its first start and keeps them across `sherpa down`
+  and `sherpa resume`. A redeploy gives it new ones, which `sherpa redeploy` saves to the lab's `known_hosts` file.
 - `bgpd` is started, which the image does not do on its own. LLDP does not run.
+
+### Sandbox
+
+The container runs in a [sandbox](../../architecture/sandboxes.md): a Flatcar VM of its own, which
+Sherpa handles as a virtual machine for `down`, `resume` and `status`.
+
+- The container is privileged in that VM, so its privileges reach the VM's kernel, not the
+  server's.
+- `sherpa console <node>` opens a `bash` shell on the VM's serial console: press Enter. `sherpa vnc`
+  is refused.
+- The VM gets the node's `memory` plus 1024 MiB and its `cpu.count` vCPUs.
+- Volumes are copied when the node is created, so a change on the server needs a `sherpa redeploy`.
+- The server needs the [`flatcar_sandbox`](../linux/flatcar-sandbox.md) image, which you import
+  once. The sandbox has a management address of its own, named `<node>-sbx`.
+- The sandbox runs the imported image of the node's model and version, from the repo that version
+  was imported or pulled from, with no repo override: `sherpa up` and `sherpa redeploy` refuse a
+  node whose `image` names another repo, before they create anything. To run another repo, pull
+  it as a version of its own and set the node's `version` to it.
+- A node is ready once SSH answers on its management address.

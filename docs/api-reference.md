@@ -393,7 +393,21 @@ error objects, with `code`, `message`, and `data` where the code defines it.
 | The current state forbids it | `409`, `CONFLICT` | `-32000` |
 | Not enough host memory | `507`, `INSUFFICIENT_MEMORY` | `-32005` |
 | Host CPUs pinned by another node | `409`, `CPU_PINS_HELD` | `-32006` |
+| A node's VM reported that it failed, with its reason | `502`, `NODE_FAILED` | `-32000` |
 | Any other failure | `500`, `INTERNAL_ERROR` | `-32000` |
+
+### A node that failed
+
+A node that runs in a [sandbox](architecture/sandboxes.md) whose VM reports that it could not
+start the node's container fails with the reason the VM reported, which is often Docker's own
+message:
+
+```json
+{ "error": { "code": "NODE_FAILED", "message": "Sandbox srl01-238d85cd failed: cannot create the container: No such image: ghcr.io/nokia/srlinux:26.7.X" } }
+```
+
+`up` lists the reason with the node, and `redeploy` answers with it over REST (`502`), RPC and
+the web UI. The reason is cut to 512 characters and has no control characters.
 
 ### An unexpected failure
 
@@ -408,7 +422,7 @@ REST operation, and the job page of a lab made or destroyed in the web UI, say t
 server logs the reference at `error` level with what failed and the full error, so an admin can
 find it with `grep 3f9a1c07` in the server's log. No answer, of any kind, carries a file path,
 libvirt or Docker text, or the error's chain: a refusal of a known kind carries only its own
-message. The errors a destroy or a clean reports for a resource it could not remove, the
+message. The one exception is a node that failed: see below. The errors a destroy or a clean reports for a resource it could not remove, the
 errors of an up's Keycloak and Vault nodes, and the per-node messages of down and resume give
 the reference the same way.
 
@@ -633,7 +647,7 @@ The errors come as HTTP statuses before the upgrade:
 | `401` | The token is missing, invalid or expired |
 | `403` | `Access denied: only the owner of lab '<lab-id>' can open its consoles`, to an admin who does not own the lab |
 | `404` | The lab or the node was not found, or the lab is another user's and the caller is not an admin |
-| `400` | `<node> is a container, and containers have no serial console. Connect with 'sherpa ssh <node>' instead.` |
+| `400` | `<node> is a container, and containers have no serial console. Connect with 'sherpa ssh <node>' instead.` A container that runs in a [sandbox](architecture/sandboxes.md) has a serial console |
 | `409` | `Node '<node>' is not running. Start it with 'sherpa resume'.` |
 | `409` | `The console of <node> is in use by <user> from <client-ip> since <YYYY-MM-DD HH:MM:SS> UTC. Close that session, or take it over with 'sherpa console <node> --force'.` |
 
@@ -668,6 +682,7 @@ The errors are those of the serial console, with these differences:
 | ------ | ------- |
 | `400` | `<node> is a container, and containers have no VNC console. Connect with 'sherpa ssh <node>' instead.` |
 | `400` | `<node> is a unikernel, and unikernels have no VNC console. Use 'sherpa console <node>' instead.` |
+| `400` | `<node> runs in a sandbox, which has a serial console only. Use 'sherpa console <node>' instead.` |
 | `409` | `The VNC console of <node> is in use by <user> from <client-ip> since <YYYY-MM-DD HH:MM:SS> UTC. Close that session, or take it over with 'sherpa vnc <node> --force'.` |
 
 A session ends with the serial console's close frames, except that `1000` says `The node's VNC

@@ -87,6 +87,14 @@ The script only creates a disk that is missing, and never changes one that is th
 [update script](../update/sherpa.md) does the same on every run, so running it again restores a
 disk that was deleted.
 
+## Sandbox Image
+
+The `arista_eos` container, `nokia_srlinux` and the `sonic_linux` container run in
+[sandboxes](../../architecture/sandboxes.md), which boot the
+[`flatcar_sandbox`](../../nodes/linux/flatcar-sandbox.md) image. The install script downloads no
+image: download and import it yourself before the first lab with one of those nodes. The script
+installs `bzip2` with its other packages, to unpack the image.
+
 ## Before the First Lab
 
 Each user sets a [device password](../../architecture/device-password.md), with
