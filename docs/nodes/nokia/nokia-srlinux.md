@@ -83,5 +83,9 @@ Sherpa handles as a virtual machine for `down`, `resume` and `status`.
   What SR Linux saves stays in the VM across `sherpa down` and `sherpa resume`.
 - The server needs the [`flatcar_sandbox`](../linux/flatcar-sandbox.md) image, which you import
   once. The sandbox has a management address of its own, named `<node>-sbx`.
+- The sandbox runs the imported image of the node's model and version, from the repo that version
+  was imported or pulled from, with no repo override: `sherpa up` and `sherpa redeploy` refuse a
+  node whose `image` names another repo, before they create anything. To run another repo, pull
+  it as a version of its own and set the node's `version` to it.
 - A node is ready once SSH answers. With a config of your own it is ready once the container
   started, unless `ready_check.port` says otherwise.

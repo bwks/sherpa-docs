@@ -239,8 +239,10 @@ image = "custom-ubuntu"
 
 For a container node, `image` is the image repository without a tag: the node's version is the
 tag. It replaces the repo the version was pulled from, for every container model, including those
-with a built-in repo. `sherpa up` and `sherpa redeploy` check that Docker has `<image>:<version>`
-and fail if it does not, before they create anything.
+with a built-in repo, except a node that runs in a [sandbox](architecture/sandboxes.md): one of
+those runs the repo its version was imported or pulled from, and another repo is refused.
+`sherpa up` and `sherpa redeploy` check that Docker has `<image>:<version>` and fail if it does
+not, before they create anything.
 
 ##### kind (string)
 
