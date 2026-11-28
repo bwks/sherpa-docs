@@ -136,39 +136,31 @@ The arista_eos container, nokia_srlinux and the sonic_linux container run in a s
 boots the flatcar_sandbox image, and the server has none. ...
 ```
 
-The VM boots the image through Flatcar's own bootloader, with the kernel argument `quiet`: while
-it boots, `sherpa console` shows the bootloader's menu and kernel errors only, then the network
-OS CLI. The kernel prints only errors there after boot too, so its info messages, such as
-interface renames, never mix into the CLI.
-
-## Boot Disk
-
-Sandboxes boot no copy of the image: each boots an overlay of the image's boot disk, the image
-with the kernel arguments that sandboxes boot with. The image you imported is not changed.
-
-- The first `sherpa up` or `sherpa redeploy` with a sandbox after a version is imported makes its
-  boot disk: a VM boots the image once to set the kernel arguments, which takes about 30 seconds,
-  and a progress message says so. A later operation waits for it, and every later lab uses it.
-- The boot disk is about the size of the image, in the [storage pool](storage.md), and belongs to
-  no lab: `sherpa destroy` keeps it.
-- Deleting the `flatcar_sandbox` version deletes its boot disk, and so does importing the version
-  again from another file; the next `sherpa up` makes a new one. Both are refused while a lab's
-  sandbox disk is built on the boot disk, as for any image a lab disk is built on.
-- `sherpad` removes what an interrupted boot disk build left when it starts. Finished boot disks
-  are kept.
+The VM boots an overlay of the image through Flatcar's own bootloader, with the kernel arguments
+in the image: Sherpa adds none and never changes the image. While it boots, `sherpa console`
+shows the bootloader's menu and the kernel's boot messages, then the network OS CLI. Once the
+VM's root file system is up, the kernel prints only errors there, so its info messages, such as
+interface renames, never mix into the CLI. An image with the
+[optional `quiet` edit](../nodes/linux/flatcar-sandbox.md#optional-boot-quietly) prints only
+errors from the kernel's start on, and boots faster.
 
 ## Docker Stores
 
-A VM does not hold a copy of its image for each node. Each image has a Docker store, a disk with
-the image loaded once, and every sandbox of the image boots on it without copying the image.
+A VM does not hold a copy of its image for each node. Each container image version has a Docker
+store, a disk with the image loaded once, and every sandbox of the version boots on it without
+copying the image.
 
-- The first `sherpa up` or `sherpa redeploy` that needs an image makes its store. It takes
+- The first `sherpa up` or `sherpa redeploy` that needs a version makes its store. It takes
   minutes, and a progress message says so. A later operation that needs the same store waits for
   it.
 - A store belongs to no lab. `sherpa destroy` keeps it.
-- Nothing removes a store when its image is deleted or imported again; an image imported again
-  gets a store of its own.
+- Importing or pulling the version again, or deleting it, removes its store; the next
+  `sherpa up` makes a new one. Both are refused while a lab's sandbox disk is built on the store,
+  running or stopped: destroy the lab first.
 - `sherpad` removes what an interrupted store build left when it starts. Finished stores are
   kept.
 
-The stores are in the [storage pool](storage.md).
+A store is `virtiob.qcow2` in its version's folder of the model's `sandbox` folder in the
+[images directory](storage.md#images), such as
+`/opt/sherpa/images/arista_eos/sandbox/4.35.0F/virtiob.qcow2` for cEOS 4.35.0F. No image can
+have the version `sandbox`.

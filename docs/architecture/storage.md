@@ -32,6 +32,11 @@ When a lab is created, Sherpa creates each VM's disk from the base image rather 
 
 Supported disk formats: `qcow2`, `iso`, `raw`, `json`, `ign`, `img`.
 
+A model's `sandbox` folder holds the [Docker stores](sandboxes.md#docker-stores) of its container
+versions that run in sandboxes, one version folder each:
+`/opt/sherpa/images/<model>/sandbox/<version>/virtiob.qcow2`. Sherpa makes them, and they are
+not images: the image scan skips the folder, and no image can have the version `sandbox`.
+
 ### Boot Disk Overlays
 
 By default, a virtual machine's boot disk is a QCOW2 overlay on top of the base image. The

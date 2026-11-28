@@ -77,8 +77,10 @@ ISE, MikroTik CHR and Flatcar Linux, fail to start without it. If `qemu-img`, `m
 `mkfs.vfat` or `mkfs.ext4` is missing, the script first installs `qemu-utils`, `dosfstools` and `e2fsprogs`; if
 a disk cannot be made, it stops before changing the binaries.
 
-If `bunzip2` is missing, the update script installs `bzip2`, which unpacks the
-[`flatcar_sandbox`](../../nodes/linux/flatcar-sandbox.md) image. It downloads no image.
+The update script installs no package for the
+[`flatcar_sandbox`](../../nodes/linux/flatcar-sandbox.md) image, and downloads no image. The
+install script installs `bzip2`, which unpacks it; on a server installed without it, install
+`bzip2` before you unpack the image.
 
 On every run, even when there is nothing to install, the update script makes `/opt/sherpa`,
 `/opt/sherpa/bin` and `/opt/sherpa/libvirt` root's and `755`, creates the folders `sherpad`
